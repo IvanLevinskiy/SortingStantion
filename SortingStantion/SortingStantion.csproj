@@ -90,6 +90,62 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="TIASortingStantion\AdditionalFiles\PLCM\plcmArchive.pma15_0" />
+    <None Include="TIASortingStantion\IM\SearchIndex\segments.gen" />
+    <None Include="TIASortingStantion\IM\SearchIndex\segments_13y" />
+    <None Include="TIASortingStantion\IM\SearchIndex\segments_1h3" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.fdt" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.fdx" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.fnm" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.frq" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.prx" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.tii" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.tis" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.tvd" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.tvf" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk.tvx" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gk_1.del" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1gl.cfs" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.fdt" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.fdx" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.fnm" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.frq" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.prx" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.tii" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.tis" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.tvd" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.tvf" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk.tvx" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vk_3.del" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vl.cfs" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vl_1.del" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vm.cfs" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vn.cfs" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vo.cfs" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vp.cfs" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vq.cfs" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vq_1.del" />
+    <None Include="TIASortingStantion\IM\SearchIndex\_1vr.cfs" />
+    <None Include="TIASortingStantion\IM\SPL\options" />
+    <None Include="TIASortingStantion\SortingStantion.ap16" />
+    <None Include="TIASortingStantion\System\PEData.idx" />
+    <None Include="TIASortingStantion\System\PEData.plf" />
+    <None Include="TIASortingStantion\Vci\Vci.db" />
+    <None Include="TIASortingStantion\XRef\XRef.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TIASortingStantion\AdditionalFiles\CSS\" />
+    <Folder Include="TIASortingStantion\Logs\" />
+    <Folder Include="TIASortingStantion\TMP\" />
+    <Folder Include="TIASortingStantion\UserFiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListConsumer\HmiBase.xml" />
+    <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListConsumer\Iecpl.xml" />
+    <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListConsumer\Siemens.Simatic.Lang.IPI.Target.xml" />
+    <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListConsumer\Siemens.Simatic.Lang.Online.xml" />
+    <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListConsumer\Siemens.Simatic.Lang.xml" />
+    <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListProvider\Siemens.Automation.DomainModel.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
