@@ -1,0 +1,230 @@
+﻿<Window x:Class="SortingStantion.MainScreen.MainScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SortingStantion.MainScreen"
+        mc:Ignorable="d"
+        Title="Сортировочный центр" Height="450" Width="800">
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+    <Viewbox VerticalAlignment="Stretch">
+        <Grid Height="450" Width="850">
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border BorderBrush="Black"
+                                    Background="{TemplateBinding Background}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter Content="{TemplateBinding Content}"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#80808080"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Opacity" Value="0.8"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--ВЕРХНЯЯ СТРОКА-->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                        Margin="0,0,0,10">
+                    <TextBlock TextAlignment="Center">
+                        <Run>Мастер</Run>
+                        <LineBreak/>
+                        <Run>Иванов И.И.</Run>
+                    </TextBlock>
+                </Button>
+
+                <Button Grid.Column="1"
+                        Margin="0,0,0,10"
+                        BorderThickness="0,1,1,1">
+                    <TextBlock>Принять задание</TextBlock>
+                </Button>
+
+                <Button Grid.Column="2"
+                        Margin="0,0,0,10"
+                        BorderThickness="0,1,1,1">
+                    <TextBlock>Завершить задание</TextBlock>
+                </Button>
+
+                <!--ТЕКУЩЕЕ ВРЕМЯ-->
+                <TextBlock Grid.Column="3"
+                           Margin="0,0,0,10"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontSize="20"
+                           Text="{Binding CurrentTime.CurrentTime}"
+                           FontWeight="Bold"/>
+
+                <Button Grid.Column="4"
+                        Margin="0,0,0,10"
+                        BorderThickness="1">
+                    <TextBlock>Настройка</TextBlock>
+                </Button>
+
+            </Grid>
+
+
+            <Grid Grid.Row="1">
+
+
+                <Border BorderThickness="0,1,0,1"
+                        BorderBrush="Black">
+
+                    <TextBlock VerticalAlignment="Center" 
+                               HorizontalAlignment="Center"
+                               Text="Зона информации"/>
+
+                </Border>
+
+            </Grid>
+
+
+            <Grid Grid.Row="2">
+
+
+                <Border BorderThickness="0,0,0,1"
+                        BorderBrush="Black">
+
+                    <TextBlock VerticalAlignment="Center" 
+                               HorizontalAlignment="Center"
+                               Text="Наименование __________, GTIN _______, Серия _____"/>
+
+                </Border>
+
+            </Grid>
+
+            <Grid Grid.Row="3">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock VerticalAlignment="Top" 
+                           HorizontalAlignment="Left"
+                           Margin="30,30,10,10"
+                           Text="Выпущено продуктов ___"/>
+
+                <TextBlock VerticalAlignment="Top" 
+                           HorizontalAlignment="Left"
+                           Margin="30,60,10,10"
+                           Text="Отбраковано вручную ___"/>
+
+                <TextBlock  Grid.Column="1"
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left"
+                            Margin="30,30,10,10"
+                            Text="Выпущено коробов ___"/>
+
+                <TextBlock  Grid.Column="1"
+                            VerticalAlignment="Top" 
+                            HorizontalAlignment="Left"
+                            Margin="30,60,10,10"
+                            Text="Повтор кодов ___"/>
+
+                <Grid   Grid.ColumnSpan="2"
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Center"
+                        Margin="30,120,10,10">
+
+                    <TextBlock  Text="Сканер"
+                                Width="100"/>
+
+                    <Ellipse Height="20"
+                             Width="20"
+                             HorizontalAlignment="Right"
+                             Fill="Green"/>
+
+
+                </Grid>
+
+               
+
+
+            </Grid>
+
+            <!--СТРОКА СТАРТ - СТОП-->
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+
+
+                <Button Grid.Column="1"
+                        Margin="20,5,20,5">
+                    <TextBlock>Старт</TextBlock>
+                </Button>
+
+                <Button Grid.Column="2"
+                        Margin="20,5,20,5">
+                    <TextBlock>Стоп</TextBlock>
+                </Button>
+
+            </Grid>
+
+            <!--НИЖНЯЯ СТРОКА-->
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                        Margin="20,5,20,5">
+                    <TextBlock>Брак</TextBlock>
+                </Button>
+
+                <Button Grid.Column="1"
+                        Margin="20,5,20,5">
+                    <TextBlock>Справка</TextBlock>
+                </Button>
+
+                <Button Grid.Column="2"
+                        Margin="20,5,20,5">
+                    <TextBlock>Добавить</TextBlock>
+                </Button>
+
+            </Grid>
+
+        </Grid>
+    </Viewbox>
+  
+</Window>
