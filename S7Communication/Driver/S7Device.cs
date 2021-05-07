@@ -1,14 +1,16 @@
 ﻿using S7Communication.Driver;
+using Simatic.Driver;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace Simatic.Driver
+namespace S7Communication.Driver
 {
-    public class Plc : IDisposable
+    public class S7Device : IDisposable
     {
         private Socket _mSocket;
 
@@ -103,21 +105,21 @@ namespace Simatic.Driver
         }
 
         /// <summary>
-        /// Последнее сообщение об ошибке
+        /// Родительский сервер
         /// </summary>
-        public string LastErrorString
+        public S7Server Server
         {
             get;
-            private set;
+            set;
         }
 
         /// <summary>
-        /// Последний код ошибки
+        /// Коллекция групп тэгов
         /// </summary>
-        public ErrorCode LastErrorCode
+        public ObservableCollection<S7Group> Groups
         {
             get;
-            private set;
+            set;
         }
 
         /// <summary>
@@ -127,7 +129,7 @@ namespace Simatic.Driver
         /// <param name="ip"></param>
         /// <param name="rack"></param>
         /// <param name="slot"></param>
-        public Plc(CpuType cpu, string ip, short rack, short slot)
+        public S7Device(CpuType cpu, string ip, short rack, short slot)
         {
             this.IP = ip;
             this.CPU = cpu;
@@ -152,9 +154,7 @@ namespace Simatic.Driver
             }
             catch
             {
-                this.LastErrorCode = ErrorCode.IPAddressNotAvailable;
-                this.LastErrorString = string.Format("Destination IP-Address '{0}' is not available!", this.IP);
-                ErrorCode result = this.LastErrorCode;
+                ErrorCode result = ErrorCode.IPAddressNotAvailable;
                 return result;
             }
 
@@ -169,10 +169,7 @@ namespace Simatic.Driver
             }
             catch (Exception ex)
             {
-                this.LastErrorCode = ErrorCode.ConnectionError;
-                this.LastErrorString = ex.Message;
-                ErrorCode result = ErrorCode.ConnectionError;
-                return result;
+                return ErrorCode.ConnectionError;
             }
             try
             {
@@ -307,10 +304,7 @@ namespace Simatic.Driver
             }
             catch (Exception ex2)
             {
-                this.LastErrorCode = ErrorCode.ConnectionError;
-                this.LastErrorString = "Couldn't establish the connection to " + this.IP + ".\nMessage: " + ex2.Message;
-                ErrorCode result = ErrorCode.ConnectionError;
-                return result;
+                return ErrorCode.ConnectionError;
             }
             return ErrorCode.NoError;
         }
@@ -426,9 +420,7 @@ namespace Simatic.Driver
             }
             catch (Exception ex)
             {
-                this.LastErrorCode = ErrorCode.WriteData;
-                this.LastErrorString = ex.Message;
-                result = this.LastErrorCode;
+                result = ErrorCode.WriteData;
             }
             return result;
         }
@@ -455,8 +447,7 @@ namespace Simatic.Driver
             }
             catch (Exception ex)
             {
-                this.LastErrorCode = ErrorCode.WriteData;
-                this.LastErrorString = "An error occurred while writing data:" + ex.Message;
+                errorCode = ErrorCode.WriteData;
             }
             return errorCode;
         }
@@ -474,25 +465,9 @@ namespace Simatic.Driver
             expr_0F[0] = 3;
             arg_13_0.Add(expr_0F);
             byteArray.Add((byte)(19 + 12 * amount));
-            byteArray.Add(new byte[]
-            {
-                2,
-                240,
-                128,
-                50,
-                1,
-                0,
-                0,
-                0,
-                0
-            });
+            byteArray.Add(new byte[] { 2, 240, 128, 50, 1, 0, 0, 0, 0});
             byteArray.Add(Word.ToByteArray((ushort)(2 + amount * 12)));
-            byteArray.Add(new byte[]
-            {
-                0,
-                0,
-                4
-            });
+            byteArray.Add(new byte[] { 0, 0, 4 });
             byteArray.Add((byte)amount);
             return byteArray;
         }
@@ -571,14 +546,10 @@ namespace Simatic.Driver
             }
             catch (SocketException ex)
             {
-                this.LastErrorCode = ErrorCode.WriteData;
-                this.LastErrorString = ex.Message;
                 result = null;
             }
             catch (Exception ex2)
             {
-                this.LastErrorCode = ErrorCode.WriteData;
-                this.LastErrorString = ex2.Message;
                 result = null;
             }
             return result;

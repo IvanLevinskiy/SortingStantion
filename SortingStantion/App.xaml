@@ -4,6 +4,10 @@
              xmlns:local="clr-namespace:SortingStantion"
              StartupUri="MainScreen/MainScreen.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Dictionarys/ButtonStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

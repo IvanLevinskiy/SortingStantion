@@ -53,6 +53,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataBridge.cs" />
+    <Compile Include="UserAdmin\AccesLevelModel.cs" />
+    <Compile Include="UserAdmin\frameAuthorization.xaml.cs">
+      <DependentUpon>frameAuthorization.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserAdmin\User.cs" />
+    <Compile Include="Utilites\DelegateCommand.cs" />
+    <Page Include="Dictionarys\ButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainScreen\MainScreen.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -65,6 +76,10 @@
       <DependentUpon>MainScreen.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserAdmin\frameAuthorization.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainScreen\MainViewModel.cs" />
@@ -146,6 +161,12 @@
     <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListConsumer\Siemens.Simatic.Lang.Online.xml" />
     <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListConsumer\Siemens.Simatic.Lang.xml" />
     <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListProvider\Siemens.Automation.DomainModel.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\S7Communication\S7Communication.csproj">
+      <Project>{e7f2b419-5ba7-42fb-a537-496120fad2b1}</Project>
+      <Name>S7Communication</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

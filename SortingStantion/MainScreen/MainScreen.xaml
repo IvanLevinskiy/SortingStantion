@@ -5,40 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortingStantion.MainScreen"
         mc:Ignorable="d"
-        Title="Сортировочный центр" Height="450" Width="800">
+        Title="Сортировочный стенд" Height="450" Width="800"
+        WindowState="Maximized">
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
     <Viewbox VerticalAlignment="Stretch">
         <Grid Height="450" Width="850">
-            <Grid.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Cursor" Value="Hand"/>
-                    <Setter Property="BorderThickness" Value="1"/>
-                    <Setter Property="Background" Value="White"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border BorderBrush="Black"
-                                    Background="{TemplateBinding Background}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                    <ContentPresenter Content="{TemplateBinding Content}"
-                                                  VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#80808080"/>
-                                    </Trigger>
-                                    <Trigger Property="IsPressed" Value="True">
-                                        <Setter Property="Opacity" Value="0.8"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Grid.Resources>
+           
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -59,12 +33,13 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0"
-                        Margin="0,0,0,10">
-                    <TextBlock TextAlignment="Center">
-                        <Run>Мастер</Run>
-                        <LineBreak/>
-                        <Run>Иванов И.И.</Run>
-                    </TextBlock>
+                        Margin="0,0,0,10"
+                        Command="{Binding AuthorizationCMD}">
+
+                    <Grid DataContext="{Binding AccesLevelModel}">
+                        <TextBlock Text="{Binding DisplayName, Mode=OneWay}" TextAlignment="Center"/>
+                    </Grid>
+                   
                 </Button>
 
                 <Button Grid.Column="1"
