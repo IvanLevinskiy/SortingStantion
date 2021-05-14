@@ -10,14 +10,14 @@ namespace SortingStantion.UserAdmin
     /// </summary>
     public enum AccesLevels
     {
-        [Description("ОПЕРАТОР")]
-        ОПЕРАТОР = 0,
+        [Description("Оператор")]
+        Оператор = 0,
 
-        [Description("НАЛАДЧИК")]
-        НАЛАДЧИК = 1,
+        [Description("Наладчик")]
+        Наладчик = 1,
 
-        [Description("МАСТЕР")]
-        МАСТЕР = 2
+        [Description("Мастер")]
+        Мастер = 2
     }
 
     /// <summary>
@@ -61,7 +61,12 @@ namespace SortingStantion.UserAdmin
         {
             get
             {
-                return $"{CurrentUser.AccesLevel}\n{CurrentUser.Name}";
+                if (CurrentUser == null)
+                {
+                    return string.Empty;
+                }
+
+                return $"{CurrentUser.AccesLevel}:\n{CurrentUser.Name}";
             }
         }
 
@@ -77,7 +82,7 @@ namespace SortingStantion.UserAdmin
         public AccesLevelModel()
         {
             //Инициализация текущего пользователя
-            CurrentUser = new User();
+            CurrentUser = null;
 
             //Инициализация коллекции пользователей
             Users = new ObservableCollection<User>();
@@ -133,7 +138,7 @@ namespace SortingStantion.UserAdmin
                 //Если имя пользователя не соответствует
                 //имени пользователя из коллеции
                 //переходим к следующему пользователю
-                if (user.Name != login)
+                if (user.Name.ToUpper() != login.ToUpper())
                 {
                     continue;
                 }

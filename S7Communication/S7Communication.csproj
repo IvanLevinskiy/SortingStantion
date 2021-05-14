@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -41,17 +42,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Driver\ByteArray.cs" />
-    <Compile Include="Driver\CpuType.cs" />
-    <Compile Include="Driver\DataType.cs" />
-    <Compile Include="Driver\ErrorCode.cs" />
-    <Compile Include="Driver\S7Device.cs" />
-    <Compile Include="Driver\S7Group.cs" />
-    <Compile Include="Driver\S7Server.cs" />
-    <Compile Include="Driver\simaticTagBase.cs" />
-    <Compile Include="Driver\VarType.cs" />
-    <Compile Include="Driver\Word.cs" />
+    <Compile Include="ByteArray.cs" />
+    <Compile Include="CpuType.cs" />
+    <Compile Include="ErrorCode.cs" />
+    <Compile Include="MemmoryArea.cs" />
+    <Compile Include="SimaticType.cs" />
+    <Compile Include="Simatic\Types\S7BOOL.cs" />
+    <Compile Include="Simatic\Types\S7WORD.cs" />
+    <Compile Include="Simatic\VarType.cs" />
+    <Compile Include="Interfaces\ISimaticTagsContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simatic\SimaticDevice.cs" />
+    <Compile Include="Simatic\SimaticGroup.cs" />
+    <Compile Include="Simatic\SimaticServer.cs" />
+    <Compile Include="Simatic\Types\S7DTL.cs" />
+    <Compile Include="Simatic\Types\S7DWORD.cs" />
+    <Compile Include="Simatic\Types\S7REAL.cs" />
+    <Compile Include="Simatic\Types\simaticTagBase.cs" />
+    <Compile Include="Utilites\DelegateCommand.cs" />
+    <Compile Include="Utilites\Converter.cs" />
+    <Compile Include="Utilites\simaticPackage.cs" />
+    <Compile Include="Word.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

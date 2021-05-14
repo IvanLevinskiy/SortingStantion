@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Xml;
-using System.Threading.Tasks;
 
-namespace S7Communication.Driver
+namespace S7Communication
 {
+
     //ГРУППА ТЭГОВ
-    public class S7Group : INotifyPropertyChanged
+    public class SimaticGroup : INotifyPropertyChanged
     {
         /// <summary>
         /// Уникальный идентефикатор
@@ -16,6 +16,9 @@ namespace S7Communication.Driver
         /// <summary>
         /// Символьное имя
         /// </summary>
+        [DisplayName("Имя")]
+        [Description("Имя группы тэгов")]
+        [Category("Свойства группы тэгов")]
         public string Name
         {
             get
@@ -32,8 +35,23 @@ namespace S7Communication.Driver
 
 
         /// <summary>
+        /// Полное имя
+        /// </summary>
+        public string FullName
+        {
+            get
+            {
+                return $"{ParentDevice.Name}.{Name}";
+            }
+        }
+
+        /// <summary>
         /// Коллекция тэгов
         /// </summary>
+        [DisplayName("Список тэгов")]
+        [Description("Список тэгов входящих в группу тэгов")]
+        [Category("Параметры группы тэгов")]
+        [Browsable(false)]
         public ObservableCollection<simaticTagBase> Tags
         {
             get;
@@ -43,11 +61,57 @@ namespace S7Communication.Driver
         /// <summary>
         /// Путь в сервере
         /// </summary>
+        [DisplayName("Путь")]
+        [Description("Полный путь до группы тэгов в сервере")]
+        [Category("Информация о группе тэгов")]
+        [ReadOnly(true)]
+        [Browsable(false)]
         public string FullPatch
         {
             get;
             set;
         }
+
+        /// <summary>
+        /// Свойство для MVVM, указывающее
+        /// на то, выбран ли объект
+        /// </summary>
+        [Browsable(false)]
+        public bool IsSelected
+        {
+            get
+            {
+                return _isSelected;
+            }
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged("IsSelected");
+
+                //Костыль
+                ParentDevice.server.FindeSelectedElement();
+            }
+        }
+        bool _isSelected;
+
+        /// <summary>
+        /// Свойство для MVVM, указывающее
+        /// на то, развернут ли узел
+        /// </summary>
+        [Browsable(false)]
+        public bool IsExpanded
+        {
+            get
+            {
+                return _isExpanded;
+            }
+            set
+            {
+                _isExpanded = value;
+                OnPropertyChanged("IsExpanded");
+            }
+        }
+        bool _isExpanded = true;
 
 
         delegate void function();
@@ -58,12 +122,12 @@ namespace S7Communication.Driver
         /// Поле, содержащее указатель
         /// на родительский объект SimaticDevice
         /// </summary>
-        public S7Device s7Device;
+        public SimaticDevice ParentDevice;
 
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public S7Group()
+        public SimaticGroup()
         {
             Tags = new ObservableCollection<simaticTagBase>();
         }
@@ -72,7 +136,7 @@ namespace S7Communication.Driver
         /// Конструктор класса
         /// </summary>
         /// <param name="Name">Символьное имя</param>
-        public S7Group(string Name)
+        public SimaticGroup(string Name)
         {
             this.Name = Name;
             Tags = new ObservableCollection<simaticTagBase>();
@@ -82,7 +146,7 @@ namespace S7Communication.Driver
         /// Конструктор класса
         /// </summary>
         /// <param name="_Tags">Коллекция тэгов</param>
-        public S7Group(ObservableCollection<simaticTagBase> _Tags)
+        public SimaticGroup(ObservableCollection<simaticTagBase> _Tags)
         {
             Tags = _Tags;
         }
@@ -91,7 +155,7 @@ namespace S7Communication.Driver
         /// Конструктор класса
         /// </summary>
         /// <param name="Tags">Массив тэгов</param>
-        public S7Group(simaticTagBase[] Tags)
+        public SimaticGroup(simaticTagBase[] Tags)
         {
             this.Tags = new ObservableCollection<simaticTagBase>();
             this.Tags.Clear();
@@ -107,27 +171,27 @@ namespace S7Communication.Driver
         /// </summary>
         /// <param name="Name">символьное имя</param>
         /// <param name="Tags">Коллекция тэгов</param>
-        public S7Group(string Name, ObservableCollection<simaticTagBase> Tags)
+        public SimaticGroup(string Name, ObservableCollection<simaticTagBase> Tags)
         {
             this.Name = Name;
             this.Tags = Tags;
         }
 
-        
+
         /// <summary>
         /// Конструктор для получения устройства из XmlNode
         /// </summary>
         /// <param name="node">Объект типа XmlNode</param>
-        public S7Group(S7Device sDevice, XmlNode node)
+        public SimaticGroup(SimaticDevice sDevice, XmlNode node)
         {
             //Инициализация коллекции тэгов
             this.Tags = new ObservableCollection<simaticTagBase>();
 
             //Указатель на родительское устройство
-            s7Device = sDevice;
+            ParentDevice = sDevice;
 
             //Получение имени группы
-            //Name = Utilites.Converter.XmlNodeToString(node, "Name");
+            Name = Utilites.Converter.XmlNodeToString(node, "Name");
 
 
             //Наполнение коллекции тэгами
@@ -147,22 +211,22 @@ namespace S7Communication.Driver
         {
 
             //Получаем свойства тэга
-            //var type =    Utilites.Converter.XmlNodeToString(xmlNode, "Type").ToUpper();
-            //var address = Utilites.Converter.XmlNodeToString(xmlNode, "Address");
-            //var name =    Utilites.Converter.XmlNodeToString(xmlNode, "Name");
+            var type = Utilites.Converter.XmlNodeToString(xmlNode, "Type").ToUpper();
+            var address = Utilites.Converter.XmlNodeToString(xmlNode, "Address");
+            var name = Utilites.Converter.XmlNodeToString(xmlNode, "Name");
 
             //Создаем регистр
             simaticTagBase tag = null;
 
             //Управляем моделью создания регистра
-            //switch (type)
-            //{
-            //    //case "BOOL":  tag = new mbSingleRegister(address, Types.Short); break;
-            //    //case "BYTE": tag = new mbSingleRegister(address, Types.Ushort); break;
-            //    //case "WORD":   tag = new mbRealRegister(address); break;
-            //    case "DWORD":  tag = new simaticDWord(name, address, this); break;
-            //    case "REAL":  tag = new simaticReal(name, address, this); break;
-            //}
+            switch (type)
+            {
+                //case "BOOL":  tag = new mbSingleRegister(address, Types.Short); break;
+                //case "BYTE": tag = new mbSingleRegister(address, Types.Ushort); break;
+                //case "WORD":   tag = new mbRealRegister(address); break;
+                case "DWORD": tag = new S7DWORD(name, address, this); break;
+                case "REAL": tag = new S7REAL(name, address, this); break;
+            }
 
             //возвращаем регистр
             return tag;
@@ -175,7 +239,7 @@ namespace S7Communication.Driver
         /// <returns></returns>
         public void AddTag(simaticTagBase tag)
         {
-            tag.ParentGroup = this;
+            tag.group = this;
             this.Tags.Add(tag);
         }
 

@@ -5,36 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortingStantion.UserAdmin"
         mc:Ignorable="d"
-        Title="Авторизация пользователя" Height="210" Width="400"
+        Title="Авторизация пользователя" Height="180" Width="400"
         WindowStartupLocation="CenterScreen">
     <StackPanel>
         
         <!--ЛОГИН-->
-        <Grid Height="40"
-              Margin="10">
+        <Grid Height="30"
+              Margin="5">
             <TextBlock Text="Логин:"
+                       FontSize="14"
                        VerticalAlignment="Center"/>
 
             <TextBox x:Name="tbxLogin"
-                     Margin="80,2,5,2" 
-                     VerticalAlignment="Center"/>
+                     FontSize="14"
+                     VerticalAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     Margin="80,0,5,0" 
+                     Height="25"/>
 
         </Grid>
 
         <!--ПАРОЛЬ-->
-        <Grid Height="40"
-              Margin="10">
+        <Grid Height="30"
+              Margin="5">
             <TextBlock Text="Пароль:"
+                       FontSize="14"
                        VerticalAlignment="Center"/>
 
             <PasswordBox x:Name="pwbPassword"
-                         Margin="80,5,5,5"
-                         VerticalAlignment="Center"/>
+                         FontSize="14"
+                         Margin="80,0,5,0" 
+                         Height="25"
+                         VerticalAlignment="Center"
+                         VerticalContentAlignment="Center"/>
 
         </Grid>
 
         <!--КНОПКА АВТОРИЗАЦИИ-->
         <Button Height="40"
+                FontSize="14"
                 Margin="80,5,15,5"
                 Command="{Binding AuthorizationCMD}"
                 Content="Авторизироваться"/>

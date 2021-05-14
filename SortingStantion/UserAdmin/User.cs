@@ -36,12 +36,12 @@ namespace SortingStantion.UserAdmin
             get
             {
 
-                if (AccesLevel == AccesLevels.МАСТЕР)
+                if (AccesLevel == AccesLevels.Мастер)
                 {
                     return "МАСТЕР";
                 }
 
-                if (AccesLevel == AccesLevels.НАЛАДЧИК)
+                if (AccesLevel == AccesLevels.Наладчик)
                 {
                     return "НАЛАДЧИК";
                 }
@@ -116,14 +116,14 @@ namespace SortingStantion.UserAdmin
                 OnPropertyChanged("AccesLevel");
             }
         }
-        AccesLevels accesLevel = AccesLevels.ОПЕРАТОР;
+        AccesLevels accesLevel = AccesLevels.Оператор;
 
         /// <summary>
         /// Конструктор класса
         /// </summary>
         public User()
         {
-            AccesLevel = AccesLevels.ОПЕРАТОР;
+            AccesLevel = AccesLevels.Оператор;
         }
 
         /// <summary>
@@ -163,12 +163,12 @@ namespace SortingStantion.UserAdmin
                 {
                     if (attribut.InnerText == "0")
                     {
-                        this.AccesLevel = AccesLevels.НАЛАДЧИК;
+                        this.AccesLevel = AccesLevels.Наладчик;
                     }
 
                     if (attribut.InnerText == "1")
                     {
-                        this.AccesLevel = AccesLevels.МАСТЕР;
+                        this.AccesLevel = AccesLevels.Мастер;
                     }
                 }
             }

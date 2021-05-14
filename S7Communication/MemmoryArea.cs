@@ -1,6 +1,6 @@
-﻿namespace Simatic.Driver
+﻿namespace S7Communication
 {
-    public enum DataType
+    public enum MemmoryArea
     {
         Input = 129,
         Output,

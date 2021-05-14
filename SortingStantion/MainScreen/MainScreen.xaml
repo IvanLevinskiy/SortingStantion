@@ -4,9 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortingStantion.MainScreen"
+        xmlns:convert="clr-namespace:SortingStantion.Converters"
         mc:Ignorable="d"
         Title="Сортировочный стенд" Height="450" Width="800"
         WindowState="Maximized">
+
+    <Window.Resources>
+        <convert:ObjToBoolConverter x:Key="obc"/>
+        <convert:InverseObjToBoolConverter x:Key="iobc"/>
+    </Window.Resources>
+    
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
@@ -36,8 +43,21 @@
                         Margin="0,0,0,10"
                         Command="{Binding AuthorizationCMD}">
 
-                    <Grid DataContext="{Binding AccesLevelModel}">
-                        <TextBlock Text="{Binding DisplayName, Mode=OneWay}" TextAlignment="Center"/>
+                    <Grid DataContext="{Binding AccesLevelModel}"
+                          Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="50"/>
+                            <ColumnDefinition Width="110"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0"
+                              Height="30">
+                            <ContentPresenter Content="{StaticResource IconUser}"/>
+                        </Grid>
+
+                        <TextBlock  Grid.Column="1"
+                                    Text="{Binding DisplayName, Mode=OneWay}" 
+                                    TextAlignment="Center"/>
                     </Grid>
                    
                 </Button>
@@ -111,7 +131,7 @@
                 <TextBlock VerticalAlignment="Top" 
                            HorizontalAlignment="Left"
                            Margin="30,30,10,10"
-                           Text="Выпущено продуктов ___"/>
+                           Text="Выпущено продуктов ______________"/>
 
                 <TextBlock VerticalAlignment="Top" 
                            HorizontalAlignment="Left"
@@ -163,14 +183,29 @@
 
 
                 <Button Grid.Column="1"
+                        Command="{Binding Start}"
+                        IsEnabled="{Binding Run.Status, Converter={StaticResource iobc}}"
+                        BorderBrush="Green"
                         Margin="20,5,20,5">
                     <TextBlock>Старт</TextBlock>
                 </Button>
 
                 <Button Grid.Column="2"
+                        Command="{Binding Stop}"
+                        BorderBrush="Red"
+                        IsEnabled="{Binding Run.Status, Converter={StaticResource obc}}"
                         Margin="20,5,20,5">
                     <TextBlock>Стоп</TextBlock>
                 </Button>
+
+                <TextBlock Text="{Binding sbool_0.StatusText}"
+                           VerticalAlignment="Center"
+                           />
+
+                <TextBlock Text="{Binding sbool_1.StatusText}"
+                           VerticalAlignment="Center"
+                           Margin="120,0,0,0"
+                           />
 
             </Grid>
 

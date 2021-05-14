@@ -1,10 +1,10 @@
-﻿using Simatic.Driver;
+﻿using S7Communication.Utilites;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace S7Communication.Driver
+namespace S7Communication
 {
     public class simaticTagBase : INotifyPropertyChanged
     {
@@ -25,6 +25,16 @@ namespace S7Communication.Driver
         }
         string name;
 
+        /// <summary>
+        /// Полное имя тэга
+        /// </summary>
+        public string FullName
+        {
+            get
+            {
+                return $"{group.FullName}.{Name}";
+            }
+        }
 
         /// <summary>
         /// Адрес тэга
@@ -39,7 +49,11 @@ namespace S7Communication.Driver
             {
                 address = value;
                 temporyAddress = value;
+                
+                //Разбор адреса
                 ParseAddress(address);
+
+                //Обновление модели представления
                 OnPropertyChanged("Address");
             }
         }
@@ -81,6 +95,8 @@ namespace S7Communication.Driver
         }
         string statusText = string.Empty;
 
+
+
         /// <summary>
         /// Статус тэга
         /// </summary>
@@ -92,30 +108,58 @@ namespace S7Communication.Driver
             }
             set
             {
-                status = value;
-                ObjectToString();
+                //Проверка на нулевой указатель
+                if (status == null)
+                {
+                    status = value;
+                    UpdatedValue(value);
+                    return;
+                }
+
+                //Обработка полученых данных
+                if (status.Equals(value) == false)
+                {
+                    status = value;
+                    UpdatedValue(value);
+                    ChangeValue?.Invoke(status);
+                }
+
+                OnPropertyChanged("Status");
             }
         }
         object status = 0;
 
         /// <summary>
-        /// Список тэгов (костыль для MVVM)
+        /// Событие, генерируемое при
+        /// изменении значения переменной
         /// </summary>
-        public ObservableCollection<simaticTagBase> Tags
+        public event Action<object> ChangeValue;
+
+        /// <summary>
+        /// Свойство для MVVM
+        /// </summary>
+        public bool IsSelected
         {
             get
             {
-                var tags = new ObservableCollection<simaticTagBase>();
-                tags.Add(this);
-                return tags;
+                return _isSelected;
+            }
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged("IsSelected");
+
+                //Костыль
+                group.ParentDevice.server.FindeSelectedElement();
             }
         }
+        bool _isSelected;
 
 
         /// <summary>
         /// Тип данных ПЛК
         /// </summary>
-        public DataType DataType
+        public MemmoryArea DataType
         {
             get;
             set;
@@ -173,20 +217,24 @@ namespace S7Communication.Driver
         public object OldStatus = null;
 
         /// <summary>
-        /// Родительская группа
+        /// Родительское устройство
         /// </summary>
-        public S7Group ParentGroup
+        public SimaticDevice device
         {
             get
             {
-                return parentGroup;
-            }
-            set
-            {
-                parentGroup = value;
+                return group.ParentDevice;
             }
         }
-        S7Group parentGroup = new S7Group();
+
+        /// <summary>
+        /// Родительская группа
+        /// </summary>
+        public SimaticGroup group
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Конструктор класса
@@ -199,29 +247,29 @@ namespace S7Communication.Driver
         /// <summary>
         /// Метод для разбора адреса
         /// </summary>
-        private void ParseAddress(string address)
+        public void ParseAddress(string address)
         {
             //Получение типа данных
-            //DataType = Converter.StringToDataType(address);
+            DataType = Converter.StringToDataType(address);
 
-            ////Получение номера блока данных
-            //if (DataType == Driver.DataType.DataBlock)
-            //{
-            //    //Получение фрагмента адреса с номером ДБ 
-            //    var dbn_ar = address.Split('.');
+            //Получение номера блока данных
+            if (DataType == MemmoryArea.DataBlock)
+            {
+                //Получение фрагмента адреса с номером ДБ 
+                var dbn_ar = address.Split('.');
 
-            //    string dbn_0 = dbn_ar[0];
-            //    temporyAddress = dbn_ar[1];
+                string dbn_0 = dbn_ar[0];
+                temporyAddress = dbn_ar[1];
 
-            //    //Удаление лишнего текста
-            //    dbn_0 = dbn_0.Replace("DB", "");
+                //Удаление лишнего текста
+                dbn_0 = dbn_0.Replace("DB", "");
 
-            //    //Удаление пробелов
-            //    dbn_0 = dbn_0.Replace(" ", "");
+                //Удаление пробелов
+                dbn_0 = dbn_0.Replace(" ", "");
 
-            //    //Преобразование в численный вид
-            //    DBNumber = Convert.ToInt16(dbn_0);
-            //}
+                //Преобразование в численный вид
+                DBNumber = Convert.ToInt16(dbn_0);
+            }
 
             //Получение начального байта в адресе переменной
             string stb = string.Empty;
@@ -269,9 +317,9 @@ namespace S7Communication.Driver
         }
 
         /// <summary>
-        /// Метод для чтения тэга
+        /// Метод для перевода типа к строковому виду
         /// </summary>
-        public virtual void Read()
+        public virtual void UpdatedValue(object value)
         {
 
         }

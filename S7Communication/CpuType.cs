@@ -1,10 +1,10 @@
-﻿namespace Simatic.Driver
+﻿namespace S7Communication
 {
     public enum CpuType
     {
         S7200,
-        S7300  = 10,
-        S7400  = 20,
+        S7300 = 10,
+        S7400 = 20,
         S71200 = 30,
         S71500 = 40
     }

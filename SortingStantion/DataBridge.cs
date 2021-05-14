@@ -1,4 +1,5 @@
-﻿using SortingStantion.UserAdmin;
+﻿using S7Communication;
+using SortingStantion.UserAdmin;
 
 namespace SortingStantion
 {
@@ -9,6 +10,9 @@ namespace SortingStantion
         /// </summary>
         public static AccesLevelModel MainAccesLevelModel;
 
-
+        /// <summary>
+        /// Сервер
+        /// </summary>
+        public static SimaticServer server = new SimaticServer();
     }
 }

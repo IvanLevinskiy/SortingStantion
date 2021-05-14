@@ -53,6 +53,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\S7_FIELD_IO.cs" />
+    <Compile Include="Converters\InverseObjToBoolConverter.cs" />
+    <Compile Include="Converters\ObjToBoolConverter.cs" />
     <Compile Include="DataBridge.cs" />
     <Compile Include="UserAdmin\AccesLevelModel.cs" />
     <Compile Include="UserAdmin\frameAuthorization.xaml.cs">
@@ -63,6 +66,10 @@
     <Page Include="Dictionarys\ButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dictionarys\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainScreen\MainScreen.xaml">
       <Generator>MSBuild:Compile</Generator>

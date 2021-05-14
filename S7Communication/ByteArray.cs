@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace S7Communication.Driver
+namespace S7Communication
 {
-	internal class ByteArray
+    internal class ByteArray
 	{
 		private List<byte> list = new List<byte>();
 

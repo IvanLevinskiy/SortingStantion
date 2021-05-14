@@ -1,4 +1,4 @@
-﻿namespace Simatic.Driver
+﻿namespace S7Communication
 {
     public enum VarType
     {
