@@ -63,10 +63,10 @@ namespace SortingStantion.UserAdmin
             {
                 if (CurrentUser == null)
                 {
-                    return string.Empty;
+                    return "***";
                 }
 
-                return $"{CurrentUser.AccesLevel}:\n{CurrentUser.Name}";
+                return $"{CurrentUser.AccesLevel}: {CurrentUser.Name}";
             }
         }
 

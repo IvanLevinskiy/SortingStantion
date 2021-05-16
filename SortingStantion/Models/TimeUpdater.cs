@@ -35,11 +35,10 @@ namespace SortingStantion.Models
             {
                 while (true)
                 {
-                    currentTime = DateTime.Now.ToString("HH mm");
-                    OnPropertyChanged("CurrentTime");
-                    Thread.Sleep(1000);
-
-                    currentTime = DateTime.Now.ToString("HH:mm");
+                    //currentTime = DateTime.Now.ToString("HH mm");
+                    //OnPropertyChanged("CurrentTime");
+                    //Thread.Sleep(1000);
+                    currentTime = DateTime.Now.ToString("HH:mm:ss  dd.MM.yyyy");
                     OnPropertyChanged("CurrentTime");
                     Thread.Sleep(1000);
                 }

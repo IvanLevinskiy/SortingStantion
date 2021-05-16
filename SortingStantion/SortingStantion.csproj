@@ -57,17 +57,32 @@
     <Compile Include="Converters\InverseObjToBoolConverter.cs" />
     <Compile Include="Converters\ObjToBoolConverter.cs" />
     <Compile Include="DataBridge.cs" />
+    <Compile Include="frameMain\frameMain.xaml.cs">
+      <DependentUpon>frameMain.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserAdmin\AccesLevelModel.cs" />
     <Compile Include="UserAdmin\frameAuthorization.xaml.cs">
       <DependentUpon>frameAuthorization.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserAdmin\User.cs" />
     <Compile Include="Utilites\DelegateCommand.cs" />
+    <Page Include="Dictionarys\Brushes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionarys\ButtonStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Dictionarys\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dictionarys\TextBlockStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="frameMain\frameMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -58,6 +58,22 @@ namespace SortingStantion.MainScreen
             set;
         }
 
+        /// <summary>
+        /// Главное содержимое экрана
+        /// </summary>
+        object _mainScreenContent = new SortingStantion.frameMain.frameMain();
+        public object mainScreenContent
+        {
+            get
+            {
+                return _mainScreenContent;
+            }
+            set
+            {
+                _mainScreenContent = value;
+                OnPropertyChanged("mainScreenContent");
+            }
+        }
 
         /// <summary>
         /// Конструктор
