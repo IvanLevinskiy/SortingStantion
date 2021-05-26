@@ -35,5 +35,42 @@
         </Setter>
     </Style>
 
+    <!--КНОПКА ЗАКРЫТЬ ПРИЛОЖЕНИЕ-->
+    <Style x:Key="ButtonExit" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid Background="{TemplateBinding Background}">
+                        <Viewbox Margin="5">
+                            <Grid Width="400" Height="400">
+
+                                <Line X1="0" Y1="0" X2="390" Y2="370" 
+                                      Fill="{TemplateBinding Foreground}" 
+                                      StrokeThickness="30" 
+                                      Stroke="{TemplateBinding Foreground}" />
+
+                                <Line X1="390" Y1="0" X2="0" Y2="370" 
+                                      Fill="{TemplateBinding Foreground}" 
+                                      StrokeThickness="30" 
+                                      Stroke="{TemplateBinding Foreground}" />
+                            </Grid>
+                        </Viewbox>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="0.5"/>
+                <Setter Property="Cursor" Value="Hand"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 </ResourceDictionary>

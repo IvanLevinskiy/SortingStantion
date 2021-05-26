@@ -13,6 +13,9 @@ namespace S7Communication
             this.Address = address;
             this.group = simaticGroup;
             this.Lenght = 4;
+
+            //Добавление тэга в группу
+            simaticGroup.Tags.Add(this);
         }
 
         /// <summary>

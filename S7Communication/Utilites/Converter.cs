@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace S7Communication.Utilites
 {
-    public class Converter
+    public class Converters
     {
         /// <summary>
         /// Преобразование XmlNode в SimaticType
@@ -49,6 +49,11 @@ namespace S7Communication.Utilites
             try
             {
                 XmlNode attribut = node.Attributes.GetNamedItem(XmlNodeStr);
+
+                if (attribut == null)
+                {
+                    return string.Empty;
+                }
 
                 if (attribut.Value != string.Empty)
                 {
@@ -98,6 +103,13 @@ namespace S7Communication.Utilites
             try
             {
                 XmlNode attribut = node.Attributes.GetNamedItem(XmlNodeStr);
+
+                //Возвращение значения по умолчанию
+                if (attribut == null)
+                {
+                    return CpuType.S7300;
+                }
+
 
                 if (attribut.Value != string.Empty)
                 {

@@ -191,7 +191,7 @@ namespace S7Communication
             ParentDevice = sDevice;
 
             //Получение имени группы
-            Name = Utilites.Converter.XmlNodeToString(node, "Name");
+            Name = Utilites.Converters.XmlNodeToString(node, "Name");
 
 
             //Наполнение коллекции тэгами
@@ -211,9 +211,9 @@ namespace S7Communication
         {
 
             //Получаем свойства тэга
-            var type = Utilites.Converter.XmlNodeToString(xmlNode, "Type").ToUpper();
-            var address = Utilites.Converter.XmlNodeToString(xmlNode, "Address");
-            var name = Utilites.Converter.XmlNodeToString(xmlNode, "Name");
+            var type = Utilites.Converters.XmlNodeToString(xmlNode, "Type").ToUpper();
+            var address = Utilites.Converters.XmlNodeToString(xmlNode, "Address");
+            var name = Utilites.Converters.XmlNodeToString(xmlNode, "Name");
 
             //Создаем регистр
             simaticTagBase tag = null;

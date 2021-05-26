@@ -96,7 +96,6 @@ namespace S7Communication
         string statusText = string.Empty;
 
 
-
         /// <summary>
         /// Статус тэга
         /// </summary>
@@ -154,7 +153,6 @@ namespace S7Communication
             }
         }
         bool _isSelected;
-
 
         /// <summary>
         /// Тип данных ПЛК
@@ -250,7 +248,7 @@ namespace S7Communication
         public void ParseAddress(string address)
         {
             //Получение типа данных
-            DataType = Converter.StringToDataType(address);
+            DataType = Converters.StringToDataType(address);
 
             //Получение номера блока данных
             if (DataType == MemmoryArea.DataBlock)
@@ -295,9 +293,18 @@ namespace S7Communication
         /// Метод для записи состояния переменной
         /// </summary>
         /// <param name="Value"></param>
-        public virtual void Write(object Value)
+        public virtual bool Write(object Value)
         {
-   
+            return false;
+        }
+
+        /// <summary>
+        /// Метод для записи состояния переменной
+        /// </summary>
+        /// <param name="Value"></param>
+        public virtual bool Write(string Value)
+        {
+            return false;
         }
 
         /// <summary>

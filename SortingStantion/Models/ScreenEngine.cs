@@ -1,0 +1,92 @@
+﻿using SortingStantion.Utilites;
+using System.ComponentModel;
+using System.Windows.Input;
+
+namespace SortingStantion.Models
+{
+    /// <summary>
+    /// Движок для управления экранами
+    /// </summary>
+    public class ScreenEngine : INotifyPropertyChanged
+    {
+
+        /// <summary>
+        /// Главный экран
+        /// </summary>
+        frameMain.frameMain frameMain = new SortingStantion.frameMain.frameMain();
+
+        /// <summary>
+        /// Экран настроек
+        /// </summary>
+        frameSettings.frameSettings frameSettings = new SortingStantion.frameSettings.frameSettings();
+
+        /// <summary>
+        /// Текущий экран
+        /// </summary>
+        object currentScreen;
+        public object CurrentScreen
+        {
+            get
+            {
+                return currentScreen;
+            }
+            set
+            {
+                currentScreen = value;
+                OnPropertyChanged("CurrentScreen");
+            }
+        }
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        public ScreenEngine()
+        {
+            CurrentScreen = frameMain;
+        }
+
+        /// <summary>
+        /// Команда открытия главного
+        /// экрана
+        /// </summary>
+        public ICommand OpenMainScreenCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    CurrentScreen = frameMain;
+                },
+                (obj) => (true));
+            }
+        }
+
+        /// <summary>
+        /// Команда открытия экрана
+        /// настроек
+        /// </summary>
+        public ICommand OpenSettingsScreenCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    CurrentScreen = frameSettings;
+                },
+                (obj) => (true));
+            }
+        }
+
+        #region Реализация интерфейса INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+
+        }
+        #endregion
+    }
+}

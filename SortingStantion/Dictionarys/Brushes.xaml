@@ -12,6 +12,7 @@
     <SolidColorBrush x:Key="DarkColor" Color="#FF292929" />
     <SolidColorBrush x:Key="LightColor" Color="#FF323232" />
 
-    <SolidColorBrush x:Key="IconColor" Color="#FF676767" />
+    <!--<SolidColorBrush x:Key="IconColor" Color="#FF676767" />-->
+    <SolidColorBrush x:Key="IconColor" Color="#FFE1E1E1" />
 
 </ResourceDictionary>

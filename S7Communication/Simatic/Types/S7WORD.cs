@@ -19,6 +19,9 @@ namespace S7Communication
 
             //Разбор адреса операнда
             ParseAddress(Address);
+
+            //Добавление тэга в группу
+            simaticGroup.Tags.Add(this);
         }
 
         /// <summary>

@@ -53,19 +53,47 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\customMessageBox.xaml.cs">
+      <DependentUpon>customMessageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MSG.xaml.cs">
+      <DependentUpon>MSG.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\rButton.cs" />
     <Compile Include="Controls\S7_FIELD_IO.cs" />
     <Compile Include="Converters\InverseObjToBoolConverter.cs" />
     <Compile Include="Converters\ObjToBoolConverter.cs" />
+    <Compile Include="Converters\SwitchBindingExtension.cs" />
     <Compile Include="DataBridge.cs" />
+    <Compile Include="Dictionarys\WindowStyles.xaml.cs">
+      <DependentUpon>WindowStyles.xaml</DependentUpon>
+    </Compile>
     <Compile Include="frameMain\frameMain.xaml.cs">
       <DependentUpon>frameMain.xaml</DependentUpon>
     </Compile>
+    <Compile Include="frameSettings\frameSettings.xaml.cs">
+      <DependentUpon>frameSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="frameSettings\frameSettingsViewModel.cs" />
+    <Compile Include="Models\MSG_ENGINE.cs" />
+    <Compile Include="Models\ScreenEngine.cs" />
+    <Compile Include="S7Extension\Item.cs" />
+    <Compile Include="TechnologicalObjects\Conveyor.cs" />
+    <Compile Include="TechnologicalObjects\WorkAssignment.cs" />
     <Compile Include="UserAdmin\AccesLevelModel.cs" />
     <Compile Include="UserAdmin\frameAuthorization.xaml.cs">
       <DependentUpon>frameAuthorization.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserAdmin\User.cs" />
     <Compile Include="Utilites\DelegateCommand.cs" />
+    <Page Include="Controls\customMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MSG.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionarys\Brushes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -78,11 +106,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dictionarys\rButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionarys\TextBlockStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dictionarys\WindowStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="frameMain\frameMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="frameSettings\frameSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

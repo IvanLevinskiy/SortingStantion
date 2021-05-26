@@ -59,7 +59,8 @@
 
     <!--ИКОНКА ВЫХОДА ИЗ ПРИЛОЖЕНИЯ-->
     <Canvas x:Key="IconExitApp" x:Shared="false" Height="38" Width="38">
-        <Path Data="M4 29.03C4 18.74 8.67 14.07 19.15 13.88V7L34.8 17.67L19.15 28.33V21.45C13.85 21.45 10.5 21.77 5.14 29.4L4 31.05V29.03ZM20.41 25.93L32.59 17.66L20.41 9.4V15.14H19.78C10.19 15.14 5.89 18.61 5.33 27.01C10.63 20.19 14.54 20.19 19.78 20.19H20.41V25.93Z" Fill="#666666"/>
+        <Path Data="M4 29.03C4 18.74 8.67 14.07 19.15 13.88V7L34.8 17.67L19.15 28.33V21.45C13.85 21.45 10.5 21.77 5.14 29.4L4 31.05V29.03ZM20.41 25.93L32.59 17.66L20.41 9.4V15.14H19.78C10.19 15.14 5.89 18.61 5.33 27.01C10.63 20.19 14.54 20.19 19.78 20.19H20.41V25.93Z" 
+              Fill="{StaticResource IconColor}"/>
     </Canvas>
 
     <!--ИКОНКА СБРОСА-->
@@ -242,7 +243,7 @@
         <Canvas Width="512" Height="512" >
             <Canvas.Resources>
                 <Style TargetType="Polygon">
-                    <Setter Property="Fill" Value="Green"/>
+                    <Setter Property="Fill" Value="#FFFF323B"/>
                     <!--<Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type ContentControl}},Path=Foreground}"/>-->
                 </Style>
             </Canvas.Resources>

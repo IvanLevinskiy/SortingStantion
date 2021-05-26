@@ -1,0 +1,97 @@
+﻿using System.ComponentModel;
+using System.Windows;
+
+namespace SortingStantion.Controls
+{
+    /// <summary>
+    /// Логика взаимодействия для customMessageBox.xaml
+    /// </summary>
+    public partial class customMessageBox : Window, INotifyPropertyChanged
+    {
+        /// <summary>
+        /// Заголовок
+        /// </summary>
+        string caption = string.Empty;
+        public string Caption
+        {
+            get
+            {
+                return caption;
+            }
+            set
+            {
+                caption = value;
+                OnPropertyChanged("Caption");
+            }
+
+        }
+
+        /// <summary>
+        /// Сообщение
+        /// </summary>
+        string message = string.Empty;
+        public string Message
+        {
+            get
+            {
+                return message;
+            }
+            set
+            {
+                message = value;
+                OnPropertyChanged("Message");
+            }
+
+        }
+
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        public customMessageBox(string caption, string message)
+        {
+            InitializeComponent();
+
+            Message = message;
+            Caption = caption;
+
+            DataContext = this;
+        }
+
+        /// <summary>
+        /// Метод вызываемый при нажатии на
+        /// кнопку ЗАКРЫТЬ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+
+        #region Реализация интерфейса INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+
+        }
+        #endregion
+
+        private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                this.DragMove();
+            }
+            catch
+            { 
+            
+            }
+        }
+
+    }
+}

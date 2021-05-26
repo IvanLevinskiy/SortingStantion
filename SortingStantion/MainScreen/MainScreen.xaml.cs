@@ -11,6 +11,12 @@ namespace SortingStantion.MainScreen
         {
             InitializeComponent();
 
+            //Передача контейнера для
+            //отображения сообщений
+            DataBridge.MSGBOX.grid = MSGCONTAINER;
+
+            //Передача  UI Dispatcher
+            DataBridge.UIDispatcher = this.Dispatcher;
         }
 
         /// <summary>
@@ -21,6 +27,18 @@ namespace SortingStantion.MainScreen
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                this.DragMove();
+            }
+            catch
+            { 
+            
+            }
         }
     }
 }

@@ -44,6 +44,9 @@ namespace S7Communication
             var sarray = Address.Split('.');
             var sbit = sarray[sarray.Length - 1];
             Bit = Convert.ToInt16(sbit);
+
+            //Добавление тэга в группу
+            simaticGroup.AddTag(this);
         }
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace S7Communication
         /// Метод для записи значения в ПЛК
         /// </summary>
         /// <param name="value"></param>
-        public override void Write(object value)
+        public override bool Write(object value)
         {
             var _value = Convert.ToBoolean(value);
 
@@ -85,7 +88,7 @@ namespace S7Communication
                     Status = value;
                 }
 
-                return;
+                return result;
             }
 
             //Алгоритм сброса бита
@@ -107,8 +110,10 @@ namespace S7Communication
                     Status = value;
                 }
 
-                return;
+                return result;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -155,6 +160,8 @@ namespace S7Communication
         public override void BuildStatus(byte[] bytes, int startbytefromrequest)
         {
             int offset = StartByteAddress - startbytefromrequest;
+
+            var v =  this.Address;
 
             //Если отсутсвует указатель
             //на массив байт - выходим

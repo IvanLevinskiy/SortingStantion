@@ -1,6 +1,7 @@
 ﻿using S7Communication;
-using Simatic;
 using SortingStantion.Models;
+using SortingStantion.S7Extension;
+using SortingStantion.TechnologicalObjects;
 using SortingStantion.UserAdmin;
 using SortingStantion.Utilites;
 using System.ComponentModel;
@@ -34,14 +35,73 @@ namespace SortingStantion.MainScreen
         }
 
         /// <summary>
-        /// Указатель на главный Simatic TCP сервер
+        /// Модель для управления экранами
         /// </summary>
-        SimaticServer server = DataBridge.server;
+        public ScreenEngine ScreenEngine
+        {
+            get
+            {
+                return DataBridge.ScreenEngine;
+            }
+        }
 
         /// <summary>
-        /// Команда ПУСК-ОСТАНОВКА
+        /// Указатель на главный Simatic TCP сервер
         /// </summary>
-        public S7BOOL Run
+        public SimaticServer server
+        {
+            get
+            {
+                return DataBridge.server;
+            }
+        }
+
+        /// <summary>
+        /// Указатель на экземпляр ПЛК
+        /// </summary>
+        public SimaticDevice device
+        {
+            get
+            {
+                return  server.Devices[0];
+            }
+        }
+
+        /// <summary>
+        /// Указатель на группу, где хранятся все тэгиК
+        /// </summary>
+        public SimaticGroup group
+        {
+            get
+            {
+                return device.Groups[0];
+            }
+        }
+
+        /// <summary>
+        /// Технологический объект - конвейер
+        /// </summary>
+        public Conveyor Conveyor
+        {
+            get
+            {
+                return DataBridge.Conveyor;
+            }
+            set
+            {
+                Conveyor = value;
+            }
+        }
+
+        /// <summary>
+        /// Технологический объект - рабочее задание
+        /// </summary>
+
+        /// <summary>
+        /// Команда принять - завершить
+        /// задание
+        /// </summary>
+        public S7BOOL TaskTag
         {
             get;
             set;
@@ -58,21 +118,12 @@ namespace SortingStantion.MainScreen
             set;
         }
 
-        /// <summary>
-        /// Главное содержимое экрана
-        /// </summary>
-        object _mainScreenContent = new SortingStantion.frameMain.frameMain();
-        public object mainScreenContent
+       
+
+        Item CurrentItem
         {
-            get
-            {
-                return _mainScreenContent;
-            }
-            set
-            {
-                _mainScreenContent = value;
-                OnPropertyChanged("mainScreenContent");
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -86,25 +137,14 @@ namespace SortingStantion.MainScreen
 
             //Инициализация модели пользователей
             DataBridge.MainAccesLevelModel = new AccesLevelModel();
-
-            //Инициализация устройства
-            var device = new SimaticDevice("192.168.0.1", CpuType.S71200, slot:1, rack:0);
-
-            //Группа тэгов
-            var group = new SimaticGroup("");
-
+                        
             //Тэг который сбрасывает дисконект
             ConnectFlag = new S7BOOL("ConnectFlag", "DB1.DBX0.0", group);
 
-           
+            //Тэг для принятия - завершения задания
+            TaskTag = new S7BOOL("", "DB1.DBX182.0", group);
 
-            Run = new S7BOOL("", "DB1.DBX18.0", group);
-
-
-            group.AddTag(Run);
-            device.AddGroup(group);
-            server.AddDevice(device);
-
+            //Запуск сервера
             server.Start();
 
 
@@ -119,35 +159,44 @@ namespace SortingStantion.MainScreen
             });
         }
 
+      
+
         /// <summary>
-        /// Команда для открытия окна авторизации
+        /// Команда для запуска - остановки
+        /// линии
         /// </summary>
-        public ICommand Start
+        public ICommand AcceptTaskCMD
         {
             get
             {
                 return new DelegateCommand((obj) =>
                 {
-                    Run.Write(true);
+                    //Если статус не является
+                    //булевым значением - игнорируем обработку
+                    //команды
+                    if (TaskTag.Status is bool? == false)
+                    {
+                        return;
+                    }
+
+                    if ((bool?)TaskTag.Status == true)
+                    {
+                        //Запись статуса в ПЛК
+                        TaskTag.Write(false);
+                        return;
+                    }
+
+                    if ((bool?)TaskTag.Status == false)
+                    {
+                        //Запись статуса в ПЛК
+                        TaskTag.Write(true);
+                        return;
+                    }
                 },
                 (obj) => (true));
             }
         }
 
-        /// <summary>
-        /// Команда для открытия окна авторизации
-        /// </summary>
-        public ICommand Stop
-        {
-            get
-            {
-                return new DelegateCommand((obj) =>
-                {
-                    Run.Write(false);
-                },
-                (obj) => (true));
-            }
-        }
 
         /// <summary>
         /// Команда для открытия окна авторизации

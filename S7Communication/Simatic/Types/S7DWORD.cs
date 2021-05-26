@@ -16,6 +16,9 @@ namespace S7Communication
 
             //Разбор адреса операнда
             ParseAddress(Address);
+
+            //Добавление тэга в группу
+            simaticGroup.Tags.Add(this);
         }
 
         /// <summary>
@@ -65,7 +68,7 @@ namespace S7Communication
                 return;
             }
 
-            if (bytes.Length < 4)
+            if (bytes.Length < offset + 4)
             {
                 Status = null;
                 StatusText = string.Empty;
@@ -73,7 +76,7 @@ namespace S7Communication
             }
 
             //Построение статуса из байтов
-            Status = (UInt32)(bytes[0] << 32) | (UInt32)(bytes[1] << 16) | (UInt32)(bytes[2] << 8) | ((UInt32)(bytes[3]));
+            Status = (UInt32)(bytes[0 + offset] << 32) | (UInt32)(bytes[1 + offset] << 16) | (UInt32)(bytes[2 + offset] << 8) | ((UInt32)(bytes[3 + offset]));
         }
     }
 }

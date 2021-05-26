@@ -137,7 +137,10 @@ namespace S7Communication
                 {
                     DataType = tag.DataType;
                     DBNumber = tag.DBNumber;
-                    
+
+                    //Определяем первый байт в запросе
+                    StartByte = tag.StartByteAddress;
+
                     //Добавление тэга в колекцию
                     //экземпляра
                     Tags.Add(tag);
@@ -155,7 +158,7 @@ namespace S7Communication
                 }
 
                 //Проверка на то, подходит текущий тэг 
-                //пакету тэгов по критериям (область памяти, дб, ...)
+                //пакету тэгов по критериям (область памяти, дб, длина ...)
                 if (AddressSpaceIsValid(tag) == true)
                 {
                     //Добавление тэга в колекцию
@@ -175,9 +178,7 @@ namespace S7Communication
             //Сортировка тэгов по первому байту
             Tags = Tags.OrderBy(o => o.StartByteAddress).ToList();
 
-            //Определяем первый байт в запросе
-            StartByte = FirstTag.StartByteAddress;
-
+           
             //Определение количество байт 
             //за один запрос
             Lenght = LastTag.StartByteAddress + LastTag.Lenght - StartByte;
@@ -196,6 +197,10 @@ namespace S7Communication
             temp = (DataType == tag.DataType);
             temp &= (DBNumber == tag.DBNumber);
             temp &= (Tags[0] != tag);
+
+            var lenght = tag.StartByteAddress + tag.Lenght - StartByte;
+
+            temp &= lenght <= 200;
 
             return temp;
 

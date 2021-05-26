@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System;
 using System.Net;
 using System.Threading;
+using System.Linq;
 
 namespace S7Communication
 {
@@ -106,10 +107,18 @@ namespace S7Communication
         /// Свойство, указывающее доступно ли
         /// устройство Plc
         /// </summary>
+        bool isAvailable = false;
         public bool IsAvailable
         {
-            get;
-            set;
+            get
+            {
+                return isAvailable;
+            }
+            set
+            {
+                isAvailable = value;
+                OnPropertyChanged("IsAvailable");
+            }
         }
 
         /// <summary>
@@ -265,19 +274,19 @@ namespace S7Communication
             Groups = new ObservableCollection<SimaticGroup>();
 
             //Получение имени из файла
-            Name = Utilites.Converter.XmlNodeToString(node, "Name");
+            Name = Utilites.Converters.XmlNodeToString(node, "Name");
 
             //Получение типа ПЛК
-            CPU = Utilites.Converter.XmlNodeToCpuType(node, "TypePLC");
+            CPU = Utilites.Converters.XmlNodeToCpuType(node, "CPU");
 
             //Получение IP
-            IP = Utilites.Converter.XmlNodeToString(node, "IP");
+            IP = Utilites.Converters.XmlNodeToString(node, "IP");
 
             //Получение Rack
-            Rack = (short)Utilites.Converter.XmlNodeToInt(node, "Rack");
+            Rack = (short)Utilites.Converters.XmlNodeToInt(node, "Rack");
 
             //Получение Slot
-            Slot = (short)Utilites.Converter.XmlNodeToInt(node, "Slot");
+            Slot = (short)Utilites.Converters.XmlNodeToInt(node, "Slot");
 
             //Наполение коллекции группами
             foreach (XmlNode groupnode in node.ChildNodes)
@@ -346,30 +355,9 @@ namespace S7Communication
 
             try
             {
-                byte[] array = new byte[]
-                {
-                    3,
-                    0,
-                    0,
-                    22,
-                    17,
-                    224,
-                    0,
-                    0,
-                    0,
-                    46,
-                    0,
-                    193,
-                    2,
-                    1,
-                    0,
-                    194,
-                    2,
-                    3,
-                    0,
-                    192,
-                    1,
-                    9
+                byte[] array = new byte[] 
+                { 
+                    3, 0, 0, 22, 17, 224, 0, 0, 0, 46, 0, 193, 2, 1, 0, 194, 2, 3, 0, 192, 1, 9 
                 };
 
                 CpuType cPU = this.CPU;
@@ -439,40 +427,20 @@ namespace S7Communication
                 return false;
                 IL_241:
 
-
+                //Отправка телеграммы
                 this._mSocket.Send(array, 22, SocketFlags.None);
+
+
                 if (this._mSocket.Receive(buffer, 22, SocketFlags.None) != 22)
                 {
                     throw new Exception(ErrorCode.WrongNumberReceivedBytes.ToString());
                 }
+
                 byte[] buffer2 = new byte[]
                 {
-                    3,
-                    0,
-                    0,
-                    25,
-                    2,
-                    240,
-                    128,
-                    50,
-                    1,
-                    0,
-                    0,
-                    255,
-                    255,
-                    0,
-                    8,
-                    0,
-                    0,
-                    240,
-                    0,
-                    0,
-                    3,
-                    0,
-                    3,
-                    1,
-                    0
+                    3, 0, 0, 25, 2, 240, 128, 50, 1, 0, 0, 255, 255, 0, 8, 0, 0, 240, 0, 0, 3, 0, 3, 1, 0
                 };
+
                 this._mSocket.Send(buffer2, 25, SocketFlags.None);
                 if (this._mSocket.Receive(buffer, 27, SocketFlags.None) != 27)
                 {
@@ -516,16 +484,9 @@ namespace S7Communication
             byteArray.Add((byte)(19 + 12 * amount));
             byteArray.Add(new byte[]
             {
-                2,
-                240,
-                128,
-                50,
-                1,
-                0,
-                0,
-                0,
-                0
+                2, 240, 128, 50, 1, 0, 0, 0, 0
             });
+
             byteArray.Add(Word.ToByteArray((ushort)(2 + amount * 12)));
             byteArray.Add(new byte[]
             {
@@ -617,12 +578,12 @@ namespace S7Communication
             catch (SocketException ex)
             {
                 //Переподключение
-                ReconnectRequest = true;
+               // ReconnectRequest = true;
                 result = null;
             }
             catch (Exception ex2)
             {
-                ReconnectRequest = true;
+                //ReconnectRequest = true;
                 result = null;
             }
             return result;
@@ -796,6 +757,24 @@ namespace S7Communication
                 return new S7WORD("", s7operand, group);
             }
 
+            //Если тэг STIME
+            if (s7operand.Contains("-STIME"))
+            {
+                return new S7TIME("", s7operand, group);
+            }
+
+            //Если тэг WSTRING
+            if (s7operand.Contains("-WSTR"))
+            {
+                return new S7_WSTRING("", s7operand, group);
+            }
+
+            //Если тэг STRING
+            if (s7operand.Contains("-STR"))
+            {
+                return new S7_STRING("", s7operand, group);
+            }
+
             return null;
         }
 
@@ -851,6 +830,10 @@ namespace S7Communication
             {
                 tags.Add(tag);
             }
+
+            //Сортировка тэгов по первому байту
+            //Сортировка тэгов по первому байту
+            tags = Tags.OrderBy(o => o.StartByteAddress).ToList();
 
             //Распределение тэгов по 
             //коллекции

@@ -33,8 +33,13 @@ namespace SortingStantion.Controls
                 {
                     return;
                 }
+
+                S7TAG.ChangeValue += S7TAG_ChangeValue;
+
             }
         }
+
+        
         string address;
 
         /// <summary>
@@ -127,13 +132,12 @@ namespace SortingStantion.Controls
 
         /// <summary>
         /// Обработчик события по изминению
-        /// состояния регистра
+        /// состояния тэга
         /// </summary>
         /// <param name="obj"></param>
-        private void Register_ChangeValue(object obj)
+        private void S7TAG_ChangeValue(object obj)
         {
             SetText(S7TAG.StatusText);
-
         }
 
 
@@ -157,7 +161,7 @@ namespace SortingStantion.Controls
             originalsourse.Text = text;
 
             //Возвращаем подписку на изменение регистра
-            S7TAG.ChangeValue += Register_ChangeValue;
+            S7TAG.ChangeValue += S7TAG_ChangeValue;
         }
 
         /// <summary>
@@ -187,11 +191,11 @@ namespace SortingStantion.Controls
                 }
 
                 //Запоинаем текст в контроле
-                //if ((bool)S7TAG?.Write(value))
-                //{
-                //    text = Text;
-                //    deFocus();
-                //}
+                if ((bool)S7TAG?.Write(this.Text))
+                {
+                    text = Text;
+                    deFocus();
+                }
 
                 return;
             }
@@ -200,7 +204,7 @@ namespace SortingStantion.Controls
             //возвращаем значение
             if (e.Key == Key.Escape)
             {
-                Register_ChangeValue(true);
+                S7TAG_ChangeValue(true);
                 //DataBridge.FocusElement.Focus();
             }
         }
@@ -259,7 +263,7 @@ namespace SortingStantion.Controls
             //значения тэга
             if (S7TAG != null)
             {
-                S7TAG.ChangeValue -= Register_ChangeValue;
+                S7TAG.ChangeValue -= S7TAG_ChangeValue;
             }
         }
 
