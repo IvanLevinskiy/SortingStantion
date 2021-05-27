@@ -93,5 +93,16 @@ namespace SortingStantion.Controls
             }
         }
 
+        /// <summary>
+        /// Станичный метод для отображения окна
+        /// сообщения
+        /// </summary>
+        /// <param name="message"></param>
+        public static void Show(string message)
+        {
+            customMessageBox cmb = new customMessageBox("Ошибка", message);
+            cmb.ShowDialog();
+        }
+
     }
 }

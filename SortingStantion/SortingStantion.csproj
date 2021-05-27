@@ -77,6 +77,7 @@
     <Compile Include="frameSettings\frameSettingsViewModel.cs" />
     <Compile Include="Models\MSG_ENGINE.cs" />
     <Compile Include="Models\ScreenEngine.cs" />
+    <Compile Include="Models\SettingsFile.cs" />
     <Compile Include="S7Extension\Item.cs" />
     <Compile Include="TechnologicalObjects\Conveyor.cs" />
     <Compile Include="TechnologicalObjects\WorkAssignment.cs" />

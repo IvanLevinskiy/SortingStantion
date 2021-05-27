@@ -33,6 +33,12 @@ namespace SortingStantion
         /// </summary>
         public static ScreenEngine ScreenEngine = new ScreenEngine();
 
+        /// <summary>
+        /// Файл с конфигурацией приложения
+        /// </summary>
+        public static SettingsFile SettingsFile = new SettingsFile(@"AppData\Settings.xml");
+
+
         // **********   ТЕХНОЛОГИЧЕСКИЕ ОБЪЕКТЫ ***************//
 
         /// <summary>
@@ -44,5 +50,7 @@ namespace SortingStantion
         /// Рабочее задание
         /// </summary>
         public static WorkAssignment WorkAssignment = new WorkAssignment();
+
+
     }
 }

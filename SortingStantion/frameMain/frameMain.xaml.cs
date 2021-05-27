@@ -10,6 +10,9 @@ namespace SortingStantion.frameMain
         public frameMain()
         {
             InitializeComponent();
+
+            //DataBridge.SettingsFile = new Models.SettingsFile(@"AppData\Settings.xml");
+           // var s = DataBridge.SettingsFile.GetValue("SrvL3Url");
         }
     }
 }
