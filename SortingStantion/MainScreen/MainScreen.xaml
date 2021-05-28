@@ -198,22 +198,21 @@
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
 
-                <!--СТАТУС ПЛК-->
-                <Border Grid.Column="3"
-                        BorderBrush="{StaticResource GridColor}"
-                        BorderThickness="1,0,1,1">
-
-                    <Grid>
-                        <ContentPresenter Content="{convert:SwitchBinding device.IsAvailable, 
-                                                   {StaticResource plcConnectionOK}, 
-                                                   {StaticResource plcConnectionError}}"/>
-                    </Grid>
-                    
-                </Border>
-
-                <!--КНОПКА ПРИНЯТИЯ ЗАДАНИЯ-->
-                <Button Grid.Column="4"
+                <!--КНОПКА ПРИНЯТИЯ ЗАДАНИЕ-->
+                <Button Grid.Column="2"
                         Margin="1,0,1,2"
+                        Style="{StaticResource cButton}"
+                        Background="{StaticResource DarkColor}"
+                        Foreground="{StaticResource IconColor}"
+                        BorderThickness="0"
+                        BorderBrush="Transparent"
+                        Content="{convert:SwitchBinding TaskTag.Status, {StaticResource btnFinishTask}, {StaticResource btnAcceptTask}}"
+                        Command="{Binding AcceptTaskCMD}"/>
+
+                <!--КНОПКА ЗАВЕРШИТЬ ЗАДАНИЕ-->
+                <Button Grid.Column="3"
+                        Margin="1,0,1,2"
+                        Style="{StaticResource cButton}"
                         Background="{StaticResource DarkColor}"
                         Foreground="{StaticResource IconColor}"
                         BorderThickness="0"
@@ -222,16 +221,39 @@
                         Command="{Binding AcceptTaskCMD}"/>
 
 
-
-                <!--КНОПКА ЗАПУСКА-ОСТАНОВА ЛИНИИ-->
-                <Button Grid.Column="5"
+                <!--КНОПКА Запуска ЛИНИИ-->
+                <Button Grid.Column="4"
                         Margin="1,0,1,2"
-                        Background="{StaticResource DarkColor}"
+                        Style="{StaticResource cButton}"
+                        Background="#FF6DC27A"
                         Foreground="{StaticResource IconColor}"
                         BorderThickness="0"
                         BorderBrush="Transparent"
-                        Content="{convert:SwitchBinding Conveyor.Run.Status, {StaticResource btnStop}, {StaticResource btnStart}}"
-                        Command="{Binding Conveyor.StartStopLineCMD}"/>
+        
+                        Command="{Binding Conveyor.StartLineCMD}">
+                    <TextBlock TextAlignment="Center">
+                        <Run>Запустить</Run>
+                        <LineBreak/>
+                        <Run>линию</Run>
+                    </TextBlock>
+                </Button>
+
+                <!--КНОПКА ОСТАНОВА ЛИНИИ-->
+                <Button Grid.Column="5"
+                        Margin="1,0,1,2"
+                        Style="{StaticResource cButton}"
+                        Background="#FFDB4969"
+                        Foreground="{StaticResource IconColor}"
+                        BorderThickness="0"
+                        BorderBrush="Transparent"
+        
+                        Command="{Binding Conveyor.StopLineCMD}">
+                    <TextBlock TextAlignment="Center">
+                        <Run>Остановить</Run>
+                        <LineBreak/>
+                        <Run>линию</Run>
+                    </TextBlock>
+                </Button>
 
 
                 <!--ЧАСЫ - ПОЛЬЗОВАТЕЛЬ-->

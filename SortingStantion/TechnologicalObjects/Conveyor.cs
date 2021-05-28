@@ -70,10 +70,10 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
-        /// Команда для запуска - остановки
+        /// Команда для запуска
         /// линии
         /// </summary>
-        public ICommand StartStopLineCMD
+        public ICommand StartLineCMD
         {
             get
             {
@@ -84,14 +84,6 @@ namespace SortingStantion.TechnologicalObjects
                     //команды
                     if (Run.Status is bool? == false)
                     {
-                        return;
-                    }
-
-                    //Если конвейер запущен - останавливаем его
-                    if ((bool?)Run.Status == true)
-                    {
-                        //Запись статуса в ПЛК
-                        Run.Write(false);
                         return;
                     }
 
@@ -113,9 +105,59 @@ namespace SortingStantion.TechnologicalObjects
                         return;
                     }
                 },
-                (obj) => (true));
+                (obj) => (GetStateLine() == false));
             }
         }
+
+        /// <summary>
+        /// Команда для остановки
+        /// линии
+        /// </summary>
+        public ICommand StopLineCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    //Если статус не является
+                    //булевым значением - игнорируем обработку
+                    //команды
+                    if (Run.Status is bool? == false)
+                    {
+                        return;
+                    }
+
+                    //Если конвейер запущен - останавливаем его
+                    if ((bool?)Run.Status == true)
+                    {
+                        //Запись статуса в ПЛК
+                        Run.Write(false);
+                        return;
+                    }
+
+                    
+                },
+                (obj) => (GetStateLine() == true));
+            }
+        }
+
+        /// <summary>
+        /// Метод для получения состояния линии
+        /// true - запущена
+        /// false - остановлена
+        /// null - не определено
+        /// </summary>
+        /// <returns></returns>
+        bool? GetStateLine()
+        {
+            if (Run.Status is bool? == false)
+            {
+                return null;
+            }
+
+            return (bool?)Run.Status;
+        }
+
 
         /// <summary>
         /// Метод, вызываемый при изминении

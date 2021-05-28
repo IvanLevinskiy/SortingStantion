@@ -265,6 +265,8 @@ namespace SortingStantion.Controls
             {
                 S7TAG.ChangeValue -= S7TAG_ChangeValue;
             }
+
+ 
         }
 
         #region РЕАЛИЗАЦИЯ ИНТЕРФЕЙСА INotifyPropertyChanged

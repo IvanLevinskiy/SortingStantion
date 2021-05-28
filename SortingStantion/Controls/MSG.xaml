@@ -17,12 +17,14 @@
 
         <!--ПОЛЕ ДАТЫ-->
         <TextBlock Text="{Binding Datetime}"
+                   Foreground="White"
                    Grid.Column="0"
                    VerticalAlignment="Center"
                    TextAlignment="Center"/>
 
         <!--ПОЛЕ СООБЩЕНИЯ-->
         <TextBlock Text="{Binding Message}"
+                   Foreground="White"
                    Grid.Column="1"
                    VerticalAlignment="Center"
                    TextAlignment="Left"/>

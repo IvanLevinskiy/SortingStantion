@@ -31,6 +31,13 @@ namespace SortingStantion.Models
             grid.Children.Clear();
             grid.Children.Add(msg);
             MESSAGES.Add(msg);
+
+            //Если сообщений больше 4
+            //удаляем самое первое
+            if (MESSAGES.Count > 4)
+            {
+                MESSAGES.RemoveAt(0);
+            }
         }
 
         /// <summary>

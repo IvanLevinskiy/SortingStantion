@@ -113,12 +113,13 @@ namespace SortingStantion.Controls
 
             if (type == MSGTYPE.SUCCES)
             {
-                return new SolidColorBrush(Colors.Green);
+                //Зеленый цвет
+                return new SolidColorBrush(Color.FromArgb(0xFF, 0x7D, 0xD2, 0x94));
             }
 
             if (type == MSGTYPE.ERROR)
             {
-                return new SolidColorBrush(Colors.Red);
+                return new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
             }
 
             return new SolidColorBrush(Colors.Transparent);
