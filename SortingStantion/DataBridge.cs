@@ -6,6 +6,9 @@ using System.Windows.Threading;
 
 namespace SortingStantion
 {
+    /// <summary>
+    /// Класс для храниния и доступа к глобальным объектам
+    /// </summary>
     public class DataBridge
     {
         /// <summary>
@@ -14,22 +17,22 @@ namespace SortingStantion
         public static Dispatcher UIDispatcher;
 
         /// <summary>
-        /// Клавная модель, управляющая пользователями
+        /// Модель, управляющая пользователями
         /// </summary>
         public static AccesLevelModel MainAccesLevelModel;
 
         /// <summary>
-        /// Сервер
+        /// Simatic tcp сервер
         /// </summary>
         public static SimaticServer server = new SimaticServer("AppData/Plc.xml");
 
         /// <summary>
         /// Модель, управляющая сообщениями на главном экране
         /// </summary>
-        public static MSG_ENGINE MSGBOX = new MSG_ENGINE();
+        public static Message_Engine MSGBOX = new Message_Engine();
 
         /// <summary>
-        /// Модель для управления экранами
+        /// Модель управляющая экранами
         /// </summary>
         public static ScreenEngine ScreenEngine = new ScreenEngine();
 
@@ -39,7 +42,9 @@ namespace SortingStantion
         public static SettingsFile SettingsFile = new SettingsFile(@"AppData\Settings.xml");
 
 
-        // **********   ТЕХНОЛОГИЧЕСКИЕ ОБЪЕКТЫ ***************//
+        /// <summary>
+        /// **********   ТЕХНОЛОГИЧЕСКИЕ ОБЪЕКТЫ ***************
+        /// </summary>
 
         /// <summary>
         /// Конвейер - линия
@@ -51,6 +56,10 @@ namespace SortingStantion
         /// </summary>
         public static WorkAssignment WorkAssignment = new WorkAssignment();
 
+        /// <summary>
+        /// Объяект, управляющий обработкой аварий от ПЛК
+        /// </summary>
+        public static AlarmsEngine AlarmsEngine = new AlarmsEngine();
 
     }
 }

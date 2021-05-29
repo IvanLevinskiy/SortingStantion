@@ -114,7 +114,7 @@ namespace SortingStantion.Controls
             if (type == MSGTYPE.SUCCES)
             {
                 //Зеленый цвет
-                return new SolidColorBrush(Color.FromArgb(0xFF, 0x7D, 0xD2, 0x94));
+                return new SolidColorBrush(Color.FromArgb(0xFF, 0x6D, 0xC2, 0x7A));
             }
 
             if (type == MSGTYPE.ERROR)

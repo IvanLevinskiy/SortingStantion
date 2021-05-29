@@ -57,6 +57,40 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Флаг, указывающий, что
+        /// линия запущена (для View Model)
+        /// </summary>
+        public bool LineIsRun
+        {
+            get 
+            {
+                if (Run.Status is bool? == false)
+                {
+                    return false;
+                }
+
+                return (bool)Run.Status == true;
+            }
+        }
+
+        /// <summary>
+        /// Флаг, указывающий, что
+        /// линия остановлена (для View Model)
+        /// </summary>
+        public bool LineIsStop
+        {
+            get
+            {
+                if (Run.Status is bool? == false)
+                {
+                    return false;
+                }
+
+                return (bool)Run.Status == false;
+            }
+        }
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public Conveyor()
@@ -105,7 +139,7 @@ namespace SortingStantion.TechnologicalObjects
                         return;
                     }
                 },
-                (obj) => (GetStateLine() == false));
+                (obj) => (true));
             }
         }
 
@@ -137,27 +171,9 @@ namespace SortingStantion.TechnologicalObjects
 
                     
                 },
-                (obj) => (GetStateLine() == true));
+                (obj) => (true));
             }
         }
-
-        /// <summary>
-        /// Метод для получения состояния линии
-        /// true - запущена
-        /// false - остановлена
-        /// null - не определено
-        /// </summary>
-        /// <returns></returns>
-        bool? GetStateLine()
-        {
-            if (Run.Status is bool? == false)
-            {
-                return null;
-            }
-
-            return (bool?)Run.Status;
-        }
-
 
         /// <summary>
         /// Метод, вызываемый при изминении
@@ -201,6 +217,10 @@ namespace SortingStantion.TechnologicalObjects
                 };
                 DataBridge.UIDispatcher.Invoke(action);
             }
+
+            //уведомление модели представления
+            OnPropertyChanged("LineIsRun");
+            OnPropertyChanged("LineIsStop");
         }
 
         #region Реализация интерфейса INotifyPropertyChanged

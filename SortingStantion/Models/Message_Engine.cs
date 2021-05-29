@@ -9,7 +9,7 @@ namespace SortingStantion.Models
     /// Класс, осуществляющий управление 
     /// сообщениями в информационном окне
     /// </summary>
-    public class MSG_ENGINE
+    public class Message_Engine
     {
         /// <summary>
         /// Коллекция всех сообщений
@@ -47,6 +47,13 @@ namespace SortingStantion.Models
         /// <param name="msg"></param>
         public void Remove(MSG msg)
         {
+            //Если указателя на msg нет
+            //выходим из функции
+            if (msg == null)
+            {
+                return;
+            }
+
             //Очищаем контейнер
             grid.Children.Clear();
             MESSAGES.Remove(msg);

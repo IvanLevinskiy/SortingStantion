@@ -75,10 +75,12 @@
       <DependentUpon>frameSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="frameSettings\frameSettingsViewModel.cs" />
-    <Compile Include="Models\MSG_ENGINE.cs" />
+    <Compile Include="Models\AlarmsEngine.cs" />
+    <Compile Include="Models\Message_Engine.cs" />
     <Compile Include="Models\ScreenEngine.cs" />
     <Compile Include="Models\SettingsFile.cs" />
     <Compile Include="S7Extension\Item.cs" />
+    <Compile Include="S7Extension\S7DiscreteAlarm.cs" />
     <Compile Include="TechnologicalObjects\Conveyor.cs" />
     <Compile Include="TechnologicalObjects\WorkAssignment.cs" />
     <Compile Include="UserAdmin\AccesLevelModel.cs" />

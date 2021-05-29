@@ -94,6 +94,21 @@ namespace SortingStantion.MainScreen
         }
 
         /// <summary>
+        /// Технологический объект - задание
+        /// </summary>
+        public WorkAssignment WorkAssignment
+        {
+            get
+            {
+                return DataBridge.WorkAssignment;
+            }
+            set
+            {
+                WorkAssignment = value;
+            }
+        }
+
+        /// <summary>
         /// Технологический объект - рабочее задание
         /// </summary>
 
@@ -118,13 +133,6 @@ namespace SortingStantion.MainScreen
             set;
         }
 
-       
-
-        Item CurrentItem
-        {
-            get;
-            set;
-        }
 
         /// <summary>
         /// Конструктор
@@ -141,8 +149,6 @@ namespace SortingStantion.MainScreen
             //Тэг который сбрасывает дисконект
             ConnectFlag = new S7BOOL("ConnectFlag", "DB1.DBX0.0", group);
 
-            //Тэг для принятия - завершения задания
-            TaskTag = new S7BOOL("", "DB1.DBX182.0", group);
 
             //Запуск сервера
             server.Start();
@@ -161,41 +167,7 @@ namespace SortingStantion.MainScreen
 
       
 
-        /// <summary>
-        /// Команда для запуска - остановки
-        /// линии
-        /// </summary>
-        public ICommand AcceptTaskCMD
-        {
-            get
-            {
-                return new DelegateCommand((obj) =>
-                {
-                    //Если статус не является
-                    //булевым значением - игнорируем обработку
-                    //команды
-                    if (TaskTag.Status is bool? == false)
-                    {
-                        return;
-                    }
-
-                    if ((bool?)TaskTag.Status == true)
-                    {
-                        //Запись статуса в ПЛК
-                        TaskTag.Write(false);
-                        return;
-                    }
-
-                    if ((bool?)TaskTag.Status == false)
-                    {
-                        //Запись статуса в ПЛК
-                        TaskTag.Write(true);
-                        return;
-                    }
-                },
-                (obj) => (true));
-            }
-        }
+       
 
 
         /// <summary>

@@ -1,5 +1,7 @@
 ﻿using S7Communication;
+using SortingStantion.Utilites;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace SortingStantion.TechnologicalObjects
 {
@@ -74,12 +76,57 @@ namespace SortingStantion.TechnologicalObjects
         }
 
 
-
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
         public WorkAssignment()
         {
             //Инициализация тэга
             inWorkTag = new S7BOOL("", "DB1.DBX182.0", group);
         }
+
+        /// <summary>
+        /// Команда - принять задание
+        /// </summary>
+        public ICommand AcceptTaskCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+
+                    if (InWork == false)
+                    {
+                        //Запись статуса в ПЛК
+                        inWorkTag.Write(true);
+                        return;
+                    }
+                },
+                (obj) => (InWork == false));
+            }
+        }
+
+        /// <summary>
+        /// Команда для завершения задания
+        /// </summary>
+        public ICommand FinishTaskCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+
+                    if (InWork == true)
+                    {
+                        //Запись статуса в ПЛК
+                        inWorkTag.Write(false);
+                        return;
+                    }
+                },
+                (obj) => (InWork == true));
+            }
+        }
+
 
 
         #region Реализация интерфейса INotifyPropertyChanged

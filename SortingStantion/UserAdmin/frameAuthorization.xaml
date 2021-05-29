@@ -59,6 +59,7 @@
         <Button Height="60"
                 FontSize="20"
                 Margin="80,30,15,5"
+                Style="{StaticResource cButton}"
                 Command="{Binding AuthorizationCMD}"
                 Background="{StaticResource LightColor}"
                 Foreground="{StaticResource TextColor}"
