@@ -7,7 +7,7 @@
         Style="{StaticResource VS2012WindowStyle}"
         mc:Ignorable="d"
         Title="Авторизация пользователя"
-        Height="320" 
+        Height="370" 
         Width="600"
         Background="{StaticResource DarkColor}"
         WindowStartupLocation="CenterScreen">
@@ -21,7 +21,38 @@
                        Foreground="{StaticResource TextColor}"
                        VerticalAlignment="Center"/>
 
-            <TextBox x:Name="tbxLogin"
+            <ComboBox SelectedItem="{Binding SelectedUser}"
+                      ItemsSource="{Binding Users}"
+                      Margin="80,0,5,0" 
+                      Background="{StaticResource LightColor}"
+                      Foreground="{StaticResource TextColor}"
+                      Height="40"
+                      FontSize="20">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock  Foreground="{StaticResource TextColor}"
+                                        Text="{Binding Name}"
+                                        FontSize="20"
+                                        HorizontalAlignment="Center"
+                                        TextAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+        </Grid>
+
+        <!--ШТРИХКОД-->
+        <Grid Height="50"
+              Margin="5">
+            <TextBlock Text="ID:"
+                       FontSize="20"
+                       Foreground="{StaticResource TextColor}"
+                       VerticalAlignment="Center"/>
+
+            <TextBox x:Name="tbID"
+                     Text="{Binding SelectedUser.ID}"
                      Background="{StaticResource LightColor}"
                      Foreground="{StaticResource TextColor}"
                      BorderThickness="0"
@@ -32,6 +63,12 @@
                      Margin="80,0,5,0" 
                      Height="40"/>
 
+            <!--КВАДРАТ НАД ПОЛЕМ ВВОДА-ВЫВОДА ДЛЯ ТОГО, ЧТОБ НЕБЫЛО КУРСОРА-->
+            <Rectangle  Fill="Transparent"
+                        Margin="80,0,5,0" 
+                        Height="40"/>
+
+
         </Grid>
 
         <!--ПАРОЛЬ-->
@@ -39,6 +76,7 @@
               Margin="5">
             <TextBlock Text="Пароль:"
                        FontSize="20"
+                       Height="40"
                        Foreground="{StaticResource TextColor}"
                        VerticalAlignment="Center"/>
 

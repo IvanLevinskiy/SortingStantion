@@ -128,7 +128,7 @@ namespace SortingStantion.TechnologicalObjects
                         //иначе уведомляем оператора сообщением
                         if (DataBridge.WorkAssignment.InWork == false)
                         {
-                            customMessageBox mb = new customMessageBox("Ошибка", "Запуск линии невозможен! Необходимо принять задание в работу!");
+                            customMessageBox mb = new customMessageBox("Ошибка", "Запуск невозможен, задание не принято в работу");
                             mb.ShowDialog();
 
                             return;
