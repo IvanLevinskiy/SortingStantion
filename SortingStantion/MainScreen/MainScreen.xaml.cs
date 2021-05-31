@@ -11,10 +11,6 @@ namespace SortingStantion.MainScreen
         {
             InitializeComponent();
 
-            //Передача контейнера для
-            //отображения сообщений
-            DataBridge.MSGBOX.grid = MSGCONTAINER;
-
             //Передача  UI Dispatcher
             DataBridge.UIDispatcher = this.Dispatcher;
         }

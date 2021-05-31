@@ -7,419 +7,241 @@
         xmlns:convert="clr-namespace:SortingStantion.Converters"
         xmlns:controls="clr-namespace:SortingStantion.Controls"
         mc:Ignorable="d"
-        Title="Сортировочный стенд" Height="450" Width="800"
+        Title="Сортировочный стенд" Height="768" Width="1024"
         Background="{StaticResource LightColor}"
+        WindowState="Maximized"
         WindowStyle="None"
-        AllowsTransparency="True"
-        WindowState="Maximized" >
+        AllowsTransparency="True">
 
     <Window.Resources>
         <convert:ObjToBoolConverter x:Key="obc"/>
         <convert:InverseObjToBoolConverter x:Key="iobc"/>
-
-       
-        
-
-        <!--ПРЕДСТАВЛЕНИЕ КНОПКИ - ЗАВЕРШИТЬ ЗАДАНИЕ-->
-        <Grid Width="120" x:Key="btnFinishTask">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Width="20">
-                <ContentPresenter Content="{StaticResource IconTask}"/>
-            </Grid>
-
-            <TextBlock Grid.Column="1"
-                                   HorizontalAlignment="Center"
-                                   TextAlignment="Center"
-                                   FontFamily="Tahoma"
-                                   Margin="0">
-                                <Run>ЗАВЕРШИТЬ</Run>
-                                <LineBreak/>
-                                <Run>ЗАДАНИЕ</Run>
-            </TextBlock>
-
-        </Grid>
-
-        <!--ПРЕДСТАВЛЕНИЕ ИНДИКАТОРА - ЕСТЬ СВЯЗЬ С ПЛК-->
-        <Grid x:Key="plcConnectionOK">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="25"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <Viewbox Width="25">
-                <Grid >
-                    <ContentPresenter Content="{StaticResource IconPLCOk}"/>
-                </Grid>
-            </Viewbox>
-
-
-
-            <TextBlock TextAlignment="Left"
-                                   Grid.Column="1"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextColor}"
-                                   FontFamily="Tahoma"
-                                   Margin="0">
-                                <Run>ЕСТЬ СВЯЗЬ</Run>
-                                <LineBreak/>
-                                <Run>С ПЛК</Run>
-            </TextBlock>
-
-
-        </Grid>
-
-        <!--ПРЕДСТАВЛЕНИЕ ИНДИКАТОРА - НЕТ СВЯЗИ С ПЛК-->
-        <Grid x:Key="plcConnectionError">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="25"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <Viewbox Width="25">
-                <Grid >
-                    <ContentPresenter Content="{StaticResource IconPLCError}"/>
-                </Grid>
-            </Viewbox>
-
-
-
-            <TextBlock TextAlignment="Left"
-                                   Grid.Column="1"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   Foreground="{StaticResource TextColor}"
-                                   FontFamily="Tahoma"
-                                   Margin="0">
-                                <Run>НЕТ СВЯЗИ</Run>
-                                <LineBreak/>
-                                <Run>С ПЛК</Run>
-            </TextBlock>
-
-
-        </Grid>
-
     </Window.Resources>
     
     <Window.DataContext>
         <local:MainViewModel/>
     </Window.DataContext>
-    <Viewbox VerticalAlignment="Stretch">
-        <Grid Height="450" Width="800">
-           
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="2"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
 
-            <!--ВЕРХНЯЯ СТРОКА-->
-            <Grid Margin="0,5,5,2" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="10"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="50"/>
-                </Grid.ColumnDefinitions>
+    <Grid>
 
-                <!--КНОПКА ПРИНЯТИЯ ЗАДАНИЕ-->
-                <Button Grid.Column="2"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!--ВЕРХНЯЯ СТРОКА-->
+        <Grid Margin="0,5,5,2" 
+              MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+
+            <!--КНОПКА ПРИНЯТИЯ ЗАДАНИЕ-->
+            <Button Grid.Column="0"
                         Margin="1,0,1,2"
-                        Style="{StaticResource cButton}"
+                        Style="{StaticResource btnStyle}"
                         Background="{StaticResource DarkColor}"
                         Foreground="{StaticResource IconColor}"
                         BorderThickness="0"
                         BorderBrush="Transparent"
                         Command="{Binding WorkAssignment.AcceptTaskCMD}">
 
-                    <Grid Width="100">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="25"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                <Grid Width="200">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                        <Grid Width="20">
-                            <ContentPresenter Content="{StaticResource IconAddTask}"/>
-                        </Grid>
+                    <Grid Width="50">
+                        <ContentPresenter Content="{StaticResource IconAddTask}"/>
+                    </Grid>
 
-                        <TextBlock Grid.Column="1"
+                    <TextBlock Grid.Column="1"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Left"
                                    FontFamily="Tahoma"
+                                   FontSize="{StaticResource fontSizeButtons}"
                                    Margin="0">
                                 <Run>Принять</Run>
                                 <LineBreak/>
                                 <Run>задание</Run>
-                        </TextBlock>
+                    </TextBlock>
 
-                    </Grid>
+                </Grid>
 
-                </Button>
+            </Button>
 
-                <!--КНОПКА ЗАВЕРШИТЬ ЗАДАНИЕ-->
-                <Button Grid.Column="3"
+            <!--КНОПКА ЗАВЕРШИТЬ ЗАДАНИЕ-->
+            <Button Grid.Column="1"
                         Margin="1,0,1,2"
-                        Style="{StaticResource cButton}"
+                        Style="{StaticResource btnStyle}"
                         Background="{StaticResource DarkColor}"
                         Foreground="{StaticResource IconColor}"
                         BorderThickness="0"
                         BorderBrush="Transparent"
                         Command="{Binding WorkAssignment.FinishTaskCMD}">
 
-                    <Grid Width="100">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="25"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                <Grid Width="200">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                        <Grid Width="20">
-                            <ContentPresenter Content="{StaticResource IconFinishTask}"/>
-                        </Grid>
+                    <Grid Width="50">
+                        <ContentPresenter Content="{StaticResource IconFinishTask}"/>
+                    </Grid>
 
-                        <TextBlock Grid.Column="1"
+                    <TextBlock Grid.Column="1"
                                    HorizontalAlignment="Center"
                                    TextAlignment="Left"
                                    FontFamily="Tahoma"
+                               FontSize="{StaticResource fontSizeButtons}"
                                    Margin="0">
                                 <Run>Завершить</Run>
                                 <LineBreak/>
                                 <Run>задание</Run>
-                        </TextBlock>
-
-                    </Grid>
-
-                </Button>
-
-
-                <!--КНОПКА Запуска ЛИНИИ-->
-                <Button Grid.Column="5"
-                        Margin="1,0,1,2"
-                        Style="{StaticResource cButton}"
-                        Background="#FF6DC27A"
-                        Foreground="{StaticResource IconColor}"
-                        BorderThickness="0"
-                        BorderBrush="Transparent"
-                        Command="{Binding Conveyor.StartLineCMD}">
-                    <TextBlock TextAlignment="Center">
-                        <Run>Запустить</Run>
-                        <LineBreak/>
-                        <Run>линию</Run>
                     </TextBlock>
-                </Button>
 
-                <!--КНОПКА ОСТАНОВА ЛИНИИ-->
-                <Button Grid.Column="6"
-                        Margin="1,0,1,2"
-                        Style="{StaticResource cButton}"
-                        Background="#FFDB4969"
-                        Foreground="{StaticResource IconColor}"
-                        BorderThickness="0"
-                        BorderBrush="Transparent"
-                        IsEnabled="{Binding Conveyor.LineIsRun}"
-                        Command="{Binding Conveyor.StopLineCMD}">
-                    <TextBlock TextAlignment="Center">
-                        <Run>Остановить</Run>
-                        <LineBreak/>
-                        <Run>линию</Run>
-                    </TextBlock>
-                </Button>
+                </Grid>
+
+            </Button>
 
 
-                <!--ЧАСЫ - ПОЛЬЗОВАТЕЛЬ-->
-                <Border Grid.Column="7"
+           
+
+            <!--ЧАСЫ - ПОЛЬЗОВАТЕЛЬ-->
+            <Border Grid.Column="2"
                         Margin="0,0,0,2"
                         BorderBrush="Transparent"
                         BorderThickness="1,1,0,1">
 
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                        <Grid Background="#FF676767" 
+                    <Grid Background="#FF676767" 
                               Margin="5,1,5,1">
-                            
-                            <!--ТЕКУЩЕЕ ВРЕМЯ-->
-                            <TextBlock Grid.Column="3"
-                                       Margin="0"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Text="{Binding CurrentTime.CurrentTime}"
-                                       Foreground="{StaticResource DarkColor}"/>
-                        </Grid>
 
-                        <Button Grid.Row="1"
+                        <!--ТЕКУЩЕЕ ВРЕМЯ-->
+                        <TextBlock Grid.Column="3"
+                                   Margin="0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   FontSize="{StaticResource fontSizeData}"
+                                   Text="{Binding CurrentTime.CurrentTime}"
+                                   Foreground="{StaticResource DarkColor}"/>
+                    </Grid>
+
+                    <Button Grid.Row="1"
                                 Margin="5,1,5,1"
-                                FontSize="8"
-                                Style="{StaticResource cButton}"
+                                Style="{StaticResource btnStyle}"
                                 Command="{Binding AuthorizationCMD}"
                                 BorderBrush="Transparent"
                                 Foreground="{StaticResource TextColor}"
                                 Background="Transparent">
 
-                            <Grid DataContext="{Binding AccesLevelModel}">
-                                <!--<Grid.ColumnDefinitions>
+                        <Grid DataContext="{Binding AccesLevelModel}">
+                            <!--<Grid.ColumnDefinitions>
                                     <ColumnDefinition MinWidth="50"/>
                                     <ColumnDefinition Width="110"/>
                                 </Grid.ColumnDefinitions>-->
 
-                                <!--<Grid Grid.Column="0"
+                            <!--<Grid Grid.Column="0"
                               Height="30">
                                     <ContentPresenter Content="{StaticResource IconUser}"/>
                                 </Grid>-->
 
-                                <TextBlock  Grid.Column="1"
-                                    Text="{Binding DisplayName, Mode=OneWay}" 
-                                    TextAlignment="Center"/>
-                            </Grid>
+                            <TextBlock  Grid.Column="1"
+                                        Text="{Binding DisplayName, Mode=OneWay}" 
+                                        FontSize="{StaticResource fontSizeButtons}"
+                                        TextAlignment="Center"/>
+                        </Grid>
 
-                        </Button>
+                    </Button>
 
-                    </Grid>
-                    
-                </Border>
+                </Grid>
 
-                <!--КНОПКА ВЫЗОВА НАСТРОЕК-->
-                <Button Grid.Column="8"
-                        Margin="0,0,0,2"
-                        BorderThickness="1"
-                        Style="{StaticResource cButton}"
-                        BorderBrush="{StaticResource GridColor}"
-                        Background="#FF292929"
-                        Click="btnExit_Click">
-                    <Grid>
-                        <Viewbox Margin="10,0,10,10"
+            </Border>
+
+            <!--КНОПКА ВЫЗОВА НАСТРОЕК-->
+            <Button Grid.Column="3"
+                    Margin="0,0,0,2"
+                    BorderThickness="1"
+                    Style="{StaticResource btnStyle}"
+                    DataContext="{Binding ScreenEngine}"
+                    Command="{Binding OpenSettingsScreenCMD}"
+                    BorderBrush="{StaticResource GridColor}"
+                    Background="#FF292929">
+                <Grid>
+                    <Viewbox Margin="10,0,10,10"
                                  VerticalAlignment="Top">
-                            <ContentPresenter  Content="{StaticResource IconSettings}"/>
-                        </Viewbox>
+                        <ContentPresenter  Content="{StaticResource IconSettings}"/>
+                    </Viewbox>
 
-                        <TextBlock Text="НАСТРОЙКИ"
+                    <TextBlock Text="НАСТРОЙКИ"
                                    VerticalAlignment="Bottom"
                                    HorizontalAlignment="Center"
                                    Foreground="{StaticResource IconColor}"
                                    FontSize="8"/>
-                    </Grid>
-                </Button>
+                </Grid>
+            </Button>
 
-                <!--КНОПКА ВЫХОДА ИЗ ПРИЛОЖЕНИЯ-->
-                <Button Grid.Column="9"
-                        Margin="0,0,0,2"
-                        BorderThickness="1"
-                        Style="{StaticResource cButton}"
-                        BorderBrush="{StaticResource GridColor}"
-                        Background="#FF292929"
-                        Click="btnExit_Click">
-                    <Grid>
-                        <Viewbox Margin="10,0,10,10"
+            <!--КНОПКА ВЫХОДА ИЗ ПРИЛОЖЕНИЯ-->
+            <controls:cButton   Grid.Column="4"
+                                Margin="0,0,0,2"
+                                BorderThickness="1"
+                                Style="{StaticResource accesslevrl_btn_Style}"
+                                BorderBrush="{StaticResource GridColor}"
+                                Background="#FF292929"
+                                Click="btnExit_Click">
+                <Grid>
+                    <Viewbox Margin="10,0,10,10"
                                  VerticalAlignment="Top">
-                            <ContentPresenter  Content="{StaticResource IconExitApp}"/>
-                        </Viewbox>
-                   
-                        <TextBlock Text="ВЫХОД"
+                        <ContentPresenter  Content="{StaticResource IconExitApp}"/>
+                    </Viewbox>
+
+                    <TextBlock Text="ВЫХОД"
                                    VerticalAlignment="Bottom"
                                    HorizontalAlignment="Center"
                                    Foreground="{StaticResource IconColor}"
                                    FontSize="8"/>
-                    </Grid>
-                </Button>
+                </Grid>
+            </controls:cButton>
 
-                <Rectangle Fill="{StaticResource DarkColor}"
+            <Rectangle Fill="{StaticResource DarkColor}"
                            Grid.ColumnSpan="6"
                            Height="1"
                             VerticalAlignment="Bottom"/>
 
-                <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown"
+            <Grid MouseLeftButtonDown="Grid_MouseLeftButtonDown"
                       Background="{StaticResource GridColor}"
                       Opacity="0.5"
                       Margin="5">
-                    
-                </Grid>
-
-            </Grid>
-
-            <!--ОБРАМЛЕНИЕ ВЕРХНЕЙ РАМКИ-->
-            <Border Grid.Row="1"
-                    BorderBrush="{StaticResource DarkColor}"
-                    BorderThickness="0,1,0,1" Background="#FF2B2B2B"/>
-
-            <!--ЗОНА ИНФОРМАЦИИ-->
-            <Grid Grid.Row="2">
-
-                <Border BorderThickness="0,1,0,1"
-                        BorderBrush="{StaticResource GridColor}">
-
-                    <Grid x:Name="MSGCONTAINER">
-                        <Rectangle Fill="Orange"
-                               Opacity="0.5"
-                               Margin="0,1,0,1"/>
-
-                        <TextBlock Text="18:00:00 16.05.2021              Линия остановлена"
-                                   Margin="10,0,0,0"/>
-                    </Grid>
-
-                   
-
-                </Border>
-
-            </Grid>
-
-            <!--ГЛАВНЫЙ ЭКРАН-->
-            <Grid Grid.Row="3"
-                  Background="#FF262626">
-
-                <ContentControl Content="{Binding ScreenEngine.CurrentScreen}"/>
-
-            </Grid>
-
-            <!--НИЖНЯЯ СТРОКА-->
-            <Grid Grid.Row="4" 
-                  Background="#FF323232"
-                  DataContext="{Binding ScreenEngine}">
-
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel.Resources>
-                        <Style TargetType="Button">
-                            <Setter Property="Width" Value="150"/>
-                            <Setter Property="Margin" Value="0,0,0,2"/>
-                            <Setter Property="Background" Value="{StaticResource DarkColor}"/>
-                            <Setter Property="Foreground" Value="{StaticResource IconColor}"/>
-                            <Setter Property="BorderBrush" Value="{StaticResource GridColor}"/>
-                        </Style>
-                    </StackPanel.Resources>
-
-                    <controls:rButton Content="ГЛАВНЫЙ ЭКРАН"
-                                      Command="{Binding OpenMainScreenCMD}"
-                                      IsChecked="True"
-                                      Width="150" />
-
-                    <controls:rButton Content="НАСТРОЙКИ" 
-                                      Command="{Binding OpenSettingsScreenCMD}"
-                                      Width="150" />
-
-                    <controls:rButton Content="СПРАВКА" 
-                                      Width="150" />
-
-
-                </StackPanel>
-
-                
 
             </Grid>
 
         </Grid>
-    </Viewbox>
-  
+
+        <!--ОБРАМЛЕНИЕ ВЕРХНЕЙ РАМКИ-->
+        <Border Grid.Row="1"
+                    BorderBrush="{StaticResource DarkColor}"
+                    BorderThickness="0,1,0,1" Background="#FF2B2B2B"/>
+
+        <!--ГЛАВНЫЙ ЭКРАН-->
+        <Grid Grid.Row="1"
+                  Background="#FF262626">
+
+            <ContentControl Content="{Binding ScreenEngine.CurrentScreen}"/>
+
+        </Grid>
+
+    </Grid>
+
 </Window>

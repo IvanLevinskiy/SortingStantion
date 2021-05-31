@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SortingStantion.frameMain"
              xmlns:controls="clr-namespace:SortingStantion.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="348" d:DesignWidth="800">
+             d:DesignHeight="666" d:DesignWidth="1024">
     <Grid Background="#FF262626">
 
         <Grid.Resources>
@@ -14,42 +14,52 @@
                 <Setter Property="Background" Value="{StaticResource DarkColor}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                <Setter Property="HorizontalAlignment" Value="Right"/>
-                <Setter Property="Width" Value="150"/>
                 <Setter Property="Margin" Value="5"/>
                 <Setter Property="IsReadOnly" Value="True"/>
             </Style>
         </Grid.Resources>
 
-        <!--ТАБЛИЦА ЗАДАНИЯ-->
-        <Grid Background="#FF1E1E1E" 
-              Width="400"
-              Height="130"
-              Margin="10,10,0,10"
-              VerticalAlignment="Top"
-              HorizontalAlignment="Left">
+        <StackPanel Orientation="Vertical"
+                    VerticalAlignment="Top">
 
-            <Rectangle VerticalAlignment="Top"
-                       HorizontalAlignment="Right"
-                       Opacity="0"
-                       Width="200"
-                       Height="20"
-                       Fill="#FF262626"/>
+            <!--ЗОНА ИНФОРМАЦИИ-->
+            <Grid Background="{StaticResource LightColor}" 
+                  Height="100"
+                  Margin="10,30,10,0"
+                  VerticalAlignment="Top">
 
-            <TextBlock Text="ЗАДАНИЕ:"
-                       FontFamily="Tahoma"
-                       FontWeight="Bold"
-                       Margin="20,5,10,10"
-                       Foreground="{StaticResource TextColor}"/>
+                <Border BorderThickness="0,1,0,1"
+                    BorderBrush="{StaticResource GridColor}">
 
-            <StackPanel Margin="10"
-                        VerticalAlignment="Bottom"
-                        Orientation="Vertical">
-                <Grid Height="30" Background="{StaticResource LightColor}">
+                    <Grid x:Name="MSGCONTAINER">
+
+                    </Grid>
+
+
+
+                </Border>
+
+            </Grid>
+
+
+            <!--ТАБЛИЦА ЗАДАНИЯ-->
+            <Grid Background="#FF1E1E1E" 
+                  Margin="10,30,10,0"
+                  VerticalAlignment="Top">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="1.3*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0"
+                  Height="50" 
+                  Background="{StaticResource LightColor}">
 
                     <TextBlock Text="ПРОДУКТ:"
                            Margin="10,0,0,0"
+                           FontSize="{StaticResource fontSizeData}"
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
 
@@ -58,15 +68,23 @@
                            VerticalAlignment="Bottom"/>
 
                     <controls:S7_FIELD_IO Address="DB1.DBD268-STR40" 
-                                          Width="250"
-                                          IsReadOnly="False"
-                                          Text="Моцарелла 300 гр."/>
+                                      Background="Transparent"
+                                      Height="40"
+                                      FontSize="{StaticResource fontSizeData}"
+                                      Margin="105,5,25,5"
+                                      VerticalContentAlignment="Center"
+                                      IsReadOnly="False"
+                                      Text="Моцарелла 300 гр."/>
 
                 </Grid>
 
-                <Grid Height="30" Background="{StaticResource LightColor}">
+                <Grid Grid.Column="1"
+                  Height="50" 
+                  Background="{StaticResource LightColor}">
+
                     <TextBlock Text="GTIN:"
                            Margin="10,0,0,0"
+                           FontSize="{StaticResource fontSizeData}"
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
 
@@ -75,15 +93,23 @@
                            VerticalAlignment="Bottom"/>
 
                     <controls:S7_FIELD_IO Address="DB1.DBD226-STR40" 
-                                          Width="250"
-                                          IsReadOnly="False"
-                                          Text="04604567890126"/>
+                                      Background="Transparent"
+                                      Height="40"
+                                      FontSize="{StaticResource fontSizeData}"
+                                      Margin="62,5,28,5"
+                                      VerticalContentAlignment="Center"
+                                      IsReadOnly="False"
+                                      Text="04604567890126"/>
 
                 </Grid>
 
-                <Grid Height="30" Background="{StaticResource LightColor}">
-                    <TextBlock Text="ШТРИХКОД:"
+                <Grid Grid.Column="2"
+                  Height="50" 
+                  Background="{StaticResource LightColor}">
+
+                    <TextBlock Text="СЕРИЯ:"
                            Margin="10,0,0,0"
+                           FontSize="{StaticResource fontSizeData}"
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
 
@@ -92,44 +118,38 @@
                            VerticalAlignment="Bottom"/>
 
                     <controls:S7_FIELD_IO Address="DB1.DBD184-STR40" 
-                                          Width="250"
-                                          IsReadOnly="False"
-                                          Text="Series 2"/>
+                                      Background="Transparent"
+                                      Height="40"
+                                      FontSize="{StaticResource fontSizeData}"
+                                      Margin="78,5,32,5"
+                                      VerticalContentAlignment="Center"
+                                      IsReadOnly="False"
+                                      Text="Series 2"/>
 
                 </Grid>
 
-            </StackPanel>
-            
-        </Grid>
+            </Grid>
 
-        <!--ТАБЛИЦА КОЛИЧЕСТВА ИЗДЕЛИЙ-->
-        <Grid Background="#FF1E1E1E" 
-              Width="400"
-              Height="190"
-              Margin="10,0,0,10"
-              VerticalAlignment="Bottom"
-              HorizontalAlignment="Left">
+            <!--ТАБЛИЦА СО СЧЕТЧИКАМИ ИЗДЕЛИЙ-->
+            <Grid VerticalAlignment="Top"
+              Margin="10,30,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <Rectangle VerticalAlignment="Top"
-                       HorizontalAlignment="Right"
-                       Opacity="0"
-                       Width="200"
-                       Height="20"
-                       Fill="#FF262626"/>
+                <!--ВЫПУЩЕНО КОРОБОВ-->
+                <Grid Height="50" 
+                  Background="{StaticResource LightColor}">
 
-            <TextBlock Text="СЧЕТЧИК ИЗДЕЛИЙ:"
-                       FontFamily="Tahoma"
-                       FontWeight="Bold"
-                       Margin="20,5,10,10"
-                       Foreground="{StaticResource TextColor}"/>
-
-            <StackPanel Margin="10"
-                        VerticalAlignment="Bottom"
-                        Orientation="Vertical">
-
-                <Grid Height="30" Background="{StaticResource LightColor}">
                     <TextBlock Text="ВЫПУЩЕНО КОРОБОВ:"
-                               FontFamily="Tahoma"
+                           FontFamily="{StaticResource fontFamilyData}"
+                           FontSize="{StaticResource fontSizeData}"
                            Margin="10,0,0,0"
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
@@ -139,16 +159,23 @@
                            VerticalAlignment="Bottom"/>
 
                     <controls:S7_FIELD_IO Address="DB1.DBD20-DWORD"
+                                      Height="40"
+                                      FontSize="{StaticResource fontSizeData}"
+                                      VerticalContentAlignment="Center"
+                                      IsReadOnly="False"
+                                      Margin="280,0,10,0"
                                       Text="0"/>
 
                 </Grid>
 
-
-                <!--ПОЛЕ - ОТБРАКОВАНО ВРУЧНУЮ-->
-                <Grid Height="30" Background="{StaticResource LightColor}">
+                <!--ВЫПУЩЕНО ПРОДУКТОВ-->
+                <Grid Grid.Row="1"
+                  Height="50" 
+                  Background="{StaticResource LightColor}">
 
                     <TextBlock Text="ВЫПУЩЕНО ПРОДУКТОВ:"
-                               FontFamily="Tahoma"
+                           FontFamily="{StaticResource fontFamilyData}"
+                           FontSize="{StaticResource fontSizeData}"
                            Margin="10,0,0,0"
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
@@ -158,33 +185,25 @@
                            VerticalAlignment="Bottom"/>
 
                     <controls:S7_FIELD_IO Address="DB1.DBD16-DWORD"
+                                      Height="40"
+                                      FontSize="{StaticResource fontSizeData}"
+                                      VerticalContentAlignment="Center"
+                                      IsReadOnly="False"
+                                      Margin="280,0,10,0"
                                       Text="0"/>
 
                 </Grid>
 
-                <!--ПОЛЕ - ОТБРАКОВАНО АВТОМАТИЧЕСКИ-->
-                <Grid Height="30" Background="{StaticResource LightColor}">
+                <!--ОТБРАКОВАНО ВРУЧНУЮ-->
+                <Grid Grid.Column="2"
+                  Height="50" 
+                  Background="{StaticResource LightColor}">
 
-                    <TextBlock Text="ОТБРАКОВАНО АВТОМАТИЧЕСКИ:"
-                               FontFamily="Tahoma"
-                           Margin="10,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
-
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
-
-                    <controls:S7_FIELD_IO Address="DB1.DBD24-DWORD"
-                                      Text="0"/>
-
-                </Grid>
-
-                <Grid Height="30" Background="{StaticResource LightColor}">
                     <TextBlock Text="ОТБРАКОВАНО ВРУЧНУЮ:"
-                               FontFamily="Tahoma"
+                           FontFamily="Tahoma"
                            Margin="10,0,0,0"
                            VerticalAlignment="Center"
+                           FontSize="{StaticResource fontSizeData}"
                            Foreground="{StaticResource TextColor}"/>
 
                     <Rectangle Fill="{StaticResource GridColor}"
@@ -192,37 +211,127 @@
                            VerticalAlignment="Bottom"/>
 
                     <controls:S7_FIELD_IO Address="DB1.DBD28-DWORD"
+                                      Height="40"
+                                      FontSize="{StaticResource fontSizeData}"
+                                      VerticalContentAlignment="Center"
+                                      IsReadOnly="False"
+                                      Margin="280,0,10,0"
                                       Text="0"/>
 
                 </Grid>
 
-               
-                <Grid Height="30" Background="{StaticResource LightColor}">
+                <!--ПОВТОР КОДОВ-->
+                <Grid Grid.Row="1"
+                  Grid.Column="2"
+                  Height="50" 
+                  Background="{StaticResource LightColor}">
                     <TextBlock  Text="ПОВТОР КОДОВ:"
-                                FontFamily="Tahoma"
-                                Margin="10,0,0,0"
-                                VerticalAlignment="Center"
-                                Foreground="{StaticResource TextColor}"/>
+                            FontFamily="Tahoma"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="{StaticResource fontSizeData}"
+                            Foreground="{StaticResource TextColor}"/>
 
                     <Rectangle Fill="{StaticResource GridColor}"
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
                     <controls:S7_FIELD_IO Address="DB1.DBD22"
+                                      Height="40"
+                                      FontSize="{StaticResource fontSizeData}"
+                                      VerticalContentAlignment="Center"
+                                      IsReadOnly="False"
+                                      Margin="280,0,10,0"
                                       Text="0"/>
 
                 </Grid>
 
-            </StackPanel>
-        </Grid>
+            </Grid>
+
+            <!--КНОПКИ-->
+            <Grid Height="100"
+              Margin="10,30,10,0"
+              Background="{StaticResource LightColor}"
+              VerticalAlignment="Top">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!--КНОПКА Запуска ЛИНИИ-->
+                <Button     Grid.Column="0"
+                        Margin="20"
+                        Style="{StaticResource btnStyle}"
+                        Background="#FF6DC27A"
+                        Foreground="{StaticResource IconColor}"
+                        BorderThickness="0"
+                        BorderBrush="Transparent"
+                        Command="{Binding Conveyor.StartLineCMD}">
+                    <TextBlock TextAlignment="Center"
+                           FontSize="{StaticResource fontSizeButtons}">
+                        <Run>СТАРТ</Run>
+                    </TextBlock>
+                </Button>
+
+                <!--КНОПКА ОСТАНОВА ЛИНИИ-->
+                <Button Grid.Column="6"
+                        Margin="20"
+                        Style="{StaticResource btnStyle}"
+                        Background="#FFDB4969"
+                        Foreground="{StaticResource IconColor}"
+                        BorderThickness="0"
+                        BorderBrush="Transparent"
+                        IsEnabled="{Binding Conveyor.LineIsRun}"
+                        Command="{Binding Conveyor.StopLineCMD}">
+                    <TextBlock TextAlignment="Center"
+                           FontSize="{StaticResource fontSizeButtons}">
+                        <Run>СТОП</Run>
+                    </TextBlock>
+                </Button>
 
 
+            </Grid>
+
+            <!--СТАТУСЫ-->
+            <Grid Height="100"
+              Margin="10,30,10,0"
+              Background="{StaticResource LightColor}"
+              VerticalAlignment="Top">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid HorizontalAlignment="Left"
+                      Margin="20,0,0,0">
+                    <ContentPresenter Content="{StaticResource IconError}"/>
+                </Grid>
+
+                <TextBlock Text="СКАНЕР"
+                           Margin="75,38,15,38"
+                           VerticalAlignment="Center"
+                           FontSize="{StaticResource fontSizeData}"
+                           FontFamily="{StaticResource fontFamilyData}"
+                           Foreground="{StaticResource TextColor}"
+                           />
+
+            </Grid>
+
+        </StackPanel>
+
+       
+        
         <!--ТАБЛИЦА СИМУЛЯЦИЯ-->
         <Grid Background="#FF1E1E1E" 
+              Visibility="Hidden"
               Width="380"
               Height="130"
-              Margin="10,10,0,10"
-              VerticalAlignment="Top"
+              Margin="0,0,0,80"
+              VerticalAlignment="Bottom"
               HorizontalAlignment="Right">
 
             <Rectangle VerticalAlignment="Top"
@@ -235,7 +344,7 @@
             <TextBlock Text="CИМУЛЯЦИЯ:"
                        FontFamily="Tahoma"
                        FontWeight="Bold"
-                       Margin="20,5,10,10"
+                       Margin="20,-3,10,18"
                        Foreground="{StaticResource TextColor}"/>
 
             <StackPanel Margin="10"
@@ -297,6 +406,57 @@
 
         </Grid>
 
+
+        <!--НИЖНЯЯ СТРОКА-->
+        <Grid Height="60"
+              VerticalAlignment="Bottom"
+              Background="#FF323232"
+              DataContext="{Binding ScreenEngine}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="150"/>
+                    <Setter Property="Margin" Value="0,0,0,2"/>
+                    <Setter Property="Background" Value="{StaticResource DarkColor}"/>
+                    <Setter Property="Foreground" Value="{StaticResource IconColor}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource GridColor}"/>
+                </Style>
+            </Grid.Resources>
+
+            <Button Grid.Column="0"
+                    Content="БРАК"
+                    Style="{StaticResource btnStyle}"
+                    Background="{StaticResource DarkColor}"
+                    Foreground="{StaticResource TextColor}"
+                    FontFamily="{StaticResource fontFamilyButtons}"
+                    FontSize="{StaticResource fontSizeButtons}"
+                    Command="{Binding OpenMainScreenCMD}"/>
+
+            <Button Grid.Column="1" 
+                    Content="СПРАВКА" 
+                    Style="{StaticResource btnStyle}"
+                    Background="{StaticResource DarkColor}"
+                    Foreground="{StaticResource TextColor}"
+                    Command="{Binding OpenSettingsScreenCMD}"
+                    FontFamily="{StaticResource fontFamilyButtons}"
+                    FontSize="{StaticResource fontSizeButtons}"/>
+
+            <Button Grid.Column="2"
+                     Content="ДОБАВИТЬ" 
+                     Style="{StaticResource btnStyle}"
+                     Background="{StaticResource DarkColor}"
+                     Foreground="{StaticResource TextColor}"
+                     FontFamily="{StaticResource fontFamilyButtons}"
+                     FontSize="{StaticResource fontSizeButtons}"/>
+
+
+        </Grid>
 
     </Grid>
 </UserControl>

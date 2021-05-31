@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using SortingStantion.Models;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SortingStantion.frameSettings
 {
@@ -19,9 +8,25 @@ namespace SortingStantion.frameSettings
     /// </summary>
     public partial class frameSettings : UserControl
     {
+
+        /// <summary>
+        /// Модель для управления экранами
+        /// </summary>
+        public ScreenEngine ScreenEngine
+        {
+            get
+            {
+                return DataBridge.ScreenEngine;
+            }
+        }
+
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
         public frameSettings()
         {
             InitializeComponent();
+            DataContext = this;
         }
     }
 }

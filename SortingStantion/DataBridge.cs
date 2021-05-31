@@ -19,7 +19,7 @@ namespace SortingStantion
         /// <summary>
         /// Модель, управляющая пользователями
         /// </summary>
-        public static AccesLevelModel MainAccesLevelModel;
+        public static AccesLevelModel MainAccesLevelModel = new AccesLevelModel();
 
         /// <summary>
         /// Simatic tcp сервер

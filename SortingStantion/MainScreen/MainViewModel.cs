@@ -142,9 +142,6 @@ namespace SortingStantion.MainScreen
             //Инициализация модели - синхронизатора
             //времени
             CurrentTime = new TimeUpdater();
-
-            //Инициализация модели пользователей
-            DataBridge.MainAccesLevelModel = new AccesLevelModel();
                         
             //Тэг который сбрасывает дисконект
             ConnectFlag = new S7BOOL("ConnectFlag", "DB1.DBX0.0", group);
@@ -164,10 +161,6 @@ namespace SortingStantion.MainScreen
                 }
             });
         }
-
-      
-
-       
 
 
         /// <summary>

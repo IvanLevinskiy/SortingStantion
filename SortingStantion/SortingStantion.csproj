@@ -53,6 +53,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\cButton.cs" />
     <Compile Include="Controls\customMessageBox.xaml.cs">
       <DependentUpon>customMessageBox.xaml</DependentUpon>
     </Compile>
@@ -106,6 +107,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Dictionarys\ComboBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dictionarys\Fonts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -170,6 +175,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Docs\A1-2 СОПы проверки.docx" />
+    <None Include="Docs\A2-2 СОПы работы и наладки.docx" />
+    <None Include="Docs\Описание ПО L2 сериализация вер.2.docx" />
+    <None Include="Docs\Техническое_требование_к_программному_обеспечению_ПЛК.docx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

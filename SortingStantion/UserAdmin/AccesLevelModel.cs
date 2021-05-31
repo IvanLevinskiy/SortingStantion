@@ -10,14 +10,11 @@ namespace SortingStantion.UserAdmin
     /// </summary>
     public enum AccesLevels
     {
-        [Description("Оператор")]
-        Оператор = 0,
+        [Description("Мастер")]
+        Мастер = 0,
 
         [Description("Наладчик")]
         Наладчик = 1,
-
-        [Description("Мастер")]
-        Мастер = 2
     }
 
     /// <summary>

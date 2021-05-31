@@ -10,13 +10,14 @@
     <Grid Background="{Binding Brush}">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="0"/>
             <ColumnDefinition />
             <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
 
         <!--ПОЛЕ ДАТЫ-->
         <TextBlock Text="{Binding Datetime}"
+                   Visibility="Hidden"
                    Foreground="White"
                    Grid.Column="0"
                    VerticalAlignment="Center"
@@ -24,10 +25,12 @@
 
         <!--ПОЛЕ СООБЩЕНИЯ-->
         <TextBlock Text="{Binding Message}"
+                   FontSize="{StaticResource fontSizeData}"
+                   FontFamily="{StaticResource fontFamilyData}"
                    Foreground="White"
                    Grid.Column="1"
                    VerticalAlignment="Center"
-                   TextAlignment="Left"/>
+                   TextAlignment="Center"/>
 
     </Grid>
 </UserControl>

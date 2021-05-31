@@ -6,265 +6,286 @@
              xmlns:local="clr-namespace:SortingStantion.frameSettings"
              xmlns:controls="clr-namespace:SortingStantion.Controls"
              mc:Ignorable="d" 
-                d:DesignHeight="348" d:DesignWidth="800">
+             d:DesignHeight="666" d:DesignWidth="1024">
 
     <Grid Background="#FF262626">
 
-        <!--НАСТРОЙКИ СВЯЗИ С ПЛК--><!--
-        <StackPanel Width="350"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left">
+        <Grid Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-            <Grid Height="30"
-                  Margin="0,10,0,0"
+            <!--НАСТРОЙКИ СКАНЕРА-->
+            <StackPanel Margin="0"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left" 
+                        Width="500" 
+                        Background="#FF1E1E1E">
+
+                <Grid   Height="80"
+                        Margin="0"
+                        Background="{StaticResource LightColor}">
+                    
+                    <TextBlock  Text="Настройки сканера"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                                Foreground="{StaticResource TextColor}"/>
+                </Grid>
+
+                <Grid Height="50" Margin="0,10,0,0">
+                    <TextBlock  Text="Время включения сканера, ms:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                                Foreground="{StaticResource TextColor}"/>
+
+                    <controls:S7_FIELD_IO Address="DB1.DBD136-STIME"
+                                          Foreground="{StaticResource TextColor}"
+                                          Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
+                                          BorderThickness="0"
+                                          Width="100"
+                                          Height="40"
+                                          Margin="100,7,5,7"
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          HorizontalContentAlignment="Center"/>
+
+                    <Rectangle Fill="{StaticResource GridColor}"
+                           Opacity="0"
+                           Height="1"
+                           VerticalAlignment="Bottom"/>
+
+                </Grid>
+
+                <Grid Height="50">
+                    <TextBlock Text="Длительность импульса сканера, ms:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                           Foreground="{StaticResource TextColor}"/>
+
+                    <controls:S7_FIELD_IO Address="DB1.DBD140-STIME"
+                                      Foreground="{StaticResource TextColor}"
+                                      Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
+                                      BorderThickness="0"
+                                      Width="100"
+                                      Height="40"
+                                      Margin="100,7,5,7"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Center"/>
+
+                    <Rectangle Fill="{StaticResource GridColor}"
+                           Opacity="0"
+                           Height="1"
+                           VerticalAlignment="Bottom"/>
+
+                </Grid>
+
+                <Grid Height="50">
+                    <TextBlock  Text="Время передачи данных, ms:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                                Foreground="{StaticResource TextColor}"/>
+
+                    <controls:S7_FIELD_IO Address="DB1.DBD144-STIME"
+                                      Foreground="{StaticResource TextColor}"
+                                      Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
+                                      BorderThickness="0"
+                                      Height="40"
+                                      Width="100"
+                                      Margin="100,7,5,7"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Center"/>
+
+                    <Rectangle Fill="{StaticResource GridColor}"
+                           Height="1"
+                           VerticalAlignment="Bottom"/>
+
+                </Grid>
+
+            </StackPanel>
+
+            <!--НАСТРОЙКИ ОТБРАКОВЩИКА-->
+            <StackPanel Grid.Column="1"
+                        VerticalAlignment="Top"
+                        Margin="0,0,10,0"
+                        Background="#FF1E1E1E">
+
+                <Grid Height="80"
+                  Margin="0,0,0,0"
                   Background="{StaticResource LightColor}">
-                <TextBlock Text="Настройки связи с ПЛК"
+
+                    <TextBlock Text="Настройки отбраковщика"
                            Margin="20,0,0,0"
+                           FontSize="{StaticResource fontSizeData}"
+                           FontFamily="{StaticResource fontFamilyData}"
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
-            </Grid>
+                </Grid>
 
-            <Grid Height="30" Margin="0,10,0,0">
-                <TextBlock Text="IP:"
+                <Grid Height="50" Margin="0,10,0,0">
+
+                    <TextBlock Text="Задержка срабатывания толкателяб, ms:"
                            Margin="20,0,0,0"
                            VerticalAlignment="Center"
+                           FontSize="{StaticResource fontSizeData}"
+                           FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                <TextBox Text="{Binding IP}"
-                         Foreground="{StaticResource TextColor}"
-                         Background="{StaticResource LightColor}"
-                         BorderThickness="0"
-                         Width="200"
-                         Margin="100,7,0,7"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Center"
-                         HorizontalContentAlignment="Center"/>
-
-                <Rectangle Fill="{StaticResource GridColor}"
-                           Opacity="0"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
-
-            </Grid>
-
-            <Grid Height="30">
-                <TextBlock Text="Rack:"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
-
-                <TextBox Text="{Binding Rack}"
-                         Foreground="{StaticResource TextColor}"
-                         Background="{StaticResource LightColor}"
-                         BorderThickness="0"
-                         Width="200"
-                         Margin="100,0,0,0"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Center"
-                         HorizontalContentAlignment="Center"/>
-
-                <Rectangle Fill="{StaticResource GridColor}"
-                           Opacity="0"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
-
-            </Grid>
-
-            <Grid Height="30">
-                <TextBlock Text="Slot:"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
-
-                <TextBox Text="{Binding Slot}"
-                         Foreground="{StaticResource TextColor}"
-                         Background="{StaticResource LightColor}"
-                         BorderThickness="0"
-                         Width="200"
-                         Margin="100,0,0,0"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Center"
-                         HorizontalContentAlignment="Center"/>
-
-                <Rectangle Fill="{StaticResource GridColor}"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
-
-            </Grid>
-
-        </StackPanel>-->
-
-
-        <!--НАСТРОЙКИ СКАНЕРА-->
-        <StackPanel Width="350"
-                    Margin="0,0,50,0"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left">
-
-            <Grid Height="30"
-                  Margin="0,10,0,0"
-                  Background="{StaticResource LightColor}">
-                <TextBlock Text="Настройки сканера"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
-            </Grid>
-
-            <Grid Height="30" Margin="0,10,0,0">
-                <TextBlock Text="Время включения сканера, ms:"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
-
-                <controls:S7_FIELD_IO Address="DB1.DBD136-STIME"
+                    <controls:S7_FIELD_IO Address="DB1.DBD148-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
                                       BorderThickness="0"
+                                      Height="40"
                                       Width="100"
-                                      Margin="100,7,0,7"
+                                      Margin="100,7,5,7"
                                       HorizontalAlignment="Right"
                                       VerticalAlignment="Center"
                                       HorizontalContentAlignment="Center"/>
 
-                <Rectangle Fill="{StaticResource GridColor}"
+                    <Rectangle Fill="{StaticResource GridColor}"
                            Opacity="0"
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-            </Grid>
+                </Grid>
 
-            <Grid Height="30">
-                <TextBlock Text="Длительность импульса сканера, ms:"
+                <Grid Height="50">
+                    <TextBlock Text="Длина импульса толкателя, ms:"
                            Margin="20,0,0,0"
                            VerticalAlignment="Center"
+                           FontSize="{StaticResource fontSizeData}"
+                           FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                <controls:S7_FIELD_IO Address="DB1.DBD140-STIME"
+                    <controls:S7_FIELD_IO Address="DB1.DBD152-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
                                       BorderThickness="0"
+                                      Height="40"
                                       Width="100"
-                                      Margin="100,7,0,7"
+                                      Margin="100,7,5,7"
                                       HorizontalAlignment="Right"
                                       VerticalAlignment="Center"
                                       HorizontalContentAlignment="Center"/>
 
-                <Rectangle Fill="{StaticResource GridColor}"
+                    <Rectangle Fill="{StaticResource GridColor}"
                            Opacity="0"
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-            </Grid>
+                </Grid>
 
-            <Grid Height="30">
-                <TextBlock Text="Время передачи данных, ms:"
+                <Grid Height="50">
+                    <TextBlock Text="Время контроля отбраковки, ms:"
                            Margin="20,0,0,0"
                            VerticalAlignment="Center"
+                           FontSize="{StaticResource fontSizeData}"
+                           FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                <controls:S7_FIELD_IO Address="DB1.DBD144-STIME"
+                    <controls:S7_FIELD_IO Address="DB1.DBD156-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
                                       BorderThickness="0"
+                                      Height="40"
                                       Width="100"
-                                      Margin="100,7,0,7"
+                                      Margin="100,7,5,7"
                                       HorizontalAlignment="Right"
                                       VerticalAlignment="Center"
                                       HorizontalContentAlignment="Center"/>
 
-                <Rectangle Fill="{StaticResource GridColor}"
+                    <Rectangle Fill="{StaticResource GridColor}"
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-            </Grid>
+                </Grid>
 
-        </StackPanel>
+            </StackPanel>
 
-        <!--НАСТРОЙКИ ОТБРАКОВЩИКА-->
-        <StackPanel Width="350"
-                    VerticalAlignment="Top"
-                    Margin="0,0,50,0"
-                    HorizontalAlignment="Right">
+        </Grid>
 
-            <Grid Height="30"
-                  Margin="0,10,0,0"
-                  Background="{StaticResource LightColor}">
-                <TextBlock Text="Настройки отбраковщика"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
-            </Grid>
 
-            <Grid Height="30" Margin="0,10,0,0">
-                
-                <TextBlock Text="Задержка срабатывания толкателяб, ms:"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
 
-                <controls:S7_FIELD_IO Address="DB1.DBD148-STIME"
-                                      Foreground="{StaticResource TextColor}"
-                                      Background="{StaticResource LightColor}"
-                                      BorderThickness="0"
-                                      Width="100"
-                                      Margin="100,7,0,7"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"
-                                      HorizontalContentAlignment="Center"/>
+      
 
-                <Rectangle Fill="{StaticResource GridColor}"
-                           Opacity="0"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
+        <!--НИЖНЯЯ СТРОКА-->
+        <Grid Height="60"
+              VerticalAlignment="Bottom"
+              Background="#FF323232"
+              DataContext="{Binding ScreenEngine}">
 
-            </Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-            <Grid Height="30">
-                <TextBlock Text="Длина импульса толкателя, ms:"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="150"/>
+                    <Setter Property="Margin" Value="0,0,0,2"/>
+                    <Setter Property="Background" Value="{StaticResource DarkColor}"/>
+                    <Setter Property="Foreground" Value="{StaticResource IconColor}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource GridColor}"/>
+                </Style>
+            </Grid.Resources>
 
-                <controls:S7_FIELD_IO Address="DB1.DBD152-STIME"
-                                      Foreground="{StaticResource TextColor}"
-                                      Background="{StaticResource LightColor}"
-                                      BorderThickness="0"
-                                      Width="100"
-                                      Margin="100,0,0,0"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"
-                                      HorizontalContentAlignment="Center"/>
+            <Button Grid.Column="0"
+                    Content="ВЫКЛЮЧИТЬ КОМПЛЕКС"
+                    Style="{StaticResource btnStyle}"
+                    Background="{StaticResource DarkColor}"
+                    Foreground="{StaticResource TextColor}"
+                    FontFamily="{StaticResource fontFamilyButtons}"
+                    FontSize="{StaticResource fontSizeButtons}"
+                    Command="{Binding OpenMainScreenCMD}"/>
 
-                <Rectangle Fill="{StaticResource GridColor}"
-                           Opacity="0"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
+            <Button Grid.Column="1" 
+                    Content="" 
+                    Style="{StaticResource btnStyle}"
+                    Background="{StaticResource DarkColor}"
+                    Foreground="{StaticResource TextColor}"
+                    FontFamily="{StaticResource fontFamilyButtons}"
+                    FontSize="{StaticResource fontSizeButtons}"/>
 
-            </Grid>
+            <Button Grid.Column="2"
+                    Content="ВЕРНУТЬСЯ" 
+                    Style="{StaticResource btnStyle}"
+                    Background="{StaticResource DarkColor}"
+                    Foreground="{StaticResource TextColor}"
+                    FontFamily="{StaticResource fontFamilyButtons}"
+                    FontSize="{StaticResource fontSizeButtons}"
+                    Command="{Binding OpenMainScreenCMD}"/>
 
-            <Grid Height="30">
-                <TextBlock Text="Время контроля отбраковки, ms:"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
 
-                <controls:S7_FIELD_IO Address="DB1.DBD156-STIME"
-                                      Foreground="{StaticResource TextColor}"
-                                      Background="{StaticResource LightColor}"
-                                      BorderThickness="0"
-                                      Width="100"
-                                      Margin="100,0,0,0"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"
-                                      HorizontalContentAlignment="Center"/>
-
-                <Rectangle Fill="{StaticResource GridColor}"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
-
-            </Grid>
-
-        </StackPanel>
+        </Grid>
 
     </Grid>
 </UserControl>
