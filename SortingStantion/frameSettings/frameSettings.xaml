@@ -6,21 +6,20 @@
              xmlns:local="clr-namespace:SortingStantion.frameSettings"
              xmlns:controls="clr-namespace:SortingStantion.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="666" d:DesignWidth="1024">
+             d:DesignHeight="768" d:DesignWidth="1024">
 
     <Grid Background="#FF262626">
 
-        <Grid Margin="0,20,0,0">
+        <Grid Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <!--НАСТРОЙКИ СКАНЕРА-->
-            <StackPanel Margin="0"
+            <StackPanel Grid.Column="0"
                         VerticalAlignment="Top"
-                        HorizontalAlignment="Left" 
-                        Width="500" 
+                        Margin="0,0,10,0"
                         Background="#FF1E1E1E">
 
                 <Grid   Height="80"
@@ -265,7 +264,7 @@
                     Foreground="{StaticResource TextColor}"
                     FontFamily="{StaticResource fontFamilyButtons}"
                     FontSize="{StaticResource fontSizeButtons}"
-                    Command="{Binding OpenMainScreenCMD}"/>
+                    Command="{Binding ShutdownCMD}"/>
 
             <Button Grid.Column="1" 
                     Content="" 

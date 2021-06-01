@@ -77,6 +77,21 @@ namespace SortingStantion.Models
             }
         }
 
+        /// <summary>
+        /// Команда для выключения комплекса
+        /// </summary>
+        public ICommand ShutdownCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    App.Current.Shutdown();
+                },
+                (obj) => (true));
+            }
+        }
+
         #region Реализация интерфейса INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string property)
