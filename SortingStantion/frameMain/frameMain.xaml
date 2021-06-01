@@ -249,7 +249,8 @@
                                       Margin="105,5,25,5"
                                       VerticalContentAlignment="Center"
                                       IsReadOnly="False"
-                                      Text="Моцарелла 300 гр."/>
+                                      Text="Моцарелла 300 гр."
+                                          Foreground="#FF686868"/>
 
                 </Grid>
 
@@ -274,7 +275,8 @@
                                       Margin="62,5,28,5"
                                       VerticalContentAlignment="Center"
                                       IsReadOnly="False"
-                                      Text="04604567890126"/>
+                                      Text="04604567890126"
+                                          Foreground="#FF686868"/>
 
                 </Grid>
 
@@ -299,7 +301,8 @@
                                       Margin="78,5,32,5"
                                       VerticalContentAlignment="Center"
                                       IsReadOnly="False"
-                                      Text="Series 2"/>
+                                      Text="Series 2" 
+                                          Foreground="#FF686868"/>
 
                 </Grid>
 

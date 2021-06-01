@@ -17,6 +17,11 @@ namespace SortingStantion
         public static Dispatcher UIDispatcher;
 
         /// <summary>
+        /// Указатель на главный экран
+        /// </summary>
+        public static MainScreen.MainScreen MainScreen;
+
+        /// <summary>
         /// Модель, управляющая пользователями
         /// </summary>
         public static AccesLevelModel MainAccesLevelModel = new AccesLevelModel();
@@ -60,6 +65,11 @@ namespace SortingStantion
         /// Объяект, управляющий обработкой аварий от ПЛК
         /// </summary>
         public static AlarmsEngine AlarmsEngine = new AlarmsEngine();
+
+        /// <summary>
+        /// Экземпляр объекта - ручной сканер
+        /// </summary>
+        public static Scaner Scaner = new Scaner();
 
     }
 }

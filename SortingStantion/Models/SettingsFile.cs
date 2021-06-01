@@ -184,7 +184,7 @@ namespace SortingStantion.Models
         {
 
             //Создаем экземпляр xml докумета
-            XmlDocument xDoc = new XmlDocument();
+            xDoc = new XmlDocument();
 
             //Заргузка из файла
             try
@@ -203,20 +203,67 @@ namespace SortingStantion.Models
         /// по наименованию узла
         /// </summary>
         /// <returns></returns>
-        public string GetValue(string nodename)
+        public string GetValue(string name)
         {
-            var nodes = xDoc.ChildNodes;
+            //Получаем корневой элемент
+            XmlNode root = xDoc.ChildNodes[0];
 
-            foreach (XmlNode node in nodes)
+            //Получаем коллекцию всех настроек
+            var settingsnodes = root.ChildNodes[0];
+
+            //Ищем нужное свойство по атрибуту Name
+            foreach (XmlNode settingnode in settingsnodes)
             {
-                if (node.Name == nodename)
+
+                var attr_name = GetAttribut(settingnode, "name");
+
+                if (name == attr_name)
                 {
-                    var value = node.Value;
-                    return value;
+                    var valuenode = settingnode.ChildNodes[0];
+                    return valuenode.InnerText;
                 }
             }
-                        
+
             //Возвращаем пустой результат
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Получение атрибута из XmlNode
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="attribut"></param>
+        /// <returns></returns>
+        public string GetAttribut(XmlNode node, string attribut)
+        {
+            try
+            {
+                if (node.Attributes == null)
+                {
+                    return string.Empty;
+                }
+
+                XmlNode attributNode = node.Attributes.GetNamedItem(attribut);
+
+
+                //Если атрибута нет
+                if (attributNode == null)
+                {
+                    return string.Empty;
+                }
+
+                //Если атрибут не пустой
+                if (attributNode.Value != string.Empty)
+                {
+                    return attributNode.Value;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
             return string.Empty;
         }
     }

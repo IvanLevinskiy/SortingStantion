@@ -1,5 +1,8 @@
 ﻿using S7Communication;
+using SortingStantion.Controls;
 using SortingStantion.S7Extension;
+using System;
+using System.Windows.Interop;
 
 namespace SortingStantion.Models
 {
@@ -85,6 +88,16 @@ namespace SortingStantion.Models
         public S7DiscreteAlarm al_9;
 
         /// <summary>
+        /// Ошибка 13 - Ошибка ИБП UPS
+        /// </summary>
+        public S7DiscreteAlarm al_13;
+
+        /// <summary>
+        /// Сообщение о том, что соединение с ПЛК потеряно
+        /// </summary>
+        Controls.MSG msgLostConnection;
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public AlarmsEngine()
@@ -96,6 +109,40 @@ namespace SortingStantion.Models
             al_5 = new S7DiscreteAlarm("Получение кода от сканера при остановке конвейера", "DB6.DBX12.4", group);
             al_6 = new S7DiscreteAlarm("Ошибка отбраковщика (продукт не отбраковался)", "DB6.DBX12.5", group);
             al_7 = new S7DiscreteAlarm("Массовый брак", "DB6.DBX12.6", group);
+
+            //Ошибка питания UPS (ИБП)
+            al_13 = new S7DiscreteAlarm("Потеря питания! Комплекс будет отключен", "DB6.DBX13.4", group);
+            al_13.MessageAction = () =>
+            {
+                SortingStantion.frameUSPFault.frameUSPFault fups = new SortingStantion.frameUSPFault.frameUSPFault();
+                fups.Owner = DataBridge.MainScreen;
+                fups.ShowDialog();
+            };
+
+
+            //Ошибка потреи связи с устройством
+            device.LostConnection += () =>
+            {
+                Action action = () =>
+                {
+                    msgLostConnection = new Controls.MSG($"Потеряно соединение с ПЛК {device.IP}", MSGTYPE.ERROR);
+                    DataBridge.MSGBOX.Add(msgLostConnection);
+                };
+                DataBridge.UIDispatcher.Invoke(action);
+                
+            };
+
+            //Ошибка потреи связи с устройством
+            device.GotConnection += () =>
+            {
+                Action action = () =>
+                {
+                    DataBridge.MSGBOX.Remove(msgLostConnection);
+                };
+                DataBridge.UIDispatcher.Invoke(action);
+
+            };
+
         }
     }
 }

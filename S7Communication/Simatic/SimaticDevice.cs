@@ -116,6 +116,22 @@ namespace S7Communication
             }
             set
             {
+                //Проверка на то, что появилось соединение 
+                //с устройством
+                if (IsAvailable == false && value == true)
+                {
+                    //Уведомление подписчиков
+                    GotConnection?.Invoke();
+                }
+
+                //Проверка на то, что потеряно соединение 
+                //с устройством
+                if (IsAvailable == true && value == false)
+                {
+                    //Уведомление подписчиков
+                    LostConnection?.Invoke();
+                }
+
                 isAvailable = value;
                 OnPropertyChanged("IsAvailable");
             }
@@ -141,6 +157,18 @@ namespace S7Communication
         /// обновлены
         /// </summary>
         public event Action DataUpdated;
+
+        /// <summary>
+        /// Событие, вызываемое при 
+        /// получении соединения с устройством
+        /// </summary>
+        public event Action GotConnection;
+
+        /// <summary>
+        /// Событие, вызываемое при 
+        /// потери соединения с устройством
+        /// </summary>
+        public event Action LostConnection;
 
         /// <summary>
         /// Свойство, показывает доступно ли
@@ -339,8 +367,8 @@ namespace S7Communication
             try
             {
                 this._mSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                this._mSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 1000);
-                this._mSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, 1000);
+                this._mSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 100);
+                this._mSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, 100);
                 IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse(this.IP), 102);
                 this._mSocket.Connect(remoteEP);
                 
@@ -578,12 +606,12 @@ namespace S7Communication
             catch (SocketException ex)
             {
                 //Переподключение
-               // ReconnectRequest = true;
+                ReconnectRequest = true;
                 result = null;
             }
             catch (Exception ex2)
             {
-                //ReconnectRequest = true;
+                ReconnectRequest = true;
                 result = null;
             }
             return result;
@@ -619,32 +647,26 @@ namespace S7Communication
                 expr_28[0] = 3;
                 arg_2C_0.Add(expr_28);
                 byteArray.Add((byte)num2);
+                
                 byteArray.Add(new byte[]
                 {
-                    2,
-                    240,
-                    128,
-                    50,
-                    1,
-                    0,
-                    0
+                    2, 240, 128, 50, 1, 0, 0
                 });
+
                 byteArray.Add(Word.ToByteArray((ushort)(num - 1)));
+
                 byteArray.Add(new byte[]
                 {
-                    0,
-                    14
+                    0, 14
                 });
+
                 byteArray.Add(Word.ToByteArray((ushort)(num + 4)));
+
                 byteArray.Add(new byte[]
                 {
-                    5,
-                    1,
-                    18,
-                    10,
-                    16,
-                    2
+                    5, 1, 18, 10, 16, 2
                 });
+
                 byteArray.Add(Word.ToByteArray((ushort)num));
                 byteArray.Add(Word.ToByteArray((ushort)db));
                 byteArray.Add((byte)dataType);
@@ -653,11 +675,12 @@ namespace S7Communication
                 byteArray.Add(Word.ToByteArray((ushort)(startByteAdr * 8)));
                 byteArray.Add(new byte[]
                 {
-                    0,
-                    4
+                    0, 4
                 });
+
                 byteArray.Add(Word.ToByteArray((ushort)(num * 8)));
                 byteArray.Add(value);
+
                 this._mSocket.Send(byteArray.array, byteArray.array.Length, SocketFlags.None);
                 this._mSocket.Receive(array, 512, SocketFlags.None);
                 if (array[21] != 255)
@@ -858,6 +881,7 @@ namespace S7Communication
             //пытаемся подключиться (переподключиться)
             M1: if (Open() == false)
             {
+                IsAvailable = false;
                 Thread.Sleep(1000);
                 goto M1;
             }
@@ -878,6 +902,7 @@ namespace S7Communication
                     goto M1;
                 }
 
+                IsAvailable = true;
                 Processing();
                 
                 Thread.Sleep(server.Timeout);

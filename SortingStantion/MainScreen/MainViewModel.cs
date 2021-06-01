@@ -173,6 +173,7 @@ namespace SortingStantion.MainScreen
                 return new DelegateCommand((obj) =>
                 {
                     frameAuthorization frameAuthorization = new frameAuthorization();
+                    frameAuthorization.Owner = DataBridge.MainScreen;
                     frameAuthorization.ShowDialog();
                 },
                 (obj) => (true));
