@@ -10,7 +10,7 @@
         Height="370" 
         Width="600"
         Background="{StaticResource DarkColor}"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterOwner">
     <StackPanel Background="{StaticResource DarkColor}">
         
         <!--ЛОГИН-->

@@ -11,6 +11,9 @@ namespace SortingStantion.MainScreen
         {
             InitializeComponent();
 
+            //ПЕредача экземпляра окна
+            DataBridge.MainScreen = this;
+
             //Передача  UI Dispatcher
             DataBridge.UIDispatcher = this.Dispatcher;
         }

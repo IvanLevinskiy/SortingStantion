@@ -19,6 +19,11 @@ namespace SortingStantion.S7Extension
         }
 
         /// <summary>
+        /// Метод, вызываемый при возникновлении аварии
+        /// </summary>
+        public Action MessageAction;
+
+        /// <summary>
         /// Элемент сообщения об ошибке
         /// </summary>
         MSG msg;
@@ -56,6 +61,9 @@ namespace SortingStantion.S7Extension
                 {
                     msg = new MSG(Message, MSGTYPE.ERROR);
                     DataBridge.MSGBOX.Add(msg);
+
+                    MessageAction?.Invoke();
+
                     return;
                 }
 
