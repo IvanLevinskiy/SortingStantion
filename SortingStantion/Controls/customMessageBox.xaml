@@ -9,7 +9,7 @@
         Height="300"
         AllowsTransparency="True" 
         WindowStyle="None" 
-        WindowStartupLocation="CenterScreen" 
+        WindowStartupLocation="CenterOwner" 
         Background="#FF323232">
     <Border BorderBrush="#FF1E1E1E"
             BorderThickness="2" 

@@ -60,10 +60,10 @@ namespace SortingStantion.UserAdmin
             {
                 if (CurrentUser == null)
                 {
-                    return "***";
+                    return "Мастер:";
                 }
 
-                return $"{CurrentUser.AccesLevel}: {CurrentUser.Name}";
+                return $"{CurrentUser.AccesLevel}:\n{CurrentUser.Name}";
             }
         }
 

@@ -7,42 +7,162 @@
              xmlns:controls="clr-namespace:SortingStantion.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="1024">
+    <UserControl.Resources>
+
+        <!--СТРЕЛОЧКА ВВЕРХ SCROL BAR-->
+        <Style x:Key="ScrollBarLineButtonStyle" TargetType="{x:Type RepeatButton}">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Canvas Height="18">
+                            <Polygon Fill="DarkGray" 
+                                     Points="3,15 15,15 9,3" 
+                                     Visibility="Visible"></Polygon>
+                        </Canvas>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--СТРЕЛОЧКА ВНИЗ  SCROL BAR-->
+        <Style x:Key="ScrollBarLineButtonBottomStyle" TargetType="{x:Type RepeatButton}">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Canvas Height="18">
+                            <Polygon Fill="DarkGray"
+                                     Points="3,3 9,15 15,3" 
+                                     Visibility="Visible"></Polygon>
+                        </Canvas>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--ПОЛОСА ПРОКРУТКИ  SCROL BAR-->
+        <Style x:Key="ScrollBarThumbStyle" TargetType="{x:Type Thumb}">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Margin" Value="-0,0,0,2" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Rectangle x:Name="Rectangle"
+                               Fill="Gray" 
+                               Margin="1,5" 
+                               RadiusX="0" 
+                               RadiusY="0"/>
+                        
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Rectangle" Property="Fill" Value="DarkGray"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--ШАБЛОН ScrollBar-->
+        <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid Margin="-5,0,5,0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="18"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition MaxHeight="18"/>
+                </Grid.RowDefinitions>
+
+                <Rectangle Fill="#FF323232"
+                           Grid.RowSpan="3"
+                           Margin="0,0,-1,0"/>
+
+                <RepeatButton Grid.Row="0" 
+                              Height="18"
+                          Style="{StaticResource ScrollBarLineButtonStyle}"
+                          Command="ScrollBar.LineUpCommand" >
+                </RepeatButton>
+
+                <Track Name="PART_Track" Grid.Row="1" 
+                   IsDirectionReversed="True">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageUpCommand" 
+                                      >
+                        </RepeatButton>
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource ScrollBarThumbStyle}"/>
+
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="ScrollBar.PageDownCommand"/>
+
+                    </Track.IncreaseRepeatButton>
+                </Track>
+
+                <RepeatButton Grid.Row="3" Height="18"
+                              VerticalAlignment="Top"
+                          Style="{StaticResource ScrollBarLineButtonBottomStyle}"
+                          Command="ScrollBar.LineDownCommand">
+                </RepeatButton>
+            </Grid>
+        </ControlTemplate>
+
+        <Style TargetType="{x:Type ScrollBar}">
+            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}"/>
+        </Style>
+    </UserControl.Resources>
 
     <Grid Background="#FF262626">
 
         <Grid Margin="0,10,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
 
-            <!--НАСТРОЙКИ СКАНЕРА-->
-            <StackPanel Grid.Column="0"
-                        VerticalAlignment="Top"
-                        Margin="0,0,10,0"
-                        Background="#FF1E1E1E">
+            <Border Height="65"
+                    BorderBrush="{StaticResource DarkColor}"
+                    BorderThickness="2"
+                      VerticalAlignment="Top"
+                      Background="{StaticResource LightColor}">
 
-                <Grid   Height="80"
-                        Margin="0"
-                        Background="{StaticResource LightColor}">
-                    
-                    <TextBlock  Text="Настройки сканера"
-                                Margin="20,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="{StaticResource fontSizeData}"
-                                FontFamily="{StaticResource fontFamilyData}"
-                                Foreground="{StaticResource TextColor}"/>
-                </Grid>
+                <TextBlock Text="НАСТРОЙКИ"
+                           Foreground="{StaticResource TextColor}"
+                           FontSize="{StaticResource fontSizeButtons}"
+                           VerticalAlignment="Center"
+                           Margin="30,0,0,0"/>
 
-                <Grid Height="50" Margin="0,10,0,0">
-                    <TextBlock  Text="Время включения сканера, ms:"
-                                Margin="20,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="{StaticResource fontSizeData}"
-                                FontFamily="{StaticResource fontFamilyData}"
-                                Foreground="{StaticResource TextColor}"/>
+            </Border>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD136-STIME"
+            <ScrollViewer Margin="0,68,0,60">
+                <StackPanel>
+
+                    <!--НАСТРОЙКИ СКАНЕРА-->
+                    <StackPanel VerticalAlignment="Top"
+                                Margin="0,0,10,0"
+                                Background="#FF1E1E1E">
+
+                        <Grid   Height="80"
+                                Margin="0"
+                                Background="{StaticResource LightColor}">
+
+                            <TextBlock  Text="Настройки сканирования"
+                                        Margin="20,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="{StaticResource fontSizeData}"
+                                        FontFamily="{StaticResource fontFamilyData}"
+                                        Foreground="{StaticResource TextColor}"/>
+                        </Grid>
+
+                        <Grid Height="50" 
+                              Margin="0,10,0,0">
+
+                            <TextBlock  Text="Время включения сканера, ms:"
+                                        Margin="20,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="{StaticResource fontSizeData}"
+                                        FontFamily="{StaticResource fontFamilyData}"
+                                        Foreground="{StaticResource TextColor}"/>
+
+                            <controls:S7_FIELD_IO Address="DB1.DBD136-STIME"
                                           Foreground="{StaticResource TextColor}"
                                           Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -56,22 +176,22 @@
                                           VerticalAlignment="Center"
                                           HorizontalContentAlignment="Center"/>
 
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Opacity="0"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
 
-                </Grid>
+                        </Grid>
 
-                <Grid Height="50">
-                    <TextBlock Text="Длительность импульса сканера, ms:"
+                        <Grid Height="50">
+                            <TextBlock Text="Длительность импульса сканера, ms:"
                                 Margin="20,0,0,0"
                                 VerticalAlignment="Center"
                                 FontSize="{StaticResource fontSizeData}"
                                 FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD140-STIME"
+                            <controls:S7_FIELD_IO Address="DB1.DBD140-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -85,22 +205,22 @@
                                       VerticalAlignment="Center"
                                       HorizontalContentAlignment="Center"/>
 
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Opacity="0"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
 
-                </Grid>
+                        </Grid>
 
-                <Grid Height="50">
-                    <TextBlock  Text="Время передачи данных, ms:"
+                        <Grid Height="50">
+                            <TextBlock  Text="Время передачи данных, ms:"
                                 Margin="20,0,0,0"
                                 VerticalAlignment="Center"
                                 FontSize="{StaticResource fontSizeData}"
                                 FontFamily="{StaticResource fontFamilyData}"
                                 Foreground="{StaticResource TextColor}"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD144-STIME"
+                            <controls:S7_FIELD_IO Address="DB1.DBD144-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -114,42 +234,44 @@
                                       VerticalAlignment="Center"
                                       HorizontalContentAlignment="Center"/>
 
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
 
-                </Grid>
+                        </Grid>
 
-            </StackPanel>
+                    </StackPanel>
 
-            <!--НАСТРОЙКИ ОТБРАКОВЩИКА-->
-            <StackPanel Grid.Column="1"
+                    <!--НАСТРОЙКИ ОТБРАКОВЩИКА-->
+                    <StackPanel Grid.Column="1"
                         VerticalAlignment="Top"
-                        Margin="0,0,10,0"
+                        Margin="0,5,10,0"
                         Background="#FF1E1E1E">
 
-                <Grid Height="80"
-                  Margin="0,0,0,0"
-                  Background="{StaticResource LightColor}">
+                        <Grid Height="80"
+                              Margin="0,0,0,0"
+                              Background="{StaticResource LightColor}">
 
-                    <TextBlock Text="Настройки отбраковщика"
-                           Margin="20,0,0,0"
-                           FontSize="{StaticResource fontSizeData}"
-                           FontFamily="{StaticResource fontFamilyData}"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource TextColor}"/>
-                </Grid>
+                            <TextBlock Text="Настройки отбраковщика"
+                                       Margin="20,0,0,0"
+                                       FontSize="{StaticResource fontSizeData}"
+                                       FontFamily="{StaticResource fontFamilyData}"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource TextColor}"/>
+                        </Grid>
 
-                <Grid Height="50" Margin="0,10,0,0">
+                        <Grid Height="50" 
+                              Margin="0,10,0,0">
 
-                    <TextBlock Text="Задержка срабатывания толкателяб, ms:"
-                           Margin="20,0,0,0"
-                           VerticalAlignment="Center"
-                           FontSize="{StaticResource fontSizeData}"
-                           FontFamily="{StaticResource fontFamilyData}"
-                           Foreground="{StaticResource TextColor}"/>
+                            <TextBlock Text="Задержка срабатывания толкателяб, ms:"
+                                       Margin="20,0,0,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="{StaticResource fontSizeData}"
+                                       FontFamily="{StaticResource fontFamilyData}"
+                                       Foreground="{StaticResource TextColor}"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD148-STIME"
+                            <controls:S7_FIELD_IO Address="DB1.DBD148-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -163,22 +285,22 @@
                                       VerticalAlignment="Center"
                                       HorizontalContentAlignment="Center"/>
 
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Opacity="0"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
 
-                </Grid>
+                        </Grid>
 
-                <Grid Height="50">
-                    <TextBlock Text="Длина импульса толкателя, ms:"
+                        <Grid Height="50">
+                            <TextBlock Text="Длина импульса толкателя, ms:"
                            Margin="20,0,0,0"
                            VerticalAlignment="Center"
                            FontSize="{StaticResource fontSizeData}"
                            FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD152-STIME"
+                            <controls:S7_FIELD_IO Address="DB1.DBD152-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -192,22 +314,22 @@
                                       VerticalAlignment="Center"
                                       HorizontalContentAlignment="Center"/>
 
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Opacity="0"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
 
-                </Grid>
+                        </Grid>
 
-                <Grid Height="50">
-                    <TextBlock Text="Время контроля отбраковки, ms:"
+                        <Grid Height="50">
+                            <TextBlock Text="Время контроля отбраковки, ms:"
                            Margin="20,0,0,0"
                            VerticalAlignment="Center"
                            FontSize="{StaticResource fontSizeData}"
                            FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD156-STIME"
+                            <controls:S7_FIELD_IO Address="DB1.DBD156-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -221,14 +343,179 @@
                                       VerticalAlignment="Center"
                                       HorizontalContentAlignment="Center"/>
 
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
 
-                </Grid>
+                        </Grid>
 
-            </StackPanel>
+                    </StackPanel>
 
+                    <!--НАСТРОЙКИ ПК-->
+                    <StackPanel Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Margin="0,5,10,0"
+                        Background="#FF1E1E1E">
+
+                        <Grid   Height="80"
+                        Margin="0"
+                        Background="{StaticResource LightColor}">
+
+                            <TextBlock  Text="Настройки ПК"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                                Foreground="{StaticResource TextColor}"/>
+                        </Grid>
+
+                        <Grid Height="50" Margin="0,10,0,0">
+                            <TextBlock  Text="Порт ручного сканера:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                                Foreground="{StaticResource TextColor}"/>
+
+                            <controls:S7_FIELD_IO Address="DB1.DBD136-STIME"
+                                          Foreground="{StaticResource TextColor}"
+                                          Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
+                                          BorderThickness="0"
+                                          Width="100"
+                                          Height="40"
+                                          Margin="100,7,5,7"
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          HorizontalContentAlignment="Center"/>
+
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
+
+                        </Grid>
+
+                        <Grid Height="50">
+                            <TextBlock Text="Игнорировать повтор продукта:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                           Foreground="{StaticResource TextColor}"/>
+
+                            <controls:S7_FIELD_IO Address="DB1.DBD140-STIME"
+                                      Foreground="{StaticResource TextColor}"
+                                      Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
+                                      BorderThickness="0"
+                                      Width="100"
+                                      Height="40"
+                                      Margin="100,7,5,7"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Center"/>
+
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
+
+                        </Grid>
+
+
+
+                    </StackPanel>
+
+                    <!--НАСТРОЙКИ ПЛК-->
+                    <StackPanel Grid.Column="1"
+                        VerticalAlignment="Top"
+                        Margin="0,5,10,0"
+                        Background="#FF1E1E1E">
+
+                        <Grid   Height="80"
+                        Margin="0"
+                        Background="{StaticResource LightColor}">
+
+                            <TextBlock  Text="Настройки ПЛК"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                                Foreground="{StaticResource TextColor}"/>
+                        </Grid>
+
+                        <Grid Height="50" Margin="0,10,0,0">
+                            <TextBlock  Text="Массовый брак:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                                Foreground="{StaticResource TextColor}"/>
+
+                            <controls:S7_FIELD_IO Address="DB1.DBD164-DWORD"
+                                          Foreground="{StaticResource TextColor}"
+                                          Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
+                                          BorderThickness="0"
+                                          Width="100"
+                                          Height="40"
+                                          Margin="100,7,5,7"
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          HorizontalContentAlignment="Center"/>
+
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
+
+                        </Grid>
+
+                        <Grid Height="50">
+                            <TextBlock Text="Время задержки остановки, ms:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                           Foreground="{StaticResource TextColor}"/>
+
+                            <controls:S7_FIELD_IO Address="DB1.DBD160-STIME"
+                                      Foreground="{StaticResource TextColor}"
+                                      Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
+                                      BorderThickness="0"
+                                      Width="100"
+                                      Height="40"
+                                      Margin="100,7,5,7"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Center"/>
+
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
+
+                        </Grid>
+
+
+
+                    </StackPanel>
+
+                </StackPanel>
+
+            </ScrollViewer>
+         
         </Grid>
 
 

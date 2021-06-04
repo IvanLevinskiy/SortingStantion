@@ -18,6 +18,7 @@ namespace SortingStantion.S7Extension
             set;
         }
 
+
         /// <summary>
         /// Метод, вызываемый при возникновлении аварии
         /// </summary>
@@ -39,6 +40,7 @@ namespace SortingStantion.S7Extension
         {
             this.Message = message;
             this.ChangeValue += S7DiscreteAlarm_ChangeValue;
+
         }
 
         /// <summary>

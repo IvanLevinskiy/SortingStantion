@@ -12,7 +12,10 @@ namespace SortingStantion.Controls
     /// </summary>
     public enum MSGTYPE
     {
-        ERROR, WARNING, INFO, SUCCES
+        ERROR = 3, 
+        WARNING = 2, 
+        INFO = 1, 
+        SUCCES = 0
     }
 
     /// <summary>

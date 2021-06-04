@@ -23,17 +23,52 @@
                     VerticalAlignment="Top">
 
             <!--ВЕРХНЯЯ СТРОКА-->
-            <Grid Margin="0,5,5,2">
+            <Grid Margin="0,5,5,2" Height="80">
 
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="280"/>
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
 
-                <!--КНОПКА ПРИНЯТИЯ ЗАДАНИЕ-->
+                <!--АВТОРИЗАЦИЯ-->
                 <Button Grid.Column="0"
+                        Margin="1,0,1,2"
+                        Style="{StaticResource btnStyle}"
+                        Background="{StaticResource DarkColor}"
+                        Foreground="{StaticResource IconColor}"
+                        BorderThickness="0"
+                        BorderBrush="Transparent"
+                        Command="{Binding AuthorizationCMD}">
+
+                    <Grid Width="250">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Width="50"
+                              HorizontalAlignment="Left">
+                            <ContentPresenter Content="{StaticResource IconUser}"/>
+                        </Grid>
+
+                        <TextBlock Grid.Column="1"
+                                   HorizontalAlignment="Left"
+                                   TextAlignment="Left"
+                                   FontFamily="Tahoma"
+                                   DataContext="{Binding AccesLevelModel}"
+                                   FontSize="{StaticResource fontSizeButtons}"
+                                   Margin="0">
+                                <Run Text="{Binding DisplayName, Mode=OneWay}"/>
+                        </TextBlock>
+                    </Grid>
+
+                </Button>
+
+                <!--КНОПКА ПРИНЯТИЯ ЗАДАНИЕ-->
+                <Button Grid.Column="1"
                         Margin="1,0,1,2"
                         Style="{StaticResource btnStyle}"
                         Background="{StaticResource DarkColor}"
@@ -68,7 +103,7 @@
                 </Button>
 
                 <!--КНОПКА ЗАВЕРШИТЬ ЗАДАНИЕ-->
-                <Button Grid.Column="1"
+                <Button Grid.Column="2"
                         Margin="1,0,1,2"
                         Style="{StaticResource btnStyle}"
                         Background="{StaticResource DarkColor}"
@@ -106,7 +141,7 @@
 
 
                 <!--ЧАСЫ - ПОЛЬЗОВАТЕЛЬ-->
-                <Border Grid.Column="2"
+                <Border Grid.Column="3"
                         Margin="0,0,0,2"
                         BorderBrush="Transparent"
                         BorderThickness="1,1,0,1">
@@ -133,7 +168,6 @@
                         <Button Grid.Row="1"
                                 Margin="5,1,5,1"
                                 Style="{StaticResource btnStyle}"
-                                Command="{Binding AuthorizationCMD}"
                                 BorderBrush="Transparent"
                                 Foreground="{StaticResource TextColor}"
                                 Background="Transparent">
@@ -150,7 +184,7 @@
                                 </Grid>-->
 
                                 <TextBlock  Grid.Column="1"
-                                        Text="{Binding DisplayName, Mode=OneWay}" 
+                                        Text="" 
                                         FontSize="{StaticResource fontSizeButtons}"
                                         TextAlignment="Center"/>
                             </Grid>
@@ -162,7 +196,7 @@
                 </Border>
 
                 <!--КНОПКА ВЫЗОВА НАСТРОЕК-->
-                <Button Grid.Column="3"
+                <Button Grid.Column="4"
                     Margin="0,0,0,2"
                     BorderThickness="1"
                     Style="{StaticResource btnStyle}"
@@ -486,7 +520,7 @@
 
                 <Grid HorizontalAlignment="Left"
                       Margin="20,0,0,0">
-                    <ContentPresenter Content="{StaticResource IconError}"/>
+                    <ContentPresenter Content="{StaticResource IconOk}"/>
                 </Grid>
 
                 <TextBlock Text="СКАНЕР"
