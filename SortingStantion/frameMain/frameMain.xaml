@@ -249,7 +249,7 @@
                                       Margin="105,5,25,5"
                                       VerticalContentAlignment="Center"
                                       IsReadOnly="False"
-                                      Text="Моцарелла 300 гр."
+                                      Text=""
                                           Foreground="#FF686868"/>
 
                 </Grid>
@@ -275,7 +275,7 @@
                                       Margin="62,5,28,5"
                                       VerticalContentAlignment="Center"
                                       IsReadOnly="False"
-                                      Text="04604567890126"
+                                      Text=""
                                           Foreground="#FF686868"/>
 
                 </Grid>
@@ -284,7 +284,7 @@
                   Height="50" 
                   Background="{StaticResource LightColor}">
 
-                    <TextBlock Text="СЕРИЯ:"
+                    <TextBlock Text="ПАРТИЯ:"
                            Margin="10,0,0,0"
                            FontSize="{StaticResource fontSizeData}"
                            VerticalAlignment="Center"
@@ -298,10 +298,10 @@
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
-                                      Margin="78,5,32,5"
+                                      Margin="94,5,16,5"
                                       VerticalContentAlignment="Center"
                                       IsReadOnly="False"
-                                      Text="Series 2" 
+                                      Text="" 
                                           Foreground="#FF686868"/>
 
                 </Grid>

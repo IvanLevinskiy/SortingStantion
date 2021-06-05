@@ -43,6 +43,11 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
+        /// Тэ для сброса ошибок
+        /// </summary>
+        public S7BOOL ResetAlarmsTag;
+
+        /// <summary>
         /// Ошибка 1 - Посторонний продукт (GTIN не совпадает с заданием)
         /// </summary>
         public S7DiscreteAlarm al_1;
@@ -102,7 +107,14 @@ namespace SortingStantion.Models
         /// </summary>
         public AlarmsEngine()
         {
+            ResetAlarmsTag = (S7BOOL)device.GetTagByAddress("DB1.DBX132.1");
+
+            //Сбрасываем ошибки
+            ResetAlarmsTag.Write(true);
+
+            //Посторонний продукт
             al_1 = new S7DiscreteAlarm("Посторонний продукт (GTIN не совпадает с заданием)", "DB6.DBX12.0", group);
+            
             al_2 = new S7DiscreteAlarm("Посторонний код (код не является СИ)", "DB6.DBX12.1", group);
             al_3 = new S7DiscreteAlarm("Номер продукта числится в браке", "DB6.DBX12.2", group);
             al_4 = new S7DiscreteAlarm("Повтор кода продукта", "DB6.DBX12.3", group);

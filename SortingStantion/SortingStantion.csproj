@@ -79,12 +79,17 @@
     <Compile Include="frameUSPFault\frameUSPFault.xaml.cs">
       <DependentUpon>frameUSPFault.xaml</DependentUpon>
     </Compile>
+    <Compile Include="frame_gtin_fault\frame_gtin_fault.xaml.cs">
+      <DependentUpon>frame_gtin_fault.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\AlarmsEngine.cs" />
     <Compile Include="Models\Message_Engine.cs" />
     <Compile Include="Models\ScreenEngine.cs" />
     <Compile Include="Models\SettingsFile.cs" />
     <Compile Include="S7Extension\Item.cs" />
     <Compile Include="S7Extension\S7DiscreteAlarm.cs" />
+    <Compile Include="TechnologicalObjects\Box.cs" />
+    <Compile Include="TechnologicalObjects\BoxEngine.cs" />
     <Compile Include="TechnologicalObjects\Conveyor.cs" />
     <Compile Include="TechnologicalObjects\Scaner.cs" />
     <Compile Include="TechnologicalObjects\WorkAssignment.cs" />
@@ -143,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="frameUSPFault\frameUSPFault.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="frame_gtin_fault\frame_gtin_fault.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -798,6 +798,12 @@ namespace S7Communication
                 return new S7_STRING("", s7operand, group);
             }
 
+            //Если тэг BOOL
+            if (s7operand.Contains(".DBX"))
+            {
+                return new S7BOOL("", s7operand, group);
+            }
+
             return null;
         }
 

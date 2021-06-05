@@ -71,5 +71,11 @@ namespace SortingStantion
         /// </summary>
         public static Scaner Scaner = new Scaner();
 
+        /// <summary>
+        /// Элемент, управляющий статистикой
+        /// обработаных коробов
+        /// </summary>
+        public static BoxEngine BoxEngine = new BoxEngine();
+
     }
 }
