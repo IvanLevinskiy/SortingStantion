@@ -116,14 +116,14 @@ namespace SortingStantion.UserAdmin
                 OnPropertyChanged("AccesLevel");
             }
         }
-        AccesLevels accesLevel;
+        AccesLevels accesLevel = AccesLevels.Мастер;
 
         /// <summary>
         /// Конструктор класса
         /// </summary>
         public User()
         {
-
+            UpdateProperties();
         }
 
         /// <summary>

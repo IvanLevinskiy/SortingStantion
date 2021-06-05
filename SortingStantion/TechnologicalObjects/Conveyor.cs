@@ -129,6 +129,7 @@ namespace SortingStantion.TechnologicalObjects
                         if (DataBridge.WorkAssignment.InWork == false)
                         {
                             customMessageBox mb = new customMessageBox("Ошибка", "Запуск невозможен, задание не принято в работу");
+                            mb.Owner = DataBridge.MainScreen;
                             mb.ShowDialog();
 
                             return;

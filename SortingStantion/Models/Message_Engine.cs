@@ -28,16 +28,33 @@ namespace SortingStantion.Models
         /// <param name="msg"></param>
         public void Add(MSG msg)
         {
+            //Очищаем содержимое месседж бокса
             grid.Children.Clear();
-            grid.Children.Add(msg);
+
+            //Добавляем сообщение в коллекцию
             MESSAGES.Add(msg);
 
-            //Если сообщений больше 4
+            //Если сообщений больше 3
             //удаляем самое первое
-            if (MESSAGES.Count > 4)
+            if (MESSAGES.Count > 3)
             {
                 MESSAGES.RemoveAt(0);
             }
+
+            //Ищем сообщение с самым высоким приоритетом
+            var highmsg = MESSAGES[0];
+            foreach (var item in MESSAGES)
+            {
+                if (item.Type > highmsg.Type)
+                {
+                    highmsg = item;
+                }
+            }
+
+            grid.Children.Add(msg);
+            
+
+           
         }
 
         /// <summary>
