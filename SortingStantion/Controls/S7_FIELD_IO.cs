@@ -26,6 +26,13 @@ namespace SortingStantion.Controls
             set
             {
                 address = value;
+
+                //Если сервер не проинициализирован - инициализируем его
+                if (DataBridge.server == null)
+                {
+                    DataBridge.CreateSimaticServer();
+                }
+
                 S7TAG = DataBridge.server.Devices[0].GetTagByAddress(address);
 
                 //Если регистр не найден
@@ -34,12 +41,16 @@ namespace SortingStantion.Controls
                     return;
                 }
 
+                //Подписка на изменение значение тэга
                 S7TAG.ChangeValue += S7TAG_ChangeValue;
+
+                //Подписка на возобновление соединения с ПЛК
+                S7TAG.device.GotConnection += Device_GotConnection;
 
             }
         }
 
-        
+
         string address;
 
         /// <summary>
@@ -239,6 +250,25 @@ namespace SortingStantion.Controls
                     this.Text = text;
                     this.originalTextBox.Text = text;
                 }
+            };
+
+            this.Dispatcher.Invoke(action);
+        }
+
+
+        /// <summary>
+        /// Метод, вызываемый при возобновлении
+        /// соединения с ПЛК
+        /// </summary>
+        private void Device_GotConnection()
+        {
+            Action action = () =>
+            {
+                //Преобразование к типу sting
+                S7TAG.ObjectToString();
+
+                this.Text = S7TAG.StatusText;
+                //this.originalTextBox.Text = S7TAG.StatusText;
             };
 
             this.Dispatcher.Invoke(action);

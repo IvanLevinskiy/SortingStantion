@@ -288,8 +288,9 @@ namespace S7Communication
         {
             //Инициализация группы тэгов
             Groups = new ObservableCollection<SimaticGroup>();
-            Rack = rack;
-            Slot = slot;
+            this.ip = ip;
+            this.Rack = rack;
+            this.Slot = slot;
         }
 
         /// <summary>
@@ -591,7 +592,7 @@ namespace S7Communication
                 //Неверное количество байт
                 if (array2[21] != 255)
                 {
-                    throw new Exception(ErrorCode.WrongNumberReceivedBytes.ToString());
+                    return null;
                 }
 
                 //Перенос байт в ответ
@@ -815,12 +816,14 @@ namespace S7Communication
         /// <returns></returns>
         public simaticTagBase GetTagByAddress(string s7operand)
         {
-            
+            //Получение адреса без указания типа
+            var s7address = s7operand.Split('-')[0];
+
             //Выполняем поиск тэга из списка всех тэгов
             //в коллекции устройства
             foreach (var tag in Tags)
             {
-                if (tag.Address == s7operand)
+                if (tag.Address == s7address)
                 {
                     return tag;
                 }

@@ -23,7 +23,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_border" Property="Background" Value="#FFF" />
+                            <!--<Setter TargetName="PART_border" Property="Background" Value="#FFF" />-->
                             <Setter TargetName="PART_border" Property="Opacity" Value="0.7" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
@@ -84,7 +84,7 @@
                                     MouseLeftButtonDown="TitleBarMouseLeftButtonDown"
                                     MouseMove="TitleBarMouseMove"
                                     >
-                                    <Grid Height="32">
+                                    <Grid Height="40">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition />
                                             <ColumnDefinition Width="34"/>
@@ -113,7 +113,7 @@
                                             Foreground="White"
                                             Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
                                             />
-                                        <Button
+                                        <!--<Button
                                             x:Name="MinButton" 
                                             Grid.Column="1"
                                             VerticalAlignment="Top"
@@ -131,8 +131,8 @@
                                                     Data="M0,8 H8 M0,7 H8 M0,6 H8"
                                                     />
                                             </Grid>
-                                        </Button>
-                                        <Button
+                                        </Button>-->
+                                        <!--<Button
                                             Grid.Column="2"
                                             x:Name="MaxButton" 
                                             VerticalAlignment="Top"
@@ -151,24 +151,30 @@
                                                     Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"
                                                     />
                                             </Grid>
-                                        </Button>
+                                        </Button>-->
+                                        
+                                        <!--КНОПКА ЗАКРЫТЬ-->
                                         <Button
                                             Grid.Column="3"
                                             x:Name="CloseButton" 
-                                            VerticalAlignment="Top"
-                                            Width="34"
-                                            Height="26"
+                                            VerticalAlignment="Center"
+                                            Width="30"
+                                            Height="30"
                                             Style="{StaticResource VS2012WindowStyleTitleBarButton}"
-                                            Click="CloseButtonClick"
-                                            >
-                                            <Grid MaxHeight="9" MaxWidth="9">
-                                                <Path
+                                            Foreground="{StaticResource TextColor}"
+                                            Click="CloseButtonClick">
+
+                                            <Viewbox>
+
+                                                <Grid MaxHeight="9" MaxWidth="9">
+                                                    <Path
                                                     Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
                                                     StrokeThickness="1.5"
                                                     Stretch="None"
-                                                    Data="M0,0 L8,8 M0,8 L8,0"
-                                                    />
-                                            </Grid>
+                                                    Data="M0,0 L8,8 M0,8 L8,0"/>
+                                                </Grid>
+                                            </Viewbox>
+                                           
                                         </Button>
                                     </Grid>
                                 </Border>
@@ -215,9 +221,9 @@
                         <Rectangle MouseDown="OnSizeSouthEast" x:Name="rectSizeSouthEast" Cursor="SizeNWSE" Fill="Transparent" Width="5" Height="5" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="WindowState" Value="Maximized">
+                        <!--<Trigger Property="WindowState" Value="Maximized">
                             <Setter TargetName="PART_MaxButton_Path" Property="Data" Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8"/>
-                        </Trigger>
+                        </Trigger>-->
                         <Trigger Property="IsActive" Value="False">
                             <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource VS2012WindowBorderBrushInactive}"/>
                         </Trigger>

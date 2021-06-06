@@ -122,7 +122,7 @@
                     BorderBrush="{StaticResource DarkColor}"
                     BorderThickness="2"
                       VerticalAlignment="Top"
-                      Background="{StaticResource LightColor}">
+                      Background="{StaticResource DarkColor}">
 
                 <TextBlock Text="НАСТРОЙКИ"
                            Foreground="{StaticResource TextColor}"

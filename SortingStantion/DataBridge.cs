@@ -2,6 +2,7 @@
 using SortingStantion.Models;
 using SortingStantion.TechnologicalObjects;
 using SortingStantion.UserAdmin;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace SortingStantion
@@ -27,9 +28,43 @@ namespace SortingStantion
         public static AccesLevelModel MainAccesLevelModel = new AccesLevelModel();
 
         /// <summary>
+        /// Файл с конфигурацией приложения
+        /// </summary>
+        public static SettingsFile SettingsFile = new SettingsFile(@"AppData\Settings.xml");
+
+        /// <summary>
+        /// Элемент, отображающий сообщения пользователя
+        /// </summary>
+        public static ContentPresenter UserMessagePresenter;
+
+        /// <summary>
         /// Simatic tcp сервер
         /// </summary>
-        public static SimaticServer server = new SimaticServer("AppData/Plc.xml");
+        public static SimaticServer server;
+
+        /// <summary>
+        /// Метод для создания Simatic Server
+        /// </summary>
+        public static void CreateSimaticServer()
+        {
+            //Создаем экземпляр Simatic Server
+            server = new SimaticServer();
+
+            //Получаем ip из настроек
+            var ip = SettingsFile.GetValue("PlcIp");
+
+            //Создаем экземпляр устройства
+            var s7device = new SimaticDevice(ip, CpuType.S71200, 0, 1);
+
+            //Добавляем устройство в сервер
+            server.AddDevice(s7device);
+
+            //Создаем пустую группу для тэгов
+            var s7group = new SimaticGroup();
+
+            //Добавляем группу в устройство
+            s7device.AddGroup(s7group);
+        }
 
         /// <summary>
         /// Модель, управляющая сообщениями на главном экране
@@ -41,10 +76,7 @@ namespace SortingStantion
         /// </summary>
         public static ScreenEngine ScreenEngine = new ScreenEngine();
 
-        /// <summary>
-        /// Файл с конфигурацией приложения
-        /// </summary>
-        public static SettingsFile SettingsFile = new SettingsFile(@"AppData\Settings.xml");
+
 
 
         /// <summary>

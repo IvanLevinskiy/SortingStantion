@@ -99,7 +99,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Сообщение о том, что соединение с ПЛК потеряно
         /// </summary>
-        Controls.MSG msgLostConnection;
+        Controls.UserMessage msgLostConnection;
 
         /// <summary>
         /// Конструктор класса
@@ -113,7 +113,15 @@ namespace SortingStantion.Models
 
             //Посторонний продукт
             al_1 = new S7DiscreteAlarm("Посторонний продукт (GTIN не совпадает с заданием)", "DB6.DBX12.0", group);
-            
+            al_1.MessageAction = () =>
+            {
+                frame_gtin_fault.frame_gtin_fault fr= new frame_gtin_fault.frame_gtin_fault();
+                fr.Owner = DataBridge.MainScreen;
+                fr.ShowDialog();
+            };
+
+
+
             al_2 = new S7DiscreteAlarm("Посторонний код (код не является СИ)", "DB6.DBX12.1", group);
 
 
@@ -139,7 +147,7 @@ namespace SortingStantion.Models
             {
                 Action action = () =>
                 {
-                    msgLostConnection = new Controls.MSG($"Потеряно соединение с ПЛК {device.IP}", MSGTYPE.ERROR);
+                    msgLostConnection = new Controls.UserMessage($"Потеряно соединение с ПЛК {device.IP}", MSGTYPE.ERROR);
                     DataBridge.MSGBOX.Add(msgLostConnection);
                 };
                 DataBridge.UIDispatcher.Invoke(action);

@@ -35,6 +35,23 @@ namespace SortingStantion.MainScreen
         }
 
         /// <summary>
+        /// Объект, управляющий сообщениями
+        /// пользователю
+        /// </summary>
+        public Message_Engine Message_Engine
+        {
+            get
+            {
+                return message_Engine;
+            }
+            set
+            {
+                message_Engine = value;
+            }
+        }
+        Message_Engine message_Engine = new Message_Engine();
+
+        /// <summary>
         /// Модель для управления экранами
         /// </summary>
         public ScreenEngine ScreenEngine

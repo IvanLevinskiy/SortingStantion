@@ -27,7 +27,7 @@ namespace SortingStantion.S7Extension
         /// <summary>
         /// Элемент сообщения об ошибке
         /// </summary>
-        MSG msg;
+        UserMessage msg;
 
         /// <summary>
         /// Конструктор класса
@@ -61,7 +61,7 @@ namespace SortingStantion.S7Extension
                 //Если новое значение true, добавляем сообщение
                 if ((bool)value == true)
                 {
-                    msg = new MSG(Message, MSGTYPE.ERROR);
+                    msg = new UserMessage(Message, MSGTYPE.ERROR);
                     DataBridge.MSGBOX.Add(msg);
 
                     MessageAction?.Invoke();

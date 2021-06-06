@@ -3,7 +3,10 @@ using System;
 
 namespace SortingStantion.TechnologicalObjects
 {
-
+    /// <summary>
+    /// Объяект, осуществляющий работу с коробами, из учет
+    /// сравнение для отбраковки
+    /// </summary>
     public class BoxEngine
     {
         /// <summary>
@@ -40,7 +43,7 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
-        /// Сигналь от сканера GOODREAD
+        /// Сигнал от сканера GOODREAD
         /// </summary>
         S7BOOL GOODREAD;
 
@@ -50,6 +53,12 @@ namespace SortingStantion.TechnologicalObjects
         S7BOOL NOREAD;
 
         /// <summary>
+        /// Сигнал для перемещения данных
+        /// просканированного изделия в коллекцию
+        /// </summary>
+        S7BOOL TRANSFER_CMD;
+
+        /// <summary>
         /// Тэг GTIN
         /// </summary>
         S7_STRING GTIN;
@@ -57,8 +66,13 @@ namespace SortingStantion.TechnologicalObjects
         /// <summary>
         /// Тэг ID
         /// </summary>
-        S7_STRING BARCODE;
+        S7_STRING SERIALNUMBER;
 
+
+        /// <summary>
+        /// Тэг GTIN из задания
+        /// </summary>
+        S7_STRING GTIN_TASK;
 
 
         /// <summary>
@@ -69,9 +83,11 @@ namespace SortingStantion.TechnologicalObjects
             //Инициализация сигналов от сканера
             GOODREAD = (S7BOOL)device.GetTagByAddress("DB1.DBX414.0");
             NOREAD   = (S7BOOL)device.GetTagByAddress("DB1.DBX414.1");
+            TRANSFER_CMD = (S7BOOL)device.GetTagByAddress("DB1.DBX414.2");
 
-            GTIN = (S7_STRING)device.GetTagByAddress("DB1.DBD418-STR14");
-            BARCODE = (S7_STRING)device.GetTagByAddress("DB1.DBD434-STR40");
+            GTIN = (S7_STRING)device.GetTagByAddress("DB1.DBD416-STR14");
+            SERIALNUMBER = (S7_STRING)device.GetTagByAddress("DB1.DBD432-STR6");
+            GTIN_TASK = (S7_STRING)device.GetTagByAddress("DB1.DBD226-STR40");
 
             //Подписываемся на событие по изминению
             //тэга GOODREAD и NOREAD
@@ -91,29 +107,21 @@ namespace SortingStantion.TechnologicalObjects
 
             //Проверяем совпадение GTIN
             var scaner_gtin = GTIN.StatusText;
-            var task_gtin = "gtin";
+            var task_gtin = GTIN_TASK.StatusText;
 
-            var scaner_barcode = BARCODE.StatusText;
+            var scaner_barcode = SERIALNUMBER.StatusText;
             var task_barcode = "barcode";
 
             //Если GTIN из сканера и задачи
             //не совпадают - сетим ошибку
             if (scaner_gtin != task_gtin)
             {
-                Action action = () =>
-                {
-                    SortingStantion.frame_gtin_fault.frame_gtin_fault fups = new SortingStantion.frame_gtin_fault.frame_gtin_fault(scaner_gtin, scaner_barcode);
-                    fups.Owner = DataBridge.MainScreen;
-                    fups.ShowDialog();
-                };
-                //DataBridge.UIDispatcher.Invoke(action);
-
-                DataBridge.AlarmsEngine.al_1.MessageAction = action;
-
-
-
                 DataBridge.AlarmsEngine.al_1.Write(true);
-            }    
+            }
+            else
+            {
+                TRANSFER_CMD.Write(true);
+            }
 
             //Стираем GOODREAD и NOREAD
             GOODREAD.Write(false);

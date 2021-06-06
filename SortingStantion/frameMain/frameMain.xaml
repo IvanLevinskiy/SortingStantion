@@ -238,11 +238,10 @@
                   VerticalAlignment="Top">
 
                 <Border BorderThickness="0,1,0,1"
-                    BorderBrush="{StaticResource GridColor}">
+                        BorderBrush="{StaticResource GridColor}"
+                        DataContext="{Binding Message_Engine}">
 
-                    <Grid x:Name="MSGCONTAINER">
-
-                    </Grid>
+                    <ContentPresenter x:Name="msgConteiner"/>
 
 
 

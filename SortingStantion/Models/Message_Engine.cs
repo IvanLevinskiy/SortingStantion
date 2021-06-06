@@ -1,6 +1,8 @@
 ﻿using SortingStantion.Controls;
+using System;
 using System.Collections.Generic;
-using System.Windows.Controls;
+using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace SortingStantion.Models
 {
@@ -9,60 +11,88 @@ namespace SortingStantion.Models
     /// Класс, осуществляющий управление 
     /// сообщениями в информационном окне
     /// </summary>
-    public class Message_Engine
+    public class Message_Engine : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Коллекция всех сообщений
-        /// </summary>
-        public List<MSG> MESSAGES = new List<MSG>();
-
         /// <summary>
         /// Экземпляр контейнера, в котором будут
         /// хранится сообщения
         /// </summary>
-        public Grid grid;
+        public object _CurrentMessage
+        {
+            get
+            {
+                return currentMessage;
+            }
+            set
+            {
+                currentMessage = value;
+                DataBridge.UserMessagePresenter.Content = value;
+            }
+        }
+        object currentMessage;
+
+        /// <summary>
+        /// Коллекция всех сообщений
+        /// </summary>
+        public List<UserMessage> MessageList = new List<UserMessage>();
+
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        public Message_Engine()
+        {
+        }        
 
         /// <summary>
         /// метод для добавления сообщения в контейнер
         /// </summary>
         /// <param name="msg"></param>
-        public void Add(MSG msg)
+        public void Add(UserMessage msg)
         {
-            //Очищаем содержимое месседж бокса
-            grid.Children.Clear();
+            // Если новое сообщение ошибка
+            if (msg.Type == MSGTYPE.ERROR)
+            {
+                _CurrentMessage = msg;
+                goto M0;
+            }
+
+            if (_CurrentMessage == null)
+            {
+                _CurrentMessage = msg;
+                goto M0;
+            }
+
+            if (_CurrentMessage is UserMessage == false)
+            {
+                return;
+            }
+
+            var cm = (UserMessage)_CurrentMessage;
+
+            //Если текущее сообщение не ошибка
+            if (cm.Type != MSGTYPE.ERROR)
+            {
+                _CurrentMessage = msg;
+            }
 
             //Добавляем сообщение в коллекцию
-            MESSAGES.Add(msg);
+            M0: MessageList.Add(msg);
 
             //Если сообщений больше 3
             //удаляем самое первое
-            if (MESSAGES.Count > 3)
+            if (MessageList.Count > 3)
             {
-                MESSAGES.RemoveAt(0);
+                MessageList.RemoveAt(0);
             }
-
-            //Ищем сообщение с самым высоким приоритетом
-            var highmsg = MESSAGES[0];
-            foreach (var item in MESSAGES)
-            {
-                if (item.Type > highmsg.Type)
-                {
-                    highmsg = item;
-                }
-            }
-
-            grid.Children.Add(msg);
-            
-
-           
         }
+
 
         /// <summary>
         /// Метод для удаления сообщения из 
         /// контейнера
         /// </summary>
         /// <param name="msg"></param>
-        public void Remove(MSG msg)
+        public void Remove(UserMessage msg)
         {
             //Если указателя на msg нет
             //выходим из функции
@@ -71,18 +101,27 @@ namespace SortingStantion.Models
                 return;
             }
 
-            //Очищаем контейнер
-            grid.Children.Clear();
-            MESSAGES.Remove(msg);
+            //Удаляем сообщение из списка
+            MessageList.Remove(msg);
 
             //Если в истории сообщений есть сообщения
             //выводим их в контейнер
-            if (MESSAGES.Count > 0)
+            if (MessageList.Count > 0)
             {
-                grid.Children.Add(MESSAGES[MESSAGES.Count - 1]);
+                _CurrentMessage = MessageList[MessageList.Count - 1];
+            }
+        }
+
+        #region Реализация интерфейса INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
             }
 
         }
-
+        #endregion
     }
 }

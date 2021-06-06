@@ -199,7 +199,7 @@ namespace SortingStantion.TechnologicalObjects
                 {
 
                     //Вывод сообщения в окно информации
-                    MSG msg = new MSG("Линия запущена", MSGTYPE.SUCCES);
+                    UserMessage msg = new UserMessage("Линия запущена", MSGTYPE.SUCCES);
                     DataBridge.MSGBOX.Add(msg);
 
                     
@@ -213,7 +213,7 @@ namespace SortingStantion.TechnologicalObjects
                 Action action = () =>
                 {
                     //Вывод сообщения в окно информации
-                    MSG msg = new MSG("Линия остановлена", MSGTYPE.WARNING);
+                    UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
                     DataBridge.MSGBOX.Add(msg);
                 };
                 DataBridge.UIDispatcher.Invoke(action);

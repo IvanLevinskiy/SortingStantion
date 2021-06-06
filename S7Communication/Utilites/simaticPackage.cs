@@ -212,8 +212,8 @@ namespace S7Communication
         /// </summary>
         public void Read()
         {
+            //Считывание данныех из ПЛК
             var ReportFromDevice = PointerDevice.ReadBytesWithASingleRequest(DataType, DBNumber, StartByte, Lenght);
-
 
             //Заполняем тэги данными
             foreach (var tag in Tags)

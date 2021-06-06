@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using S7Communication;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SortingStantion.frame_gtin_fault
@@ -8,19 +9,76 @@ namespace SortingStantion.frame_gtin_fault
     /// </summary>
     public partial class frame_gtin_fault : Window
     {
-        //string gtin;
-        //string barcode;
+
+        /// <summary>
+        /// Указатель на главный Simatic TCP сервер
+        /// </summary>
+        public SimaticServer server
+        {
+            get
+            {
+                return DataBridge.server;
+            }
+        }
+
+        /// <summary>
+        /// Указатель на экземпляр ПЛК
+        /// </summary>
+        public SimaticDevice device
+        {
+            get
+            {
+                return server.Devices[0];
+            }
+        }
+
+        /// <summary>
+        /// Указатель на группу, где хранятся все тэгиК
+        /// </summary>
+        public SimaticGroup group
+        {
+            get
+            {
+                return device.Groups[0];
+            }
+        }
+
+        /// <summary>
+        /// Тэг GTIN
+        /// </summary>
+        public S7_STRING GTIN
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Тэг ID
+        /// </summary>
+        public S7_STRING SERIALNUMBER
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        public frame_gtin_fault()
+        {
+            InitializeComponent();
+            DataContext = this;
+
+            GTIN = (S7_STRING)device.GetTagByAddress("DB1.DBD416-STR14");
+            SERIALNUMBER = (S7_STRING)device.GetTagByAddress("DB1.DBD432-STR6");
+        }
 
         public frame_gtin_fault(string gtin, string barcode)
         {
             InitializeComponent();
 
             //Перенос свойств
-            this.gtin.Text = gtin;
-            this.barcode.Text = barcode;
 
-            //Формиование сообщения
-            //txMessage.Text = $"\tСчитан посторонний продукт\tGTIN: {gtin}\tномер: {barcode}.\nНайдите его ручным сканером и удалите с конвейера.";
         }
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

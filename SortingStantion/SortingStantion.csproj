@@ -57,8 +57,8 @@
     <Compile Include="Controls\customMessageBox.xaml.cs">
       <DependentUpon>customMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MSG.xaml.cs">
-      <DependentUpon>MSG.xaml</DependentUpon>
+    <Compile Include="Controls\UserMessage.xaml.cs">
+      <DependentUpon>UserMessage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\rButton.cs" />
     <Compile Include="Controls\S7_FIELD_IO.cs" />
@@ -103,7 +103,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\MSG.xaml">
+    <Page Include="Controls\UserMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
