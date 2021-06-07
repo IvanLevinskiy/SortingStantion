@@ -86,7 +86,10 @@ namespace SortingStantion.Models
             {
                 return new DelegateCommand((obj) =>
                 {
-                    App.Current.Shutdown();
+                    frameSettings.windowExit windowExit = new frameSettings.windowExit();
+                    windowExit.Owner = DataBridge.MainScreen;
+                    windowExit.ShowDialog();
+
                 },
                 (obj) => (true));
             }

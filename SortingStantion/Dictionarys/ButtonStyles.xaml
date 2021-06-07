@@ -116,4 +116,43 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="controls:S7ToggleButton" x:Key="s7ToggleButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+
+                        <Viewbox>
+                            <ContentPresenter x:Name="image" Content="{StaticResource IconTougleOn}"/>
+                        </Viewbox>
+
+                        <Grid x:Name="warning" Visibility="Hidden">
+                            <Viewbox Height="20" 
+                                     Width="20"
+                                     VerticalAlignment="Top"
+                                     HorizontalAlignment="Right">
+
+                                <ContentPresenter Content="{StaticResource IconWarning}"/>
+                            </Viewbox>
+                        </Grid >
+
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked}" Value="False">
+                            <Setter TargetName="image" Property="Content" Value="{StaticResource IconTougleOff}"/>
+                        </DataTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding WriteBit.IsValid}" Value="false">
+                            <Setter TargetName="warning" Property="Visibility" Value="Visible"/>
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

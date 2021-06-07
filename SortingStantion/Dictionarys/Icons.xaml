@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SortingStantion.Dictionarys">
 
-
+    <!--ИКОНКА ПОЛЬЗОВАТЕЛЯ-->
     <Viewbox x:Key="IconUser" x:Shared="false">
         <Canvas Height="60" Width="60">
             <Path Data="M48.014,42.889l-9.553-4.776C37.56,37.662,37,36.756,37,35.748v-3.381c0.229-0.28,0.47-0.599,0.719-0.951 c1.239-1.75,2.232-3.698,2.954-5.799C42.084,24.97,43,23.575,43,22v-4c0-0.963-0.36-1.896-1-2.625v-5.319 c0.056-0.55,0.276-3.824-2.092-6.525C37.854,1.188,34.521,0,30,0s-7.854,1.188-9.908,3.53C17.724,6.231,17.944,9.506,18,10.056 v5.319c-0.64,0.729-1,1.662-1,2.625v4c0,1.217,0.553,2.352,1.497,3.109c0.916,3.627,2.833,6.36,3.503,7.237v3.309 c0,0.968-0.528,1.856-1.377,2.32l-8.921,4.866C8.801,44.424,7,47.458,7,50.762V54c0,4.746,15.045,6,23,6s23-1.254,23-6v-3.043 C53,47.519,51.089,44.427,48.014,42.889z" 
@@ -221,7 +221,6 @@
         <Path Data="M32.6798 33.87C32.3798 33.87 32.0698 33.75 31.8398 33.52L4.47977 6.15001C4.01977 5.69001 4.01977 4.94001 4.47977 4.48001C4.93977 4.02001 5.68977 4.02001 6.14977 4.48001L33.5098 31.84C33.9698 32.3 33.9698 33.05 33.5098 33.51C33.2898 33.75 32.9798 33.87 32.6798 33.87Z" Fill="#FFDB4969"/>
     </Canvas>
 
-
     <!--ИКОНКА ЗАМКА-->
     <Viewbox x:Key="IconLock" x:Shared="false">
         <Grid>
@@ -337,8 +336,6 @@
         </Canvas>
     </Viewbox>
 
-
-
     <!--ИКОНКА - ЕСТЬ СВЯЗЬ С ПЛК-->
     <Canvas  x:Key="IconPLCOk" x:Shared="false" Height="38" Width="38">
         <Path Data="M22.7299 2C24.6799 2 26.2599 3.59 26.2599 5.53V31.46C26.2599 33.41 24.6699 34.99 22.7299 34.99H15.6999C13.7499 34.99 12.1699 33.4 12.1699 31.46V5.53C12.1599 3.59 13.7499 2 15.6999 2H22.7299ZM22.7299 0H15.6999C12.6399 0 10.1699 2.48 10.1699 5.53V31.46C10.1699 34.52 12.6499 36.99 15.6999 36.99H22.7299C25.7899 36.99 28.2599 34.51 28.2599 31.46V5.53C28.2599 2.48 25.7899 0 22.7299 0Z" Fill="#676767"/>
@@ -353,7 +350,6 @@
         <Path Data="M31.78 19.5H6C5.45 19.5 5 19.05 5 18.5C5 17.95 5.45 17.5 6 17.5H31.78C32.33 17.5 32.78 17.95 32.78 18.5C32.78 19.05 32.33 19.5 31.78 19.5Z" Fill="#E14F4F"/>
     </Canvas>
 
-
     <!--ИКОНКА - СВЯЗЬ С ВЕРХНИМ УРОВНЕМ - ОК-->
     <Canvas  x:Key="IconTopLevelOk" x:Shared="false" Height="38" Width="38">
         <Path Data="M22.7299 2C24.6799 2 26.2599 3.59 26.2599 5.53V31.46C26.2599 33.41 24.6699 34.99 22.7299 34.99H15.6999C13.7499 34.99 12.1699 33.4 12.1699 31.46V5.53C12.1599 3.59 13.7499 2 15.6999 2H22.7299ZM22.7299 0H15.6999C12.6399 0 10.1699 2.48 10.1699 5.53V31.46C10.1699 34.52 12.6499 36.99 15.6999 36.99H22.7299C25.7899 36.99 28.2599 34.51 28.2599 31.46V5.53C28.2599 2.48 25.7899 0 22.7299 0Z" Fill="#676767"/>
@@ -367,7 +363,6 @@
         <Path Data="M31.78 15.5H6C3.79 15.5 2 13.71 2 11.5C2 9.29 3.79 7.5 6 7.5H31.78C33.99 7.5 35.78 9.29 35.78 11.5C35.78 13.71 33.99 15.5 31.78 15.5Z" Fill="#323232"/>
         <Path Data="M31.78 12.5H6C5.45 12.5 5 12.05 5 11.5C5 10.95 5.45 10.5 6 10.5H31.78C32.33 10.5 32.78 10.95 32.78 11.5C32.78 12.05 32.33 12.5 31.78 12.5Z" Fill="#E14F4F"/>
     </Canvas>
-
 
     <!--ИКОНКА WARNING-->
     <Viewbox x:Key="IconWarning" x:Shared="false">
@@ -390,6 +385,7 @@
         </Canvas>
     </Viewbox>
 
+    <!--ИКОНКА PLAY-->
     <Viewbox x:Key="IconPlay" x:Shared="false">
         <Canvas Width="512" Height="512" >
             <Canvas.Resources>
@@ -401,6 +397,8 @@
 		            L98.6,505.7c-29.6,17.2-70.2-2.4-70.2-39.6V45.9C28.4,8.7,69-10.9,98.6,6.3L460.6,216.4z" Fill="Green"/>
         </Canvas>
     </Viewbox>
+    
+    <!--ИКОНКА ПАУЗА-->
     <Viewbox x:Key="IconPause" x:Shared="false">
         <Canvas Width="24" Height="24" >
             <Canvas.Resources>
@@ -411,6 +409,8 @@
             <Path Data="M10 24h-6v-24h6v24zm10 0h-6v-24h6v24zm-11-23h-4v22h4v-22zm10 0h-4v22h4v-22z"/>
         </Canvas>
     </Viewbox>
+    
+    <!--ИКОНКА СТОП-->
     <Viewbox x:Key="IconStop" x:Shared="false">
         <Canvas Width="512" Height="512" >
             <Canvas.Resources>
@@ -421,6 +421,92 @@
             </Canvas.Resources>
             <Polygon Points="28.4,28.4 28.4,56.9 455.1,56.9 455.1,455.1 56.9,455.1 56.9,28.4 28.4,28.4 28.4,56.9 28.4,28.4 0,28.4 0,512 
 		                    512,512 512,0 0,0 0,28.4" />
+        </Canvas>
+    </Viewbox>
+
+    <!--ИКОНКА ПЕРЕКЛЮЧАТЕЛЯ В АКТИВНОМ СОСТОЯНИИ-->
+    <Viewbox x:Key="IconTougleOn"  x:Shared="false">
+        <Canvas Width="78.48" Height="35">
+            <Canvas.RenderTransform>
+                <TranslateTransform X="0" Y="0"/>
+            </Canvas.RenderTransform>
+            <Canvas.Resources/>
+            <Canvas >
+                <Rectangle Canvas.Left="0.06497404" 
+                           Canvas.Top="-0.049667623" 
+                           Width="78.480453" 
+                           Height="35.088787" 
+                           RadiusX="20" 
+                           RadiusY="20" 
+                           Fill="#FF00FFFF" 
+                           StrokeThickness="0.166532"/>
+
+                <Ellipse Canvas.Left="46.2" 
+                         Canvas.Top="2.3" 
+                         Width="30" 
+                         Height="30" 
+                         Fill="#FFFFFFFF" 
+                         StrokeThickness="0.198436"/>
+
+                <Ellipse Canvas.Left="48.7" 
+                         Canvas.Top="4.8" 
+                         Width="25" 
+                         Height="25" 
+                         Fill="#FF000000" 
+                         StrokeThickness="0.165363"/>
+
+                <Rectangle Canvas.Left="15.398208" 
+                           Canvas.Top="9.4060364" 
+                           Width="3.96875" 
+                           Height="15.969494" 
+                           Name="rect64" 
+                           Fill="#FFFFFFFF" 
+                           StrokeThickness="0.264583"/>
+            </Canvas>
+        </Canvas>
+    </Viewbox>
+
+    <!--ИКОНКА ПЕРЕКЛЮЧАТЕЛЯ В НЕАКТИВНОМ СОСТОЯНИИ-->
+    <Viewbox x:Key="IconTougleOff"  x:Shared="false">
+        <Canvas Width="78.48" 
+                Height="35">
+
+            <Canvas.RenderTransform>
+                <TranslateTransform X="0" Y="0"/>
+            </Canvas.RenderTransform>
+            <Canvas.Resources/>
+
+            <Canvas >
+                <Rectangle Canvas.Left="0.06497404" 
+                           Canvas.Top="-0.049667623" 
+                           Width="78.480453" 
+                           Height="35.088787" 
+                           RadiusX="20" 
+                           RadiusY="20" 
+                           Fill="{StaticResource LightColor}" 
+                           StrokeThickness="0.166532"/>
+
+                <Ellipse Canvas.Left="2.8" 
+                         Canvas.Top="2.3" 
+                         Width="30" 
+                         Height="30" 
+                         Fill="#FFCCCCCC" 
+                         StrokeThickness="0.198436"/>
+
+                <Ellipse Canvas.Left="5.3" 
+                         Canvas.Top="4.8" 
+                         Width="25" 
+                         Height="25" 
+                         Fill="{StaticResource LightColor}" 
+                         StrokeThickness="0.165363"/>
+
+                <Ellipse Canvas.Left="55.7" 
+                         Canvas.Top="11.4" 
+                         Width="10" 
+                         Height="10" 
+                         Fill="#FFCCCCCC" 
+                         StrokeThickness="0.264583"/>
+            </Canvas>
         </Canvas>
     </Viewbox>
 

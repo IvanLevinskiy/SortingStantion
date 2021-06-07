@@ -57,6 +57,7 @@
     <Compile Include="Controls\customMessageBox.xaml.cs">
       <DependentUpon>customMessageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\S7ToggleButton.cs" />
     <Compile Include="Controls\UserMessage.xaml.cs">
       <DependentUpon>UserMessage.xaml</DependentUpon>
     </Compile>
@@ -76,6 +77,9 @@
       <DependentUpon>frameSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="frameSettings\frameSettingsViewModel.cs" />
+    <Compile Include="frameSettings\windowExit.xaml.cs">
+      <DependentUpon>windowExit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="frameUSPFault\frameUSPFault.xaml.cs">
       <DependentUpon>frameUSPFault.xaml</DependentUpon>
     </Compile>
@@ -147,6 +151,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="frameSettings\windowExit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="frameUSPFault\frameUSPFault.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -194,6 +202,7 @@
     </EmbeddedResource>
     <None Include="Docs\A1-2 СОПы проверки.docx" />
     <None Include="Docs\A2-2 СОПы работы и наладки.docx" />
+    <None Include="Docs\quickscan_i_family_prg_rus.pdf" />
     <None Include="Docs\Описание ПО L2 сериализация вер.2.docx" />
     <None Include="Docs\Техническое_требование_к_программному_обеспечению_ПЛК.docx" />
     <None Include="Properties\Settings.settings">

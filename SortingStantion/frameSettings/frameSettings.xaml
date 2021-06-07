@@ -116,19 +116,31 @@
 
     <Grid Background="#FF262626">
 
-        <Grid Margin="0,10,0,0">
+        <Grid >
 
             <Border Height="65"
                     BorderBrush="{StaticResource DarkColor}"
                     BorderThickness="2"
-                      VerticalAlignment="Top"
-                      Background="{StaticResource DarkColor}">
+                    VerticalAlignment="Top"
+                    Background="{StaticResource DarkColor}">
 
-                <TextBlock Text="НАСТРОЙКИ"
-                           Foreground="{StaticResource TextColor}"
-                           FontSize="{StaticResource fontSizeButtons}"
-                           VerticalAlignment="Center"
-                           Margin="30,0,0,0"/>
+                <Grid>
+
+                    <ContentPresenter Content="{StaticResource IconSettings}"
+                                      HorizontalAlignment="Left"
+                                      Margin="5"/>
+
+                    <TextBlock Text="НАСТРОЙКИ"
+                               Foreground="{StaticResource TextColor}"
+                               FontSize="{StaticResource fontSizeButtons}"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="80,0,0,0"/>
+
+
+                </Grid>
+
+                
 
             </Border>
 
@@ -407,19 +419,14 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD140-STIME"
-                                      Foreground="{StaticResource TextColor}"
-                                      Background="{StaticResource LightColor}"
-                                          FontSize="{StaticResource fontSizeData}"
-                                          FontFamily="{StaticResource fontFamilyData}"
-                                          VerticalContentAlignment="Center"
-                                      BorderThickness="0"
-                                      Width="100"
-                                      Height="40"
-                                      Margin="100,7,5,7"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"
-                                      HorizontalContentAlignment="Center"/>
+                            <controls:S7ToggleButton Address="DB1.DBX168.0"
+                                                     Style="{StaticResource s7ToggleButton}"
+                                                     VerticalContentAlignment="Center"
+                                                     Width="80"
+                                                     Height="40"
+                                                     Margin="80,10,15,10"
+                                                     HorizontalAlignment="Right"
+                                                     VerticalAlignment="Center"/>
 
                             <Rectangle Fill="{StaticResource GridColor}"
                                        Opacity="1"
