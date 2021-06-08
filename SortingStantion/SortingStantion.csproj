@@ -103,6 +103,9 @@
     </Compile>
     <Compile Include="UserAdmin\User.cs" />
     <Compile Include="Utilites\DelegateCommand.cs" />
+    <Compile Include="windiwAddingBox\windiwAddingBox.xaml.cs">
+      <DependentUpon>windiwAddingBox.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\customMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -176,6 +179,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UserAdmin\frameAuthorization.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="windiwAddingBox\windiwAddingBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

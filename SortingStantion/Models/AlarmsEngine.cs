@@ -125,7 +125,6 @@ namespace SortingStantion.Models
             al_2 = new S7DiscreteAlarm("Посторонний код (код не является СИ)", "DB6.DBX12.1", group);
 
 
-
             al_3 = new S7DiscreteAlarm("Номер продукта числится в браке", "DB6.DBX12.2", group);
             al_4 = new S7DiscreteAlarm("Повтор кода продукта", "DB6.DBX12.3", group);
             al_5 = new S7DiscreteAlarm("Получение кода от сканера при остановке конвейера", "DB6.DBX12.4", group);

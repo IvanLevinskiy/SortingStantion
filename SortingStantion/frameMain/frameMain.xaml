@@ -147,12 +147,9 @@
                         BorderThickness="1,1,0,1">
 
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <Grid Background="#FF676767" 
+                      
+                        <Grid Background="#FF676767"
+                              Grid.RowSpan="2"
                               Margin="5,1,5,1">
 
                             <!--ТЕКУЩЕЕ ВРЕМЯ-->
@@ -664,7 +661,8 @@
                      Background="{StaticResource DarkColor}"
                      Foreground="{StaticResource TextColor}"
                      FontFamily="{StaticResource fontFamilyButtons}"
-                     FontSize="{StaticResource fontSizeButtons}"/>
+                     FontSize="{StaticResource fontSizeButtons}"
+                    Command="{Binding AddingBoxCMD}"/>
 
 
         </Grid>

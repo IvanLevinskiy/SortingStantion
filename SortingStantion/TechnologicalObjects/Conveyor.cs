@@ -101,6 +101,10 @@ namespace SortingStantion.TechnologicalObjects
             //Подпись на событие по изминеию статуса работы
             //линии
             Run.ChangeValue += Run_ChangeValue;
+
+            //Вывод сообщения в окно информации (начальное)
+            UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
+            DataBridge.MSGBOX.Add(msg);
         }
 
         /// <summary>

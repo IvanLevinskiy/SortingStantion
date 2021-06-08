@@ -101,6 +101,7 @@ namespace SortingStantion.Models
                 return;
             }
 
+
             //Удаляем сообщение из списка
             MessageList.Remove(msg);
 

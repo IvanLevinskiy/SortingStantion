@@ -1,0 +1,66 @@
+﻿<Window x:Class="SortingStantion.windiwAddingBox.windiwAddingBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SortingStantion.windiwAddingBox"
+        mc:Ignorable="d"
+        Style="{StaticResource VS2012WindowStyle}"
+        Background="#FF323232"
+        WindowStartupLocation="CenterOwner"
+        Title="Добавление продукта" Width="700" Height="300">
+    <Grid Background="#FF1E1E1E">
+
+        <Grid Height="50"
+              Margin="20,30,20,0"
+              VerticalAlignment="Top">
+
+            <TextBlock Text="Считайте ручным сканером код добавляемого продукта"
+                   
+                   Foreground="{StaticResource TextColor}"
+                   FontSize="{StaticResource fontSizeData}"
+                   TextAlignment="Center"/>
+
+        </Grid>
+
+        <Grid Height="50"
+              Margin="10,80,20,0"
+              VerticalAlignment="Top">
+
+            <TextBlock Text="Код:"
+                   HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                   Foreground="{StaticResource TextColor}"
+                   FontSize="{StaticResource fontSizeData}"
+                   TextAlignment="Center"/>
+
+            <TextBox Text="sdfsdf"
+                 Height="30"
+                     Margin="60,0,20,0"
+                 FontSize="{StaticResource fontSizeData}"
+                 Foreground="{StaticResource TextColor}"
+                 Background="{StaticResource DarkColor}"
+                 BorderThickness="0"
+                 VerticalAlignment="Center"/>
+
+            <Rectangle Fill="Transparent"/>
+
+        </Grid>
+
+        <!--КНОПКА - ДОБАВИТЬ-->
+        <Button Height="50"
+                Width="300"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Margin="0,150,40,50"
+                Style="{StaticResource btnStyle}"
+                Background="{StaticResource LightColor}"
+                Foreground="{StaticResource TextColor}"
+                FontSize="{StaticResource fontSizeData}"
+                Content="Добавить"
+            />
+
+
+
+    </Grid>
+</Window>

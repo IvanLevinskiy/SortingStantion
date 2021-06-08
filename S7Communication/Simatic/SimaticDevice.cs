@@ -107,8 +107,8 @@ namespace S7Communication
         /// Свойство, указывающее доступно ли
         /// устройство Plc
         /// </summary>
-        bool isAvailable = false;
-        public bool IsAvailable
+        bool? isAvailable = null;
+        public bool? IsAvailable
         {
             get
             {
@@ -118,7 +118,7 @@ namespace S7Communication
             {
                 //Проверка на то, что появилось соединение 
                 //с устройством
-                if (IsAvailable == false && value == true)
+                if (isAvailable != true  && value == true)
                 {
                     //Уведомление подписчиков
                     GotConnection?.Invoke();
@@ -126,7 +126,7 @@ namespace S7Communication
 
                 //Проверка на то, что потеряно соединение 
                 //с устройством
-                if (IsAvailable == true && value == false)
+                if (isAvailable != false && value == false)
                 {
                     //Уведомление подписчиков
                     LostConnection?.Invoke();

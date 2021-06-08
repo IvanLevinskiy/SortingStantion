@@ -16,6 +16,10 @@ namespace SortingStantion.MainScreen
 
             //Передача  UI Dispatcher
             DataBridge.UIDispatcher = this.Dispatcher;
+
+            //Инициализируем свойство IsAvailable ПЛК
+            //для того, чтоб отображалась ошибка
+            DataBridge.server.Devices[0].IsAvailable = false;
         }
 
         /// <summary>

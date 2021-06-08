@@ -95,6 +95,24 @@ namespace SortingStantion.Models
             }
         }
 
+        /// <summary>
+        /// Команда для добавления нового короба
+        /// (при нажатии на клавишу Добавить)
+        /// </summary>
+        public ICommand AddingBoxCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    windiwAddingBox.windiwAddingBox windiwAddingBox = new windiwAddingBox.windiwAddingBox();
+                    windiwAddingBox.Owner = DataBridge.MainScreen;
+                    windiwAddingBox.ShowDialog();
+                },
+                (obj) => (true));
+            }
+        }
+
         #region Реализация интерфейса INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string property)

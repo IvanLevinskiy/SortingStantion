@@ -163,10 +163,8 @@ namespace SortingStantion.MainScreen
             //Тэг который сбрасывает дисконект
             ConnectFlag = new S7BOOL("ConnectFlag", "DB1.DBX0.0", group);
 
-
             //Запуск сервера
             server.Start();
-
 
             //Запуск задачи, взводящий флаг ConnectFlag
             Task.Factory.StartNew(() =>
@@ -196,6 +194,7 @@ namespace SortingStantion.MainScreen
                 (obj) => (true));
             }
         }
+        
 
         #region Реализация интерфейса INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
