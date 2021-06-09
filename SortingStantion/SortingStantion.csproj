@@ -95,6 +95,7 @@
     <Compile Include="TechnologicalObjects\Box.cs" />
     <Compile Include="TechnologicalObjects\BoxEngine.cs" />
     <Compile Include="TechnologicalObjects\Conveyor.cs" />
+    <Compile Include="TechnologicalObjects\Result.cs" />
     <Compile Include="TechnologicalObjects\Scaner.cs" />
     <Compile Include="TechnologicalObjects\WorkAssignment.cs" />
     <Compile Include="UserAdmin\AccesLevelModel.cs" />

@@ -59,7 +59,7 @@ namespace SortingStantion.frameUSPFault
             tag.ChangeValue += (state) =>
             {
 
-                if ((bool)state == false)
+                if ((bool?)state == false)
                 {
                     Action action = () =>
                     {

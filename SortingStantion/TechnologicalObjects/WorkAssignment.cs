@@ -77,12 +77,75 @@ namespace SortingStantion.TechnologicalObjects
 
 
         /// <summary>
+        /// Уникальный идентификатор задания.
+        /// </summary>
+        public S7_STRING TASK_ID_TAG
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Номер GTIN. (14 символов)
+        /// </summary>
+        public S7_STRING GTIN_TAG
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Наименование продукта (UTF-8)
+        /// </summary>
+        public S7_STRING PRODUCT_NAME_TAG
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Номер производственной серии (до 20 символов) 
+        /// </summary>
+        public S7_STRING LOT_NO_TAG
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Кол-во продуктов в коробе. 
+        /// </summary>
+        public S7DWORD NUM_PACKS_IN_BOX_TAG
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Ожидаемое количество продуктов в серии 
+        /// (определяется по заданию на производство серии) 
+        /// </summary>
+        public S7DWORD NUM_PACKS_IN_SERIES_TAG
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public WorkAssignment()
         {
-            //Инициализация тэга
+            //Инициализация тэгов
             inWorkTag = new S7BOOL("", "DB1.DBX182.0", group);
+            TASK_ID_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD184-STR40");
+            GTIN_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD226-STR40");
+            GTIN_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD268-STR82");
+            LOT_NO_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD352-STR40");
+
+            NUM_PACKS_IN_BOX_TAG = (S7DWORD)device.GetTagByAddress("DB1.DBD396-DWORD");
+            NUM_PACKS_IN_SERIES_TAG = (S7DWORD)device.GetTagByAddress("DB1.DBD398-DWORD");
         }
 
         /// <summary>
