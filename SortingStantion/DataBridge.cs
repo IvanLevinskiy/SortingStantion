@@ -109,5 +109,10 @@ namespace SortingStantion
         /// </summary>
         public static BoxEngine BoxEngine = new BoxEngine();
 
+        /// <summary>
+        /// Элемент разделяющий данные штрихкода
+        /// </summary>
+        public static DataSpliter DataSpliter = new DataSpliter();
+
     }
 }

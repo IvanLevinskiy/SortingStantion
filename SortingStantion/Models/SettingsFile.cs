@@ -1,6 +1,6 @@
 ﻿using SortingStantion.Controls;
 using System;
-using System.Windows;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace SortingStantion.Models
@@ -10,160 +10,15 @@ namespace SortingStantion.Models
     /// </summary>
     public class SettingsFile
     {
-        public string SrvL3Url
-        {
-            get;
-            set;
-        }
-
-        public string SrvL3Login
-        {
-            get;
-            set;
-        }
-
-        public string SrvL3Password
-        {
-            get;
-            set;
-        }
-
-        public string LocalSrvPort
-        {
-            get;
-            set;
-        }
-
-        public string SrvL3UrlReport
-        {
-            get;
-            set;
-        }
-
-        public string SerialPort232Name
-        {
-            get;
-            set;
-        }
-
-        public string SerialPort232BaudRate
-        {
-            get;
-            set;
-        }
-
-        public string SerialPort232Parity
-        {
-            get;
-            set;
-        }
-
-        public string SerialPort232DataBits
-        {
-            get;
-            set;
-        }
-
-        public string SerialPort232StopBits
-        {
-            get;
-            set;
-        }
-
-        public string SerialPort232Handshake
-        {
-            get;
-            set;
-        }
-
-        public string HandSerialPort232Name
-        {
-            get;
-            set;
-        }
-
-        public string scannerServerPort
-        {
-            get;
-            set;
-        }
-
-        public string WindowTimeOut
-        {
-            get;
-            set;
-        }
-
-        public string LineNum
-        {
-            get;
-            set;
-        }
-
-        public string PlcIp
-        {
-            get;
-            set;
-        }
-
-        public string ReuestTimeout
-        {
-            get;
-            set;
-        }
-
-        public string _1fieldPreficks
-        {
-            get;
-            set;
-        }
-
-        public string _1fieldLength
-        {
-            get;
-            set;
-        }
-
-        public string _2fieldPreficks
-        {
-            get;
-            set;
-        }
-
-        public string _2fieldLength
-        {
-            get;
-            set;
-        }
-
-        public string _3fieldPreficks
-        {
-            get;
-            set;
-        }
-
-        public string _3fieldLength
-        {
-            get;
-            set;
-        }
-
-        public string LogSizeInMonth
-        {
-            get;
-            set;
-        }
-
-        public string PacketLogEnable
-        {
-            get;
-            set;
-        }
-
         /// <summary>
         /// Xml документ с настройками
         /// </summary>
-        XmlDocument xDoc;
+        public XmlDocument xDoc;
+
+        /// <summary>
+        /// Список всех настроек в файле конфигурации
+        /// </summary>
+        List<Setting> Settings = new List<Setting>();
 
 
         /// <summary>
@@ -182,6 +37,8 @@ namespace SortingStantion.Models
         /// <param name="file"></param>
         public void Load(string file)
         {
+            //Очистка всех настроек
+            Settings.Clear();
 
             //Создаем экземпляр xml докумета
             xDoc = new XmlDocument();
@@ -190,6 +47,20 @@ namespace SortingStantion.Models
             try
             {
                 xDoc.Load(file);
+
+                //Получение корневого элементаэ
+                XmlNode root = xDoc.ChildNodes[0];
+
+                //Получаем коллекцию всех настроек
+                var settingsnodes = root.ChildNodes[0];
+
+                //Инициализация настроек и добавление 
+                //их в список настроек
+                foreach (XmlNode settingnode in settingsnodes)
+                {
+                    var setting = new Setting(settingnode);
+                    Settings.Add(setting);
+                }
             }
             catch (Exception ex)
             {
@@ -199,28 +70,39 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
+        /// Метод для получения настройки
+        /// по наименованию
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Setting GetSetting(string name)
+        {
+            //Ищем нужное свойство по атрибуту Name
+            foreach (var setting in Settings)
+            {
+                if (name == setting.Name)
+                {
+                    return setting;
+                }
+            }
+
+            //Возвращаем пустой результат
+            return null;
+        }
+
+        /// <summary>
         /// Метод для получения значения из XmlNode
         /// по наименованию узла
         /// </summary>
         /// <returns></returns>
         public string GetValue(string name)
         {
-            //Получаем корневой элемент
-            XmlNode root = xDoc.ChildNodes[0];
-
-            //Получаем коллекцию всех настроек
-            var settingsnodes = root.ChildNodes[0];
-
             //Ищем нужное свойство по атрибуту Name
-            foreach (XmlNode settingnode in settingsnodes)
+            foreach (var setting in Settings)
             {
-
-                var attr_name = GetAttribut(settingnode, "name");
-
-                if (name == attr_name)
+                if (name == setting.Name)
                 {
-                    var valuenode = settingnode.ChildNodes[0];
-                    return valuenode.InnerText;
+                    return setting.Value;
                 }
             }
 
@@ -229,42 +111,13 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
-        /// Получение атрибута из XmlNode
+        /// Метод для получения настроек 
+        /// из файла конфигурации
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="attribut"></param>
         /// <returns></returns>
-        public string GetAttribut(XmlNode node, string attribut)
+        public Setting [] GetSettingsList()
         {
-            try
-            {
-                if (node.Attributes == null)
-                {
-                    return string.Empty;
-                }
-
-                XmlNode attributNode = node.Attributes.GetNamedItem(attribut);
-
-
-                //Если атрибута нет
-                if (attributNode == null)
-                {
-                    return string.Empty;
-                }
-
-                //Если атрибут не пустой
-                if (attributNode.Value != string.Empty)
-                {
-                    return attributNode.Value;
-                }
-
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-            return string.Empty;
+            return Settings.ToArray();
         }
     }
 }

@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortingStantion.frameSettings"
         mc:Ignorable="d" Style="{StaticResource VS2012WindowStyle}"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         Title="" Height="250" Width="600" >
-    <Grid Background="{StaticResource DarkColor}">
+    <Grid >
         
         <TextBlock Text="Вы действительно намерены выключить комплекс?"
                    FontSize="{StaticResource fontSizeData}"

@@ -6,37 +6,38 @@
         xmlns:local="clr-namespace:SortingStantion.windiwAddingBox"
         mc:Ignorable="d"
         Style="{StaticResource VS2012WindowStyle}"
+        ResizeMode="NoResize"
         Background="#FF323232"
         WindowStartupLocation="CenterOwner"
-        Title="Добавление продукта" Width="700" Height="300">
-    <Grid Background="#FF1E1E1E">
+        Title="Добавление продукта" Width="550" Height="300">
+    <Grid >
 
         <Grid Height="50"
               Margin="20,30,20,0"
               VerticalAlignment="Top">
 
-            <TextBlock Text="Считайте ручным сканером код добавляемого продукта"
-                   
-                   Foreground="{StaticResource TextColor}"
-                   FontSize="{StaticResource fontSizeData}"
-                   TextAlignment="Center"/>
+            <TextBlock Text="      Считайте ручным сканером код добавляемого продукта."
+                       TextWrapping="Wrap"
+                       TextAlignment="Justify"
+                       Foreground="{StaticResource TextColor}"
+                       FontSize="{StaticResource fontSizeData}"/>
 
         </Grid>
 
         <Grid Height="50"
-              Margin="10,80,20,0"
+              Margin="10,110,20,0"
               VerticalAlignment="Top">
 
-            <TextBlock Text="Код:"
+            <TextBlock Text="       СЧИТАНО:"
                    HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                    Foreground="{StaticResource TextColor}"
                    FontSize="{StaticResource fontSizeData}"
                    TextAlignment="Center"/>
 
-            <TextBox Text="sdfsdf"
+            <TextBox Text="GTIN:04601234567895 SN:F8h3W"
                  Height="30"
-                     Margin="60,0,20,0"
+                     Margin="150,0,20,0"
                  FontSize="{StaticResource fontSizeData}"
                  Foreground="{StaticResource TextColor}"
                  Background="{StaticResource DarkColor}"
@@ -50,9 +51,9 @@
         <!--КНОПКА - ДОБАВИТЬ-->
         <Button Height="50"
                 Width="300"
-                VerticalAlignment="Top"
+                VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
-                Margin="0,150,40,50"
+                Margin="0,0,10,10"
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource LightColor}"
                 Foreground="{StaticResource TextColor}"

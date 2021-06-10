@@ -3,7 +3,7 @@
                     x:Class="SortingStantion.Dictionarys.DictionaryWindowStyles"
                     xmlns:local="clr-namespace:SortingStantion.Dictionarys">
 
-    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#EFEFF2" />
+    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#FF292929" />
     <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="#007ACC" />
     <SolidColorBrush x:Key="VS2012WindowBorderBrushInactive" Color="#999999" />
     <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFFFFF" />
@@ -59,7 +59,7 @@
                             x:Name="PART_Border"
                             Width="Auto"
                             Height="Auto"
-                            Background="#EFEFF2"
+                            Background="{StaticResource DarkColor}"
                             BorderBrush="{StaticResource VS2012WindowBorderBrush}"
                             BorderThickness="1"
                             Padding="0">

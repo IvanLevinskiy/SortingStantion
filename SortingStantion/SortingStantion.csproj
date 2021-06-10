@@ -87,8 +87,11 @@
       <DependentUpon>frame_gtin_fault.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AlarmsEngine.cs" />
+    <Compile Include="Models\DataField.cs" />
+    <Compile Include="Models\DataSpliter.cs" />
     <Compile Include="Models\Message_Engine.cs" />
     <Compile Include="Models\ScreenEngine.cs" />
+    <Compile Include="Models\Setting.cs" />
     <Compile Include="Models\SettingsFile.cs" />
     <Compile Include="S7Extension\Item.cs" />
     <Compile Include="S7Extension\S7DiscreteAlarm.cs" />
@@ -107,6 +110,7 @@
     <Compile Include="windiwAddingBox\windiwAddingBox.xaml.cs">
       <DependentUpon>windiwAddingBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="windiwAddingBox\windowAddingBoxViewModel.cs" />
     <Page Include="Controls\customMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
