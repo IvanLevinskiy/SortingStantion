@@ -1,9 +1,10 @@
-﻿using System;
+﻿using SortingStantion.UserAdmin;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Xml;
 
-namespace SortingStantion.UserAdmin
+namespace SortingStantion.Models
 {
     /// <summary>
     /// Перечисление уровней доступа

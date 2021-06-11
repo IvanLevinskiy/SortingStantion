@@ -174,7 +174,7 @@
                                         FontFamily="{StaticResource fontFamilyData}"
                                         Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD136-STIME"
+                            <controls:S7TextBox Address="DB1.DBD136-STIME"
                                           Foreground="{StaticResource TextColor}"
                                           Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -203,7 +203,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD140-STIME"
+                            <controls:S7TextBox Address="DB1.DBD140-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -232,7 +232,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                                 Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD144-STIME"
+                            <controls:S7TextBox Address="DB1.DBD144-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -283,7 +283,7 @@
                                        FontFamily="{StaticResource fontFamilyData}"
                                        Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD148-STIME"
+                            <controls:S7TextBox Address="DB1.DBD148-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -312,7 +312,7 @@
                            FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD152-STIME"
+                            <controls:S7TextBox Address="DB1.DBD152-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -341,7 +341,7 @@
                            FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD156-STIME"
+                            <controls:S7TextBox Address="DB1.DBD156-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -390,7 +390,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                                 Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD136-STIME"
+                            <controls:S7TextBox Address="DB1.DBD136-STIME"
                                           Foreground="{StaticResource TextColor}"
                                           Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -465,7 +465,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                                 Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD164-DWORD"
+                            <controls:S7TextBox Address="DB1.DBD164-DWORD"
                                           Foreground="{StaticResource TextColor}"
                                           Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -494,7 +494,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7_FIELD_IO Address="DB1.DBD160-STIME"
+                            <controls:S7TextBox Address="DB1.DBD160-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
