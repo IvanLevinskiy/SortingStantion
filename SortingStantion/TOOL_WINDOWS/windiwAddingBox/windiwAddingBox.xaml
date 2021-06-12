@@ -35,7 +35,7 @@
                    FontSize="{StaticResource fontSizeData}"
                    TextAlignment="Center"/>
 
-            <TextBox Text="GTIN:04601234567895 SN:F8h3W"
+            <TextBox Text="GTIN:04601234567895       SN:F8h3W"
                  Height="30"
                      Margin="150,0,20,0"
                  FontSize="{StaticResource fontSizeData}"

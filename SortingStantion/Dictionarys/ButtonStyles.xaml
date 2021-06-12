@@ -41,14 +41,14 @@
         </Setter>
     </Style>
 
-    <Style TargetType="controls:cButton" x:Key="accesslevrl_btn_Style">
+    <Style TargetType="controls:xButton" x:Key="accesslevrl_btn_Style">
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Background" Value="White"/>
         <Setter Property="BorderBrush" Value="{StaticResource GridColor}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls:cButton">
+                <ControlTemplate TargetType="controls:xButton">
 
                     <Border x:Name="border"
                             BorderBrush="{TemplateBinding BorderBrush}"

@@ -1,4 +1,5 @@
-﻿using SortingStantion.Utilites;
+﻿using SortingStantion.Models;
+using SortingStantion.Utilites;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;

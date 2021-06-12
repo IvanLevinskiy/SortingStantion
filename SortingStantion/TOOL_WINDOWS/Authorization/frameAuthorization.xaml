@@ -36,6 +36,11 @@
                                         FontSize="20"
                                         HorizontalAlignment="Center"
                                         TextAlignment="Center"/>
+
+                            <Rectangle Height="1"
+                                       Fill="{StaticResource GridColor}"
+                                       VerticalAlignment="Bottom"/>
+
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

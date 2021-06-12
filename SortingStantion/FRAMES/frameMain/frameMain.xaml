@@ -10,7 +10,7 @@
     <Grid Background="#FF262626">
 
         <Grid.Resources>
-            <Style TargetType="controls:S7_FIELD_IO">
+            <Style TargetType="controls:S7TextBox">
                 <Setter Property="Background" Value="{StaticResource DarkColor}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
                 <Setter Property="BorderThickness" Value="0"/>
@@ -272,7 +272,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD268-STR40" 
+                    <controls:S7TextBox Address="DB1.DBD268-STR40" 
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
@@ -298,7 +298,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD226-STR40" 
+                    <controls:S7TextBox Address="DB1.DBD226-STR40" 
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
@@ -324,7 +324,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD184-STR40" 
+                    <controls:S7TextBox Address="DB1.DBD184-STR40" 
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
@@ -366,7 +366,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD20-DWORD"
+                    <controls:S7TextBox Address="DB1.DBD20-DWORD"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
                                       VerticalContentAlignment="Center"
@@ -392,7 +392,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD16-DWORD"
+                    <controls:S7TextBox Address="DB1.DBD16-DWORD"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
                                       VerticalContentAlignment="Center"
@@ -418,7 +418,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD28-DWORD"
+                    <controls:S7TextBox Address="DB1.DBD28-DWORD"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
                                       VerticalContentAlignment="Center"
@@ -444,7 +444,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD22"
+                    <controls:S7TextBox Address="DB1.DBD22"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
                                       VerticalContentAlignment="Center"
@@ -569,7 +569,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD248-STR40" 
+                    <controls:S7TextBox Address="DB1.DBD248-STR40" 
                                           Width="250"
                                           IsReadOnly="False"
                                           Text="Моцарелла 300 гр."/>
@@ -586,7 +586,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD416-STR14" 
+                    <controls:S7TextBox Address="DB1.DBD416-STR14" 
                                           Width="250"
                                           IsReadOnly="False"
                                           Text="04604567890126"/>
@@ -603,7 +603,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7_FIELD_IO Address="DB1.DBD432-STR40" 
+                    <controls:S7TextBox Address="DB1.DBD432-STR40" 
                                           Width="250"
                                           IsReadOnly="False"
                                           Text="Series 2"/>

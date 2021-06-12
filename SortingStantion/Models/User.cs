@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SortingStantion.Models;
+using System;
 using System.ComponentModel;
 using System.Xml;
 
-namespace SortingStantion.UserAdmin
+namespace SortingStantion.Models
 {
     /// <summary>
     /// Класс, реализующий описание

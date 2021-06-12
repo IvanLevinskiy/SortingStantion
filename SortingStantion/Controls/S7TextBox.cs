@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace SortingStantion.Controls
 {
-    public class S7_FIELD_IO : TextBox, INotifyPropertyChanged
+    public class S7TextBox : TextBox, INotifyPropertyChanged
     {
         /// <summary>
         /// Указатель на оригинальный 
@@ -97,7 +97,7 @@ namespace SortingStantion.Controls
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public S7_FIELD_IO()
+        public S7TextBox()
         {
             //Передача контекста данных
             DataContext = this;

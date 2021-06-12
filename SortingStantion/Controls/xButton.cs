@@ -6,7 +6,7 @@ namespace SortingStantion.Controls
     /// Класс, описывающий кнопку с 
     /// разграничением прав пользователей
     /// </summary>
-    public class cButton : Button
+    public class xButton : Button
     {
         /// <summary>
         /// Минимальный уровень доступа
@@ -28,7 +28,7 @@ namespace SortingStantion.Controls
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public cButton()
+        public xButton()
         {
             DataBridge.MainAccesLevelModel.ChangeUser += Users_ChangeUser;
 
