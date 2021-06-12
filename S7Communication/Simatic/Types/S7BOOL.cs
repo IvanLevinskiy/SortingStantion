@@ -167,8 +167,8 @@ namespace S7Communication
             //на массив байт - выходим
             if (bytes == null)
             {
-                Status = null;
-                StatusText = string.Empty;
+                //Status = null;
+                //StatusText = string.Empty;
                 return;
             }
 
@@ -176,8 +176,8 @@ namespace S7Communication
             //выходим из функции
             if (bytes.Length < 1)
             {
-                Status = null;
-                StatusText = string.Empty;
+                //Status = null;
+                //StatusText = string.Empty;
                 return;
             }
 

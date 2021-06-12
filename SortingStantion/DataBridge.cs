@@ -40,7 +40,7 @@ namespace SortingStantion
         /// <summary>
         /// Simatic tcp сервер
         /// </summary>
-        public static SimaticServer server;
+        public static SimaticServer S7Server;
 
         /// <summary>
         /// Метод для создания Simatic Server
@@ -48,7 +48,7 @@ namespace SortingStantion
         public static void CreateSimaticServer()
         {
             //Создаем экземпляр Simatic Server
-            server = new SimaticServer();
+            S7Server = new SimaticServer();
 
             //Получаем ip из настроек
             var ip = SettingsFile.GetValue("PlcIp");
@@ -57,7 +57,7 @@ namespace SortingStantion
             var s7device = new SimaticDevice(ip, CpuType.S71200, 0, 1);
 
             //Добавляем устройство в сервер
-            server.AddDevice(s7device);
+            S7Server.AddDevice(s7device);
 
             //Создаем пустую группу для тэгов
             var s7group = new SimaticGroup();
@@ -76,9 +76,6 @@ namespace SortingStantion
         /// </summary>
         public static ScreenEngine ScreenEngine = new ScreenEngine();
 
-
-
-
         /// <summary>
         /// **********   ТЕХНОЛОГИЧЕСКИЕ ОБЪЕКТЫ ***************
         /// </summary>
@@ -89,9 +86,9 @@ namespace SortingStantion
         public static Conveyor Conveyor = new Conveyor();
 
         /// <summary>
-        /// Рабочее задание
+        /// Модуль, управляющий рабочими заданиямиРабочее задание
         /// </summary>
-        public static WorkAssignment WorkAssignment = new WorkAssignment();
+        public static WorkAssignmentEngine WorkAssignmentEngine = new WorkAssignmentEngine();
 
         /// <summary>
         /// Объяект, управляющий обработкой аварий от ПЛК
@@ -113,6 +110,12 @@ namespace SortingStantion
         /// Элемент разделяющий данные штрихкода
         /// </summary>
         public static DataSpliter DataSpliter = new DataSpliter();
+
+        /// <summary>
+        /// Объект, осуществляющий логирование и архивацию
+        /// сообщений в базу данных
+        /// </summary>
+        public static AlarmLogging AlarmLogging = new AlarmLogging();
 
     }
 }

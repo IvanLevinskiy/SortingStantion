@@ -15,7 +15,7 @@ namespace SortingStantion.Models
         {
             get
             {
-                return DataBridge.server;
+                return DataBridge.S7Server;
             }
         }
 
@@ -111,7 +111,9 @@ namespace SortingStantion.Models
             //Сбрасываем ошибки
             ResetAlarmsTag.Write(true);
 
-            //Посторонний продукт
+            /*
+                Посторонний продукт
+            */
             al_1 = new S7DiscreteAlarm("Посторонний продукт (GTIN не совпадает с заданием)", "DB6.DBX12.0", group);
             al_1.MessageAction = () =>
             {
@@ -121,31 +123,91 @@ namespace SortingStantion.Models
             };
 
 
-
+            /*
+                Посторонний код (код не является СИ)
+            */
             al_2 = new S7DiscreteAlarm("Посторонний код (код не является СИ)", "DB6.DBX12.1", group);
+            al_2.MessageAction = () =>
+            {
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Посторонний код (код не является СИ)", MessageType.Alarm);
+            };
 
-
+            /*
+                Номер продукта числится в браке
+            */
             al_3 = new S7DiscreteAlarm("Номер продукта числится в браке", "DB6.DBX12.2", group);
-            al_4 = new S7DiscreteAlarm("Повтор кода продукта", "DB6.DBX12.3", group);
-            al_5 = new S7DiscreteAlarm("Получение кода от сканера при остановке конвейера", "DB6.DBX12.4", group);
-            al_6 = new S7DiscreteAlarm("Ошибка отбраковщика (продукт не отбраковался)", "DB6.DBX12.5", group);
-            al_7 = new S7DiscreteAlarm("Массовый брак", "DB6.DBX12.6", group);
+            al_3.MessageAction = () =>
+            {
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Номер продукта числится в браке", MessageType.Alarm);
+            };
 
-            //Ошибка питания UPS (ИБП)
+            /*
+                Повтор кода продукта
+            */
+            al_4 = new S7DiscreteAlarm("Повтор кода продукта", "DB6.DBX12.3", group);
+            al_4.MessageAction = () =>
+            {
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Повтор кода продукта", MessageType.Alarm);
+            };
+
+            /*
+                Получение кода от сканера при остановке конвейера
+            */
+            al_5 = new S7DiscreteAlarm("Получение кода от сканера при остановке конвейера", "DB6.DBX12.4", group);
+            al_5.MessageAction = () =>
+            {
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Получение кода от сканера при остановке конвейера", MessageType.Alarm);
+            };
+
+            /*
+                Ошибка отбраковщика (продукт не отбраковался)
+            */
+            al_6 = new S7DiscreteAlarm("Ошибка отбраковщика (продукт не отбраковался)", "DB6.DBX12.5", group);
+            al_6.MessageAction = () =>
+            {
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Ошибка отбраковщика (продукт не отбраковался)", MessageType.Alarm);
+            };
+
+            /*
+                Массовый брак
+            */
+            al_7 = new S7DiscreteAlarm("Массовый брак", "DB6.DBX12.6", group);
+            al_7.MessageAction = () =>
+            {
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Массовый брак", MessageType.Alarm);
+            };
+
+            /*
+                Ошибка питания UPS (ИБП)
+            */
             al_13 = new S7DiscreteAlarm("Потеря питания! Комплекс будет отключен", "DB6.DBX13.4", group);
             al_13.MessageAction = () =>
             {
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Ошибка питания ИБП", MessageType.Alarm);
+
+                //Создание окна
                 SortingStantion.frameUSPFault.frameUSPFault fups = new SortingStantion.frameUSPFault.frameUSPFault();
                 fups.Owner = DataBridge.MainScreen;
                 fups.ShowDialog();
             };
 
-
-            //Ошибка потреи связи с устройством
+            /*
+                Ошибка потреи связи с устройством
+            */
             device.LostConnection += () =>
             {
                 Action action = () =>
                 {
+                    //Запись сообщения в базу данных
+                    DataBridge.AlarmLogging.AddMessage("Потеря связи с ПЛК", MessageType.Alarm);
+
                     msgLostConnection = new Controls.UserMessage($"Потеряно соединение с ПЛК {device.IP}", MSGTYPE.ERROR);
                     DataBridge.MSGBOX.Add(msgLostConnection);
                 };
@@ -153,11 +215,16 @@ namespace SortingStantion.Models
                 
             };
 
-            //Ошибка потреи связи с устройством
+            /*
+                Ошибка потреи связи с устройством
+            */
             device.GotConnection += () =>
             {
                 Action action = () =>
                 {
+                    //Запись сообщения в базу данных
+                    DataBridge.AlarmLogging.AddMessage("Восстановление связи с ПЛК", MessageType.Alarm);
+
                     DataBridge.MSGBOX.Remove(msgLostConnection);
                 };
                 DataBridge.UIDispatcher.Invoke(action);

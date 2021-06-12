@@ -53,7 +53,7 @@ namespace SortingStantion.frameUSPFault
             timer.Start();
 
             //Получение тэга, ошибки USP
-            var tag = DataBridge.server.Devices[0].GetTagByAddress("DB6.DBX13.4");
+            var tag = DataBridge.S7Server.Devices[0].GetTagByAddress("DB6.DBX13.4");
 
             //При появлении питания закрытия окна
             tag.ChangeValue += (state) =>

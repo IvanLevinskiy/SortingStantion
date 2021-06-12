@@ -1,15 +1,30 @@
 ﻿using Newtonsoft.Json;
-using System.ComponentModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SortingStantion.TechnologicalObjects
+namespace SortingStantion.Models
 {
-    /// <summary>
-    /// Класс, описывающий рабочее задание
-    /// </summary>
-    public class WorkAssignment : INotifyPropertyChanged
+    /*
     {
-       
+      "id": "f8453afd-de4e-11e7-8110-000c73101135117",
+      "gtin": "04604567890126",
+      "lotNo": "Series 2",
+      "lineNum": "2",
+      "numРacksInBox": 4,
+      "productName": "Моцарелла 300 гр.",
+      "numPacksInSeries": 10000,
+    }
+    */
 
+
+    /// <summary>
+    /// Класс - структура для десериализации
+    /// рабочего задания
+    /// </summary>
+    public class workAssignmentStructure
+    {
         /// <summary>
         /// Уникальный идентификатор задания.
         /// </summary>
@@ -54,7 +69,7 @@ namespace SortingStantion.TechnologicalObjects
         /// Кол-во продуктов в коробе
         /// </summary>
         [JsonProperty("numРacksInBox")]
-        public int numРacksInBox
+        public string numРacksInBox
         {
             get;
             set;
@@ -74,34 +89,10 @@ namespace SortingStantion.TechnologicalObjects
         /// Ожидаемое количество продуктов в серии (определяется по заданию на производство серии) 
         /// </summary>
         [JsonProperty("numPacksInSeries")]
-        public int numPacksInSeries
+        public string numPacksInSeries
         {
             get;
             set;
         }
-
-        /// <summary>
-        /// Конструктор класса
-        /// </summary>
-        public WorkAssignment()
-        {
-           
-        }
-
-      
-
-
-        #region Реализация интерфейса INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
-
-        }
-        #endregion
-
     }
 }

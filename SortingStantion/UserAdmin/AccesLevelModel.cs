@@ -141,12 +141,17 @@ namespace SortingStantion.UserAdmin
                 }
 
                 ////Если пользователь валидный
-                ////извещаем подписчиков
+                ////извещаем подписчиков и делаем запись в базу данных
                 if (user.Password == Password)
                 {
                     CurrentUser = user;
                     OnPropertyChanged("DisplayName");
                     ChangeUser?.Invoke((int)CurrentUser.AccesLevel);
+
+                    //Запись в базу данных
+                    var message = $"Авторизован новый пользователь: {user.Name} с уровнем доступа: {user.AccesLevel.ToString()}";
+                    DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.ChangeUser);
+
                     return true;
                 }
             }

@@ -17,7 +17,7 @@ namespace SortingStantion.frame_gtin_fault
         {
             get
             {
-                return DataBridge.server;
+                return DataBridge.S7Server;
             }
         }
 

@@ -21,7 +21,7 @@ namespace SortingStantion.TechnologicalObjects
         {
             get
             {
-                return DataBridge.server;
+                return DataBridge.S7Server;
             }
         }
 
@@ -130,7 +130,7 @@ namespace SortingStantion.TechnologicalObjects
                     {
                         //Если задание принято, то запускаем линию
                         //иначе уведомляем оператора сообщением
-                        if (DataBridge.WorkAssignment.InWork == false)
+                        if (DataBridge.WorkAssignmentEngine.InWork == false)
                         {
                             customMessageBox mb = new customMessageBox("Ошибка", "Запуск невозможен, задание не принято в работу");
                             mb.Owner = DataBridge.MainScreen;

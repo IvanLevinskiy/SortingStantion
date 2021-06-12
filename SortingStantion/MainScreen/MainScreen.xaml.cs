@@ -19,7 +19,7 @@ namespace SortingStantion.MainScreen
 
             //Инициализируем свойство IsAvailable ПЛК
             //для того, чтоб отображалась ошибка
-            DataBridge.server.Devices[0].IsAvailable = false;
+            DataBridge.S7Server.Devices[0].IsAvailable = false;
         }
 
         /// <summary>

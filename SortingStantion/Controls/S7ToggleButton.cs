@@ -56,7 +56,7 @@ namespace SortingStantion.Controls
             {
                 address = value;
 
-                S7TAG = (S7BOOL)DataBridge.server.Devices[0].GetTagByAddress(address);
+                S7TAG = (S7BOOL)DataBridge.S7Server.Devices[0].GetTagByAddress(address);
 
                 //Если регистр не найден
                 if (S7TAG == null)

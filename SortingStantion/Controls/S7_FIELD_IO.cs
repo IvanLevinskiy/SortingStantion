@@ -28,12 +28,12 @@ namespace SortingStantion.Controls
                 address = value;
 
                 //Если сервер не проинициализирован - инициализируем его
-                if (DataBridge.server == null)
+                if (DataBridge.S7Server == null)
                 {
                     DataBridge.CreateSimaticServer();
                 }
 
-                S7TAG = DataBridge.server.Devices[0].GetTagByAddress(address);
+                S7TAG = DataBridge.S7Server.Devices[0].GetTagByAddress(address);
 
                 //Если регистр не найден
                 if (S7TAG == null)

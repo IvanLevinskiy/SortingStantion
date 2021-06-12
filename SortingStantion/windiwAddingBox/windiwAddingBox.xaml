@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         Background="#FF323232"
         WindowStartupLocation="CenterOwner"
-        Title="Добавление продукта" Width="550" Height="300">
+        Title="Добавление продукта" Width="550" Height="250">
     <Grid >
 
         <Grid Height="50"
@@ -24,7 +24,7 @@
 
         </Grid>
 
-        <Grid Height="50"
+        <!--<Grid Height="50"
               Margin="10,110,20,0"
               VerticalAlignment="Top">
 
@@ -46,7 +46,7 @@
 
             <Rectangle Fill="Transparent"/>
 
-        </Grid>
+        </Grid>-->
 
         <!--КНОПКА - ДОБАВИТЬ-->
         <Button Height="50"

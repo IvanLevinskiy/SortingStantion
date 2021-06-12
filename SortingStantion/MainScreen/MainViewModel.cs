@@ -68,7 +68,7 @@ namespace SortingStantion.MainScreen
         {
             get
             {
-                return DataBridge.server;
+                return DataBridge.S7Server;
             }
         }
 
@@ -112,15 +112,15 @@ namespace SortingStantion.MainScreen
         /// <summary>
         /// Технологический объект - задание
         /// </summary>
-        public WorkAssignment WorkAssignment
+        public WorkAssignmentEngine WorkAssignment
         {
             get
             {
-                return DataBridge.WorkAssignment;
+                return DataBridge.WorkAssignmentEngine;
             }
             set
             {
-                WorkAssignment = value;
+                DataBridge.WorkAssignmentEngine = value;
             }
         }
 

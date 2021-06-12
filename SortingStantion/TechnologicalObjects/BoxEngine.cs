@@ -16,7 +16,7 @@ namespace SortingStantion.TechnologicalObjects
         {
             get
             {
-                return DataBridge.server;
+                return DataBridge.S7Server;
             }
         }
 
