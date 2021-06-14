@@ -96,5 +96,16 @@ namespace SortingStantion.frame_gtin_fault
             DataBridge.AlarmsEngine.al_1.Write(false);
             this.Close();
         }
+
+        /// <summary>
+        /// Метод, вызываемый при закрытии окна
+        /// (отмена закрытия окна)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+        }
     }
 }
