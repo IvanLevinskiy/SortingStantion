@@ -324,7 +324,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7TextBox Address="DB1.DBD184-STR40" 
+                    <controls:S7TextBox Address="DB1.DBD352-STR40" 
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
