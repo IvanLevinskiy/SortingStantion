@@ -119,6 +119,8 @@
     <Compile Include="FRAMES\frameSettings\windowExit.xaml.cs">
       <DependentUpon>windowExit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserAutorizationHistotyItem.cs" />
+    <Compile Include="TechnologicalObjects\ResultOperation.cs" />
     <Compile Include="TOOL_WINDOWS\WindowUSPFault\WindowUSPFault.xaml.cs">
       <DependentUpon>WindowUSPFault.xaml</DependentUpon>
     </Compile>

@@ -10,11 +10,21 @@ namespace SortingStantion.Models
     /// Перечисление типов аварий
     /// </summary>
     public enum MessageType
-    { 
-        Alarm = 0, 
-        Info = 1, 
+    {
+        [Description("Авария ПЛК")]
+        Alarm = 0,
+
+        [Description("Информация")]
+        Info = 1,
+
+        [Description("Действие оператора")]
         Event = 2,
-        ChangeUser = 3
+
+        [Description("История смены пользователей")]
+        ChangeUser = 3,
+
+        [Description("История обработки заданий")]
+        TaskLogging = 4
     }
 
     /// <summary>

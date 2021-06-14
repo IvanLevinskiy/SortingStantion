@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner" 
         Width="700" Height="400"
         Title="Посторонний продукт"
-        Background="#FF323232">
+        Background="#FF323232" Closing="Window_Closing">
     <Border BorderBrush="#FF1E1E1E"
             BorderThickness="2" 
             Background="#FF1E1E1E">

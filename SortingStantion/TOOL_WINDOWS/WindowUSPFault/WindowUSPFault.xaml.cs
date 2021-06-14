@@ -72,9 +72,15 @@ namespace SortingStantion.frameUSPFault
             };
         }
 
-        private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        /// <summary>
+        /// Метод, вызываемый при закрытии окна
+        /// (для отмены закрытия окна)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
+            e.Cancel = true;
         }
     }
 }

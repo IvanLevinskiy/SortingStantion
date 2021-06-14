@@ -1,7 +1,9 @@
-﻿using SortingStantion.UserAdmin;
+﻿using SortingStantion.Controls;
+using SortingStantion.UserAdmin;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Media;
 using System.Xml;
 
 namespace SortingStantion.Models
@@ -72,7 +74,7 @@ namespace SortingStantion.Models
         /// Событие, возникающее при смене
         /// пользователя
         /// </summary>
-        public event Action<int> ChangeUser;
+        public event Action<int, User> ChangeUser;
 
         /// <summary>
         /// Конструктор класса
@@ -131,6 +133,11 @@ namespace SortingStantion.Models
         /// </summary>
         public bool Login(string login, string Password)
         {
+            //Локальные переменные для вывода сообщения
+            //в зоне информации
+            SolidColorBrush brush;
+            UserMessage messageItem;
+
             foreach (var user in Users)
             {
                 //Если имя пользователя не соответствует
@@ -145,23 +152,42 @@ namespace SortingStantion.Models
                 ////извещаем подписчиков и делаем запись в базу данных
                 if (user.Password == Password)
                 {
+                    //Если текущий пользователь тот же, который был,
+                    //пишем
+                    if (currentUser == user)
+                    {
+                        brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                        messageItem = new Controls.UserMessage("Пользователь уже авторизован", brush);
+                        DataBridge.MSGBOX.Add(messageItem);
+
+                        return false;
+                    }
+
+                    //В случае успешной авторизации
                     CurrentUser = user;
                     OnPropertyChanged("DisplayName");
-                    ChangeUser?.Invoke((int)CurrentUser.AccesLevel);
+                    ChangeUser?.Invoke((int)CurrentUser.AccesLevel, user);
 
                     //Запись в базу данных
                     var message = $"Авторизован новый пользователь: {user.Name} с уровнем доступа: {user.AccesLevel.ToString()}";
                     DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.ChangeUser);
 
+                    //Выводим сообщение об успешной авторизации
+                    brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                    messageItem = new Controls.UserMessage(message, MSGTYPE.INFO);
+                    DataBridge.MSGBOX.Add(messageItem);
+
                     return true;
                 }
             }
 
+            //Выводим сообщение, что при ошибке возникла ошибка авторизации
+            brush =  new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+            messageItem = new Controls.UserMessage("Ошибка авторизации", brush);
+            DataBridge.MSGBOX.Add(messageItem);
+
             return false;
         }
-
-
-
 
         /// <summary>
         /// Выход из логина

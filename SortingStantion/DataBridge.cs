@@ -117,5 +117,10 @@ namespace SortingStantion
         /// </summary>
         public static AlarmLogging AlarmLogging = new AlarmLogging();
 
+        /// <summary>
+        /// Класс, осуществляющий формирование отчета
+        /// </summary>
+        public static ResultOperation Report = new ResultOperation();
+
     }
 }

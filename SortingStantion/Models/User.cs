@@ -1,6 +1,4 @@
-﻿using SortingStantion.Models;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Xml;
 
 namespace SortingStantion.Models
@@ -174,7 +172,6 @@ namespace SortingStantion.Models
                 }
             }
         }
-
 
         /// <summary>
         /// Метод для обновления свойств MVVM

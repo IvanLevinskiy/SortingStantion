@@ -104,6 +104,26 @@ namespace SortingStantion.Controls
         }
 
         /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="type"></param>
+        public UserMessage(string message, Brush color)
+        {
+            InitializeComponent();
+
+            DataContext = this;
+
+            //Инициализация полей
+            Message = message;
+            Type = MSGTYPE.WARNING;
+            Datetime = DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss");
+
+            //Определение цвета окна
+            Brush = color;
+        }
+
+        /// <summary>
         /// Перевод типа сообщения в цвет кисти
         /// </summary>
         /// <returns></returns>
@@ -123,6 +143,11 @@ namespace SortingStantion.Controls
             if (type == MSGTYPE.ERROR)
             {
                 return new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+            }
+
+            if (type == MSGTYPE.INFO)
+            {
+                return new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x7A, 0xCC));
             }
 
             return new SolidColorBrush(Colors.Transparent);
