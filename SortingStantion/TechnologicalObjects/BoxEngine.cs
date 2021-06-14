@@ -95,6 +95,10 @@ namespace SortingStantion.TechnologicalObjects
             NOREAD.ChangeValue += BARCODESCANER_CHANGEVALUE;
         }
 
+        /// <summary>
+        /// Событие, вызываемое при изменении статуса GOODREAD или NOREAD
+        /// </summary>
+        /// <param name="svalue"></param>
         private void BARCODESCANER_CHANGEVALUE(object svalue)
         {
             bool? value = (bool?)svalue;
@@ -120,6 +124,12 @@ namespace SortingStantion.TechnologicalObjects
             }
             else
             {
+                //Добавляем просканированное изделие
+                //в коллекцию изделий результата
+                DataBridge.Report.AddBox(scaner_barcode);
+
+                //Взвод флага для перемещения изделия
+                //в колекцию коробов между сканером и отбраковщиком
                 TRANSFER_CMD.Write(true);
             }
 

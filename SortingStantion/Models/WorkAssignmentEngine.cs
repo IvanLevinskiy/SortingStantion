@@ -192,10 +192,19 @@ namespace SortingStantion.Models
             }
         }
 
+
         /// <summary>
-        /// Событие, генерируемое при получении новых данных
+        /// Событие, генерируемое при принятии
+        /// нового задания
         /// </summary>
-        public event Action<workAssignmentStructure> NewWorkAssignment;
+        public event Action<WorkAssignment> WorkOrderAcceptanceNotification;
+
+        /// <summary>
+        /// Событие, генерируемое при завершении
+        /// рабочего задания
+        /// </summary>
+        public event Action<WorkAssignment> WorkOrderCompletionNotification;
+
 
         /// <summary>
         /// Конструктор класса
@@ -293,7 +302,9 @@ namespace SortingStantion.Models
                         NUM_PACKS_IN_BOX_TAG.Write(SelectedWorkAssignment.numРacksInBox);
                         NUM_PACKS_IN_SERIES_TAG.Write(SelectedWorkAssignment.numPacksInSeries);
 
-                        
+                        //Уведомление подписчиков о принятии задания
+                        WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
+
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(true);
                         return;
@@ -321,6 +332,13 @@ namespace SortingStantion.Models
                         PRODUCT_NAME_TAG.Write("");
                         NUM_PACKS_IN_BOX_TAG.Write(0);
                         NUM_PACKS_IN_SERIES_TAG.Write(0);
+
+                        //Уведомление подписчиков о завершении задания
+                        WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
+
+                        //Запись в базу данных
+                        var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
+                        DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.TaskLogging);
 
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(false);

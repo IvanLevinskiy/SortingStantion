@@ -1,4 +1,5 @@
 ﻿using S7Communication;
+using SortingStantion.Models;
 using System;
 using System.ComponentModel;
 using System.Threading;
@@ -106,7 +107,7 @@ namespace SortingStantion.Controls
         /// Метод, вызываемый при смене пользователя
         /// </summary>
         /// <param name="obj"></param>
-        private void Users_ChangeUser(int currentuser)
+        private void Users_ChangeUser(int currentuser, User newuser)
         {
             this.IsEnabled = CheckAccesLevel();
         }

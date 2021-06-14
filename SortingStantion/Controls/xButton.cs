@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using SortingStantion.Models;
+using System.Windows.Controls;
 
 namespace SortingStantion.Controls
 {
@@ -41,7 +42,7 @@ namespace SortingStantion.Controls
         /// Собылие при изменении пользователя
         /// </summary>
         /// <param name="accesslevel"></param>
-        private void Users_ChangeUser(int accesslevel)
+        private void Users_ChangeUser(int accesslevel, User newuser)
         {
             CheckAccesLevel();
         }

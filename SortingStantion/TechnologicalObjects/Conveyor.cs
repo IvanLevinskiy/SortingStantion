@@ -141,6 +141,10 @@ namespace SortingStantion.TechnologicalObjects
 
                         //Запись статуса в ПЛК
                         Run.Write(true);
+
+                        //Внесение в базу данных сообщения об остановке комплекса
+                        DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТАРТ. Линия запущена", Models.MessageType.Event);
+                        
                         return;
                     }
                 },
@@ -171,6 +175,10 @@ namespace SortingStantion.TechnologicalObjects
                     {
                         //Запись статуса в ПЛК
                         Run.Write(false);
+
+                        //Внесение в базу данных сообщения об остановке комплекса
+                        DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТОП. Линия остановлена", Models.MessageType.Event);
+
                         return;
                     }
 

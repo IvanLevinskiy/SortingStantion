@@ -38,6 +38,9 @@ namespace SortingStantion.frameSettings
         /// <param name="e"></param>
         private void btnYesClick(object sender, RoutedEventArgs e)
         {
+            //Внесение в базу данных сообщения об завершении работы комплекса
+            DataBridge.AlarmLogging.AddMessage("Завершение работы комплекса", Models.MessageType.Event);
+
             App.Current.Shutdown();
         }
 

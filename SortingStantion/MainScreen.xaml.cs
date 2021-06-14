@@ -11,6 +11,9 @@ namespace SortingStantion.MainScreen
         {
             InitializeComponent();
 
+            //Внесение в базу данных сообщения о запуске приложения 
+            DataBridge.AlarmLogging.AddMessage("Запуск приложения", Models.MessageType.Event);
+
             //ПЕредача экземпляра окна
             DataBridge.MainScreen = this;
 
