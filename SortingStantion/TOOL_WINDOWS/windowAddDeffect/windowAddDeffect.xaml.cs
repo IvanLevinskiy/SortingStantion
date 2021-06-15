@@ -3,13 +3,18 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace SortingStantion.windiwAddingBox
+namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
 {
     /// <summary>
-    /// Логика взаимодействия для windiwAddingBox.xaml
+    /// Логика взаимодействия для windowAddDeffect.xaml
     /// </summary>
-    public partial class windiwAddingBox : Window
+    public partial class windowAddDeffect : Window
     {
+
+        /// <summary>
+        /// Таймер для автоматического закрытия окна
+        /// при бездействии
+        /// </summary>
         DispatcherTimer ShutdownTimer;
 
         /// <summary>
@@ -24,11 +29,10 @@ namespace SortingStantion.windiwAddingBox
             }
             set
             {
-                //Запоминание серийного номера
                 currentSerialNumber = value;
 
                 //Управление Enable кнопки ДОБАВИТЬ
-                btnAddBox.IsEnabled = string.IsNullOrEmpty(currentSerialNumber) == false;
+                btnAddDeffect.IsEnabled = string.IsNullOrEmpty(currentSerialNumber) == false;
 
                 //Сброс таймера отсчета времени бездействия
                 ShutdownTimer.Stop();
@@ -54,7 +58,10 @@ namespace SortingStantion.windiwAddingBox
         }
         string currentGTIN;
 
-        public windiwAddingBox()
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        public windowAddDeffect()
         {
             //Инициализация UI
             InitializeComponent();
@@ -86,24 +93,72 @@ namespace SortingStantion.windiwAddingBox
         /// <param name="obj"></param>
         private void Scaner_NewDataNotification(string datastring)
         {
+            //Текст сообщения в зоне информации
+            string message = string.Empty;
+
             //Разбор данных по полям
             var inputdata = datastring;
             DataBridge.DataSpliter.Split(ref inputdata);
 
+            //Если код не распознан (поля не соответствуют шаблону)
+            if (DataBridge.DataSpliter.IsValid == false)
+            {
+                message = $"Код не распознан";
+                ShowMessageInformationZone(message);
+
+                //Выход из функции
+                return;
+            }
+
             //Добавление номера продукта в буфер текущего окна
             CurrentSerialNumber = DataBridge.DataSpliter.GetSerialNumber();
             CurrentGTIN = DataBridge.DataSpliter.GetGTIN();
-            DataBridge.Report.AddBox(CurrentSerialNumber);
 
-            //Выводим сообщение в зоне иноформации
-            string message = $"Считан продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber}";
-
-            Action action = () =>
+            //Если GTIN не соответсвтвует заданию
+            if (CurrentGTIN != DataBridge.WorkAssignmentEngine.GTIN_TAG.StatusText)
             {
-                var msgitem = new UserMessage(message, MSGTYPE.INFO);
-                DataBridge.MSGBOX.Add(msgitem);
-            };
-            DataBridge.UIDispatcher.Invoke(action);
+                message = $"Посторонний продукт не может быть добавлен в брак.";
+                ShowMessageInformationZone(message);
+                
+                //Стирание старой информации
+                CurrentSerialNumber = string.Empty;
+                CurrentGTIN = string.Empty;
+
+                //Выход из функции
+                return;
+            }
+
+            DataBridge.Report.AddDeffect(CurrentSerialNumber);
+
+            //Формируем сообщение для зоны иноформации
+            message = $"Считан продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber}";
+            ShowMessageInformationZone(message);
+
+
+        }
+
+        /// <summary>
+        /// Метод, вызываемый по клику на кнопку
+        /// ДОБАВИТЬ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAddDeffect_Click(object sender, RoutedEventArgs e)
+        {
+            //Проверка - 
+
+            //Добавление номера продукта в список брака
+            DataBridge.Report.AddDeffect(CurrentSerialNumber);
+
+            //Добавление в базу данных (лог) записи
+            string message = $"Продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber} добавлен в список брака";
+            DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
+
+            //Стирание серийного номера для того, чтоб
+            //через акцессор заблокировать кнопку Добавить и сбросить
+            //таймер по которому отсчитывается время бездействия
+            CurrentSerialNumber = string.Empty;
+
 
         }
 
@@ -139,6 +194,20 @@ namespace SortingStantion.windiwAddingBox
             }
 
             return 60;
+        }
+
+        /// <summary>
+        /// Метод для отображения сообщения в зоне информации
+        /// </summary>
+        /// <param name="message"></param>
+        void ShowMessageInformationZone(string message)
+        {
+            Action action = () =>
+            {
+                var msgitem = new UserMessage(message, MSGTYPE.INFO);
+                DataBridge.MSGBOX.Add(msgitem);
+            };
+            DataBridge.UIDispatcher.Invoke(action);
         }
     }
 }

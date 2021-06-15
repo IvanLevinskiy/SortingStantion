@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner" 
         Width="700" Height="400"
         Title="Посторонний продукт"
-        Background="#FF323232" Closing="Window_Closing">
+        Background="#FF323232">
     <Border BorderBrush="#FF1E1E1E"
             BorderThickness="2" 
             Background="#FF1E1E1E">
@@ -46,13 +46,14 @@
                 </TextBlock>
 
                 <Button Content="Отмена"
+                        Click="ButtonCancel_Click"
                         Style="{StaticResource btnStyle}"
                         Background="{StaticResource DarkColor}"
                         Foreground="{StaticResource TextColor}"
                         FontSize="{StaticResource fontSizeButtons}"
                         VerticalAlignment="Bottom"
                         Margin="50,0,50,0"
-                        Height="50" Click="ButtonCancel_Click"
+                        Height="50"
                         />
 
             </Grid>

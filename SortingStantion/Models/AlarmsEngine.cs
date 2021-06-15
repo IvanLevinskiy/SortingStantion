@@ -208,10 +208,10 @@ namespace SortingStantion.Models
                     //Запись сообщения в базу данных
                     DataBridge.AlarmLogging.AddMessage("Потеря связи с ПЛК", MessageType.Alarm);
 
-                    msgLostConnection = new Controls.UserMessage($"Потеряно соединение с ПЛК {device.IP}", MSGTYPE.ERROR);
+                    msgLostConnection = new Controls.UserMessage($"Линия остановлена. Обрыв связи с контроллером.", MSGTYPE.ERROR);
                     DataBridge.MSGBOX.Add(msgLostConnection);
                 };
-                DataBridge.UIDispatcher.Invoke(action);
+                DataBridge.UIDispatcher?.Invoke(action);
                 
             };
 
@@ -227,7 +227,7 @@ namespace SortingStantion.Models
 
                     DataBridge.MSGBOX.Remove(msgLostConnection);
                 };
-                DataBridge.UIDispatcher.Invoke(action);
+                DataBridge.UIDispatcher?.Invoke(action);
 
             };
 

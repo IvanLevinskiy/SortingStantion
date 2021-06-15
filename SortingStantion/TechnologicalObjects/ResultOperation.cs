@@ -12,29 +12,29 @@ namespace SortingStantion.TechnologicalObjects
         /// <summary>
         /// Уникальный идентификатор задания. 
         /// </summary>
-        string ID;
+        public string ID;
 
         /// <summary>
         /// Время начала работы с заданием
         /// </summary>
-        DateTime startTime;
+        public DateTime startTime;
 
         /// <summary>
         /// Время окончания работы с заданием 
         /// </summary>
-        DateTime endTime;
+        public DateTime endTime;
 
         /// <summary>
         /// Массив, содержащий объекты Operator 
         /// описывающие мастера на линии
         /// </summary>
-        List<UserAuthorizationHistotyItem> operators = new List<UserAuthorizationHistotyItem>();
+        public List<UserAuthorizationHistotyItem> operators = new List<UserAuthorizationHistotyItem>();
 
         /// <summary>
         /// Акцессор для предоставления упрощенного
         /// доступа к экземпляру последнего оператора
         /// </summary>
-        UserAuthorizationHistotyItem LastOperator
+        public UserAuthorizationHistotyItem LastOperator
         {
             get
             {
@@ -51,22 +51,22 @@ namespace SortingStantion.TechnologicalObjects
         /// <summary>
         /// Список всех номеров продуктов 
         /// </summary>
-        List<string> Codes = new List<string>();
+        public List<string> Codes = new List<string>();
 
         /// <summary>
         /// Массив отбракованных вручную номеров продуктов 
         /// </summary>
-        List<string> defectiveCodes = new List<string>();
+        public List<string> defectiveCodes = new List<string>();
 
         /// <summary>
         /// Массив, содержащий номера продуктов, прошедших сканер повторно.
         /// </summary>
-        List<string> repeatPacks = new List<string>();
+        public List<string> repeatPacks = new List<string>();
 
         /// <summary>
         /// Текущее рабочее задание
         /// </summary>
-        WorkAssignment CurrentWorkAssignment
+        public WorkAssignment CurrentWorkAssignment
         {
             get;
             set;
@@ -156,11 +156,34 @@ namespace SortingStantion.TechnologicalObjects
                 //DataBridge.AlarmsEngine.al_3.Write(true);
                 return;
             }
-
-
-
-
         }
+
+        /// <summary>
+        /// Метод для добавления деффекта в результат
+        /// </summary>
+        /// <param name="serialnumber"></param>
+        public void AddDeffect(string serialnumber)
+        {
+            RemoteCode(serialnumber);
+            defectiveCodes.Add(serialnumber);
+        }
+
+        /// <summary>
+        /// Метод для удаления кодов из результата
+        /// </summary>
+        /// <param name="serialnumber"></param>
+        void RemoteCode(string serialnumber)
+        {
+            M0: foreach (var code in Codes)
+            {
+                if (serialnumber == code)
+                {
+                    Codes.Remove(code);
+                    goto M0;
+                }
+            }
+        }
+
 
     }
 }

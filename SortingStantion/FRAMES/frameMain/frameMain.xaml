@@ -644,7 +644,7 @@
                     Foreground="{StaticResource TextColor}"
                     FontFamily="{StaticResource fontFamilyButtons}"
                     FontSize="{StaticResource fontSizeButtons}"
-                    Command="{Binding OpenMainScreenCMD}"/>
+                    Command="{Binding AddingDeffectCMD}"/>
 
             <Button Grid.Column="1" 
                     Content="СПРАВКА" 

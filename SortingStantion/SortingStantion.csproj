@@ -121,6 +121,9 @@
     </Compile>
     <Compile Include="Models\UserAutorizationHistotyItem.cs" />
     <Compile Include="TechnologicalObjects\ResultOperation.cs" />
+    <Compile Include="TOOL_WINDOWS\windowAddDeffect\windowAddDeffect.xaml.cs">
+      <DependentUpon>windowAddDeffect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TOOL_WINDOWS\WindowUSPFault\WindowUSPFault.xaml.cs">
       <DependentUpon>WindowUSPFault.xaml</DependentUpon>
     </Compile>
@@ -205,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FRAMES\frameSettings\windowExit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TOOL_WINDOWS\windowAddDeffect\windowAddDeffect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,6 +1,5 @@
 ﻿using S7Communication;
 using System.Windows;
-using System.Windows.Input;
 
 namespace SortingStantion.frame_gtin_fault
 {
@@ -73,17 +72,17 @@ namespace SortingStantion.frame_gtin_fault
             SERIALNUMBER = (S7_STRING)device.GetTagByAddress("DB1.DBD432-STR6");
         }
 
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        /// <param name="gtin"></param>
+        /// <param name="barcode"></param>
         public frame_gtin_fault(string gtin, string barcode)
         {
             InitializeComponent();
 
-            //Перенос свойств
-
-        }
-
-        private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
+            //Подписка на события
+            this.Closing += Window_Closing;
         }
 
         /// <summary>
@@ -94,6 +93,7 @@ namespace SortingStantion.frame_gtin_fault
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             DataBridge.AlarmsEngine.al_1.Write(false);
+            this.Closing -= Window_Closing;
             this.Close();
         }
 

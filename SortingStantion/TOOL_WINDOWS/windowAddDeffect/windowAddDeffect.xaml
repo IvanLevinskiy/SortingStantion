@@ -1,22 +1,22 @@
-﻿<Window x:Class="SortingStantion.windiwAddingBox.windiwAddingBox"
+﻿<Window x:Class="SortingStantion.TOOL_WINDOWS.windowAddDeffect.windowAddDeffect"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SortingStantion.windiwAddingBox"
+        xmlns:local="clr-namespace:SortingStantion.TOOL_WINDOWS.windowAddDeffect"
         mc:Ignorable="d"
-        Style="{StaticResource VS2012WindowStyle}"
+         Style="{StaticResource VS2012WindowStyle}"
         ResizeMode="NoResize"
         Background="#FF323232"
         WindowStartupLocation="CenterOwner"
-        Title="Добавление продукта" Width="550" Height="250">
+        Title="Добавление деффекта" Width="550" Height="250">
     <Grid >
 
         <Grid Height="50"
               Margin="20,30,20,0"
               VerticalAlignment="Top">
 
-            <TextBlock Text="      Считайте ручным сканером код добавляемого продукта."
+            <TextBlock Text="      Считайте ручным сканером код отбраковываемого продукта."
                        TextWrapping="Wrap"
                        TextAlignment="Justify"
                        Foreground="{StaticResource TextColor}"
@@ -49,18 +49,18 @@
         </Grid>-->
 
         <!--КНОПКА - ДОБАВИТЬ-->
-        <Button x:Name="btnAddBox"
-                IsEnabled="False"
+        <Button x:Name="btnAddDeffect"
                 Height="50"
                 Width="300"
                 VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
                 Margin="0,0,10,10"
+                IsEnabled="False"
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource LightColor}"
                 Foreground="{StaticResource TextColor}"
                 FontSize="{StaticResource fontSizeData}"
-                Content="Добавить"
+                Content="Добавить брак" Click="btnAddDeffect_Click"
             />
 
 
