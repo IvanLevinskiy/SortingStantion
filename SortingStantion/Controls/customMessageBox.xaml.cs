@@ -11,17 +11,15 @@ namespace SortingStantion.Controls
         /// <summary>
         /// Заголовок
         /// </summary>
-        string caption = string.Empty;
         public string Caption
         {
             get
             {
-                return caption;
+                return this.Title;
             }
             set
             {
-                caption = value;
-                OnPropertyChanged("Caption");
+                this.Title = value;
             }
 
         }
@@ -103,6 +101,5 @@ namespace SortingStantion.Controls
             customMessageBox cmb = new customMessageBox("Ошибка", message);
             cmb.ShowDialog();
         }
-
     }
 }

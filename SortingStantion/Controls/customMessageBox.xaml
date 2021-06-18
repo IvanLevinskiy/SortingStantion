@@ -8,36 +8,16 @@
         Title="customMessageBox"  Width="500"
         Height="300"
         AllowsTransparency="True" 
-        WindowStyle="None" 
+        Style="{StaticResource VS2012WindowStyle}"
         WindowStartupLocation="CenterOwner" 
         Background="#FF323232">
+    
     <Border BorderBrush="#FF1E1E1E"
             BorderThickness="2" 
             Background="#FF1E1E1E">
 
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition/>
-                <RowDefinition Height="30"/>
-            </Grid.RowDefinitions>
-
-            <!--ЗАГОЛОВОК-->
-            <Grid Background="{StaticResource DarkColor}" 
-                  MouseLeftButtonDown="Grid_MouseLeftButtonDown">
-
-                <TextBlock Text="{Binding Caption}"
-                       Foreground="{StaticResource TextColor}"
-                       VerticalAlignment="Center"
-                       FontSize="26"
-                       Margin="10,0,0,0"/>
-
-                <!--КНОПКА ЗАКРЫТЬ-->
-                <Button Grid.Column="2"
-                    Command="{Binding CloseCMD}"
-                    Style="{StaticResource ButtonExit}" Click="Button_Click"/>
-            </Grid>
-
+           
             <!--СООБЩЕНИЕ-->
             <Grid Grid.Row="1"
                   Background="{StaticResource DarkColor}" >
@@ -45,17 +25,23 @@
                 <TextBlock Text="{Binding Message}"
                        Foreground="{StaticResource TextColor}"
                        TextAlignment="Center"
-                       VerticalAlignment="Center"
+                       VerticalAlignment="Top"
                        TextWrapping="Wrap"
                        FontSize="26"
-                       Margin="10,0,10,0"/>
+                       Margin="10,20,10,0"/>
+
+                <Button Content="OK"
+                        Style="{StaticResource btnStyle}"
+                        Background="{StaticResource LightColor}"
+                        Foreground="{StaticResource TextColor}"
+                        Margin="0,0,0,30"
+                        Height="50"
+                        Width="200"
+                        VerticalAlignment="Bottom" Click="Button_Click"/>
+
             </Grid>
 
-            <Grid Grid.Row="2" 
-                  Background="{StaticResource DarkColor}" >
-                
-            </Grid>
-
+            
         </Grid>
     </Border>
     

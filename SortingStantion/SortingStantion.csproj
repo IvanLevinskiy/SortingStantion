@@ -140,7 +140,6 @@
     <Compile Include="Models\Setting.cs" />
     <Compile Include="Models\SettingsFile.cs" />
     <Compile Include="Models\WorkAssignmentEngine.cs" />
-    <Compile Include="Models\workAssignmentStructute.cs" />
     <Compile Include="S7Extension\Item.cs" />
     <Compile Include="S7Extension\S7DiscreteAlarm.cs" />
     <Compile Include="TechnologicalObjects\Box.cs" />

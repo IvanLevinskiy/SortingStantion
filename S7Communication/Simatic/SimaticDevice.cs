@@ -138,6 +138,28 @@ namespace S7Communication
         }
 
         /// <summary>
+        /// Счетчик количества неудачных 
+        /// попыток соединения с устройством
+        /// </summary>
+        int _disconnectCounter = 0;
+        int DisconnectCounter
+        {
+            get
+            {
+                return _disconnectCounter;
+            }
+            set
+            {
+                _disconnectCounter = value;
+
+                if (_disconnectCounter >= 3)
+                {
+                    ReconnectRequest = true;
+                }
+            }
+        }
+
+        /// <summary>
         /// Сокет
         /// </summary>
         private Socket _mSocket;
@@ -606,15 +628,21 @@ namespace S7Communication
             }
             catch (SocketException ex)
             {
-                //Переподключение
-                ReconnectRequest = true;
+                DisconnectCounter++;
                 result = null;
             }
             catch (Exception ex2)
             {
-                ReconnectRequest = true;
+                DisconnectCounter++;
                 result = null;
             }
+
+            //В случае удачной попытки соединения
+            //с устройством сбрасываем счетчик неудачных
+            //попыток соединения с устройством
+            DisconnectCounter = 0;
+
+            //Возвращаем результат
             return result;
         }
 

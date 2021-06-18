@@ -29,6 +29,16 @@ namespace SortingStantion.UserAdmin
         }
 
         /// <summary>
+        /// Результат последней авторизации
+        /// </summary>
+        public bool AuthorizationResult
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
         /// Выбраный в combobox пользователь
         /// </summary>
         User selectedUser = null;
@@ -67,7 +77,7 @@ namespace SortingStantion.UserAdmin
             {
                 return new DelegateCommand((obj) =>
                 {
-                    DataBridge.MainAccesLevelModel.Login(SelectedUser.Name, pwbPassword.Password);
+                    AuthorizationResult = DataBridge.MainAccesLevelModel.Login(SelectedUser.Name, pwbPassword.Password);
                     this.Close();
                 },
                 (obj) => (SelectedUser != null));

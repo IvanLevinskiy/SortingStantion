@@ -263,7 +263,7 @@ namespace SortingStantion.Models
                 }
 
                 //Если данные не пустая строка - производим десериализацию
-                var tprices = JsonConvert.DeserializeObject<workAssignmentStructure>(data);
+                var tprices = JsonConvert.DeserializeObject<WorkAssignment>(data);
 
 
                 // создаем ответ в виде кода html
@@ -292,13 +292,24 @@ namespace SortingStantion.Models
             {
                 return new DelegateCommand((obj) =>
                 {
-
+                    //Если задание не принято в работу
                     if (InWork == false)
                     {
+                        //Вызываем окно авторизации
+                        SortingStantion.UserAdmin.frameAuthorization frameAuthorization = new SortingStantion.UserAdmin.frameAuthorization();
+                        frameAuthorization.ShowDialog();
+
+                        //Если результат авторизации не удачный, выходим
+                        if (frameAuthorization.AuthorizationResult == false)
+                        {
+                            return; 
+                        }
+
                         //Запись атрибутов принятого задания в ПЛК
                         GTIN_TAG.Write(SelectedWorkAssignment.gtin);
                         TASK_ID_TAG.Write(SelectedWorkAssignment.ID);
                         PRODUCT_NAME_TAG.Write(SelectedWorkAssignment.productName);
+                        LOT_NO_TAG.Write(SelectedWorkAssignment.lotNo);
                         NUM_PACKS_IN_BOX_TAG.Write(SelectedWorkAssignment.numРacksInBox);
                         NUM_PACKS_IN_SERIES_TAG.Write(SelectedWorkAssignment.numPacksInSeries);
 
@@ -307,6 +318,10 @@ namespace SortingStantion.Models
 
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(true);
+
+                        //Запись в базу данных о принятии задания
+                        DataBridge.AlarmLogging.AddMessage($"Задание {TASK_ID_TAG.StatusText} принято в работу", MessageType.Info);
+
                         return;
                     }
                 },
@@ -326,11 +341,23 @@ namespace SortingStantion.Models
 
                     if (InWork == true)
                     {
+                        //Вызываем окно авторизации
+                        SortingStantion.UserAdmin.frameAuthorization frameAuthorization = new SortingStantion.UserAdmin.frameAuthorization();
+                        frameAuthorization.ShowDialog();
+
+                        //Если результат авторизации не удачный, выходим
+                        if (frameAuthorization.AuthorizationResult == false)
+                        {
+                            return;
+                        }
+
                         //Стирание данных в ПЛК
                         GTIN_TAG.Write("");
                         TASK_ID_TAG.Write("");
                         PRODUCT_NAME_TAG.Write("");
+                        LOT_NO_TAG.Write("");
                         NUM_PACKS_IN_BOX_TAG.Write(0);
+
                         NUM_PACKS_IN_SERIES_TAG.Write(0);
 
                         //Уведомление подписчиков о завершении задания
@@ -342,6 +369,10 @@ namespace SortingStantion.Models
 
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(false);
+
+                        //Запись в базу данных о завершении задания
+                        DataBridge.AlarmLogging.AddMessage($"Задание {TASK_ID_TAG.StatusText} завершено", MessageType.Info);
+
                         return;
                     }
                 },
