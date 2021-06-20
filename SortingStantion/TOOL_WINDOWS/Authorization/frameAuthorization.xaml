@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SortingStantion.UserAdmin"
         Style="{StaticResource VS2012WindowStyle}"
         mc:Ignorable="d"
-        Title="Авторизация пользователя"
+        Title="Авторизация мастера"
         Height="370" 
         Width="600"
         Background="{StaticResource DarkColor}"

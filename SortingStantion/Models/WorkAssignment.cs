@@ -1,15 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
 
-namespace SortingStantion.TechnologicalObjects
+namespace SortingStantion.Models
 {
     /// <summary>
     /// Класс, описывающий рабочее задание
     /// </summary>
     public class WorkAssignment : INotifyPropertyChanged
     {
-       
-
         /// <summary>
         /// Уникальный идентификатор задания.
         /// </summary>
@@ -85,10 +83,10 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         public WorkAssignment()
         {
-           
+
         }
 
-      
+
 
 
         #region Реализация интерфейса INotifyPropertyChanged

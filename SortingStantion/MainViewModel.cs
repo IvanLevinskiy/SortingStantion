@@ -25,7 +25,7 @@ namespace SortingStantion.MainScreen
         /// <summary>
         /// Текущий пользователь
         /// </summary>
-        public AccesLevelModel AccesLevelModel
+        public AuthorizationEngine AccesLevelModel
         {
             get
             {
@@ -186,7 +186,7 @@ namespace SortingStantion.MainScreen
             {
                 return new DelegateCommand((obj) =>
                 {
-                    frameAuthorization frameAuthorization = new frameAuthorization();
+                    frameAuthorization frameAuthorization = new frameAuthorization(false);
                     frameAuthorization.Owner = DataBridge.MainScreen;
                     frameAuthorization.ShowDialog();
                 },

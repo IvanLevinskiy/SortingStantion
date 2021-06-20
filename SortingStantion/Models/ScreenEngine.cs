@@ -1,4 +1,5 @@
-﻿using SortingStantion.TOOL_WINDOWS.windowAddDeffect;
+﻿using SortingStantion.TOOL_WINDOWS.windiwInformation;
+using SortingStantion.TOOL_WINDOWS.windowAddDeffect;
 using SortingStantion.Utilites;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -126,6 +127,25 @@ namespace SortingStantion.Models
                     windowAddDeffect windowAddDeffect = new windowAddDeffect();
                     windowAddDeffect.Owner = DataBridge.MainScreen;
                     windowAddDeffect.ShowDialog();
+                },
+                (obj) => (true));
+            }
+        }
+
+        /// <summary>
+        /// Команда для открытия окна СПРАВКА
+        /// </summary>
+        public ICommand OpenInformationCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+
+
+                    windiwInformation windiwInformation = new windiwInformation();
+                    windiwInformation.Owner = DataBridge.MainScreen;
+                    windiwInformation.ShowDialog();
                 },
                 (obj) => (true));
             }

@@ -75,6 +75,7 @@
                         Foreground="{StaticResource IconColor}"
                         BorderThickness="0"
                         BorderBrush="Transparent"
+                        IsEnabled="{Binding WorkAssignment.InNotWork}"
                         Command="{Binding WorkAssignment.AcceptTaskCMD}">
 
                     <Grid Width="200">
@@ -110,6 +111,7 @@
                         Foreground="{StaticResource IconColor}"
                         BorderThickness="0"
                         BorderBrush="Transparent"
+                        IsEnabled="{Binding WorkAssignment.InWork}"
                         Command="{Binding WorkAssignment.FinishTaskCMD}">
 
                     <Grid Width="200">
@@ -651,7 +653,7 @@
                     Style="{StaticResource btnStyle}"
                     Background="{StaticResource DarkColor}"
                     Foreground="{StaticResource TextColor}"
-                    Command="{Binding OpenSettingsScreenCMD}"
+                    Command="{Binding OpenInformationCMD}"
                     FontFamily="{StaticResource fontFamilyButtons}"
                     FontSize="{StaticResource fontSizeButtons}"/>
 

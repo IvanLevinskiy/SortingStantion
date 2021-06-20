@@ -110,8 +110,8 @@ namespace S7Communication
                 //Проверка на нулевой указатель
                 if (status == null)
                 {
-                    status = value;
-                    UpdatedValue(value);
+                    //status = value;
+                    //UpdatedValue(value);
                     return;
                 }
 

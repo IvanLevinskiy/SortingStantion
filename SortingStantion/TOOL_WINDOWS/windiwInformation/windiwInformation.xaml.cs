@@ -1,20 +1,26 @@
 ﻿using SortingStantion.Controls;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
+namespace SortingStantion.TOOL_WINDOWS.windiwInformation
 {
     /// <summary>
-    /// Логика взаимодействия для windowAddDeffect.xaml
+    /// Логика взаимодействия для windiwInformation.xaml
     /// </summary>
-    public partial class windowAddDeffect : Window
+    public partial class windiwInformation : Window
     {
-
-        /// <summary>
-        /// Таймер для автоматического закрытия окна
-        /// при бездействии
-        /// </summary>
         DispatcherTimer ShutdownTimer;
 
         /// <summary>
@@ -29,10 +35,8 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
             }
             set
             {
+                //Запоминание серийного номера
                 currentSerialNumber = value;
-
-                //Управление Enable кнопки ДОБАВИТЬ
-                btnAddDeffect.IsEnabled = string.IsNullOrEmpty(currentSerialNumber) == false;
 
                 //Сброс таймера отсчета времени бездействия
                 ShutdownTimer.Stop();
@@ -58,10 +62,11 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
         }
         string currentGTIN;
 
+
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public windowAddDeffect()
+        public windiwInformation()
         {
             //Инициализация UI
             InitializeComponent();
@@ -93,73 +98,79 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
         /// <param name="obj"></param>
         private void Scaner_NewDataNotification(string datastring)
         {
-            //Текст сообщения в зоне информации
-            string message = string.Empty;
-
             //Разбор данных по полям
             var inputdata = datastring;
             DataBridge.DataSpliter.Split(ref inputdata);
 
-            //Если код не распознан (поля не соответствуют шаблону)
-            if (DataBridge.DataSpliter.IsValid == false)
-            {
-                message = $"Код не распознан";
-                ShowMessageInformationZone(message);
-
-                //Выход из функции
-                return;
-            }
-
             //Добавление номера продукта в буфер текущего окна
+            bool isvalid = DataBridge.DataSpliter.IsValid;
             CurrentSerialNumber = DataBridge.DataSpliter.GetSerialNumber();
             CurrentGTIN = DataBridge.DataSpliter.GetGTIN();
+            DataBridge.Report.AddBox(CurrentSerialNumber);
 
-            //Если GTIN не соответсвтвует заданию
-            if (CurrentGTIN != DataBridge.WorkAssignmentEngine.GTIN)
+            // Сообщение из зоны информации
+            string message = string.Empty;
+
+            //Посторонний продукт
+            if (isvalid == false)
             {
-                message = $"Посторонний продукт не может быть добавлен в брак.";
-                ShowMessageInformationZone(message);
-                
-                //Стирание старой информации
-                CurrentSerialNumber = string.Empty;
-                CurrentGTIN = string.Empty;
-
-                //Выход из функции
+                message = "Код другого продукта";
+                ShowMessage(message);
                 return;
             }
 
-            DataBridge.Report.AddDeffect(CurrentSerialNumber);
+            //Посторонний GTIN
+            if (DataBridge.WorkAssignmentEngine.GTIN != CurrentGTIN)
+            {
+                message = "Код другого продукта";
+                ShowMessage(message);
+                return;
+            }
 
-            //Формируем сообщение для зоны иноформации
-            message = $"Считан продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber}";
-            ShowMessageInformationZone(message);
+            //Посторонний GTIN
+            if (DataBridge.WorkAssignmentEngine.GTIN != CurrentGTIN)
+            {
+                message = "Код другого продукта";
+                ShowMessage(message);
+                return;
+            }
+
+            //Продукт в браке
+            if (DataBridge.Report.IsDeffect(CurrentSerialNumber) == true)
+            {
+                message = $"Продукт «{CurrentSerialNumber}» в браке.";
+                ShowMessage(message);
+                return;
+            }
+
+            //Продукт в результате
+            if (DataBridge.Report.AsAResult(CurrentSerialNumber) == true)
+            {
+                message = $"Продукт «{CurrentSerialNumber}» в результате.";
+                ShowMessage(message);
+                return;
+            }
+
+            //Продукт «s/n» доступен для сериализации
+            message = $"Продукт «{CurrentSerialNumber}» доступен для сериализации.";
+            ShowMessage(message);
+
 
 
         }
 
         /// <summary>
-        /// Метод, вызываемый по клику на кнопку
-        /// ДОБАВИТЬ
+        /// Метод для отображения сообщения в хоне информации
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnAddDeffect_Click(object sender, RoutedEventArgs e)
+        /// <param name="message"></param>
+        void ShowMessage(string message)
         {
-            //Проверка - 
-
-            //Добавление номера продукта в список брака
-            DataBridge.Report.AddDeffect(CurrentSerialNumber);
-
-            //Добавление в базу данных (лог) записи
-            string message = $"Продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber} добавлен в список брака";
-            DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
-
-            //Стирание серийного номера для того, чтоб
-            //через акцессор заблокировать кнопку Добавить и сбросить
-            //таймер по которому отсчитывается время бездействия
-            CurrentSerialNumber = string.Empty;
-
-
+            Action action = () =>
+            {
+                var msgitem = new UserMessage(message, MSGTYPE.INFO);
+                DataBridge.MSGBOX.Add(msgitem);
+            };
+            DataBridge.UIDispatcher.Invoke(action);
         }
 
         /// <summary>
@@ -196,18 +207,9 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
             return 60;
         }
 
-        /// <summary>
-        /// Метод для отображения сообщения в зоне информации
-        /// </summary>
-        /// <param name="message"></param>
-        void ShowMessageInformationZone(string message)
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            Action action = () =>
-            {
-                var msgitem = new UserMessage(message, MSGTYPE.INFO);
-                DataBridge.MSGBOX.Add(msgitem);
-            };
-            DataBridge.UIDispatcher.Invoke(action);
+            this.Close();
         }
     }
 }

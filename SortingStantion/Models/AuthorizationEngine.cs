@@ -24,7 +24,7 @@ namespace SortingStantion.Models
     /// Класс, реализующий разграничение 
     /// прав пользователя
     /// </summary>
-    public class AccesLevelModel : INotifyPropertyChanged
+    public class AuthorizationEngine : INotifyPropertyChanged
     {
         /// <summary>
         /// Коллекция пользователей
@@ -79,7 +79,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public AccesLevelModel()
+        public AuthorizationEngine()
         {
             //Инициализация текущего пользователя
             CurrentUser = null;
@@ -131,7 +131,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Метод для авторизации
         /// </summary>
-        public bool Login(string login, string Password)
+        public bool Login(string login, string Password, bool RepeatIgnore = true)
         {
             //Локальные переменные для вывода сообщения
             //в зоне информации
@@ -154,7 +154,7 @@ namespace SortingStantion.Models
                 {
                     //Если текущий пользователь тот же, который был,
                     //пишем
-                    if (currentUser == user)
+                    if (currentUser == user && RepeatIgnore == false)
                     {
                         brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
                         messageItem = new Controls.UserMessage("Пользователь уже авторизован", brush);

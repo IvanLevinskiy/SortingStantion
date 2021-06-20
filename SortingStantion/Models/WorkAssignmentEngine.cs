@@ -1,13 +1,16 @@
 ﻿using Newtonsoft.Json;
 using S7Communication;
-using SortingStantion.TechnologicalObjects;
+using SortingStantion.Controls;
 using SortingStantion.Utilites;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SortingStantion.Models
 {
@@ -15,7 +18,7 @@ namespace SortingStantion.Models
     /// Объект, осуществляющий управлением
     /// заданиями
     /// </summary>
-    public class WorkAssignmentEngine
+    public class WorkAssignmentEngine : INotifyPropertyChanged
     {
         #region SIMATIC СУЩНОСТИ 
 
@@ -54,6 +57,7 @@ namespace SortingStantion.Models
 
         #endregion
 
+      
         #region SIMATIC ТЭГИ
 
         /// <summary>
@@ -68,7 +72,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Уникальный идентификатор задания.
         /// </summary>
-        public S7_STRING TASK_ID_TAG
+        S7_STRING TASK_ID_TAG
         {
             get;
             set;
@@ -77,7 +81,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Номер GTIN. (14 символов)
         /// </summary>
-        public S7_STRING GTIN_TAG
+        S7_STRING GTIN_TAG
         {
             get;
             set;
@@ -86,7 +90,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Наименование продукта (UTF-8)
         /// </summary>
-        public S7_STRING PRODUCT_NAME_TAG
+        S7_STRING PRODUCT_NAME_TAG
         {
             get;
             set;
@@ -95,7 +99,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Номер производственной серии (до 20 символов) 
         /// </summary>
-        public S7_STRING LOT_NO_TAG
+        S7_STRING LOT_NO_TAG
         {
             get;
             set;
@@ -104,7 +108,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Кол-во продуктов в коробе. 
         /// </summary>
-        public S7DWORD NUM_PACKS_IN_BOX_TAG
+        S7DWORD NUM_PACKS_IN_BOX_TAG
         {
             get;
             set;
@@ -114,7 +118,7 @@ namespace SortingStantion.Models
         /// Ожидаемое количество продуктов в серии 
         /// (определяется по заданию на производство серии) 
         /// </summary>
-        public S7DWORD NUM_PACKS_IN_SERIES_TAG
+        S7DWORD NUM_PACKS_IN_SERIES_TAG
         {
             get;
             set;
@@ -128,10 +132,40 @@ namespace SortingStantion.Models
         {
             //Инициализация тэгов
             IN_WORK_TAG = new S7BOOL("", "DB1.DBX182.0", group);
+            IN_WORK_TAG.ChangeValue += (nvalue) =>
+            {
+                InWork = (bool)nvalue;
+                InNotWork = !InWork;
+            };
+
+            //ID задания
             TASK_ID_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD184-STR40");
+            TASK_ID_TAG.ChangeValue += (nvalue) =>
+            {
+                TaskID = TASK_ID_TAG.StatusText;
+            };
+
+            //GTIN
             GTIN_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD226-STR40");
+            GTIN_TAG.ChangeValue += (nvalue) =>
+            {
+                GTIN = GTIN_TAG.StatusText;
+            };
+
+            ///Номер производственной серии
             LOT_NO_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD352-STR40");
+            LOT_NO_TAG.ChangeValue += (nvalue) =>
+            {
+                Lot_No = LOT_NO_TAG.StatusText;
+            };
+
+            //Наименорвание продукта
             PRODUCT_NAME_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD268-STR82");
+            PRODUCT_NAME_TAG.ChangeValue += (nvalue) =>
+            {
+                Product_Name = PRODUCT_NAME_TAG.StatusText;
+            };
+
             NUM_PACKS_IN_BOX_TAG = (S7DWORD)device.GetTagByAddress("DB1.DBD396-DWORD");
             NUM_PACKS_IN_SERIES_TAG = (S7DWORD)device.GetTagByAddress("DB1.DBD398-DWORD");
         }
@@ -165,9 +199,101 @@ namespace SortingStantion.Models
             set
             {
                 IN_WORK_TAG.Write(value);
+                OnPropertyChanged("InWork");
             }
         }
-               
+
+        /// <summary>
+        /// Флаг, указывающий, что задание не принять в работу
+        /// </summary>
+        bool inNotWork = false;
+        public bool InNotWork
+        {
+            get
+            {
+                return inNotWork;
+            }
+            private set
+            {
+                inNotWork = value;
+                OnPropertyChanged("InNotWork");
+            }
+        }
+
+        /// <summary>
+        /// Уникальный идентификатор задания.
+        /// </summary>
+        string taskID = string.Empty;
+        public string TaskID
+        {
+            get
+            {
+                return taskID;
+            }
+            set
+            {
+                taskID = value;
+                TASK_ID_TAG.Write(value);
+                OnPropertyChanged("TaskID");
+            }
+        }
+
+        /// <summary>
+        /// Номер GTIN. (14 символов)
+        /// </summary>
+        string gtin = string.Empty;
+        public string GTIN
+        {
+            get
+            {
+                return lot_No;
+            }
+            set
+            {
+                lot_No = value;
+                LOT_NO_TAG.Write(lot_No);
+                OnPropertyChanged("GTIN");
+            }
+        }
+
+
+        /// <summary>
+        /// Наименование продукта (UTF-8)
+        /// </summary>
+        string product_Name = string.Empty;
+        public string Product_Name
+        {
+            get
+            {
+                return product_Name;
+            }
+            set
+            {
+                product_Name = value;
+                PRODUCT_NAME_TAG.Write(product_Name);
+                OnPropertyChanged("Product_Name");
+            }
+        }
+
+        /// <summary>
+        /// Номер производственной серии (до 20 символов) 
+        /// </summary>
+        string lot_No = string.Empty;
+        public string Lot_No
+        {
+            get
+            {
+                return lot_No;
+            }
+            set
+            {
+                lot_No = value;
+                LOT_NO_TAG.Write(lot_No);
+                OnPropertyChanged("Lot_No");
+            }
+        }
+
+
         /// <summary>
         /// Коллекция рабочих заданий
         /// </summary>
@@ -228,7 +354,17 @@ namespace SortingStantion.Models
             //http
             Task.Factory.StartNew(() =>
             {
-               // StartListener();
+                try
+                {
+                    StartListener();
+                }
+                catch (System.Net.HttpListenerException ex)
+                {
+                    SolidColorBrush brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                    UserMessage messageItem = new Controls.UserMessage(ex.Message, MSGTYPE.ERROR);
+                    DataBridge.MSGBOX.Add(messageItem);
+                }
+               
             });
         }
 
@@ -241,9 +377,35 @@ namespace SortingStantion.Models
             //Инициализация экземпляра  listener
             HttpListener listener = new HttpListener();
 
+            //Получение адреса ПК, запросы от которого необходимо
+            //прослушивать для получения задания
+            var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
+
             //Установка адресов  listener
-            listener.Prefixes.Add("http://localhost:8888/connection/");
-            listener.Start();
+            ExecuteCMD(prefixe);
+            listener.Prefixes.Add(prefixe);
+
+            try
+            {
+                
+                listener.Start();
+            }
+            catch (System.Net.HttpListenerException ex)
+            {
+                //UserMessage userMessage = new UserMessage();
+                //userMessage.Message = "";
+                //Action action = () =>
+                //{
+                //    SolidColorBrush brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                //    UserMessage messageItem = new Controls.UserMessage("Приложение должно быть запущено с правами администратора", MSGTYPE.ERROR);
+                //    DataBridge.MSGBOX.Add(messageItem);
+                //};
+                //DataBridge.UIDispatcher.Invoke(action);
+
+                return;
+                
+            }
+            
 
             //Цикл для бесконечной прослушки listener
             while (true)
@@ -283,6 +445,31 @@ namespace SortingStantion.Models
             listener.Stop();
         }
 
+        void ExecuteCMD(string uri)
+        {
+            var command = $@"netsh http add urlacl url = {uri} user=DOMAIN\user";
+
+            ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd", "/c " + command);
+
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
+
+            // wrap IDisposable into using (in order to release hProcess) 
+            using (Process process = new Process())
+            {
+                process.StartInfo = procStartInfo;
+                process.Start();
+
+                // Add this: wait until process does its work
+                process.WaitForExit();
+
+                // and only then read the result
+                string result = process.StandardOutput.ReadToEnd();
+                Console.WriteLine(result);
+            }
+        }
+
         /// <summary>
         /// Команда - принять задание
         /// </summary>
@@ -292,6 +479,16 @@ namespace SortingStantion.Models
             {
                 return new DelegateCommand((obj) =>
                 {
+                    //Если в коллекции заданий заданий нет -
+                    //пишем ошибку - "Задание не может быть принято в работу"
+                    if (SelectedWorkAssignment == null)
+                    {
+                        SolidColorBrush brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу", brush);
+                        DataBridge.MSGBOX.Add(messageItem);
+                        return;
+                    }
+
                     //Если задание не принято в работу
                     if (InWork == false)
                     {
@@ -325,7 +522,7 @@ namespace SortingStantion.Models
                         return;
                     }
                 },
-                (obj) => (InWork == false));
+                (obj) => (true));
             }
         }
 
@@ -376,10 +573,22 @@ namespace SortingStantion.Models
                         return;
                     }
                 },
-                (obj) => (InWork == true));
+                (obj) => (true));
             }
         }
 
+
+        #region Реализация интерфейса INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+
+        }
+        #endregion
 
     }
 }

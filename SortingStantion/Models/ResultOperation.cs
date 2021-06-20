@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SortingStantion.TechnologicalObjects
+namespace SortingStantion.Models
 {
     /// <summary>
     /// Класс, реализующий результат операций
@@ -107,11 +107,12 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
-        /// Метод для проверки того, находится 
-        /// продукт в браке или нет
+        /// Метод, указывающий на то,
+        /// содержится ли код в браке
         /// </summary>
+        /// <param name="serialnumber"></param>
         /// <returns></returns>
-        bool IsDeffect(string serialnumber)
+        public bool IsDeffect(string serialnumber)
         {
             foreach (var dc in defectiveCodes)
             {
@@ -125,11 +126,30 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Метод, указывающий на то,
+        /// содержится ли код в результате
+        /// </summary>
+        /// <param name="serialnumber"></param>
+        /// <returns></returns>
+        public bool AsAResult(string serialnumber)
+        {
+            foreach (var code in Codes)
+            {
+                if (code == serialnumber)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Метод для проверки повторяется ли продукт или нет
         /// </summary>
         /// <param name="serialnumber"></param>
         /// <returns></returns>
-        bool IsRepeat(string serialnumber)
+        public bool IsRepeat(string serialnumber)
         {
             foreach (var code in Codes)
             {

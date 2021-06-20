@@ -120,7 +120,10 @@
       <DependentUpon>windowExit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\UserAutorizationHistotyItem.cs" />
-    <Compile Include="TechnologicalObjects\ResultOperation.cs" />
+    <Compile Include="Models\ResultOperation.cs" />
+    <Compile Include="TOOL_WINDOWS\windiwInformation\windiwInformation.xaml.cs">
+      <DependentUpon>windiwInformation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TOOL_WINDOWS\windowAddDeffect\windowAddDeffect.xaml.cs">
       <DependentUpon>windowAddDeffect.xaml</DependentUpon>
     </Compile>
@@ -147,8 +150,8 @@
     <Compile Include="TechnologicalObjects\Conveyor.cs" />
     <Compile Include="TechnologicalObjects\Result.cs" />
     <Compile Include="TechnologicalObjects\Scaner.cs" />
-    <Compile Include="TechnologicalObjects\WorkAssignment.cs" />
-    <Compile Include="Models\AccesLevelModel.cs" />
+    <Compile Include="Models\WorkAssignment.cs" />
+    <Compile Include="Models\AuthorizationEngine.cs" />
     <Compile Include="TOOL_WINDOWS\Authorization\frameAuthorization.xaml.cs">
       <DependentUpon>frameAuthorization.xaml</DependentUpon>
     </Compile>
@@ -207,6 +210,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FRAMES\frameSettings\windowExit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TOOL_WINDOWS\windiwInformation\windiwInformation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

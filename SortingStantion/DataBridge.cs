@@ -1,7 +1,6 @@
 ﻿using S7Communication;
 using SortingStantion.Models;
 using SortingStantion.TechnologicalObjects;
-using SortingStantion.UserAdmin;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -25,7 +24,7 @@ namespace SortingStantion
         /// <summary>
         /// Модель, управляющая пользователями
         /// </summary>
-        public static AccesLevelModel MainAccesLevelModel = new AccesLevelModel();
+        public static AuthorizationEngine MainAccesLevelModel = new AuthorizationEngine();
 
         /// <summary>
         /// Файл с конфигурацией приложения
