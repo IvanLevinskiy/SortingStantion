@@ -26,6 +26,10 @@ namespace SortingStantion.frameUSPFault
         {
             InitializeComponent();
 
+            //Подписка на событие
+            //возникаемого при закрытии окна
+            this.Closing += Window_Closing;
+
             //Инициализация таймера
             timer = new DispatcherTimer();
             
@@ -63,7 +67,15 @@ namespace SortingStantion.frameUSPFault
                 {
                     Action action = () =>
                     {
+                        //Отписка от события
+                        //возникаемого при закрытии окна
+                        this.Closing -= Window_Closing;
+
+                        //Остановка таймера 
+                        //обратного отсчета
                         timer.Stop();
+
+                        //Закрытие окна
                         this.Close();
                     };
                     DataBridge.UIDispatcher.Invoke(action);

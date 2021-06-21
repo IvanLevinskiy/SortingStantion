@@ -215,6 +215,13 @@ namespace S7Communication
             //Считывание данныех из ПЛК
             var ReportFromDevice = PointerDevice.ReadBytesWithASingleRequest(DataType, DBNumber, StartByte, Lenght);
 
+            //Если телеграмма пустая, пропускаем
+            //обработку данных
+            if (ReportFromDevice == null)
+            {
+                return;
+            }
+
             //Заполняем тэги данными
             foreach (var tag in Tags)
             {

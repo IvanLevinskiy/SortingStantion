@@ -541,9 +541,7 @@ namespace S7Communication
             byteArray.Add(Word.ToByteArray((ushort)(2 + amount * 12)));
             byteArray.Add(new byte[]
             {
-                0,
-                0,
-                4
+                0, 0, 4
             });
             byteArray.Add((byte)amount);
             return byteArray;

@@ -102,7 +102,17 @@ namespace S7Communication
         /// <param name="value"></param>
         public override bool Write(string value)
         {
-            UInt32 uvalue = Convert.ToUInt32(value);
+            //Преобразование с обработкой ошибки
+            //ввода
+            UInt32 uvalue = 0;
+            var result = UInt32.TryParse(value, out uvalue);
+
+            //Обработка ошибки ввода
+            if (result == false)
+            {
+                return false;
+            }
+
             var array = BitConverter.GetBytes(uvalue);
 
             //Переворачиваем байты как у симатика

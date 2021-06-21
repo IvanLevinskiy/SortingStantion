@@ -50,6 +50,8 @@ namespace SortingStantion.S7Extension
         /// <param name="value"></param>
         private void S7DiscreteAlarm_ChangeValue(object value)
         {
+            var t = this;
+
             Action action = () =>
             {
                 //Если новое значение не bool - выходим

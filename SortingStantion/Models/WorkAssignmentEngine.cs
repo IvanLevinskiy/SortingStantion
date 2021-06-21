@@ -131,7 +131,7 @@ namespace SortingStantion.Models
         void PlcDataInit()
         {
             //Инициализация тэгов
-            IN_WORK_TAG = new S7BOOL("", "DB1.DBX182.0", group);
+            IN_WORK_TAG = (S7BOOL)device.GetTagByAddress("DB1.DBX182.0");
             IN_WORK_TAG.ChangeValue += (nvalue) =>
             {
                 InWork = (bool)nvalue;
@@ -177,28 +177,17 @@ namespace SortingStantion.Models
         /// Флаг возвращает или задает
         /// принято ли задание
         /// </summary>
+        bool inWorkFeedBack = false;
         public bool InWork
         {
             get
             {
-                //Защита от пустого указателя
-                if (IN_WORK_TAG == null)
-                {
-                    return false;
-                }
-
-                //Если тип не bool возвращаем false
-                if (IN_WORK_TAG.Status is bool == false)
-                {
-                    return false;
-                }
-
                 //Возвращение значения тэга
-                return (bool)IN_WORK_TAG.Status;
+                return inWorkFeedBack;
             }
             set
             {
-                IN_WORK_TAG.Write(value);
+                inWorkFeedBack = value; ;
                 OnPropertyChanged("InWork");
             }
         }
@@ -566,9 +555,6 @@ namespace SortingStantion.Models
 
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(false);
-
-                        //Запись в базу данных о завершении задания
-                        DataBridge.AlarmLogging.AddMessage($"Задание {TASK_ID_TAG.StatusText} завершено", MessageType.Info);
 
                         return;
                     }

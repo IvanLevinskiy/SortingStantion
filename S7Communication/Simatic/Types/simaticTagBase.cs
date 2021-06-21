@@ -116,14 +116,14 @@ namespace S7Communication
                 }
 
                 //Обработка полученых данных
-                if (status.Equals(value) == false)
+                if (status != value)
                 {
                     status = value;
                     UpdatedValue(value);
                     ChangeValue?.Invoke(status);
-                }
 
-                OnPropertyChanged("Status");
+                    OnPropertyChanged("Status");
+                }  
             }
         }
         object status = 0;
