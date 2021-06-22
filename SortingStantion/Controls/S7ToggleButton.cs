@@ -143,9 +143,9 @@ namespace SortingStantion.Controls
         /// состояния бита обратной связи
         /// </summary>
         /// <param name="obj"></param>
-        private void S7TAG_ChangeValue(object obj)
+        private void S7TAG_ChangeValue(object oldvalue, object newvalue)
         {
-            bool? value = (bool?)obj;
+            bool? value = (bool?)newvalue;
 
             Action action = () =>
             {

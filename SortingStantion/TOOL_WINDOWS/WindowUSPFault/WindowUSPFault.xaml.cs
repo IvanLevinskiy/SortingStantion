@@ -60,10 +60,10 @@ namespace SortingStantion.frameUSPFault
             var tag = DataBridge.S7Server.Devices[0].GetTagByAddress("DB6.DBX13.4");
 
             //При появлении питания закрытия окна
-            tag.ChangeValue += (state) =>
+            tag.ChangeValue += (oldstate, newstate) =>
             {
 
-                if ((bool?)state == false)
+                if ((bool?)newstate == false)
                 {
                     Action action = () =>
                     {

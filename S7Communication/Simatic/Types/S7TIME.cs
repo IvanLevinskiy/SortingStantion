@@ -36,7 +36,7 @@ namespace S7Communication
             //указатель
             if (value == null)
             {
-                StatusText = string.Empty;
+                //StatusText = string.Empty;
                 return;
             }
 

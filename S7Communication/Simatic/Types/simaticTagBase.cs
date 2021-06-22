@@ -118,9 +118,16 @@ namespace S7Communication
                 //Обработка полученых данных
                 if (status != value)
                 {
+                    //Сохранение старого статуса
+                    var oldstatus = status;
+
+                    //Сохранение нового статуса
                     status = value;
                     UpdatedValue(value);
-                    ChangeValue?.Invoke(status);
+
+                    //Извещение подписчиков
+                    ChangeValue?.Invoke(oldstatus, value);
+
 
                     OnPropertyChanged("Status");
                 }  
@@ -132,7 +139,7 @@ namespace S7Communication
         /// Событие, генерируемое при
         /// изменении значения переменной
         /// </summary>
-        public event Action<object> ChangeValue;
+        public event Action<object, object> ChangeValue;
 
         /// <summary>
         /// Свойство для MVVM

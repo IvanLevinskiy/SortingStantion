@@ -48,20 +48,24 @@ namespace SortingStantion.S7Extension
         /// значения базового тэга
         /// </summary>
         /// <param name="value"></param>
-        private void S7DiscreteAlarm_ChangeValue(object value)
+        private void S7DiscreteAlarm_ChangeValue(object oldvalue, object newvalue)
         {
-            var t = this;
+
+            if (oldvalue == newvalue)
+            {
+                return;
+            }
 
             Action action = () =>
             {
                 //Если новое значение не bool - выходим
-                if (value is bool == false)
+                if (newvalue is bool == false)
                 {
                     return;
                 }
 
                 //Если новое значение true, добавляем сообщение
-                if ((bool)value == true)
+                if ((bool)newvalue == true)
                 {
                     msg = new UserMessage(Message, MSGTYPE.ERROR);
                     DataBridge.MSGBOX.Add(msg);
@@ -72,7 +76,7 @@ namespace SortingStantion.S7Extension
                 }
 
                 //Если новое значение false, удаляем сообщение
-                if ((bool)value == false)
+                if ((bool)newvalue == false)
                 {
                     DataBridge.MSGBOX.Remove(msg);
                     return;
