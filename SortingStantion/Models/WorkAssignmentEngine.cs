@@ -132,36 +132,36 @@ namespace SortingStantion.Models
         {
             //Инициализация тэгов
             IN_WORK_TAG = (S7BOOL)device.GetTagByAddress("DB1.DBX182.0");
-            IN_WORK_TAG.ChangeValue += (nvalue) =>
+            IN_WORK_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
-                InWork = (bool)nvalue;
+                InWork = (bool)newvalue;
                 InNotWork = !InWork;
             };
 
             //ID задания
             TASK_ID_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD184-STR40");
-            TASK_ID_TAG.ChangeValue += (nvalue) =>
+            TASK_ID_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 TaskID = TASK_ID_TAG.StatusText;
             };
 
             //GTIN
             GTIN_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD226-STR40");
-            GTIN_TAG.ChangeValue += (nvalue) =>
+            GTIN_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 GTIN = GTIN_TAG.StatusText;
             };
 
             ///Номер производственной серии
             LOT_NO_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD352-STR40");
-            LOT_NO_TAG.ChangeValue += (nvalue) =>
+            LOT_NO_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 Lot_No = LOT_NO_TAG.StatusText;
             };
 
             //Наименорвание продукта
             PRODUCT_NAME_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD268-STR82");
-            PRODUCT_NAME_TAG.ChangeValue += (nvalue) =>
+            PRODUCT_NAME_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 Product_Name = PRODUCT_NAME_TAG.StatusText;
             };

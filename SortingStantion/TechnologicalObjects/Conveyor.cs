@@ -193,16 +193,16 @@ namespace SortingStantion.TechnologicalObjects
         /// статуса работы линии
         /// </summary>
         /// <param name="obj"></param>
-        private void Run_ChangeValue(object value)
+        private void Run_ChangeValue(object oldvalue, object newvalue)
         {
             //Защита от неверных типов данных
-            if (value is bool? == false)
+            if (newvalue is bool? == false)
             {
                 return;
             }
 
             //Получение статуса работы конвейера
-            bool _value = (bool)value;
+            bool _value = (bool)newvalue;
 
             //Если конвейер запущен
             if (_value == true)

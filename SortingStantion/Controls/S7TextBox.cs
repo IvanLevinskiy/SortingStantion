@@ -146,7 +146,7 @@ namespace SortingStantion.Controls
         /// состояния тэга
         /// </summary>
         /// <param name="obj"></param>
-        private void S7TAG_ChangeValue(object obj)
+        private void S7TAG_ChangeValue(object oldvalue, object newvalue)
         {
             SetText(S7TAG.StatusText);
         }
@@ -215,7 +215,7 @@ namespace SortingStantion.Controls
             //возвращаем значение
             if (e.Key == Key.Escape)
             {
-                S7TAG_ChangeValue(true);
+                //S7TAG_ChangeValue(true);
                 //DataBridge.FocusElement.Focus();
             }
         }

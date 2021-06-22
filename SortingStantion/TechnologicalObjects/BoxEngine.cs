@@ -99,9 +99,9 @@ namespace SortingStantion.TechnologicalObjects
         /// Событие, вызываемое при изменении статуса GOODREAD или NOREAD
         /// </summary>
         /// <param name="svalue"></param>
-        private void BARCODESCANER_CHANGEVALUE(object svalue)
+        private void BARCODESCANER_CHANGEVALUE(object oldvalue, object newvalue)
         {
-            bool? value = (bool?)svalue;
+            bool? value = (bool?)newvalue;
 
             //Если новое значение не true - выходим
             if (value != true)

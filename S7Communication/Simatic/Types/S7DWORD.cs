@@ -63,15 +63,15 @@ namespace S7Communication
             //выходим из функции
             if (bytes == null)
             {
-                Status = null;
-                StatusText = string.Empty;
+                //Status = null;
+                //StatusText = string.Empty;
                 return;
             }
 
             if (bytes.Length < offset + 4)
             {
-                Status = null;
-                StatusText = string.Empty;
+                //Status = null;
+                //StatusText = string.Empty;
                 return;
             }
 
