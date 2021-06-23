@@ -1,15 +1,32 @@
-﻿using System;
+﻿using S7Communication;
 using System.Collections.Generic;
 using System.Text;
 
 namespace S7Communication
 {
-    public class S7_STRING : simaticTagBase
+    public class S7_CHARS_ARRAY : simaticTagBase
     {
+        /// <summary>
+        /// Текст из массива
+        /// </summary>
+        public string Text
+        {
+            get
+            {
+                return text;
+            }
+            set
+            {
+                text = value;
+                OnPropertyChanged("Text");
+            }
+        }
+        string text;
+
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public S7_STRING(string name, string address, SimaticGroup simaticGroup)
+        public S7_CHARS_ARRAY(string name, string address, SimaticGroup simaticGroup)
         {
             this.Name = name;
             this.Address = address.Split('-')[0];
@@ -27,7 +44,7 @@ namespace S7Communication
         /// <returns></returns>
         int GetLenght(string s7operand)
         {
-            var str = s7operand.Replace("STR", "\n"); 
+            var str = s7operand.Replace("CHARS", "\n");
             str = str.Split('\n')[1];
             return int.Parse(str) + 2;
         }
@@ -54,7 +71,7 @@ namespace S7Communication
             }
 
             //Получаем текстовый вид
-            StatusText = Status.ToString();
+            StatusText = Text;
         }
 
         /// <summary>
@@ -82,24 +99,21 @@ namespace S7Communication
             //Собираем строку
             List<byte> bytes_array = new List<byte>();
 
-            //Получаем длину сообщения из строки
-            var stringlenght = bytes[offset + 1];
-
             //Переносим данные из списка в массив
-            for (int i = offset + 2; i < offset + stringlenght + 2; i++)
+            for (int i = offset + 2; i < offset + Lenght + 2; i++)
             {
-                if (bytes.Length - 1 < i)
+                if (bytes.Length < 1)
                 {
                     return;
                 }
 
-                bytes_array.Add(bytes[i]);
+                bytes_array.Add(bytes[0]);
             }
 
             //Получаем строку из байтов
             string str = Encoding.GetEncoding(1251).GetString(bytes_array.ToArray());
             str = str.Replace("\0", "");
-            Status = StatusText = str;
+            Status = Text = str; 
         }
 
         /// <summary>

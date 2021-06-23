@@ -50,6 +50,7 @@
     <Compile Include="Simatic\Types\S7BOOL.cs" />
     <Compile Include="Simatic\Types\S7TIME.cs" />
     <Compile Include="Simatic\Types\S7WORD.cs" />
+    <Compile Include="Simatic\Types\S7_CHARS_ARRAY.cs" />
     <Compile Include="Simatic\Types\S7_STRING.cs" />
     <Compile Include="Simatic\Types\S7_WSTRING.cs" />
     <Compile Include="Simatic\VarType.cs" />

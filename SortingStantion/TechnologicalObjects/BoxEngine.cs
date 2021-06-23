@@ -1,4 +1,5 @@
 ﻿using S7Communication;
+using SortingStantion.S7Extension;
 using System;
 
 namespace SortingStantion.TechnologicalObjects
@@ -74,6 +75,10 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         S7_STRING GTIN_TASK;
 
+        /// <summary>
+        /// Результат сканирования
+        /// </summary>
+        S7_CHARS_ARRAY SCAN_DATA;
 
         /// <summary>
         /// Конструктор класса
@@ -88,6 +93,9 @@ namespace SortingStantion.TechnologicalObjects
             GTIN = (S7_STRING)device.GetTagByAddress("DB1.DBD416-STR14");
             SERIALNUMBER = (S7_STRING)device.GetTagByAddress("DB1.DBD432-STR6");
             GTIN_TASK = (S7_STRING)device.GetTagByAddress("DB1.DBD226-STR40");
+
+            //Данные из сканера
+            SCAN_DATA = (S7_CHARS_ARRAY)device.GetTagByAddress("QB0-CHARS64");
 
             //Подписываемся на событие по изминению
             //тэга GOODREAD и NOREAD

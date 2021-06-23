@@ -825,6 +825,15 @@ namespace S7Communication
                 return new S7_STRING("", s7operand, group);
             }
 
+            //Если тэг CHARS_ARRAY
+            if (s7operand.Contains("-CHARS"))
+            {
+                return new S7_CHARS_ARRAY("", s7operand, group);
+            }
+
+
+            
+
             //Если тэг BOOL
             if (s7operand.Contains(".DBX"))
             {
