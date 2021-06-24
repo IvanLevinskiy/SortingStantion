@@ -51,7 +51,7 @@ namespace SortingStantion.S7Extension
         private void S7DiscreteAlarm_ChangeValue(object oldvalue, object newvalue)
         {
 
-            if (oldvalue == newvalue)
+            if (oldvalue.Equals(newvalue) == true)
             {
                 return;
             }

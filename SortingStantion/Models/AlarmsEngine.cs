@@ -117,6 +117,13 @@ namespace SortingStantion.Models
             al_1 = new S7DiscreteAlarm("Посторонний продукт (GTIN не совпадает с заданием)", "DB6.DBX12.0", group);
             al_1.MessageAction = () =>
             {
+                //Если линия выключена
+                if (DataBridge.Conveyor.LineIsRun == false)
+                {
+                    al_1.Write(false);
+                    return;
+                }
+
                 frame_gtin_fault.frame_gtin_fault fr= new frame_gtin_fault.frame_gtin_fault();
                 fr.Owner = DataBridge.MainScreen;
                 fr.ShowDialog();
@@ -129,6 +136,13 @@ namespace SortingStantion.Models
             al_2 = new S7DiscreteAlarm("Посторонний код (код не является СИ)", "DB6.DBX12.1", group);
             al_2.MessageAction = () =>
             {
+                //Если линия выключена
+                if (DataBridge.Conveyor.LineIsRun == false)
+                {
+                    al_2.Write(false);
+                    return;
+                }
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Посторонний код (код не является СИ)", MessageType.Alarm);
             };
@@ -139,6 +153,13 @@ namespace SortingStantion.Models
             al_3 = new S7DiscreteAlarm("Номер продукта числится в браке", "DB6.DBX12.2", group);
             al_3.MessageAction = () =>
             {
+                //Если линия выключена
+                if (DataBridge.Conveyor.LineIsRun == false)
+                {
+                    al_3.Write(false);
+                    return;
+                }
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Номер продукта числится в браке", MessageType.Alarm);
             };
@@ -149,6 +170,13 @@ namespace SortingStantion.Models
             al_4 = new S7DiscreteAlarm("Повтор кода продукта", "DB6.DBX12.3", group);
             al_4.MessageAction = () =>
             {
+                //Если линия выключена
+                if (DataBridge.Conveyor.LineIsRun == false)
+                {
+                    al_4.Write(false);
+                    return;
+                }
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Повтор кода продукта", MessageType.Alarm);
             };
@@ -159,6 +187,7 @@ namespace SortingStantion.Models
             al_5 = new S7DiscreteAlarm("Получение кода от сканера при остановке конвейера", "DB6.DBX12.4", group);
             al_5.MessageAction = () =>
             {
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Получение кода от сканера при остановке конвейера", MessageType.Alarm);
             };
@@ -169,6 +198,13 @@ namespace SortingStantion.Models
             al_6 = new S7DiscreteAlarm("Ошибка отбраковщика (продукт не отбраковался)", "DB6.DBX12.5", group);
             al_6.MessageAction = () =>
             {
+                //Если линия выключена
+                if (DataBridge.Conveyor.LineIsRun == false)
+                {
+                    al_6.Write(false);
+                    return;
+                }
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Ошибка отбраковщика (продукт не отбраковался)", MessageType.Alarm);
             };

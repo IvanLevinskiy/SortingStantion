@@ -937,23 +937,26 @@ namespace S7Communication
 
             while (true)
             {
-                //Если имеется запрос на переподключение
-                //пытаемся переподключиться
-                if (ReconnectRequest == true)
+                lock (_mSocket)
                 {
-                    Close();
-                    IsAvailable = false;
-                    goto M1;
+                    //Если имеется запрос на переподключение
+                    //пытаемся переподключиться
+                    if (ReconnectRequest == true)
+                    {
+                        Close();
+                        IsAvailable = false;
+                        goto M1;
+                    }
+
+                    IsAvailable = true;
+                    Processing();
+
+                    Thread.Sleep(server.Timeout);
+
+                    //Извещение подписчиков,
+                    //что данные обновлены
+                    DataUpdated?.Invoke();
                 }
-
-                IsAvailable = true;
-                Processing();
-                
-                Thread.Sleep(server.Timeout);
-
-                //Извещение подписчиков,
-                //что данные обновлены
-                DataUpdated?.Invoke();
             }
 
             //Закрытие порта
