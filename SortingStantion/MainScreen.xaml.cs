@@ -23,6 +23,19 @@ namespace SortingStantion.MainScreen
             //Инициализируем свойство IsAvailable ПЛК
             //для того, чтоб отображалась ошибка
             DataBridge.S7Server.Devices[0].IsAvailable = false;
+
+            this.Closing += MainScreen_Closing;
+        }
+
+        /// <summary>
+        /// Метод для остановки конвейера при 
+        /// завершении работы программы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainScreen_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DataBridge.Conveyor.Stop();
         }
 
         /// <summary>

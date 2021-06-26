@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace S7Communication
 {
@@ -64,10 +61,22 @@ namespace S7Communication
         /// <param name="value"></param>
         public override bool Write(object value)
         {
+            
+            //Приводим записываемое значение к типу bool 
             var _value = Convert.ToBoolean(value);
 
+            //Читаем состояние байта из ПЛК
+            var report = device.ReadBytesWithASingleRequest(this.DataType, this.DBNumber, this.StartByteAddress, 1);
+
+            if (report == null)
+            {
+                return false;
+            }
+
+            var oldsatus = report[0];
+
             //Новое значение
-            var newvalue = statusByte;
+            var newvalue = oldsatus;
 
             //Алгоритм установки бита
             if (_value == true)
@@ -125,7 +134,7 @@ namespace S7Communication
             //указатель
             if (value == null)
             {
-                StatusText = string.Empty;
+                //StatusText = string.Empty;
                 return;
             }
 
@@ -159,6 +168,7 @@ namespace S7Communication
         /// <param name="offset"></param>
         public override void BuildStatus(byte[] bytes, int startbytefromrequest)
         {
+
             int offset = StartByteAddress - startbytefromrequest;
 
             var v =  this.Address;

@@ -170,8 +170,8 @@ namespace SortingStantion.MainScreen
             {
                 while (true)
                 {
-                    ConnectFlag.Write(true);
-                    Thread.Sleep(500);
+                    //ConnectFlag.Write(true);
+                    //Thread.Sleep(500);
                 }
             });
         }

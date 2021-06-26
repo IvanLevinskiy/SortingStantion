@@ -116,7 +116,7 @@ namespace S7Communication
                 }
 
                 //Обработка полученых данных
-                if (status != value)
+                if (status.Equals(value) == false)
                 {
                     //Сохранение старого статуса
                     var oldstatus = status;

@@ -31,6 +31,11 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
+        /// Указатель на файл с настройками
+        /// </summary>
+        SettingsFile settingsFile;
+
+        /// <summary>
         /// Указатель на узел в файле
         /// настроек
         /// </summary>
@@ -39,10 +44,13 @@ namespace SortingStantion.Models
         /// <summary>
         /// Конструктор
         /// </summary>
-        public Setting(XmlNode node)
+        public Setting(XmlNode node, SettingsFile file)
         {
             //Получение указателя на XmlNode
             Node = node;
+
+            //Передача указателя на файл с настройками
+            settingsFile = file;
 
             //Получение наименования узла
             Name = GetAttribut("name");
@@ -88,6 +96,18 @@ namespace SortingStantion.Models
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Метод для установки значения настройки
+        /// </summary>
+        /// <param name="attribut"></param>
+        public void SetValue(string value)
+        {
+            var childnode = Node.FirstChild.FirstChild;
+            childnode.Value = value;
+
+            settingsFile.Save();
         }
     }
 }

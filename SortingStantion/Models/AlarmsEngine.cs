@@ -120,9 +120,12 @@ namespace SortingStantion.Models
                 //Если линия выключена
                 if (DataBridge.Conveyor.LineIsRun == false)
                 {
-                    al_1.Write(false);
+                    //al_1.Write(false);
                     return;
                 }
+
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
 
                 frame_gtin_fault.frame_gtin_fault fr= new frame_gtin_fault.frame_gtin_fault();
                 fr.Owner = DataBridge.MainScreen;
@@ -139,9 +142,12 @@ namespace SortingStantion.Models
                 //Если линия выключена
                 if (DataBridge.Conveyor.LineIsRun == false)
                 {
-                    al_2.Write(false);
+                    //al_2.Write(false);
                     return;
                 }
+
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Посторонний код (код не является СИ)", MessageType.Alarm);
@@ -160,6 +166,9 @@ namespace SortingStantion.Models
                     return;
                 }
 
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Номер продукта числится в браке", MessageType.Alarm);
             };
@@ -176,6 +185,9 @@ namespace SortingStantion.Models
                     al_4.Write(false);
                     return;
                 }
+
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Повтор кода продукта", MessageType.Alarm);
@@ -205,6 +217,9 @@ namespace SortingStantion.Models
                     return;
                 }
 
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Ошибка отбраковщика (продукт не отбраковался)", MessageType.Alarm);
             };
@@ -215,6 +230,9 @@ namespace SortingStantion.Models
             al_7 = new S7DiscreteAlarm("Массовый брак", "DB6.DBX12.6", group);
             al_7.MessageAction = () =>
             {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Массовый брак", MessageType.Alarm);
             };

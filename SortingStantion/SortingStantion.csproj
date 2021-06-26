@@ -93,6 +93,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ComboBoxSerialPorts.xaml.cs">
+      <DependentUpon>ComboBoxSerialPorts.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\xButton.cs" />
     <Compile Include="Controls\customMessageBox.xaml.cs">
       <DependentUpon>customMessageBox.xaml</DependentUpon>
@@ -119,6 +122,8 @@
     <Compile Include="FRAMES\frameSettings\windowExit.xaml.cs">
       <DependentUpon>windowExit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\NetAclChecker.cs" />
+    <Compile Include="Models\ReportBackupFile.cs" />
     <Compile Include="Models\UserAutorizationHistotyItem.cs" />
     <Compile Include="Models\ResultOperation.cs" />
     <Compile Include="TOOL_WINDOWS\windiwInformation\windiwInformation.xaml.cs">
@@ -126,6 +131,9 @@
     </Compile>
     <Compile Include="TOOL_WINDOWS\windowAddDeffect\windowAddDeffect.xaml.cs">
       <DependentUpon>windowAddDeffect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TOOL_WINDOWS\windowExtraneousBarcode\windowExtraneousBarcode.xaml.cs">
+      <DependentUpon>windowExtraneousBarcode.xaml</DependentUpon>
     </Compile>
     <Compile Include="TOOL_WINDOWS\WindowUSPFault\WindowUSPFault.xaml.cs">
       <DependentUpon>WindowUSPFault.xaml</DependentUpon>
@@ -161,6 +169,10 @@
       <DependentUpon>windiwAddingBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="TOOL_WINDOWS\windiwAddingBox\windowAddingBoxViewModel.cs" />
+    <Page Include="Controls\ComboBoxSerialPorts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\customMessageBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -218,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TOOL_WINDOWS\windowAddDeffect\windowAddDeffect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TOOL_WINDOWS\windowExtraneousBarcode\windowExtraneousBarcode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

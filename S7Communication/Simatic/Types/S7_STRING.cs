@@ -154,11 +154,17 @@ namespace S7Communication
             //Вставляем длину строки
             btslist.Insert(0, (byte)btslist.Count);
 
-            bool result = true;
-
             //Записываем значения в ПЛК
-            this.device.WriteBytes(DataType, DBNumber, StartByteAddress + 1, btslist.ToArray());
+            var result = this.device.WriteBytes(DataType, DBNumber, StartByteAddress + 1, btslist.ToArray());
 
+            //Если запись прошла успешно,
+            //устанавливаем статус текст
+            if (result == true)
+            {
+                this.StatusText = value;
+            }
+
+            //Возвращаем результат записи тэга
             return result;
         }
     }

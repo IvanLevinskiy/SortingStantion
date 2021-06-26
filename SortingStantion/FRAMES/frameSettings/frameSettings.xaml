@@ -390,7 +390,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                                 Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7TextBox Address="DB1.DBD136-STIME"
+                            <controls:ComboBoxSerialPorts 
                                           Foreground="{StaticResource TextColor}"
                                           Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"

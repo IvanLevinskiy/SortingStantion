@@ -162,33 +162,14 @@
                                    FontSize="{StaticResource fontSizeData}"
                                    Text="{Binding CurrentTime.CurrentTime}"
                                    Foreground="{StaticResource DarkColor}"/>
+
+                            <Button Background="Transparent"
+                                    Style="{StaticResource btnStyle}" 
+                                    MouseLeftButtonDown="Button_MouseLeftButtonDown"
+                                    MouseDoubleClick="Button_MouseDoubleClick"/>
+
+
                         </Grid>
-
-                        <Button Grid.Row="1"
-                                Margin="5,1,5,1"
-                                Style="{StaticResource btnStyle}"
-                                BorderBrush="Transparent"
-                                Foreground="{StaticResource TextColor}"
-                                Background="Transparent">
-
-                            <Grid DataContext="{Binding AccesLevelModel}">
-                                <!--<Grid.ColumnDefinitions>
-                                    <ColumnDefinition MinWidth="50"/>
-                                    <ColumnDefinition Width="110"/>
-                                </Grid.ColumnDefinitions>-->
-
-                                <!--<Grid Grid.Column="0"
-                              Height="30">
-                                    <ContentPresenter Content="{StaticResource IconUser}"/>
-                                </Grid>-->
-
-                                <TextBlock  Grid.Column="1"
-                                        Text="" 
-                                        FontSize="{StaticResource fontSizeButtons}"
-                                        TextAlignment="Center"/>
-                            </Grid>
-
-                        </Button>
 
                     </Grid>
 

@@ -156,6 +156,7 @@ namespace S7Communication
                 {
                     ReconnectRequest = true;
                 }
+
             }
         }
 
@@ -598,6 +599,12 @@ namespace S7Communication
         /// <returns></returns>
         public byte[] ReadBytesWithASingleRequest(MemmoryArea dataType, int db, int startByteAdr, int count)
         {
+            //Если сокет не инициализирован
+            if (_mSocket == null)
+            {
+                return null;
+            }
+
             byte[] array = new byte[count];
             byte[] result;
             try
@@ -607,7 +614,7 @@ namespace S7Communication
                 byteArray.Add(this.CreateReadDataRequestPackage(dataType, db, startByteAdr, count));
                 this._mSocket.Send(byteArray.array, byteArray.array.Length, SocketFlags.None);
                 byte[] array2 = new byte[512];
-                this._mSocket.Receive(array2, 512, SocketFlags.None);
+                var lenght = this._mSocket.Receive(array2, 512, SocketFlags.None);
                 
                 //Неверное количество байт
                 if (array2[21] != 255)
@@ -725,38 +732,6 @@ namespace S7Communication
 
             return false;
         }
-
-        ///// <summary>
-        ///// Проверка соединения
-        ///// </summary>
-        //public void TestConnection()
-        //{
-        //    string report = string.Empty;
-
-        //    if (plc.IsAvailable)
-        //    {
-        //        report += string.Format("Серверу доступно устройство с IP={0}\n", plc.IP);
-
-        //        ErrorCode code = plc.Open();
-        //        plc.Close();
-
-        //        if (code != ErrorCode.NoError)
-        //        {
-        //            report += string.Format(", однако при установке соединения с ПЛК возникает ошибка. ErrorCode={1};", plc.IP, code.ToString());
-        //            MessageBox.Show(report, "Информация об проведенном тесте соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //        }
-        //        else
-        //        {
-        //            report = string.Format("Тест соединения с ПЛК IP={0} успешно завершен. Соединение с ПЛК установлено!", plc.IP);
-        //            MessageBox.Show(report, "Информация об проведенном тесте соединения", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show(string.Format("Устройство с IP={0} недоступно для сервера (не пингуется)", plc.IP), "Информация об проведенном тесте соединения", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        //    }
-        //}
 
         /// <summary>
         /// Метод для получения всех вложенных тэгов

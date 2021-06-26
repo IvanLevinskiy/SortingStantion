@@ -363,38 +363,21 @@ namespace SortingStantion.Models
         /// </summary>
         async void StartListener()
         {
-            //Инициализация экземпляра  listener
-            HttpListener listener = new HttpListener();
-
             //Получение адреса ПК, запросы от которого необходимо
             //прослушивать для получения задания
             var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
 
+            //Регистрация url
+            NetAclChecker.AddAddress("http://localhost:8080/iswms-client/strong/");
+
+            //Инициализация экземпляра  listener
+            HttpListener listener = new HttpListener();
+
             //Установка адресов  listener
-            ExecuteCMD(prefixe);
-            listener.Prefixes.Add(prefixe);
+            listener.Prefixes.Add("http://localhost:8080/iswms-client/strong/");
 
-            try
-            {
-                
-                listener.Start();
-            }
-            catch (System.Net.HttpListenerException ex)
-            {
-                //UserMessage userMessage = new UserMessage();
-                //userMessage.Message = "";
-                //Action action = () =>
-                //{
-                //    SolidColorBrush brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-                //    UserMessage messageItem = new Controls.UserMessage("Приложение должно быть запущено с правами администратора", MSGTYPE.ERROR);
-                //    DataBridge.MSGBOX.Add(messageItem);
-                //};
-                //DataBridge.UIDispatcher.Invoke(action);
-
-                return;
-                
-            }
-            
+            //Запуск слушателя
+            listener.Start();           
 
             //Цикл для бесконечной прослушки listener
             while (true)
@@ -505,8 +488,13 @@ namespace SortingStantion.Models
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(true);
 
+                        string message = $"Задание {TASK_ID_TAG.StatusText} принято в работу";
+
                         //Запись в базу данных о принятии задания
-                        DataBridge.AlarmLogging.AddMessage($"Задание {TASK_ID_TAG.StatusText} принято в работу", MessageType.Info);
+                        DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
+
+                        var msg = new UserMessage(message, MSGTYPE.SUCCES);
+                        DataBridge.MSGBOX.Add(msg);
 
                         return;
                     }
@@ -551,7 +539,12 @@ namespace SortingStantion.Models
 
                         //Запись в базу данных
                         var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
-                        DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.TaskLogging);
+
+                        //Запись в базу данных о принятии задания
+                        DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
+
+                        var msg = new UserMessage(message, MSGTYPE.SUCCES);
+                        DataBridge.MSGBOX.Add(msg);
 
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(false);

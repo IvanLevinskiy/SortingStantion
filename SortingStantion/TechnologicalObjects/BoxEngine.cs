@@ -99,8 +99,8 @@ namespace SortingStantion.TechnologicalObjects
 
             //Подписываемся на событие по изминению
             //тэга GOODREAD и NOREAD
-            GOODREAD.ChangeValue += BARCODESCANER_CHANGEVALUE;
-            NOREAD.ChangeValue += BARCODESCANER_CHANGEVALUE;
+            //GOODREAD.ChangeValue += BARCODESCANER_CHANGEVALUE;
+            //NOREAD.ChangeValue += BARCODESCANER_CHANGEVALUE;
         }
 
         /// <summary>

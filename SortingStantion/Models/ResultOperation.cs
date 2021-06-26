@@ -80,12 +80,14 @@ namespace SortingStantion.Models
             //Подпись на событие по принятию задания
             DataBridge.WorkAssignmentEngine.WorkOrderAcceptanceNotification += (workAssignment) =>
             {
+                startTime = DateTime.Now;
                 CurrentWorkAssignment = workAssignment;
             };
 
             //Подпись на событие по завершению задания
             DataBridge.WorkAssignmentEngine.WorkOrderCompletionNotification += (workAssignment) =>
             {
+                endTime = DateTime.Now;
                 CurrentWorkAssignment = null;
             };
 
@@ -102,7 +104,6 @@ namespace SortingStantion.Models
                 var historyitem = new UserAuthorizationHistotyItem(currentuser);
                 operators.Add(historyitem);
             };
-
 
         }
 
@@ -202,6 +203,83 @@ namespace SortingStantion.Models
                     goto M0;
                 }
             }
+        }
+
+        string dtFormat(DateTime date)
+        {
+            return date.ToString("yyyy-MM-ddTHH:mm:ss+03:00");
+        }
+
+        /// <summary>
+        /// Аксессор для получения 
+        /// </summary>
+        string header
+        {
+            get
+            {
+                string result = $"\"id\":\"{ID}\",\n";
+                result += $"\"startTime\":\"{dtFormat(startTime)}\",\n";
+                result += $"\"endTime\":\"{dtFormat(endTime)}\",\n";
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Метод для формирования отчета в формате JSON
+        /// </summary>
+        /// <returns></returns>
+        public string CreatReport()
+        {
+            /**
+            {
+                "id":"108-500056",
+                "startTime":"2018-12-18T10:41:48+03:00",
+                "endTime":"2018-12-18T10:42:37+03:00",
+                "operators":
+                [
+                {
+                    "startTime":"2018-12-18T10:42:06+03:00"
+                    "endTime":"2018-12-18T10:42:37+03:00",
+                    "id":"101",
+                }
+                ],
+                "defectiveCodes":
+                [
+                    "Y№BBf2",
+                    "2Ft^o9"
+                ]
+
+                "Packs":
+                [
+                    "bF3%hI",
+                    "I<GM>j",
+                    "P0)8df",
+                    "P\".Yj>",
+                    ”h6#fR0”,
+                    "R_hw\"",
+                    "0EDFj+"
+                ]
+
+                "repeatPacks":
+                [
+                {
+                     "num": "bF3%hI",
+                     "quantity":"2"
+                }
+                {
+                     "num": "hT65?s",
+                     "quantity":"1"
+                }
+                ]
+            }
+            **/
+
+
+            string report = "{\n\"id\":" + $"\"{DataBridge.WorkAssignmentEngine.TaskID}\"";
+
+                return report;
+
         }
 
 

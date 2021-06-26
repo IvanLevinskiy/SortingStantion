@@ -108,6 +108,43 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Метод для запуска конвейера
+        /// </summary>
+        public void Start()
+        {
+            //Если статус не является
+            //булевым значением - игнорируем обработку
+            //команды
+            if (Run.Status is bool? == false)
+            {
+                return;
+            }
+
+            //Если конвейер остановлен, запускаем его
+            if ((bool?)Run.Status == false)
+            {
+                //Если задание принято, то запускаем линию
+                //иначе уведомляем оператора сообщением
+                if (DataBridge.WorkAssignmentEngine.InWork == false)
+                {
+                    customMessageBox mb = new customMessageBox("Ошибка", "Запуск невозможен, задание не принято в работу");
+                    mb.Owner = DataBridge.MainScreen;
+                    mb.ShowDialog();
+
+                    return;
+                }
+
+                //Запись статуса в ПЛК
+                Run.Write(true);
+
+                //Внесение в базу данных сообщения об остановке комплекса
+                DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТАРТ. Линия запущена", Models.MessageType.Event);
+
+                return;
+            }
+        }
+
+        /// <summary>
         /// Команда для запуска
         /// линии
         /// </summary>
@@ -117,38 +154,35 @@ namespace SortingStantion.TechnologicalObjects
             {
                 return new DelegateCommand((obj) =>
                 {
-                    //Если статус не является
-                    //булевым значением - игнорируем обработку
-                    //команды
-                    if (Run.Status is bool? == false)
-                    {
-                        return;
-                    }
-
-                    //Если конвейер остановлен, запускаем его
-                    if ((bool?)Run.Status == false)
-                    {
-                        //Если задание принято, то запускаем линию
-                        //иначе уведомляем оператора сообщением
-                        if (DataBridge.WorkAssignmentEngine.InWork == false)
-                        {
-                            customMessageBox mb = new customMessageBox("Ошибка", "Запуск невозможен, задание не принято в работу");
-                            mb.Owner = DataBridge.MainScreen;
-                            mb.ShowDialog();
-
-                            return;
-                        }
-
-                        //Запись статуса в ПЛК
-                        Run.Write(true);
-
-                        //Внесение в базу данных сообщения об остановке комплекса
-                        DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТАРТ. Линия запущена", Models.MessageType.Event);
-                        
-                        return;
-                    }
+                    Start();
                 },
                 (obj) => (true));
+            }
+        }
+
+        /// <summary>
+        /// Метод для остановки конвейера
+        /// </summary>
+        public void Stop()
+        {
+            //Если статус не является
+            //булевым значением - игнорируем обработку
+            //команды
+            if (Run.Status is bool? == false)
+            {
+                return;
+            }
+
+            //Если конвейер запущен - останавливаем его
+            if ((bool?)Run.Status == true)
+            {
+                //Запись статуса в ПЛК
+                Run.Write(false);
+
+                //Внесение в базу данных сообщения об остановке комплекса
+                DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТОП. Линия остановлена", Models.MessageType.Event);
+
+                return;
             }
         }
 
@@ -162,27 +196,7 @@ namespace SortingStantion.TechnologicalObjects
             {
                 return new DelegateCommand((obj) =>
                 {
-                    //Если статус не является
-                    //булевым значением - игнорируем обработку
-                    //команды
-                    if (Run.Status is bool? == false)
-                    {
-                        return;
-                    }
-
-                    //Если конвейер запущен - останавливаем его
-                    if ((bool?)Run.Status == true)
-                    {
-                        //Запись статуса в ПЛК
-                        Run.Write(false);
-
-                        //Внесение в базу данных сообщения об остановке комплекса
-                        DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТОП. Линия остановлена", Models.MessageType.Event);
-
-                        return;
-                    }
-
-                    
+                    Stop();
                 },
                 (obj) => (true));
             }

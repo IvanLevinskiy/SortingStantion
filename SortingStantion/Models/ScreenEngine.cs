@@ -141,8 +141,6 @@ namespace SortingStantion.Models
             {
                 return new DelegateCommand((obj) =>
                 {
-
-
                     windiwInformation windiwInformation = new windiwInformation();
                     windiwInformation.Owner = DataBridge.MainScreen;
                     windiwInformation.ShowDialog();

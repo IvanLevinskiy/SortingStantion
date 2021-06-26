@@ -222,6 +222,12 @@ namespace S7Communication
                 return;
             }
 
+            //Если длина не совпадает
+            if (ReportFromDevice.Length != Lenght)
+            {
+                return;
+            }
+
             //Заполняем тэги данными
             foreach (var tag in Tags)
             {

@@ -20,6 +20,12 @@ namespace SortingStantion.Models
         /// </summary>
         List<Setting> Settings = new List<Setting>();
 
+        /// <summary>
+        /// Полное имя (путь) до файла
+        /// настроек
+        /// </summary>
+        string filename;
+
 
         /// <summary>
         /// Конструктор
@@ -29,6 +35,7 @@ namespace SortingStantion.Models
         {
             //Загрузка файла конфигурации
             Load(file);
+            this.filename = file;
         }
 
         /// <summary>
@@ -58,7 +65,7 @@ namespace SortingStantion.Models
                 //их в список настроек
                 foreach (XmlNode settingnode in settingsnodes)
                 {
-                    var setting = new Setting(settingnode);
+                    var setting = new Setting(settingnode, this);
                     Settings.Add(setting);
                 }
             }
@@ -118,6 +125,14 @@ namespace SortingStantion.Models
         public Setting [] GetSettingsList()
         {
             return Settings.ToArray();
+        }
+
+        /// <summary>
+        /// Метод для сохранения данных в файл
+        /// </summary>
+        public void Save()
+        {
+            xDoc.Save(this.filename);
         }
     }
 }

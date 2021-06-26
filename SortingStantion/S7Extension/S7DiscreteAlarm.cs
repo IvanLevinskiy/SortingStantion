@@ -51,11 +51,6 @@ namespace SortingStantion.S7Extension
         private void S7DiscreteAlarm_ChangeValue(object oldvalue, object newvalue)
         {
 
-            if (oldvalue.Equals(newvalue) == true)
-            {
-                return;
-            }
-
             Action action = () =>
             {
                 //Если новое значение не bool - выходим
