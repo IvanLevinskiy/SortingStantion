@@ -239,8 +239,8 @@ namespace SortingStantion.Models
             }
             set
             {
-                lot_No = value;
-                LOT_NO_TAG.Write(lot_No);
+                gtin = value;
+                GTIN_TAG.Write(gtin);
                 OnPropertyChanged("GTIN");
             }
         }
@@ -417,31 +417,6 @@ namespace SortingStantion.Models
             listener.Stop();
         }
 
-        void ExecuteCMD(string uri)
-        {
-            var command = $@"netsh http add urlacl url = {uri} user=DOMAIN\user";
-
-            ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd", "/c " + command);
-
-            procStartInfo.RedirectStandardOutput = true;
-            procStartInfo.UseShellExecute = false;
-            procStartInfo.CreateNoWindow = true;
-
-            // wrap IDisposable into using (in order to release hProcess) 
-            using (Process process = new Process())
-            {
-                process.StartInfo = procStartInfo;
-                process.Start();
-
-                // Add this: wait until process does its work
-                process.WaitForExit();
-
-                // and only then read the result
-                string result = process.StandardOutput.ReadToEnd();
-                Console.WriteLine(result);
-            }
-        }
-
         /// <summary>
         /// Команда - принять задание
         /// </summary>
@@ -530,9 +505,13 @@ namespace SortingStantion.Models
                         TASK_ID_TAG.Write("");
                         PRODUCT_NAME_TAG.Write("");
                         LOT_NO_TAG.Write("");
-                        NUM_PACKS_IN_BOX_TAG.Write(0);
 
+                        //Обнуление счетчиков изделий
+                        NUM_PACKS_IN_BOX_TAG.Write(0);
                         NUM_PACKS_IN_SERIES_TAG.Write(0);
+
+                        //Выключение конвейера
+                        DataBridge.Conveyor.Stop();
 
                         //Уведомление подписчиков о завершении задания
                         WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);

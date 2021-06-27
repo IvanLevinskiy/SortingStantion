@@ -106,103 +106,108 @@ namespace SortingStantion.Models
         /// </summary>
         public AlarmsEngine()
         {
-            ResetAlarmsTag = (S7BOOL)device.GetTagByAddress("DB1.DBX132.1");
+            //ResetAlarmsTag = (S7BOOL)device.GetTagByAddress("DB1.DBX132.1");
 
             //Сбрасываем ошибки
-            ResetAlarmsTag.Write(true);
+            //ResetAlarmsTag.Write(true);
 
             /*
                 Посторонний продукт
             */
-            al_1 = new S7DiscreteAlarm("Посторонний продукт (GTIN не совпадает с заданием)", "DB6.DBX12.0", group);
-            al_1.MessageAction = () =>
-            {
-                //Если линия выключена
-                if (DataBridge.Conveyor.LineIsRun == false)
-                {
-                    //al_1.Write(false);
-                    return;
-                }
+            //al_1 = new S7DiscreteAlarm("Посторонний продукт (GTIN не совпадает с заданием)", "DB6.DBX12.0", group);
+            //al_1.MessageAction = () =>
+            //{
+            //    //Если линия выключена
+            //    if (DataBridge.Conveyor.LineIsRun == false)
+            //    {
+            //        //al_1.Write(false);
+            //        return;
+            //    }
 
-                //Остановка конвейера
-                DataBridge.Conveyor.Stop();
+            //    //Остановка конвейера
+            //    DataBridge.Conveyor.Stop();
 
-                frame_gtin_fault.frame_gtin_fault fr= new frame_gtin_fault.frame_gtin_fault();
-                fr.Owner = DataBridge.MainScreen;
-                fr.ShowDialog();
-            };
+            //    frame_gtin_fault.frame_gtin_fault fr= new frame_gtin_fault.frame_gtin_fault();
+            //    fr.Owner = DataBridge.MainScreen;
+            //    fr.ShowDialog();
+            //};
 
 
             /*
                 Посторонний код (код не является СИ)
             */
-            al_2 = new S7DiscreteAlarm("Посторонний код (код не является СИ)", "DB6.DBX12.1", group);
-            al_2.MessageAction = () =>
-            {
-                //Если линия выключена
-                if (DataBridge.Conveyor.LineIsRun == false)
-                {
-                    //al_2.Write(false);
-                    return;
-                }
+            //al_2 = new S7DiscreteAlarm("Посторонний код (код не является СИ)", "DB6.DBX12.1", group);
+            //al_2.MessageAction = () =>
+            //{
+            //    //Если линия выключена
+            //    if (DataBridge.Conveyor.LineIsRun == false)
+            //    {
+            //        //al_2.Write(false);
+            //        return;
+            //    }
 
-                //Остановка конвейера
-                DataBridge.Conveyor.Stop();
+            //    //Остановка конвейера
+            //    DataBridge.Conveyor.Stop();
 
-                //Запись сообщения в базу данных
-                DataBridge.AlarmLogging.AddMessage("Посторонний код (код не является СИ)", MessageType.Alarm);
-            };
+            //    //Запись сообщения в базу данных
+            //    DataBridge.AlarmLogging.AddMessage("Посторонний код  (код не является СИ)", MessageType.Alarm);
+
+            //    //Вызов окна
+            //    SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode windowExtraneousBarcode = new SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode();
+            //    windowExtraneousBarcode.ShowDialog();
+                
+            //};
 
             /*
                 Номер продукта числится в браке
             */
-            al_3 = new S7DiscreteAlarm("Номер продукта числится в браке", "DB6.DBX12.2", group);
-            al_3.MessageAction = () =>
-            {
-                //Если линия выключена
-                if (DataBridge.Conveyor.LineIsRun == false)
-                {
-                    al_3.Write(false);
-                    return;
-                }
+            //al_3 = new S7DiscreteAlarm("Номер продукта числится в браке", "DB6.DBX12.2", group);
+            //al_3.MessageAction = () =>
+            //{
+            //    //Если линия выключена
+            //    if (DataBridge.Conveyor.LineIsRun == false)
+            //    {
+            //        al_3.Write(false);
+            //        return;
+            //    }
 
-                //Остановка конвейера
-                DataBridge.Conveyor.Stop();
+            //    //Остановка конвейера
+            //    DataBridge.Conveyor.Stop();
 
-                //Запись сообщения в базу данных
-                DataBridge.AlarmLogging.AddMessage("Номер продукта числится в браке", MessageType.Alarm);
-            };
+            //    //Запись сообщения в базу данных
+            //    DataBridge.AlarmLogging.AddMessage("Номер продукта числится в браке", MessageType.Alarm);
+            //};
 
             /*
                 Повтор кода продукта
             */
-            al_4 = new S7DiscreteAlarm("Повтор кода продукта", "DB6.DBX12.3", group);
-            al_4.MessageAction = () =>
-            {
-                //Если линия выключена
-                if (DataBridge.Conveyor.LineIsRun == false)
-                {
-                    al_4.Write(false);
-                    return;
-                }
+            //al_4 = new S7DiscreteAlarm("Повтор кода продукта", "DB6.DBX12.3", group);
+            //al_4.MessageAction = () =>
+            //{
+            //    //Если линия выключена
+            //    if (DataBridge.Conveyor.LineIsRun == false)
+            //    {
+            //        al_4.Write(false);
+            //        return;
+            //    }
 
-                //Остановка конвейера
-                DataBridge.Conveyor.Stop();
+            //    //Остановка конвейера
+            //    DataBridge.Conveyor.Stop();
 
-                //Запись сообщения в базу данных
-                DataBridge.AlarmLogging.AddMessage("Повтор кода продукта", MessageType.Alarm);
-            };
+            //    //Запись сообщения в базу данных
+            //    DataBridge.AlarmLogging.AddMessage("Повтор кода продукта", MessageType.Alarm);
+            //};
 
             /*
                 Получение кода от сканера при остановке конвейера
             */
-            al_5 = new S7DiscreteAlarm("Получение кода от сканера при остановке конвейера", "DB6.DBX12.4", group);
-            al_5.MessageAction = () =>
-            {
+            //al_5 = new S7DiscreteAlarm("Получение кода от сканера при остановке конвейера", "DB6.DBX12.4", group);
+            //al_5.MessageAction = () =>
+            //{
 
-                //Запись сообщения в базу данных
-                DataBridge.AlarmLogging.AddMessage("Получение кода от сканера при остановке конвейера", MessageType.Alarm);
-            };
+            //    //Запись сообщения в базу данных
+            //    DataBridge.AlarmLogging.AddMessage("Получение кода от сканера при остановке конвейера", MessageType.Alarm);
+            //};
 
             /*
                 Ошибка отбраковщика (продукт не отбраковался)

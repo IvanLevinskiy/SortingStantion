@@ -1,12 +1,12 @@
 ﻿using S7Communication;
 using System.Windows;
 
-namespace SortingStantion.frame_gtin_fault
+namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
 {
     /// <summary>
     /// Логика взаимодействия для frame_gtin_fault.xaml
     /// </summary>
-    public partial class frame_gtin_fault : Window
+    public partial class windowGtinFault : Window
     {
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace SortingStantion.frame_gtin_fault
         /// <summary>
         /// Конструктор
         /// </summary>
-        public frame_gtin_fault()
+        public windowGtinFault()
         {
             InitializeComponent();
             DataContext = this;
@@ -77,7 +77,7 @@ namespace SortingStantion.frame_gtin_fault
         /// </summary>
         /// <param name="gtin"></param>
         /// <param name="barcode"></param>
-        public frame_gtin_fault(string gtin, string barcode)
+        public windowGtinFault(string gtin, string barcode)
         {
             InitializeComponent();
 

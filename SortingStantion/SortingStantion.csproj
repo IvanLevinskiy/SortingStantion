@@ -138,8 +138,8 @@
     <Compile Include="TOOL_WINDOWS\WindowUSPFault\WindowUSPFault.xaml.cs">
       <DependentUpon>WindowUSPFault.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FRAMES\frame_gtin_fault\frame_gtin_fault.xaml.cs">
-      <DependentUpon>frame_gtin_fault.xaml</DependentUpon>
+    <Compile Include="TOOL_WINDOWS\windowGtinFault\windowGtinFault.xaml.cs">
+      <DependentUpon>windowGtinFault.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\AlarmLogging.cs" />
     <Compile Include="Models\AlarmsEngine.cs" />
@@ -241,7 +241,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FRAMES\frame_gtin_fault\frame_gtin_fault.xaml">
+    <Page Include="TOOL_WINDOWS\windowGtinFault\windowGtinFault.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

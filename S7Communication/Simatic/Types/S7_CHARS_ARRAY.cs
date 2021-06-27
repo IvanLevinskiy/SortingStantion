@@ -100,14 +100,9 @@ namespace S7Communication
             List<byte> bytes_array = new List<byte>();
 
             //Переносим данные из списка в массив
-            for (int i = offset + 2; i < offset + Lenght + 2; i++)
+            for (int i = offset; i < offset + Lenght; i++)
             {
-                if (bytes.Length < 1)
-                {
-                    return;
-                }
-
-                bytes_array.Add(bytes[0]);
+                bytes_array.Add(bytes[i]);
             }
 
             //Получаем строку из байтов
@@ -165,13 +160,8 @@ namespace S7Communication
                 btslist.Add(b);
             }
 
-            //Вставляем длину строки
-            btslist.Insert(0, (byte)btslist.Count);
-
-            bool result = true;
-
             //Записываем значения в ПЛК
-            this.device.WriteBytes(DataType, DBNumber, StartByteAddress + 1, btslist.ToArray());
+            bool result = this.device.WriteBytes(DataType, DBNumber, StartByteAddress, btslist.ToArray());
 
             return result;
         }

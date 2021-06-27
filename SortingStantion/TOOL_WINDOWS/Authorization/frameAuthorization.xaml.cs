@@ -93,6 +93,8 @@ namespace SortingStantion.UserAdmin
             ShutdownTimer.Tick += ShutdownTimer_Tick;
             ShutdownTimer.Start();
 
+            this.Owner = DataBridge.MainScreen;
+
             //Выражение, вызываемое при закрытии
             //данного экземпляра окна
             this.Closing += (e, s) =>

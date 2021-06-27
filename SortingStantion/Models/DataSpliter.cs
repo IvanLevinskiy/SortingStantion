@@ -9,6 +9,15 @@ namespace SortingStantion.Models
     public class DataSpliter
     {
         /// <summary>
+        /// Исхоный штрихкод
+        /// </summary>
+        public string SourseData
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Флаг, указывающий на валидность
         /// принятых данных
         /// </summary>
@@ -49,6 +58,10 @@ namespace SortingStantion.Models
             //Получение полей из 
             //файла конфигурации
             GetDataFieldList();
+
+            //Инициализация свойств
+            GTIN = string.Empty;
+            SerialNumber = string.Empty;
         }
 
         /// <summary>
@@ -88,6 +101,8 @@ namespace SortingStantion.Models
             return string.Empty;
         }
 
+
+
         /// <summary>
         /// Метод для разделения входящей
         /// строки по полям
@@ -95,6 +110,8 @@ namespace SortingStantion.Models
         /// <param name="data"></param>
         public void Split(ref string data)
         {
+            SourseData = data;
+
             //Установка по умолчанию валидности в true
             IsValid = true;
 
@@ -102,6 +119,13 @@ namespace SortingStantion.Models
             foreach (var field in fields)
             {
                 IsValid &= field.Check(ref data);
+            }
+
+            //Получение полей
+            if (IsValid == true)
+            {
+                GTIN = GetGTIN();
+                SerialNumber = GetSerialNumber();
             }
         }
 

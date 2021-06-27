@@ -60,7 +60,7 @@
                 Background="{StaticResource LightColor}"
                 Foreground="{StaticResource TextColor}"
                 FontSize="{StaticResource fontSizeData}"
-                Content="Добавить"
+                Content="Добавить" Click="btnAddBoxClick"
             />
 
 

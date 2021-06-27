@@ -76,11 +76,17 @@ namespace SortingStantion.Models
         /// <returns></returns>
         public bool Check(ref string data)
         {
-            //Инициализация строки, в которой будет зранится результат
+
+            //Инициализация строки, в которой будет хранится результат
             Data = string.Empty;
 
+            //Инициализация строки-символа
+            //который необходимо удалить из данных 
+            string rs = string.Empty;
+            rs += '\u001d';
+
             //Строка данных в верхнем регистре
-            var DataUp = data.ToUpper();
+            var DataUp = data.ToUpper().Replace(rs, "");
 
             //Префикс в верхнем регистре
             var PreficksUp = Preficks.ToUpper();
@@ -91,7 +97,7 @@ namespace SortingStantion.Models
 
             //Если первые символы не префикс, возвращаем false
             if (ispreficks == false)
-            { 
+            {
                 return false;
             }
 
@@ -105,6 +111,7 @@ namespace SortingStantion.Models
                 data = data.Remove(0, 1);
             }
 
+            //Возврат положительного результата
             return true;
         }
 

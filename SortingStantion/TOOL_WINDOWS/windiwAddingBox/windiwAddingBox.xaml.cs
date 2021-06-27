@@ -90,13 +90,102 @@ namespace SortingStantion.windiwAddingBox
             var inputdata = datastring;
             DataBridge.DataSpliter.Split(ref inputdata);
 
-            //Добавление номера продукта в буфер текущего окна
+            Action action;
+            string message;
+
+            /*
+                НЕВЕРНЫЙ КОД (НЕ СОВПАДАЕТ СТРУКТУРА КОДА) 
+            */
+            if (DataBridge.DataSpliter.IsValid == false)
+            {
+                //Формирование сообщения
+                message = $"Код: {DataBridge.DataSpliter.SourseData} не распознан";
+
+                //Вывод информации в зоне информации
+                action = () =>
+                {
+                    var msgitem = new UserMessage(message, MSGTYPE.INFO);
+                    DataBridge.MSGBOX.Add(msgitem);
+                };
+                DataBridge.UIDispatcher.Invoke(action);
+                
+                //Выход
+                return;
+            }
+
+            /*
+                НЕВЕРНЫЙ GTIN 
+            */
+            if (DataBridge.DataSpliter.GTIN != DataBridge.WorkAssignmentEngine.GTIN)
+            {
+                //Формирование сообщения
+                message = $"Посторонний продукт не может быть добавлен в результат.";
+
+                //Вывод информации в зоне информации
+                action = () =>
+                {
+                    var msgitem = new UserMessage(message, MSGTYPE.INFO);
+                    DataBridge.MSGBOX.Add(msgitem);
+                };
+                DataBridge.UIDispatcher.Invoke(action);
+
+                //Выход
+                return;
+            }
+
+            /*
+                ПРОДУКТ УЖЕ СОДЕРЖИТСЯ В РЕЗУЛЬТАТЕ
+            */
+            var asAResult = DataBridge.Report.AsAResult(DataBridge.DataSpliter.SerialNumber);
+            if (asAResult == true)
+            {
+                //Формирование сообщения
+                message = $"Продукт «{DataBridge.DataSpliter.SerialNumber}» уже есть в результате.";
+
+                //Вывод информации в зоне информации
+                action = () =>
+                {
+                    var msgitem = new UserMessage(message, MSGTYPE.INFO);
+                    DataBridge.MSGBOX.Add(msgitem);
+                };
+                DataBridge.UIDispatcher.Invoke(action);
+
+                //Выход
+                return;
+            }
+
+
+            /*
+              Добавление номера продукта в буфер текущего окна
+            */
             CurrentSerialNumber = DataBridge.DataSpliter.GetSerialNumber();
             CurrentGTIN = DataBridge.DataSpliter.GetGTIN();
             DataBridge.Report.AddBox(CurrentSerialNumber);
 
             //Выводим сообщение в зоне иноформации
-            string message = $"Считан продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber}";
+            message = $"Считан продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber}";
+
+            action = () =>
+            {
+                var msgitem = new UserMessage(message, MSGTYPE.INFO);
+                DataBridge.MSGBOX.Add(msgitem);
+            };
+            DataBridge.UIDispatcher.Invoke(action);
+
+        }
+
+        /// <summary>
+        /// Метод, вызываемый при нажатии кнопки ДОБАВИТЬ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAddBoxClick(object sender, RoutedEventArgs e)
+        {
+            //Добавление кода в результа
+            DataBridge.Report.AddBox(CurrentSerialNumber);
+
+            //Выводим сообщение в зоне иноформации
+            var message = $"Считан продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber}";
 
             Action action = () =>
             {
@@ -105,6 +194,9 @@ namespace SortingStantion.windiwAddingBox
             };
             DataBridge.UIDispatcher.Invoke(action);
 
+            //Стирание кода из буфера для того, чтоб
+            //заблокировать кнопку Добавить
+            CurrentSerialNumber = string.Empty;
         }
 
         /// <summary>
@@ -140,5 +232,7 @@ namespace SortingStantion.windiwAddingBox
 
             return 60;
         }
+
+
     }
 }

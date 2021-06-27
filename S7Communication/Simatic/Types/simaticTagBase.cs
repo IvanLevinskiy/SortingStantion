@@ -110,8 +110,6 @@ namespace S7Communication
                 //Проверка на нулевой указатель
                 if (status == null)
                 {
-                    //status = value;
-                    //UpdatedValue(value);
                     return;
                 }
 
@@ -130,7 +128,10 @@ namespace S7Communication
 
 
                     OnPropertyChanged("Status");
-                }  
+                }
+
+                //Сообщение об обновлениимодели
+                DataUpdated?.Invoke(value);
             }
         }
         object status = 0;
@@ -140,6 +141,12 @@ namespace S7Communication
         /// изменении значения переменной
         /// </summary>
         public event Action<object, object> ChangeValue;
+
+        /// <summary>
+        /// Событие, герерируемое при обновлении значения
+        /// перменной
+        /// </summary>
+        public event Action<object> DataUpdated;
 
         /// <summary>
         /// Свойство для MVVM

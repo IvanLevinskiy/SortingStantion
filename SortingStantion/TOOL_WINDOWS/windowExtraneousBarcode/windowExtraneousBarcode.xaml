@@ -7,7 +7,7 @@
          AllowsTransparency="True" 
         Style="{StaticResource VS2012WindowStyle}"
         WindowStartupLocation="CenterOwner" 
-        Width="700" Height="400"
+        Width="700" Height="300"
         Title="Посторонний продукт"
         Background="#FF323232">
     <Border BorderBrush="#FF1E1E1E"

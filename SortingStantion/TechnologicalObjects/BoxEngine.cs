@@ -1,6 +1,8 @@
 ﻿using S7Communication;
-using SortingStantion.S7Extension;
+using SortingStantion.Controls;
+using SortingStantion.Models;
 using System;
+using System.Windows.Media;
 
 namespace SortingStantion.TechnologicalObjects
 {
@@ -81,6 +83,12 @@ namespace SortingStantion.TechnologicalObjects
         S7_CHARS_ARRAY SCAN_DATA;
 
         /// <summary>
+        /// Объект, осуществляющий разбор телеграммы
+        /// сканированного штрихкода
+        /// </summary>
+        DataSpliter spliter = new DataSpliter();
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public BoxEngine()
@@ -95,11 +103,21 @@ namespace SortingStantion.TechnologicalObjects
             GTIN_TASK = (S7_STRING)device.GetTagByAddress("DB1.DBD226-STR40");
 
             //Данные из сканера
-            SCAN_DATA = (S7_CHARS_ARRAY)device.GetTagByAddress("QB0-CHARS64");
+            SCAN_DATA = (S7_CHARS_ARRAY)device.GetTagByAddress("DB9.DBD14-CHARS100");
+            //SCAN_DATA.Write("010460123456789521F&8h3W93h(0F");
 
             //Подписываемся на событие по изминению
-            //тэга GOODREAD и NOREAD
-            //GOODREAD.ChangeValue += BARCODESCANER_CHANGEVALUE;
+            //тэга GOODREAD и NOREAD  и осуществляем вызов
+            //метода в потоке UI
+            GOODREAD.ChangeValue += (ov, nv) =>
+            {
+                Action action = () =>
+                {
+                    BARCODESCANER_CHANGEVALUE(ov, nv);
+                };
+                DataBridge.MainScreen.Dispatcher.Invoke(action);
+            };
+            
             //NOREAD.ChangeValue += BARCODESCANER_CHANGEVALUE;
         }
 
@@ -117,33 +135,115 @@ namespace SortingStantion.TechnologicalObjects
                 return;
             }
 
-            //Проверяем совпадение GTIN
-            var scaner_gtin = GTIN.StatusText;
-            var task_gtin = GTIN_TASK.StatusText;
-
-            var scaner_barcode = SERIALNUMBER.StatusText;
-            var task_barcode = "barcode";
-
-            //Если GTIN из сканера и задачи
-            //не совпадают - сетим ошибку
-            if (scaner_gtin != task_gtin)
-            {
-                DataBridge.AlarmsEngine.al_1.Write(true);
-            }
-            else
-            {
-                //Добавляем просканированное изделие
-                //в коллекцию изделий результата
-                DataBridge.Report.AddBox(scaner_barcode);
-
-                //Взвод флага для перемещения изделия
-                //в колекцию коробов между сканером и отбраковщиком
-                TRANSFER_CMD.Write(true);
-            }
-
             //Стираем GOODREAD и NOREAD
+            //для того, чтоб процедура отработала один раз
             GOODREAD.Write(false);
             NOREAD.Write(false);
+
+            //Получение GTIN из задания
+            var task_gtin = DataBridge.WorkAssignmentEngine.GTIN;
+
+            //Разбор телеграммы из ПЛК
+            var data = SCAN_DATA.StatusText;
+            spliter.Split(ref data);
+
+            //Получение GTIN и SerialNumber из разобранного
+            //штрихкода, полученного из ПЛК
+            var scaner_serialnumber = spliter.SerialNumber;
+            var scaner_gtin = spliter.GTIN;
+
+            /*
+                Если сигнатура задачи не совпадает
+                с той, что указана в задании
+            */
+            if (spliter.IsValid == false)
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage($"От автоматического сканера получен посторонний код: {spliter.SourseData}  (код не является СИ)", MessageType.Alarm);
+
+                //Вывод сообщения в зоне информации
+                string message = $"Посторонний код (код не является СИ)";
+                var brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                var msg = new UserMessage(message, brush);
+                DataBridge.MSGBOX.Add(msg);
+
+                //Вызов окна
+                SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode windowExtraneousBarcode = new SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode();
+                windowExtraneousBarcode.ShowDialog();
+
+                //Выход из метода
+                return;
+            }
+
+            /*
+                Если GTIN из сканера и задачи
+                не совпадают - формируем ошибку
+            */
+            if (scaner_gtin != task_gtin)
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Посторонний продукт (GTIN не совпадает с заданием)", MessageType.Alarm);
+
+                //Вывод сообщения в зоне информации
+                string message = $"Посторонний продукт (GTIN не совпадает с заданием)";
+                var brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                var msg = new UserMessage(message, brush);
+                DataBridge.MSGBOX.Add(msg);
+
+                //Вызов окна
+                SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode windowExtraneousBarcode = new SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode();
+                windowExtraneousBarcode.ShowDialog();
+
+                //Выход из метода
+                return;
+            }
+
+            /*
+                Если продукт числится в браке
+            */
+            if (DataBridge.Report.IsDeffect(scaner_serialnumber) == true)
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage($"Номер продукта {scaner_serialnumber} числится в браке", MessageType.Alarm);
+
+                //Вывод сообщения в окно информации
+                string message = $"Номер продукта {scaner_serialnumber} числится в браке";
+                var msg = new UserMessage(message, MSGTYPE.ERROR);
+                DataBridge.MSGBOX.Add(msg);
+
+                //Вызов окна
+                //SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode windowExtraneousBarcode = new SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode();
+                //windowExtraneousBarcode.ShowDialog();
+
+                //Выход из метода
+                return;
+            }
+
+            /*
+                Если проверка прошла успешно добавляем 
+                продукт в результат
+            */
+
+            //Добавляем просканированное изделие
+            //в коллекцию изделий результата
+            DataBridge.Report.AddBox(scaner_serialnumber);
+
+            //Запись текущих GTIN и SerialNumber в ПЛК
+            GTIN.Write(scaner_gtin);
+            SERIALNUMBER.Write(scaner_serialnumber);
+
+            //Взвод флага для перемещения изделия
+            //в колекцию коробов между сканером и отбраковщиком
+            TRANSFER_CMD.Write(true);
         }
     }
 }

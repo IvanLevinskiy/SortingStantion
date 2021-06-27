@@ -1,6 +1,8 @@
-﻿using SortingStantion.Models;
+﻿using SortingStantion.Controls;
+using SortingStantion.Models;
 using System;
 using System.IO.Ports;
+using System.Threading;
 
 namespace SortingStantion.TechnologicalObjects
 {
@@ -35,7 +37,11 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         public Scaner()
         {
+            //Загрузка настроек из файла настроек
             Load();
+            
+            //Запуск порта
+            Start();
         }
 
         /// <summary>
@@ -58,6 +64,7 @@ namespace SortingStantion.TechnologicalObjects
             port.DataBits = int.Parse(sf.GetValue("SerialPort232DataBits"));
             port.Parity = ToParity(sf.GetValue("SerialPort232StopBits"));
             port.StopBits = ToStopBits(sf.GetValue("SerialPort232StopBits"));
+            port.ReadTimeout = 1000;
         }
 
         /// <summary>
@@ -129,8 +136,10 @@ namespace SortingStantion.TechnologicalObjects
                 port.DataReceived += Port_DataReceived;
             }
             catch(Exception ex)
-            { 
-            
+            {
+                customMessageBox msg = new customMessageBox("Ошибка инициализации ручного сканера", $"При инициализации последовательного порта, к которому подключен ручной сканер возникло исключение:" +
+                                                            $"{ex.Message}. Ручной сканер работать не будет");
+                msg.Show();
             }
         }
 
@@ -142,11 +151,39 @@ namespace SortingStantion.TechnologicalObjects
         /// <param name="e"></param>
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            //Чтение данных из строки
-            var data = port.ReadLine();
+            //Отписка от события по приему данных 
+            //из SerialPort
+            port.DataReceived -= Port_DataReceived;
 
-            //Уведомление подписчиков о новых данных
-            NewDataNotification?.Invoke(data);
+            //Технологическая пауза
+            Thread.Sleep(10);
+
+            //Буфер для чтения данных их последовательноо порта
+            byte[] buffer = new byte[512];
+
+            //Чтение данных из последовательного порта
+            var lenght = port.Read(buffer, 0, buffer.Length);
+
+            //Инициализация строки для формирования результата сканирования
+            string data = string.Empty;
+
+            //Построение строки
+            for (int i = 0; i < lenght; i++)
+            {
+                data += (char)buffer[i];
+            }
+
+            //Уведомление подписчиков из потока UI
+            Action action = () =>
+            {
+                //Уведомление подписчиков о новых данных
+                NewDataNotification?.Invoke(data);
+            };
+            DataBridge.MainScreen.Dispatcher.Invoke(action);
+
+            //Подписка на событие по приему данных 
+            //из SerialPort
+            port.DataReceived += Port_DataReceived;
         }
 
         /// <summary>

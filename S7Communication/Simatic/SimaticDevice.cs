@@ -612,9 +612,14 @@ namespace S7Communication
                 ByteArray byteArray = new ByteArray(31);
                 byteArray.Add(this.ReadHeaderPackage(1));
                 byteArray.Add(this.CreateReadDataRequestPackage(dataType, db, startByteAdr, count));
-                this._mSocket.Send(byteArray.array, byteArray.array.Length, SocketFlags.None);
+
                 byte[] array2 = new byte[512];
-                var lenght = this._mSocket.Receive(array2, 512, SocketFlags.None);
+
+                lock (_mSocket)
+                {
+                    this._mSocket.Send(byteArray.array, byteArray.array.Length, SocketFlags.None);
+                    var lenght = this._mSocket.Receive(array2, 512, SocketFlags.None);
+                }
                 
                 //Неверное количество байт
                 if (array2[21] != 255)
@@ -634,12 +639,12 @@ namespace S7Communication
             catch (SocketException ex)
             {
                 DisconnectCounter++;
-                result = null;
+                return null;
             }
             catch (Exception ex2)
             {
                 DisconnectCounter++;
-                result = null;
+                return null;
             }
 
             //В случае удачной попытки соединения
@@ -666,7 +671,11 @@ namespace S7Communication
             //указатель
             if (_mSocket == null)
             {
-                return false;
+                //Открываем сессию с ПЛК
+                if (this.Open() == false)
+                {
+                    return false;
+                }
             }
 
             byte[] array = new byte[513];
@@ -715,8 +724,13 @@ namespace S7Communication
                 byteArray.Add(Word.ToByteArray((ushort)(num * 8)));
                 byteArray.Add(value);
 
-                this._mSocket.Send(byteArray.array, byteArray.array.Length, SocketFlags.None);
-                this._mSocket.Receive(array, 512, SocketFlags.None);
+
+                lock (_mSocket)
+                {
+                    this._mSocket.Send(byteArray.array, byteArray.array.Length, SocketFlags.None);
+                    this._mSocket.Receive(array, 512, SocketFlags.None);
+                }
+                
                 if (array[21] != 255)
                 {
                     throw new Exception();
@@ -896,9 +910,9 @@ namespace S7Communication
             //операций перед запуском сервера
             PreparingForStartup();
 
-            //Если связь с контроллером не открыта
-            //пытаемся подключиться (переподключиться)
-            M1: if (Open() == false)
+        //Если связь с контроллером не открыта
+        //пытаемся подключиться (переподключиться)
+        M1: if (Open() == false)
             {
                 IsAvailable = false;
                 Thread.Sleep(1000);
@@ -908,12 +922,10 @@ namespace S7Communication
             IsAvailable = true;
             ReconnectRequest = false;
 
-            //Prepare();
-
             while (true)
             {
-                lock (_mSocket)
-                {
+                //lock (_mSocket)
+                //{
                     //Если имеется запрос на переподключение
                     //пытаемся переподключиться
                     if (ReconnectRequest == true)
@@ -924,14 +936,14 @@ namespace S7Communication
                     }
 
                     IsAvailable = true;
-                    Processing();
+                    Processing();  
+                //}
 
-                    Thread.Sleep(server.Timeout);
+                //Извещение подписчиков,
+                //что данные обновлены
+                DataUpdated?.Invoke();
 
-                    //Извещение подписчиков,
-                    //что данные обновлены
-                    DataUpdated?.Invoke();
-                }
+                Thread.Sleep(server.Timeout);
             }
 
             //Закрытие порта
