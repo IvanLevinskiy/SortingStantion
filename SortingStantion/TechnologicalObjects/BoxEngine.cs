@@ -3,6 +3,10 @@ using SortingStantion.Controls;
 using SortingStantion.Models;
 using System;
 using System.Windows.Media;
+using SortingStantion.TOOL_WINDOWS.windowGtinFault;
+using SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode;
+using SortingStantion.TOOL_WINDOWS.windowProductIsDeffect;
+using SortingStantion.TOOL_WINDOWS.windowRepeatProduct;
 
 namespace SortingStantion.TechnologicalObjects
 {
@@ -83,6 +87,11 @@ namespace SortingStantion.TechnologicalObjects
         S7_CHARS_ARRAY SCAN_DATA;
 
         /// <summary>
+        /// Тэг - разрешить повтор кода продукта
+        /// </summary>
+        S7BOOL REPEAT_ENABLE;
+
+        /// <summary>
         /// Объект, осуществляющий разбор телеграммы
         /// сканированного штрихкода
         /// </summary>
@@ -98,13 +107,15 @@ namespace SortingStantion.TechnologicalObjects
             NOREAD   = (S7BOOL)device.GetTagByAddress("DB1.DBX414.1");
             TRANSFER_CMD = (S7BOOL)device.GetTagByAddress("DB1.DBX414.2");
 
+            REPEAT_ENABLE = (S7BOOL)device.GetTagByAddress("DB1.DBX168.0");
+
             GTIN = (S7_STRING)device.GetTagByAddress("DB1.DBD416-STR14");
             SERIALNUMBER = (S7_STRING)device.GetTagByAddress("DB1.DBD432-STR6");
             GTIN_TASK = (S7_STRING)device.GetTagByAddress("DB1.DBD226-STR40");
 
             //Данные из сканера
             SCAN_DATA = (S7_CHARS_ARRAY)device.GetTagByAddress("DB9.DBD14-CHARS100");
-            //SCAN_DATA.Write("010460123456789521F&8h3W93h(0F");
+            SCAN_DATA.Write("010460456789012621F&8h3W93h(0F");
 
             //Подписываемся на событие по изминению
             //тэга GOODREAD и NOREAD  и осуществляем вызов
@@ -117,8 +128,6 @@ namespace SortingStantion.TechnologicalObjects
                 };
                 DataBridge.MainScreen.Dispatcher.Invoke(action);
             };
-            
-            //NOREAD.ChangeValue += BARCODESCANER_CHANGEVALUE;
         }
 
         /// <summary>
@@ -171,7 +180,7 @@ namespace SortingStantion.TechnologicalObjects
                 DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна
-                SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode windowExtraneousBarcode = new SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode();
+                var windowExtraneousBarcode = new windowExtraneousBarcode(msg);
                 windowExtraneousBarcode.ShowDialog();
 
                 //Выход из метода
@@ -197,7 +206,7 @@ namespace SortingStantion.TechnologicalObjects
                 DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна
-                SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode windowExtraneousBarcode = new SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode();
+                var windowExtraneousBarcode = new windowGtinFault(scaner_gtin, scaner_serialnumber, msg);
                 windowExtraneousBarcode.ShowDialog();
 
                 //Выход из метода
@@ -217,16 +226,46 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Вывод сообщения в окно информации
                 string message = $"Номер продукта {scaner_serialnumber} числится в браке";
-                var msg = new UserMessage(message, MSGTYPE.ERROR);
+                var brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                var msg = new UserMessage(message, brush);
                 DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна
-                //SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode windowExtraneousBarcode = new SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode();
-                //windowExtraneousBarcode.ShowDialog();
+                var windowProductIsDeffect = new windowProductIsDeffect(scaner_serialnumber, msg);
+                windowProductIsDeffect.ShowDialog();
 
                 //Выход из метода
                 return;
             }
+
+
+            /*
+                Повтор кода
+            */
+            var RepeatEnable = (bool)REPEAT_ENABLE.Status;
+            var IsRepeat = DataBridge.Report.IsRepeat(scaner_serialnumber);
+            if (RepeatEnable == false && IsRepeat == true)
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage($"Продукт GTIN {scaner_gtin} номер {scaner_serialnumber} считан повторно", MessageType.Alarm);
+
+                //Вывод сообщения в окно информации
+                string message = $"Продукт GTIN {scaner_gtin} номер {scaner_serialnumber} считан повторно";
+                var brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                var msg = new UserMessage(message, brush);
+                DataBridge.MSGBOX.Add(msg);
+
+                //Вызов окна
+                var windowRepeatProduct = new windowRepeatProduct(scaner_gtin, scaner_serialnumber, msg);
+                windowRepeatProduct.ShowDialog();
+
+                //Выход из метода
+                return;
+            }
+
 
             /*
                 Если проверка прошла успешно добавляем 

@@ -2,13 +2,14 @@
 using SortingStantion.Controls;
 using System.Windows;
 
-namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
+namespace SortingStantion.TOOL_WINDOWS.windowProductIsDeffect
 {
     /// <summary>
-    /// Логика взаимодействия для frame_gtin_fault.xaml
+    /// Логика взаимодействия для windowProductIsDeffect.xaml
     /// </summary>
-    public partial class windowGtinFault : Window
+    public partial class windowProductIsDeffect : Window
     {
+       
         /// <summary>
         /// Указательн на сообщение
         /// в зоне информации, которое надо удалить
@@ -16,9 +17,10 @@ namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
         UserMessage userMessage;
 
         /// <summary>
-        /// Конструктор
+        /// Конструктор класса
         /// </summary>
-        public windowGtinFault(string GTIN, string serialNumber, UserMessage userMessage)
+        /// <param name="serialnumberdeffect"></param>
+        public windowProductIsDeffect(string serialnumberdeffect, UserMessage userMessage)
         {
             //Инициализация UI
             InitializeComponent();
@@ -32,12 +34,11 @@ namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
             this.Owner = DataBridge.MainScreen;
 
             //Формирование правиьного сообщения
-            txMessage.Text = $"     Считан посторонний продукт GTIN {GTIN} номер {serialNumber}. Найдите его ручным сканером и удалите с конвейера.";
+            txMessage.Text = $"     Продукт {serialnumberdeffect} числится в браке. Найдите его ручным сканером и удалите с конвейера.";
 
             //Подписка на события
             this.Closing += Window_Closing;
         }
-
 
         /// <summary>
         /// Метод, вызываемый при клике по кнопке - ОТМЕНА

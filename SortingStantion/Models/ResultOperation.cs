@@ -169,14 +169,7 @@ namespace SortingStantion.Models
         /// </summary>
         public void AddBox(string serialnumber)
         {
-            //Проверка на то, что код продукта
-            //в списке брака
-            if (IsDeffect(serialnumber) == true)
-            {
-                //Здесь надо вызывать окно
-                //DataBridge.AlarmsEngine.al_3.Write(true);
-                return;
-            }
+            Codes.Add(serialnumber);
         }
 
         /// <summary>

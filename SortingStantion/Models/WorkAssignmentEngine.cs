@@ -235,7 +235,7 @@ namespace SortingStantion.Models
         {
             get
             {
-                return lot_No;
+                return gtin;
             }
             set
             {
