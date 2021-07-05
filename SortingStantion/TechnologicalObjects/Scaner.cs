@@ -3,6 +3,7 @@ using SortingStantion.Models;
 using System;
 using System.ComponentModel;
 using System.IO.Ports;
+using System.Text;
 using System.Threading;
 
 namespace SortingStantion.TechnologicalObjects
@@ -220,13 +221,15 @@ namespace SortingStantion.TechnologicalObjects
             var lenght = port.Read(buffer, 0, buffer.Length);
 
             //Инициализация строки для формирования результата сканирования
-            string data = string.Empty;
+            string data = Encoding.ASCII.GetString(buffer); // string.Empty;
 
             //Построение строки
+            /**
             for (int i = 0; i < lenght; i++)
             {
                 data += (char)buffer[i];
             }
+            **/
 
             //Уведомление подписчиков из потока UI
             Action action = () =>

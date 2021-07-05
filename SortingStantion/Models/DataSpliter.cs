@@ -110,10 +110,25 @@ namespace SortingStantion.Models
         /// <param name="data"></param>
         public void Split(ref string data)
         {
+            //"\u0002010460456789012621vFvoJl\u001d93Pzx9\r\n"
+
+            //Удаление лишних символов
+            data = data.Replace("\u0002", "");
+            data = data.Replace("\u001d", "");
+            data = data.Replace("\r\n", "");
+
             SourseData = data;
 
             //Установка по умолчанию валидности в true
             IsValid = true;
+
+            //Если есть префикс <FNC1>
+            if (data.Contains("<FNC1>") == true)
+            {
+                var modify_str = data.Replace("<FNC1>", "\n");
+                modify_str = modify_str.Split('\n')[1];
+                data = modify_str;
+            }
 
             //Проверка всех полей и разделение данных
             foreach (var field in fields)
