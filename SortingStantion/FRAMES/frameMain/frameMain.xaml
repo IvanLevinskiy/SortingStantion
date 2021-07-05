@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SortingStantion.frameMain"
              xmlns:controls="clr-namespace:SortingStantion.Controls"
+             xmlns:converters="clr-namespace:SortingStantion.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="1024">
     <Grid Background="#FF262626">
@@ -499,7 +500,7 @@
 
                 <Grid HorizontalAlignment="Left"
                       Margin="20,0,0,0">
-                    <ContentPresenter Content="{StaticResource IconOk}"/>
+                    <ContentPresenter Content="{converters:SwitchBinding Scaner.IsAvailable, {StaticResource IconOk}, {StaticResource IconError}}"/>
                 </Grid>
 
                 <TextBlock Text="СКАНЕР"

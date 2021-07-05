@@ -22,6 +22,14 @@ namespace SortingStantion.MainScreen
             set;
         }
 
+        public Scaner Scaner
+        {
+            get
+            {
+                return DataBridge.Scaner;
+            }
+        }
+
         /// <summary>
         /// Текущий пользователь
         /// </summary>

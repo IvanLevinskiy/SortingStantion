@@ -135,7 +135,6 @@ namespace SortingStantion.Models
         {
             //Локальные переменные для вывода сообщения
             //в зоне информации
-            SolidColorBrush brush;
             UserMessage messageItem;
 
             foreach (var user in Users)
@@ -156,8 +155,7 @@ namespace SortingStantion.Models
                     //пишем
                     if (currentUser == user && RepeatIgnore == false)
                     {
-                        brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-                        messageItem = new Controls.UserMessage("Пользователь уже авторизован", brush);
+                        messageItem = new Controls.UserMessage("Пользователь уже авторизован", DataBridge.myRed);
                         DataBridge.MSGBOX.Add(messageItem);
 
                         return false;
@@ -173,8 +171,7 @@ namespace SortingStantion.Models
                     DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.ChangeUser);
 
                     //Выводим сообщение об успешной авторизации
-                    brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-                    messageItem = new Controls.UserMessage(message, MSGTYPE.INFO);
+                    messageItem = new Controls.UserMessage(message, DataBridge.myGreen);
                     DataBridge.MSGBOX.Add(messageItem);
 
                     return true;
@@ -182,8 +179,7 @@ namespace SortingStantion.Models
             }
 
             //Выводим сообщение, что при ошибке возникла ошибка авторизации
-            brush =  new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-            messageItem = new Controls.UserMessage("Ошибка авторизации", brush);
+            messageItem = new Controls.UserMessage("Ошибка авторизации", DataBridge.myRed);
             DataBridge.MSGBOX.Add(messageItem);
 
             return false;

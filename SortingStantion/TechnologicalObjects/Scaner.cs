@@ -1,14 +1,33 @@
 ﻿using SortingStantion.Controls;
 using SortingStantion.Models;
 using System;
+using System.ComponentModel;
 using System.IO.Ports;
 using System.Threading;
 
 namespace SortingStantion.TechnologicalObjects
 {
 
-    public class Scaner
+    public class Scaner : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Флаг, указывающий на то, что
+        /// сканер доступен
+        /// </summary>
+        bool isAvailable = false;
+        public bool IsAvailable
+        {
+            get 
+            {
+                return isAvailable;
+            }
+            set
+            {
+                isAvailable = value;
+                OnPropertyChanged("IsAvailable");
+            }
+        }
+
         /// <summary>
         /// Глобальный файл настроек
         /// </summary>
@@ -60,6 +79,30 @@ namespace SortingStantion.TechnologicalObjects
             //подключен сканер
             port = new SerialPort();
             port.PortName = sf.GetValue("SerialPort232Name");
+            port.BaudRate = int.Parse(sf.GetValue("SerialPort232BaudRate"));
+            port.DataBits = int.Parse(sf.GetValue("SerialPort232DataBits"));
+            port.Parity = ToParity(sf.GetValue("SerialPort232StopBits"));
+            port.StopBits = ToStopBits(sf.GetValue("SerialPort232StopBits"));
+            port.ReadTimeout = 1000;
+        }
+
+        /// <summary>
+        /// Метод для загрузки настроек 
+        /// порта
+        /// </summary>
+        /// <param name="portname"></param>
+        public void Load(string portname)
+        {
+            //Если порт был открыт - закрываем его
+            if (port != null)
+            {
+                port.Close();
+            }
+
+            //Инициализация порта, к которому
+            //подключен сканер
+            port = new SerialPort();
+            port.PortName = portname;
             port.BaudRate = int.Parse(sf.GetValue("SerialPort232BaudRate"));
             port.DataBits = int.Parse(sf.GetValue("SerialPort232DataBits"));
             port.Parity = ToParity(sf.GetValue("SerialPort232StopBits"));
@@ -132,13 +175,25 @@ namespace SortingStantion.TechnologicalObjects
         {
             try
             {
+                //Открываем порт
                 port.Open();
+
+                //Подписываемся на прием сообщения из последовательного порта
                 port.DataReceived += Port_DataReceived;
+
+                //Указываем, что сканер недоступен
+                IsAvailable = true;
             }
             catch(Exception ex)
             {
+                //Выводим сообщение от ошибке
                 customMessageBox msg = new customMessageBox("Ошибка инициализации ручного сканера", $"При инициализации последовательного порта, к которому подключен ручной сканер возникло исключение:" +
                                                             $"{ex.Message}. Ручной сканер работать не будет");
+                
+                //Указываем, что сканер недоступен
+                IsAvailable = false;
+
+                //Показываем сообщение
                 msg.Show();
             }
         }
@@ -191,7 +246,30 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         public void Stop()
         {
+            //Если порт не инициализирован,
+            //выходим
+            if (port == null)
+            {
+                return;
+            }
+            
+            // Отписка от события по приему данных
+            //из SerialPort
+            port.DataReceived -= Port_DataReceived;
+
+            //Закрытие порта
+            port.Close();
 
         }
+
+
+        #region РЕАЛИЗАЦИЯ ИНТЕРФЕЙСА INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+        #endregion
+
     }
 }

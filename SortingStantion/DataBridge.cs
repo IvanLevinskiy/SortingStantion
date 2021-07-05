@@ -2,6 +2,7 @@
 using SortingStantion.Models;
 using SortingStantion.TechnologicalObjects;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace SortingStantion
@@ -11,6 +12,21 @@ namespace SortingStantion
     /// </summary>
     public class DataBridge
     {
+        /// <summary>
+        /// Красный цвет
+        /// </summary>
+        public static SolidColorBrush myRed = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+
+        /// <summary>
+        /// Зеленый цвет
+        /// </summary>
+        public static SolidColorBrush myGreen = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+
+        /// <summary>
+        /// Синий цвет
+        /// </summary>
+        public static SolidColorBrush myBlue = new SolidColorBrush();
+
         /// <summary>
         /// Dispatcher GUI
         /// </summary>

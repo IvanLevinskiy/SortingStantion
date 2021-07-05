@@ -175,8 +175,7 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Вывод сообщения в зоне информации
                 string message = $"Посторонний код (код не является СИ)";
-                var brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-                var msg = new UserMessage(message, brush);
+                var msg = new UserMessage(message, DataBridge.myRed);
                 DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна
@@ -201,8 +200,7 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Вывод сообщения в зоне информации
                 string message = $"Посторонний продукт (GTIN не совпадает с заданием)";
-                var brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-                var msg = new UserMessage(message, brush);
+                var msg = new UserMessage(message, DataBridge.myRed);
                 DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна
@@ -226,8 +224,7 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Вывод сообщения в окно информации
                 string message = $"Номер продукта {scaner_serialnumber} числится в браке";
-                var brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-                var msg = new UserMessage(message, brush);
+                var msg = new UserMessage(message, DataBridge.myRed);
                 DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна
@@ -254,8 +251,7 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Вывод сообщения в окно информации
                 string message = $"Продукт GTIN {scaner_gtin} номер {scaner_serialnumber} считан повторно";
-                var brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-                var msg = new UserMessage(message, brush);
+                var msg = new UserMessage(message, DataBridge.myRed);
                 DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна

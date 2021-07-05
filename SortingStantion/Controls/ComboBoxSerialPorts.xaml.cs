@@ -60,8 +60,13 @@ namespace SortingStantion.Controls
                 return;
             }
 
+            //Сохранение новой настройки в файл конфигурации
             var newvalue = combobox.SelectedItem.ToString();
             setting.SetValue(newvalue);
+
+            //Смена имени порта, к которому подключен
+            //ручной сканер
+            DataBridge.Scaner.Load(newvalue);
         }
     }
 }
