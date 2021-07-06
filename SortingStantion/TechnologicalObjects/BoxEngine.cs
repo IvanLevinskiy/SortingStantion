@@ -92,6 +92,13 @@ namespace SortingStantion.TechnologicalObjects
         S7BOOL REPEAT_ENABLE;
 
         /// <summary>
+        /// Тэг, указывающий на то, что отбраковка продукта
+        /// не нужна
+        /// </summary>
+        S7BOOL IS_GOOD_FLAG;
+
+
+        /// <summary>
         /// Объект, осуществляющий разбор телеграммы
         /// сканированного штрихкода
         /// </summary>
@@ -106,7 +113,7 @@ namespace SortingStantion.TechnologicalObjects
             GOODREAD = (S7BOOL)device.GetTagByAddress("DB1.DBX414.0");
             NOREAD   = (S7BOOL)device.GetTagByAddress("DB1.DBX414.1");
             TRANSFER_CMD = (S7BOOL)device.GetTagByAddress("DB1.DBX414.2");
-
+            IS_GOOD_FLAG = (S7BOOL)device.GetTagByAddress("DB1.DBX414.3");
             REPEAT_ENABLE = (S7BOOL)device.GetTagByAddress("DB1.DBX168.0");
 
             GTIN = (S7_STRING)device.GetTagByAddress("DB1.DBD416-STR14");
@@ -148,6 +155,7 @@ namespace SortingStantion.TechnologicalObjects
             //для того, чтоб процедура отработала один раз
             GOODREAD.Write(false);
             NOREAD.Write(false);
+            IS_GOOD_FLAG.Write(false);
 
             //Получение GTIN из задания
             var task_gtin = DataBridge.WorkAssignmentEngine.GTIN;
@@ -275,6 +283,7 @@ namespace SortingStantion.TechnologicalObjects
             //Запись текущих GTIN и SerialNumber в ПЛК
             GTIN.Write(scaner_gtin);
             SERIALNUMBER.Write(scaner_serialnumber);
+            IS_GOOD_FLAG.Write(true);
 
             //Взвод флага для перемещения изделия
             //в колекцию коробов между сканером и отбраковщиком
