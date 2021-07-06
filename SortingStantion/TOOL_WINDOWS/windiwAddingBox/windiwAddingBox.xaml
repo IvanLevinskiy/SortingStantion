@@ -49,7 +49,7 @@
         </Grid>-->
 
         <!--КНОПКА - ДОБАВИТЬ-->
-        <Button x:Name="btnAddBox"
+        <!--<Button x:Name="btnAddBox"
                 IsEnabled="False"
                 Height="50"
                 Width="300"
@@ -61,7 +61,7 @@
                 Foreground="{StaticResource TextColor}"
                 FontSize="{StaticResource fontSizeData}"
                 Content="Добавить" Click="btnAddBoxClick"
-            />
+            />-->
 
 
 

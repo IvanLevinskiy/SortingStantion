@@ -28,7 +28,7 @@ namespace SortingStantion.windiwAddingBox
                 currentSerialNumber = value;
 
                 //Управление Enable кнопки ДОБАВИТЬ
-                btnAddBox.IsEnabled = string.IsNullOrEmpty(currentSerialNumber) == false;
+                //btnAddBox.IsEnabled = string.IsNullOrEmpty(currentSerialNumber) == false;
 
                 //Сброс таймера отсчета времени бездействия
                 ShutdownTimer.Stop();
@@ -162,6 +162,9 @@ namespace SortingStantion.windiwAddingBox
             CurrentGTIN = DataBridge.DataSpliter.GetGTIN();
             DataBridge.Report.AddBox(CurrentSerialNumber);
 
+            //Добавление кода в результа
+            DataBridge.Report.AddBox(CurrentSerialNumber);
+
             //Выводим сообщение в зоне иноформации
             message = $"Считан продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber}";
 
@@ -171,6 +174,10 @@ namespace SortingStantion.windiwAddingBox
                 DataBridge.MSGBOX.Add(msgitem);
             };
             DataBridge.UIDispatcher.Invoke(action);
+
+            //Стирание кода из буфера для того, чтоб
+            //заблокировать кнопку Добавить
+            CurrentSerialNumber = string.Empty;
 
         }
 

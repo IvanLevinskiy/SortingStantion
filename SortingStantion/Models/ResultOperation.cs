@@ -1,4 +1,5 @@
-﻿using SortingStantion.Models;
+﻿using SortingStantion.Controls;
+using SortingStantion.Models;
 using System;
 using System.Collections.Generic;
 
@@ -170,6 +171,10 @@ namespace SortingStantion.Models
         public void AddBox(string serialnumber)
         {
             Codes.Add(serialnumber);
+
+            var msg = $"Считан продукт с серийным номером {serialnumber}. В результате {Codes.Count} коробов";
+            UserMessage messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
+            DataBridge.MSGBOX.Add(messageItem);
         }
 
         /// <summary>

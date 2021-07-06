@@ -20,7 +20,7 @@ namespace SortingStantion
         /// <summary>
         /// Зеленый цвет
         /// </summary>
-        public static SolidColorBrush myGreen = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+        public static SolidColorBrush myGreen = new SolidColorBrush(Color.FromArgb(0xFF, 0x6D, 0xC2, 0x7A));
 
         /// <summary>
         /// Синий цвет

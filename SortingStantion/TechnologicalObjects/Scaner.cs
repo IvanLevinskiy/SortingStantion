@@ -212,7 +212,7 @@ namespace SortingStantion.TechnologicalObjects
             port.DataReceived -= Port_DataReceived;
 
             //Технологическая пауза
-            Thread.Sleep(10);
+           Thread.Sleep(100);
 
             //Буфер для чтения данных их последовательноо порта
             byte[] buffer = new byte[512];
@@ -221,15 +221,13 @@ namespace SortingStantion.TechnologicalObjects
             var lenght = port.Read(buffer, 0, buffer.Length);
 
             //Инициализация строки для формирования результата сканирования
-            string data = Encoding.ASCII.GetString(buffer); // string.Empty;
+            string data = string.Empty;
 
             //Построение строки
-            /**
             for (int i = 0; i < lenght; i++)
             {
                 data += (char)buffer[i];
             }
-            **/
 
             //Уведомление подписчиков из потока UI
             Action action = () =>
