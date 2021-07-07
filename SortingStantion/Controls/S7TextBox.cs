@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SortingStantion.Models;
+using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,23 @@ namespace SortingStantion.Controls
         /// контролл
         /// </summary>
         TextBox originalTextBox;
+
+        /// <summary>
+        /// Минимальный уровень доступа
+        /// </summary>
+        public int MinAccesLevel
+        {
+            get
+            {
+                return minAccesLevel;
+            }
+            set
+            {
+                minAccesLevel = value;
+                CheckAccesLevel();
+            }
+        }
+        int minAccesLevel = 1;
 
         /// <summary>
         /// Адрес регистра
@@ -49,29 +67,7 @@ namespace SortingStantion.Controls
 
             }
         }
-
-
         string address;
-
-        /// <summary>
-        /// Текст всплывающей подсказки
-        /// для пользователя
-        /// </summary>
-        public string TooltipUser
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Текст всплывающей подсказки
-        /// для администратора
-        /// </summary>
-        private string TooltipAdmin
-        {
-            get;
-            set;
-        }
 
         /// <summary>
         /// Флаг, разрешающий ведение лога
@@ -104,6 +100,13 @@ namespace SortingStantion.Controls
 
             //Подписка на событие по загрузке контролла
             this.Loaded += MbTextBox_Loaded;
+
+            //Подписка на изменение пользователя
+            DataBridge.MainAccesLevelModel.ChangeUser += Users_ChangeUser;
+
+            //Проверка на соответствие уровню
+            //доступа элемента управления
+            CheckAccesLevel();
         }
 
         /// <summary>
@@ -295,8 +298,35 @@ namespace SortingStantion.Controls
             {
                 S7TAG.DataUpdated -= S7TAG_ChangeValue;
             }
+        }
 
- 
+        /// <summary>
+        /// Собылие при изменении пользователя
+        /// </summary>
+        /// <param name="accesslevel"></param>
+        private void Users_ChangeUser(int accesslevel, User newuser)
+        {
+            CheckAccesLevel();
+        }
+
+        /// <summary>
+        /// Проверка на доступность управления
+        /// в зависимости от текущего уровня пользователя
+        /// </summary>
+        /// <returns></returns>
+        void CheckAccesLevel()
+        {
+            //Если текущий пользователь не авторизован
+            //полагаем, что уровень доступа 0
+            int currentlevel = 0;
+
+            if (DataBridge.MainAccesLevelModel.CurrentUser != null)
+            {
+                currentlevel = (int)DataBridge.MainAccesLevelModel.CurrentUser.AccesLevel;
+            }
+
+            //Установка свойства в зависимости от уровня доступа
+            this.IsEnabled = currentlevel >= MinAccesLevel;
         }
 
         #region РЕАЛИЗАЦИЯ ИНТЕРФЕЙСА INotifyPropertyChanged

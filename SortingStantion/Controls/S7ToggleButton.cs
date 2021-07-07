@@ -38,7 +38,7 @@ namespace SortingStantion.Controls
             set
             {
                 minAccesLevel = value;
-                this.IsEnabled = CheckAccesLevel();
+                CheckAccesLevel();
             }
         }
         int minAccesLevel = 1;
@@ -72,9 +72,6 @@ namespace SortingStantion.Controls
                 //S7TAG.device.GotConnection += Device_GotConnection;
             }
         }
-
-        
-
         string address = "Не задан";
 
         /// <summary>
@@ -101,15 +98,19 @@ namespace SortingStantion.Controls
             //Подписка на изменение текущего пользователя
             //для установки доступа к контролу
             DataBridge.MainAccesLevelModel.ChangeUser += Users_ChangeUser;
+
+            //Проверка на соответствие уровню
+            //доступа элемента управления
+            CheckAccesLevel();
         }
 
         /// <summary>
-        /// Метод, вызываемый при смене пользователя
+        /// Собылие при изменении пользователя
         /// </summary>
-        /// <param name="obj"></param>
-        private void Users_ChangeUser(int currentuser, User newuser)
+        /// <param name="accesslevel"></param>
+        private void Users_ChangeUser(int accesslevel, User newuser)
         {
-            this.IsEnabled = CheckAccesLevel();
+            CheckAccesLevel();
         }
 
         /// <summary>
@@ -158,37 +159,23 @@ namespace SortingStantion.Controls
 
 
         /// <summary>
-        /// Метод для проверки уровня доступа
+        /// Проверка на доступность управления
+        /// в зависимости от текущего уровня пользователя
         /// </summary>
-        /// <param name="accesslevel"></param>
         /// <returns></returns>
-        bool CheckAccesLevel()
+        void CheckAccesLevel()
         {
-            //Проверка регистра на валидность значения
-            var isvalid = false;
-            if (S7TAG != null)
+            //Если текущий пользователь не авторизован
+            //полагаем, что уровень доступа 0
+            int currentlevel = 0;
+
+            if (DataBridge.MainAccesLevelModel.CurrentUser != null)
             {
-                isvalid = true;
+                currentlevel = (int)DataBridge.MainAccesLevelModel.CurrentUser.AccesLevel;
             }
 
-            //Разрешение управления при соответствующем уровне доступаи валидном состоянии регистра
-            return ((int)DataBridge.MainAccesLevelModel.CurrentUser.AccesLevel >= MinAccesLevel) & isvalid;
-        }
-
-        /// <summary>
-        /// Метод, вызываемый при изминении
-        /// состояния подключения к целевому устройству
-        /// </summary>
-        /// <param name="obj"></param>
-        private void ChangeValidState(bool ConnectionState)
-        {
-            //Ихменение разрешения управления контроллом при изминении состояния
-            //подключения к целевому устройству
-            Action action = () =>
-            {
-                this.IsEnabled = CheckAccesLevel() & ConnectionState;
-            };
-            this.Dispatcher.Invoke(action);
+            //Установка свойства в зависимости от уровня доступа
+            this.IsEnabled = currentlevel >= MinAccesLevel;
         }
 
         #region Реализация интерфейса INotifyPropertyChanged

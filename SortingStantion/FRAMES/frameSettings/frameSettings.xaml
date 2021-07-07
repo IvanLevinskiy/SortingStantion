@@ -179,6 +179,7 @@
                                           Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
                                           FontFamily="{StaticResource fontFamilyData}"
+                                                
                                           VerticalContentAlignment="Center"
                                           BorderThickness="0"
                                           Width="100"
@@ -391,15 +392,15 @@
                                 Foreground="{StaticResource TextColor}"/>
 
                             <controls:ComboBoxSerialPorts 
-                                          Foreground="{StaticResource TextColor}"
-                                          Background="{StaticResource LightColor}"
-                                          FontSize="{StaticResource fontSizeData}"
-                                          FontFamily="{StaticResource fontFamilyData}"
-                                          VerticalContentAlignment="Center"
-                                          BorderThickness="0"
-                                          Width="100"
-                                          Height="40"
-                                          Margin="100,7,5,7"
+                                      Foreground="{StaticResource TextColor}"
+                                      Background="{StaticResource LightColor}"
+                                      FontSize="{StaticResource fontSizeData}"
+                                      FontFamily="{StaticResource fontFamilyData}"
+                                      VerticalContentAlignment="Center"
+                                      BorderThickness="0"
+                                      Width="100"
+                                      Height="40"
+                                      Margin="100,7,5,7"
                                           HorizontalAlignment="Right"
                                           VerticalAlignment="Center"
                                           HorizontalContentAlignment="Center"/>
@@ -425,6 +426,7 @@
                                                      Width="80"
                                                      Height="40"
                                                      Margin="80,10,15,10"
+                                                     MinAccesLevel="1"
                                                      HorizontalAlignment="Right"
                                                      VerticalAlignment="Center"/>
 
@@ -551,14 +553,17 @@
                 </Style>
             </Grid.Resources>
 
-            <Button Grid.Column="0"
-                    Content="ВЫКЛЮЧИТЬ КОМПЛЕКС"
-                    Style="{StaticResource btnStyle}"
-                    Background="{StaticResource DarkColor}"
-                    Foreground="{StaticResource TextColor}"
-                    FontFamily="{StaticResource fontFamilyButtons}"
-                    FontSize="{StaticResource fontSizeButtons}"
-                    Command="{Binding ShutdownCMD}"/>
+
+            <controls:xButton Grid.Column="0"
+                              Content="ВЫКЛЮЧИТЬ КОМПЛЕКС"
+                              Style="{StaticResource btnStyle}"
+                              Background="{StaticResource DarkColor}"
+                              Foreground="{StaticResource TextColor}"
+                              FontFamily="{StaticResource fontFamilyButtons}"
+                              FontSize="{StaticResource fontSizeButtons}"
+                              Command="{Binding ShutdownCMD}"
+                              MinAccesLevel="1"
+                    />
 
             <Button Grid.Column="1" 
                     Content="" 

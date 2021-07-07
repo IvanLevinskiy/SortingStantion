@@ -178,6 +178,9 @@ namespace SortingStantion.TechnologicalObjects
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage($"От автоматического сканера получен посторонний код: {spliter.SourseData}  (код не является СИ)", MessageType.Alarm);
 
@@ -202,6 +205,9 @@ namespace SortingStantion.TechnologicalObjects
             {
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Посторонний продукт (GTIN не совпадает с заданием)", MessageType.Alarm);
@@ -253,6 +259,9 @@ namespace SortingStantion.TechnologicalObjects
             {
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage($"Продукт GTIN {scaner_gtin} номер {scaner_serialnumber} считан повторно", MessageType.Alarm);

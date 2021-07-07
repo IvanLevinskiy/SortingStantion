@@ -137,5 +137,10 @@ namespace SortingStantion
         /// </summary>
         public static ResultOperation Report = new ResultOperation();
 
+        /// <summary>
+        /// Модель, осуществляющая взаимодействие со звуковым излучателем
+        /// </summary>
+        public static Buzzer Buzzer = new Buzzer();
+
     }
 }

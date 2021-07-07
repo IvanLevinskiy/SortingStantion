@@ -1,6 +1,7 @@
 ﻿using S7Communication;
 using SortingStantion.Controls;
 using SortingStantion.S7Extension;
+using SortingStantion.TOOL_WINDOWS.windowPusherError;
 using System;
 
 namespace SortingStantion.Models
@@ -225,8 +226,15 @@ namespace SortingStantion.Models
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Ошибка отбраковщика (продукт не отбраковался)", MessageType.Alarm);
+
+                //Вывод окна ошибки
+                windowPusherError windowPusherError = new windowPusherError(al_6);
+                windowPusherError.ShowDialog();
             };
 
             /*
@@ -237,6 +245,9 @@ namespace SortingStantion.Models
             {
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Массовый брак", MessageType.Alarm);

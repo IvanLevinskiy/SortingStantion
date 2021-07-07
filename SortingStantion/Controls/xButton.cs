@@ -31,6 +31,7 @@ namespace SortingStantion.Controls
         /// </summary>
         public xButton()
         {
+            //Подписка на изменение пользователя
             DataBridge.MainAccesLevelModel.ChangeUser += Users_ChangeUser;
 
             //Проверка на соответствие уровню

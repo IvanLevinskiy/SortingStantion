@@ -377,7 +377,19 @@ namespace SortingStantion.Models
             listener.Prefixes.Add("http://localhost:8080/iswms-client/strong/");
 
             //Запуск слушателя
-            listener.Start();           
+            try
+            {
+                listener.Start();
+            }
+            catch (Exception ex)
+            {
+                //Запись в лог
+                Logger.AddExeption("WorkAssignmentEngine.cs", ex);
+
+                //Выход из функции
+                return;
+            }
+                     
 
             //Цикл для бесконечной прослушки listener
             while (true)

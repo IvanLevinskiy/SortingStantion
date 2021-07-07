@@ -122,6 +122,7 @@
     <Compile Include="FRAMES\frameSettings\windowExit.xaml.cs">
       <DependentUpon>windowExit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Buzzer.cs" />
     <Compile Include="Models\NetAclChecker.cs" />
     <Compile Include="Models\ReportBackupFile.cs" />
     <Compile Include="Models\UserAutorizationHistotyItem.cs" />
@@ -137,6 +138,9 @@
     </Compile>
     <Compile Include="TOOL_WINDOWS\windowProductIsDeffect\windowProductIsDeffect.xaml.cs">
       <DependentUpon>windowProductIsDeffect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TOOL_WINDOWS\windowPusherError\windowPusherError.xaml.cs">
+      <DependentUpon>windowPusherError.xaml</DependentUpon>
     </Compile>
     <Compile Include="TOOL_WINDOWS\windowRepeatProduct\windowRepeatProduct.xaml.cs">
       <DependentUpon>windowRepeatProduct.xaml</DependentUpon>
@@ -244,6 +248,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TOOL_WINDOWS\windowProductIsDeffect\windowProductIsDeffect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TOOL_WINDOWS\windowPusherError\windowPusherError.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
