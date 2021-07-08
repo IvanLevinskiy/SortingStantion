@@ -363,6 +363,11 @@ namespace SortingStantion.Models
         /// </summary>
         public void Save()
         {
+            if(CurrentWorkAssignment == null)
+            { 
+            return;
+            }
+
             //Создание бэкап файла
             var reportBackupFile = new ReportBackupFile()
             {
