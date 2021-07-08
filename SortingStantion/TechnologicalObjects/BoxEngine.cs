@@ -251,7 +251,7 @@ namespace SortingStantion.TechnologicalObjects
 
 
             /*
-                Повтор кода
+                Повтор кода запрещен
             */
             var RepeatEnable = (bool)REPEAT_ENABLE.Status;
             var IsRepeat = DataBridge.Report.IsRepeat(scaner_serialnumber);
