@@ -512,6 +512,9 @@ namespace SortingStantion.Models
                             return;
                         }
 
+                        //Сохранение результата в файл
+                        DataBridge.Report.Save();
+
                         //Стирание данных в ПЛК
                         GTIN_TAG.Write("");
                         TASK_ID_TAG.Write("");

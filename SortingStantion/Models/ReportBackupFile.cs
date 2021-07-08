@@ -16,6 +16,12 @@ namespace SortingStantion.Models
             set;
         }
 
+        public List<UserAuthorizationHistotyItem> operators
+        {
+            get;
+            set;
+        }
+
         public string startTime
         {
             get;
@@ -28,6 +34,7 @@ namespace SortingStantion.Models
             set;
         }
 
+
         public List<string> defectiveCodes
         {
             get;
@@ -35,6 +42,12 @@ namespace SortingStantion.Models
         }
 
         public List<string> Packs
+        {
+            get;
+            set;
+        }
+
+        public List<RepeatPack> repeatPacks
         {
             get;
             set;

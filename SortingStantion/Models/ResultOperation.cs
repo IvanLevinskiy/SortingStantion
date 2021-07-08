@@ -1,7 +1,9 @@
-﻿using SortingStantion.Controls;
+﻿using System.Text.Json;
+using SortingStantion.Controls;
 using SortingStantion.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SortingStantion.Models
 {
@@ -62,7 +64,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Массив, содержащий номера продуктов, прошедших сканер повторно.
         /// </summary>
-        public List<string> repeatPacks = new List<string>();
+        public List<RepeatPack> repeatPacks = new List<RepeatPack>();
 
         /// <summary>
         /// Текущее рабочее задание
@@ -153,6 +155,9 @@ namespace SortingStantion.Models
         /// <returns></returns>
         public bool IsRepeat(string serialnumber)
         {
+            /*
+                Проверка кодов в списке кодов
+            */
             foreach (var code in Codes)
             {
                 if (code == serialnumber)
@@ -161,6 +166,19 @@ namespace SortingStantion.Models
                 }
             }
 
+            /*
+                Проверка кодов в списке повторов
+            */
+            foreach (var repeatPack in repeatPacks)
+            {
+                if (repeatPack.num == serialnumber)
+                {
+                    return true;
+                }
+            }
+
+            //Если не нашли код, возвращаем
+            //результат
             return false;
         }
 
@@ -170,11 +188,70 @@ namespace SortingStantion.Models
         /// </summary>
         public void AddBox(string serialnumber)
         {
+            /*
+                Объявление локальных переменных
+            */
+            var msg = string.Empty;
+            UserMessage messageItem = null;
+
+            /*
+                Если код повторяется 
+            */
+            if (IsRepeat(serialnumber) == true)
+            {
+                //Добавление кодов в повторы
+                AddRepeatProduct(serialnumber);
+
+                //Вывод сообщений
+                msg = $"Считан продукт с серийным номером {serialnumber}. Продукт добавлен в коллекцию кодов повторов";
+                messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
+                DataBridge.MSGBOX.Add(messageItem);
+
+                //Выход из процедуры
+                return;
+            }
+
+            /*
+                Если код не повторяется 
+            */
             Codes.Add(serialnumber);
 
-            var msg = $"Считан продукт с серийным номером {serialnumber}. В результате {Codes.Count} коробов";
-            UserMessage messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
+            //Вывод сообщений
+            msg = $"Считан продукт с серийным номером {serialnumber}. В результате {Codes.Count} коробов";
+            messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
             DataBridge.MSGBOX.Add(messageItem);
+        }
+
+        /// <summary>
+        /// Метод для добавления кода повтора продукта
+        /// </summary>
+        public void AddRepeatProduct(string serialnumber)
+        {
+            foreach (var repeatPack in repeatPacks)
+            {
+                //Если уже есть код продукта, который
+                //следует добавить, инкрементируем счетчик
+                if (repeatPack.num == serialnumber)
+                {
+                    repeatPack.quantity ++;
+                    return;
+                }
+
+                //Если кода повтора нет, удаляем код
+                //из результата
+                RemoteCode(serialnumber);
+
+                //Добавляем экземпляр повтора кода
+                var repeatPackItem = new RepeatPack()
+                {
+                    num = serialnumber,
+                    quantity = 1
+                };
+
+                repeatPacks.Add(repeatPackItem);
+
+
+            }
         }
 
         /// <summary>
@@ -280,6 +357,32 @@ namespace SortingStantion.Models
 
         }
 
+        /// <summary>
+        /// Метод для сохранения
+        /// результата в файл
+        /// </summary>
+        public void Save()
+        {
+            //Создание бэкап файла
+            var reportBackupFile = new ReportBackupFile()
+            {
+                id = this.CurrentWorkAssignment.ID,
+                operators = this.operators,
+                startTime = dtFormat(startTime),
+                endTime = dtFormat(endTime),
+                defectiveCodes = this.defectiveCodes,
+                Packs = this.Codes,
+                repeatPacks = this.repeatPacks
 
+            };
+
+            //Сериализация
+            string json = JsonSerializer.Serialize<ReportBackupFile>(reportBackupFile);
+
+            //Сохранение файла
+            StreamWriter sr = new StreamWriter(@"AppData\Task.json");
+            sr.Write(json);
+            sr.Close();
+        }
     }
 }
