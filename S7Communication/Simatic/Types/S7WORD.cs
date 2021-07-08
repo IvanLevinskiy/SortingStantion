@@ -82,5 +82,47 @@ namespace S7Communication
             Status = (UInt32)(bytes[0] << 8) | (UInt32)(bytes[1] << 0) ;
         }
 
+
+        /// <summary>
+        /// Метод для записи значения в тэг
+        /// </summary>
+        /// <param name="value"></param>
+        public override bool Write(object value)
+        {
+            Int16 uvalue = Convert.ToInt16(value);
+            var array = BitConverter.GetBytes(uvalue);
+
+            //Переворачиваем байты как у симатика
+            var rotaryarray = new byte[]
+            {
+                array[1],
+                array[0],
+            };
+
+
+            this.device.WriteBytes(DataType, DBNumber, StartByteAddress, rotaryarray);
+            return true;
+        }
+
+        /// <summary>
+        /// Метод для записи значения в тэг
+        /// </summary>
+        /// <param name="value"></param>
+        public override bool Write(string value)
+        {
+            Int16 uvalue = Convert.ToInt16(value);
+            var array = BitConverter.GetBytes(uvalue);
+
+            //Переворачиваем байты как у симатика
+            var rotaryarray = new byte[]
+            {
+                array[1],
+                array[0],
+            };
+
+
+            this.device.WriteBytes(DataType, DBNumber, StartByteAddress, rotaryarray);
+            return true;
+        }
     }
 }

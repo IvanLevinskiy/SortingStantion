@@ -108,7 +108,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Кол-во продуктов в коробе. 
         /// </summary>
-        S7DWORD NUM_PACKS_IN_BOX_TAG
+        S7WORD NUM_PACKS_IN_BOX_TAG
         {
             get;
             set;
@@ -118,7 +118,7 @@ namespace SortingStantion.Models
         /// Ожидаемое количество продуктов в серии 
         /// (определяется по заданию на производство серии) 
         /// </summary>
-        S7DWORD NUM_PACKS_IN_SERIES_TAG
+        S7WORD NUM_PACKS_IN_SERIES_TAG
         {
             get;
             set;
@@ -166,8 +166,8 @@ namespace SortingStantion.Models
                 Product_Name = PRODUCT_NAME_TAG.StatusText;
             };
 
-            NUM_PACKS_IN_BOX_TAG = (S7DWORD)device.GetTagByAddress("DB1.DBD396-DWORD");
-            NUM_PACKS_IN_SERIES_TAG = (S7DWORD)device.GetTagByAddress("DB1.DBD398-DWORD");
+            NUM_PACKS_IN_BOX_TAG = (S7WORD)device.GetTagByAddress("DB1.DBW396-WORD");
+            NUM_PACKS_IN_SERIES_TAG = (S7WORD)device.GetTagByAddress("DB1.DBW398-WORD");
         }
 
 
