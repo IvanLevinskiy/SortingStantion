@@ -366,7 +366,7 @@ namespace S7Communication
         public bool PING(string ip)
         {
             Ping ping = new Ping();
-            PingReply pr = ping.Send(ip);
+            PingReply pr = ping.Send(ip, 100);
 
             if (pr.Status == IPStatus.Success)
             {
