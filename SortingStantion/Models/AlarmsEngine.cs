@@ -107,77 +107,59 @@ namespace SortingStantion.Models
         /// </summary>
         public AlarmsEngine()
         {
-            //ResetAlarmsTag = (S7BOOL)device.GetTagByAddress("DB1.DBX132.1");
-
-            //Сбрасываем ошибки
-            //ResetAlarmsTag.Write(true);
+            //Инициализация тэга по которому осуществляется сброс
+            //всех сообщений
+            ResetAlarmsTag = (S7BOOL)device.GetTagByAddress("DB1.DBX132.1");
 
             /*
-                Посторонний продукт
+                Неисправность фотодатчика FS1
             */
-            //al_1 = new S7DiscreteAlarm("Посторонний продукт (GTIN не совпадает с заданием)", "DB6.DBX12.0", group);
-            //al_1.MessageAction = () =>
-            //{
-            //    //Если линия выключена
-            //    if (DataBridge.Conveyor.LineIsRun == false)
-            //    {
-            //        //al_1.Write(false);
-            //        return;
-            //    }
+            al_1 = new S7DiscreteAlarm("Отсутствует связь с датчиком сканера, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", "DB6.DBX12.0", group);
+            al_1.MessageAction = () =>
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
 
-            //    //Остановка конвейера
-            //    DataBridge.Conveyor.Stop();
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
 
-            //    frame_gtin_fault.frame_gtin_fault fr= new frame_gtin_fault.frame_gtin_fault();
-            //    fr.Owner = DataBridge.MainScreen;
-            //    fr.ShowDialog();
-            //};
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS1 (перед сканером)", MessageType.Alarm);
+            };
 
 
             /*
-                Посторонний код (код не является СИ)
+                Неисправность фотодатчика FS2
             */
-            //al_2 = new S7DiscreteAlarm("Посторонний код (код не является СИ)", "DB6.DBX12.1", group);
-            //al_2.MessageAction = () =>
-            //{
-            //    //Если линия выключена
-            //    if (DataBridge.Conveyor.LineIsRun == false)
-            //    {
-            //        //al_2.Write(false);
-            //        return;
-            //    }
+            al_2 = new S7DiscreteAlarm("Отсутствует связь с датчиком отбраковщика, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", "DB6.DBX12.1", group);
+            al_2.MessageAction = () =>
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
 
-            //    //Остановка конвейера
-            //    DataBridge.Conveyor.Stop();
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
 
-            //    //Запись сообщения в базу данных
-            //    DataBridge.AlarmLogging.AddMessage("Посторонний код  (код не является СИ)", MessageType.Alarm);
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS2 (перед отбраковщиком)", MessageType.Alarm);
 
-            //    //Вызов окна
-            //    SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode windowExtraneousBarcode = new SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode.windowExtraneousBarcode();
-            //    windowExtraneousBarcode.ShowDialog();
-                
-            //};
+            };
 
             /*
-                Номер продукта числится в браке
+                Неисправность фотодатчика FS3
             */
-            //al_3 = new S7DiscreteAlarm("Номер продукта числится в браке", "DB6.DBX12.2", group);
-            //al_3.MessageAction = () =>
-            //{
-            //    //Если линия выключена
-            //    if (DataBridge.Conveyor.LineIsRun == false)
-            //    {
-            //        al_3.Write(false);
-            //        return;
-            //    }
+            al_3 = new S7DiscreteAlarm("Отсутствует связь с датчиком контроля отбраковки, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", "DB6.DBX12.2", group);
+            al_3.MessageAction = () =>
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
 
-            //    //Остановка конвейера
-            //    DataBridge.Conveyor.Stop();
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
 
-            //    //Запись сообщения в базу данных
-            //    DataBridge.AlarmLogging.AddMessage("Номер продукта числится в браке", MessageType.Alarm);
-            //};
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS3 (перед отбраковщиком)", MessageType.Alarm);
+            };
 
             /*
                 Повтор кода продукта

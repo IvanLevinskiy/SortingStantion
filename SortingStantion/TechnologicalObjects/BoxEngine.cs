@@ -157,6 +157,34 @@ namespace SortingStantion.TechnologicalObjects
             NOREAD.Write(false);
             IS_GOOD_FLAG.Write(false);
 
+            /*
+                Если линия не в работе (определяется по таймеру остановки в TIA) 
+            */
+            if ((bool)DataBridge.Conveyor.IsStopFromTimerTag.Status == true)
+            {
+               
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage($"Получен штрихкод при остановленной линии", MessageType.Alarm);
+
+                //Вывод сообщения в зоне информации
+                string message = $"Конвейер не запущен, полученный код не будет записан в результат";
+                var msg = new UserMessage(message, DataBridge.myRed);
+                DataBridge.MSGBOX.Add(msg);
+
+                //Вызов окна
+                customMessageBox mb = new customMessageBox("Ошибка", "Подтвердите удаление продукта с конвейера!");
+                mb.Owner = DataBridge.MainScreen;
+                mb.ShowDialog();
+
+
+                //Выход из метода
+                return;
+
+            }
+
             //Получение GTIN из задания
             var task_gtin = DataBridge.WorkAssignmentEngine.GTIN;
 

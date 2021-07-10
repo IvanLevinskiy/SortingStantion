@@ -57,6 +57,16 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Тэг, полученный от сканера,
+        /// что линия остановлена
+        /// </summary>
+        public S7BOOL IsStopFromTimerTag
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Флаг, указывающий, что
         /// линия запущена (для View Model)
         /// </summary>
@@ -97,6 +107,10 @@ namespace SortingStantion.TechnologicalObjects
         {
             //Тэг для запуска - останова линии
             Run = new S7BOOL("", "DB1.DBX132.0", group);
+
+            //Тэг, указывающий, что линия установлена с учетом задержки
+            //на останов
+            IsStopFromTimerTag = new S7BOOL("", "DB1.DBX120.1", group);
 
             //Подпись на событие по изминеию статуса работы
             //линии

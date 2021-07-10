@@ -442,8 +442,7 @@ namespace SortingStantion.Models
                     //пишем ошибку - "Задание не может быть принято в работу"
                     if (SelectedWorkAssignment == null)
                     {
-                        SolidColorBrush brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу", brush);
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу", DataBridge.myRed);
                         DataBridge.MSGBOX.Add(messageItem);
                         return;
                     }
@@ -499,52 +498,59 @@ namespace SortingStantion.Models
             {
                 return new DelegateCommand((obj) =>
                 {
-
-                    if (InWork == true)
+                    //Проверка - работает ли линия
+                    if (DataBridge.Conveyor.LineIsRun == true)
                     {
-                        //Вызываем окно авторизации
-                        SortingStantion.UserAdmin.frameAuthorization frameAuthorization = new SortingStantion.UserAdmin.frameAuthorization();
-                        frameAuthorization.ShowDialog();
-
-                        //Если результат авторизации не удачный, выходим
-                        if (frameAuthorization.AuthorizationResult == false)
-                        {
-                            return;
-                        }
-
-                        //Сохранение результата в файл
-                        DataBridge.Report.Save();
-
-                        //Стирание данных в ПЛК
-                        GTIN_TAG.Write("");
-                        TASK_ID_TAG.Write("");
-                        PRODUCT_NAME_TAG.Write("");
-                        LOT_NO_TAG.Write("");
-
-                        //Обнуление счетчиков изделий
-                        NUM_PACKS_IN_BOX_TAG.Write(0);
-                        NUM_PACKS_IN_SERIES_TAG.Write(0);
-
-                        //Выключение конвейера
-                        DataBridge.Conveyor.Stop();
-
-                        //Уведомление подписчиков о завершении задания
-                        WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
-
-                        //Запись в базу данных
-                        var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
-
-                        //Запись в базу данных о принятии задания
-                        DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
-
-                        var msg = new UserMessage(message, MSGTYPE.SUCCES);
-                        DataBridge.MSGBOX.Add(msg);
-
-                        //Запись статуса в ПЛК
-                        IN_WORK_TAG.Write(false);
+                        customMessageBox mb = new customMessageBox("Ошибка", "Задание в работе, перед завершением остановите конвейер.");
+                        mb.Owner = DataBridge.MainScreen;
+                        mb.ShowDialog();
 
                         return;
                     }
+
+
+                    //Вызов окна авторизации
+                    SortingStantion.UserAdmin.frameAuthorization frameAuthorization = new SortingStantion.UserAdmin.frameAuthorization();
+                    frameAuthorization.ShowDialog();
+
+                    //Если результат авторизации не удачный, выходим
+                    if (frameAuthorization.AuthorizationResult == false)
+                    {
+                        return;
+                    }
+
+                    //Сохранение результата в файл
+                    DataBridge.Report.Save();
+
+                    //Стирание данных в ПЛК
+                    GTIN_TAG.Write("");
+                    TASK_ID_TAG.Write("");
+                    PRODUCT_NAME_TAG.Write("");
+                    LOT_NO_TAG.Write("");
+
+                    //Обнуление счетчиков изделий
+                    NUM_PACKS_IN_BOX_TAG.Write(0);
+                    NUM_PACKS_IN_SERIES_TAG.Write(0);
+
+                    //Выключение конвейера
+                    DataBridge.Conveyor.Stop();
+
+                    //Уведомление подписчиков о завершении задания
+                    WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
+
+                    //Запись в базу данных
+                    var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
+
+                    //Запись в базу данных о принятии задания
+                    DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
+
+                    var msg = new UserMessage(message, MSGTYPE.SUCCES);
+                    DataBridge.MSGBOX.Add(msg);
+
+                    //Запись статуса в ПЛК
+                    IN_WORK_TAG.Write(false);
+
+                    return;
                 },
                 (obj) => (true));
             }
