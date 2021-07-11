@@ -11,7 +11,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Время входа в логин
         /// </summary>
-        public DateTime LoginTime
+        public string startTime
         {
             get;
             set;
@@ -20,7 +20,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Время выхода из логина
         /// </summary>
-        public DateTime LogioutTime
+        public string endTime
         {
             get;
             set;
@@ -29,7 +29,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Указатель на пользователя
         /// </summary>
-        public User User
+        public string id
         {
             get;
             set;
@@ -38,10 +38,17 @@ namespace SortingStantion.Models
         /// <summary>
         /// Конструктор класса
         /// </summary>
+        public UserAuthorizationHistotyItem()
+        {
+        }
+
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
         public UserAuthorizationHistotyItem(User user)
         {
-            this.User = user;
-            LoginTime = DateTime.Now;
+            this.id = user.ID;
+            endTime = DateTime.Now.ToString();
         }
 
 

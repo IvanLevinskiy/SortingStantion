@@ -33,6 +33,15 @@ namespace SortingStantion.Controls
         int minAccesLevel = 1;
 
         /// <summary>
+        /// Имя параметра (для записи в базу данных)
+        /// </summary>
+        public string ParametrName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Адрес регистра
         /// </summary>
         public string Address
@@ -209,6 +218,9 @@ namespace SortingStantion.Controls
                 {
                     text = Text;
                     deFocus();
+
+                    //Записываем в базу данных информацию об изминении
+                    DataBridge.AlarmLogging.AddMessage($"Значение параметра: '{ParametrName}' изменено на {this.Text}", MessageType.Event);
                 }
 
                 return;

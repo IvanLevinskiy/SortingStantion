@@ -363,17 +363,17 @@ namespace S7Communication
         /// </summary>
         /// <param name="ip"></param>
         /// <returns></returns>
-        public bool PING(string ip)
+        public bool Ping()
         {
             Ping ping = new Ping();
-            PingReply pr = ping.Send(ip, 100);
+            PingReply pr = ping.Send(this.IP, 100);
 
             if (pr.Status == IPStatus.Success)
             {
                 return true;
             }
 
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -910,9 +910,18 @@ namespace S7Communication
             //операций перед запуском сервера
             PreparingForStartup();
 
-        //Если связь с контроллером не открыта
-        //пытаемся подключиться (переподключиться)
-        M1: if (Open() == false)
+
+            //Проверка на то, доступно ли устройство
+            M1: if (Ping() == false)
+            {
+                IsAvailable = false;
+                Thread.Sleep(1000);
+                goto M1;
+            }
+
+            //Если связь с контроллером не открыта
+            //пытаемся подключиться (переподключиться)
+            if (Open() == false)
             {
                 IsAvailable = false;
                 Thread.Sleep(1000);
@@ -923,12 +932,12 @@ namespace S7Communication
             ReconnectRequest = false;
 
             while (true)
-            {
+            {             
                 //lock (_mSocket)
                 //{
-                    //Если имеется запрос на переподключение
-                    //пытаемся переподключиться
-                    if (ReconnectRequest == true)
+                //Если имеется запрос на переподключение
+                //пытаемся переподключиться
+                if (ReconnectRequest == true)
                     {
                         Close();
                         IsAvailable = false;

@@ -5,7 +5,6 @@ using SortingStantion.Utilites;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -335,9 +334,9 @@ namespace SortingStantion.Models
             StreamReader sr = new StreamReader("json.txt");
             var text = sr.ReadToEnd();
             sr.Close();
-            var tprices = JsonConvert.DeserializeObject<WorkAssignment>(text);
+            var datacontant = JsonConvert.DeserializeObject<WorkAssignment>(text);
 
-            WorkAssignments.Add(tprices);
+            WorkAssignments.Add(datacontant);
 
             //Запуск задачи по прослушиванию
             //http

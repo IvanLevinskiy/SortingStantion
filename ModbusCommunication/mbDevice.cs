@@ -241,7 +241,7 @@ namespace Communication
         /// </summary>
         public mbDevice()
         {
-            PingDevice = (ip) => PING(ip);
+            PingDevice = (ip) => PING();
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace Communication
             }
 
             //Метод для пинга
-            PingDevice = (ip) => PING(ip);
+            PingDevice = (ip) => PING();
         }
 
         delegate int Operation(int x, int y);
@@ -588,10 +588,10 @@ namespace Communication
         /// </summary>
         /// <param name="ip"></param>
         /// <returns></returns>
-        public bool PING(string ip)
+        public bool PING()
         {
             Ping ping = new Ping();
-            PingReply pr = ping.Send(ip);
+            PingReply pr = ping.Send(this.IP, 100);
 
             if (pr.Status == IPStatus.Success)
             {

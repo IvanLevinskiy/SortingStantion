@@ -101,12 +101,15 @@ namespace SortingStantion.Models
                 //записываем время когда он вышел из логина
                 if (LastOperator != null)
                 {
-                    LastOperator.LogioutTime = DateTime.Now;
+                    LastOperator.endTime = DateTime.Now.GetDateTimeFormats()[43];
                 }
 
                 var historyitem = new UserAuthorizationHistotyItem(currentuser);
                 operators.Add(historyitem);
             };
+
+            //Загрузка результата из файла
+            Load();
 
         }
 
@@ -292,10 +295,34 @@ namespace SortingStantion.Models
         /// </summary>
         public void Save()
         {
-            if(CurrentWorkAssignment == null)
-            { 
-            return;
+            if (CurrentWorkAssignment == null)
+            {
+                return;
             }
+
+            //CurrentWorkAssignment = new WorkAssignment();
+            //CurrentWorkAssignment.ID = "108-500056";
+
+            //this.operators = new List<UserAuthorizationHistotyItem>()
+            //{
+            //    new UserAuthorizationHistotyItem()
+            //    { 
+            //        startTime = "2018-12-18T10:42:06+03:00",
+            //        endTime = "2018-12-18T10:42:37+03:00",
+            //        id="101"
+            //    }
+            //};
+
+            //this.defectiveCodes = new List<string>()
+            //{
+            //    "Y№BBf2", "2Ft^o9"
+            //};
+
+            //this.Codes = new List<string>()
+            //{
+            //    "bF3%hI", "I<GM>j", "P0)8df", "P\".Yj>", "h6#fR0", "R_hw\"", "0EDFj+"
+            //};
+
 
             //Создание бэкап файла
             var reportBackupFile = new ReportBackupFile()
@@ -317,6 +344,23 @@ namespace SortingStantion.Models
             StreamWriter sr = new StreamWriter(@"AppData\Task.json");
             sr.Write(json);
             sr.Close();
+        }
+
+        async void Load()
+        {
+            //Если файла нет, выходим из функции
+            if (File.Exists(@"AppData\Task.json") == false)
+            {
+                return;
+            }
+
+            //Десериализация задачи из памяти программы
+            // чтение данных
+            using (FileStream fs = new FileStream(@"AppData\Task.json", FileMode.OpenOrCreate))
+            {
+                ReportBackupFile reportBackupFile = await JsonSerializer.DeserializeAsync<ReportBackupFile>(fs);
+                fs.Close();
+            }
         }
     }
 }
