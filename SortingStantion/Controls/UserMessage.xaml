@@ -27,6 +27,7 @@
         <TextBlock Text="{Binding Message}"
                    FontSize="{StaticResource fontSizeData}"
                    FontFamily="{StaticResource fontFamilyData}"
+                   TextWrapping="Wrap"
                    Foreground="White"
                    Grid.Column="1"
                    VerticalAlignment="Center"

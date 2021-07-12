@@ -20,12 +20,12 @@ namespace SortingStantion.Models
         /// <summary>
         /// Время начала работы с заданием
         /// </summary>
-        public DateTime startTime;
+        public string startTime;
 
         /// <summary>
         /// Время окончания работы с заданием 
         /// </summary>
-        public DateTime endTime;
+        public string endTime;
 
         /// <summary>
         /// Массив, содержащий объекты Operator 
@@ -83,14 +83,14 @@ namespace SortingStantion.Models
             //Подпись на событие по принятию задания
             DataBridge.WorkAssignmentEngine.WorkOrderAcceptanceNotification += (workAssignment) =>
             {
-                startTime = DateTime.Now;
+                startTime = DateTime.Now.GetDateTimeFormats()[43];
                 CurrentWorkAssignment = workAssignment;
             };
 
             //Подпись на событие по завершению задания
             DataBridge.WorkAssignmentEngine.WorkOrderCompletionNotification += (workAssignment) =>
             {
-                endTime = DateTime.Now;
+                endTime = DateTime.Now.GetDateTimeFormats()[43];
                 CurrentWorkAssignment = null;
             };
 
@@ -329,8 +329,8 @@ namespace SortingStantion.Models
             {
                 id = this.CurrentWorkAssignment.ID,
                 operators = this.operators,
-                startTime = dtFormat(startTime),
-                endTime = dtFormat(endTime),
+                startTime = startTime,
+                endTime = endTime,
                 defectiveCodes = this.defectiveCodes,
                 Packs = this.Codes,
                 repeatPacks = this.repeatPacks
@@ -354,12 +354,23 @@ namespace SortingStantion.Models
                 return;
             }
 
+            ReportBackupFile reportBackupFile = null;
+
             //Десериализация задачи из памяти программы
             // чтение данных
             using (FileStream fs = new FileStream(@"AppData\Task.json", FileMode.OpenOrCreate))
             {
-                ReportBackupFile reportBackupFile = await JsonSerializer.DeserializeAsync<ReportBackupFile>(fs);
+                reportBackupFile = await JsonSerializer.DeserializeAsync<ReportBackupFile>(fs);
                 fs.Close();
+
+                this.ID = reportBackupFile.id;
+                this.operators = reportBackupFile.operators;
+                this.repeatPacks = reportBackupFile.repeatPacks;
+                this.startTime = reportBackupFile.startTime;
+                this.endTime = reportBackupFile.endTime;
+                this.defectiveCodes = reportBackupFile.defectiveCodes;
+                this.Codes = reportBackupFile.Packs;
+
             }
         }
     }
