@@ -188,7 +188,7 @@
                                         FontFamily="{StaticResource fontFamilyData}"
                                         Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7TextBox Address="DB1.DBD136-STIME"
+                            <controls:S7TextBox Address="DB1.DBD102-STIME"
                                                 ParametrName="Время включения сканера"
                                           Foreground="{StaticResource TextColor}"
                                           Background="{StaticResource LightColor}"
@@ -219,7 +219,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7TextBox Address="DB1.DBD140-STIME"
+                            <controls:S7TextBox Address="DB1.DBD106-STIME"
                                                 ParametrName="Длительность импульса сканироваия"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
@@ -249,7 +249,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                                 Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7TextBox Address="DB1.DBD144-STIME"
+                            <controls:S7TextBox Address="DB1.DBD110-STIME"
                                                 ParametrName="Время передачи данных"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
@@ -301,7 +301,7 @@
                                        FontFamily="{StaticResource fontFamilyData}"
                                        Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7TextBox Address="DB1.DBD148-STIME"
+                            <controls:S7TextBox Address="DB1.DBD114-STIME"
                                                 ParametrName="Задержка срабатывания толкателя"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
@@ -331,7 +331,7 @@
                            FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7TextBox Address="DB1.DBD152-STIME"
+                            <controls:S7TextBox Address="DB1.DBD118-STIME"
                                                 ParametrName="Длина импульса толкателя"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
@@ -361,7 +361,7 @@
                            FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7TextBox Address="DB1.DBD156-STIME"
+                            <controls:S7TextBox Address="DB1.DBD122-STIME"
                                                 ParametrName="Время контроля отбраковки"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
@@ -440,7 +440,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7ToggleButton Address="DB1.DBX168.0"
+                            <controls:S7ToggleButton Address="DB1.DBX134.0"
                                                      Style="{StaticResource s7ToggleButton}"
                                                      VerticalContentAlignment="Center"
                                                      Width="80"
@@ -487,7 +487,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                                 Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7TextBox Address="DB1.DBD164-DWORD"
+                            <controls:S7TextBox Address="DB1.DBD130-DWORD"
                                           Foreground="{StaticResource TextColor}"
                                           Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -516,7 +516,7 @@
                                 FontFamily="{StaticResource fontFamilyData}"
                            Foreground="{StaticResource TextColor}"/>
 
-                            <controls:S7TextBox Address="DB1.DBD160-STIME"
+                            <controls:S7TextBox Address="DB1.DBD126-STIME"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"

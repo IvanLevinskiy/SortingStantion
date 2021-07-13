@@ -75,12 +75,6 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         S7_STRING SERIALNUMBER;
 
-
-        /// <summary>
-        /// Тэг GTIN из задания
-        /// </summary>
-        S7_STRING GTIN_TASK;
-
         /// <summary>
         /// Результат сканирования
         /// </summary>
@@ -110,30 +104,79 @@ namespace SortingStantion.TechnologicalObjects
         public BoxEngine()
         {
             //Инициализация сигналов от сканера
-            GOODREAD = (S7BOOL)device.GetTagByAddress("DB1.DBX414.0");
-            NOREAD   = (S7BOOL)device.GetTagByAddress("DB1.DBX414.1");
-            TRANSFER_CMD = (S7BOOL)device.GetTagByAddress("DB1.DBX414.2");
-            IS_GOOD_FLAG = (S7BOOL)device.GetTagByAddress("DB1.DBX414.3");
-            REPEAT_ENABLE = (S7BOOL)device.GetTagByAddress("DB1.DBX168.0");
+            GOODREAD = (S7BOOL)device.GetTagByAddress("DB1.DBX380.0");
+            NOREAD   = (S7BOOL)device.GetTagByAddress("DB1.DBX380.1");
+            TRANSFER_CMD = (S7BOOL)device.GetTagByAddress("DB1.DBX380.2");
+            IS_GOOD_FLAG = (S7BOOL)device.GetTagByAddress("DB1.DBX380.3");
+            REPEAT_ENABLE = (S7BOOL)device.GetTagByAddress("DB1.DBX134.0");
 
-            GTIN = (S7_STRING)device.GetTagByAddress("DB1.DBD416-STR14");
-            SERIALNUMBER = (S7_STRING)device.GetTagByAddress("DB1.DBD432-STR6");
-            GTIN_TASK = (S7_STRING)device.GetTagByAddress("DB1.DBD226-STR40");
-
+            GTIN = (S7_STRING)device.GetTagByAddress("DB1.DBD382-STR14");
+            SERIALNUMBER = (S7_STRING)device.GetTagByAddress("DB1.DBD398-STR6");
+     
             //Данные из сканера
             SCAN_DATA = (S7_CHARS_ARRAY)device.GetTagByAddress("DB9.DBD14-CHARS100");
-            SCAN_DATA.Write("010460456789012621F&8h3W93h(0F");
+            //SCAN_DATA.Write("010460456789012621F&8h3W93h(0F");
 
             //Подписываемся на событие по изминению
             //тэга GOODREAD и NOREAD  и осуществляем вызов
             //метода в потоке UI
             GOODREAD.ChangeValue += (ov, nv) =>
             {
-                Action action = () =>
+                //Если новое или старое значение не bool
+                var errortr = (ov is bool) == false;
+                errortr = errortr || (nv is bool) == false;
+
+                if (errortr == true)
                 {
-                    BARCODESCANER_CHANGEVALUE(ov, nv);
-                };
-                DataBridge.MainScreen.Dispatcher.Invoke(action);
+                    return;
+                }
+
+                //В случае, если ппроисходит 
+                //сброс тэга - код не выполняем
+                if ((bool)ov == false && (bool)nv == true )
+                {
+                    Action action = () =>
+                    {
+                        BARCODESCANER_CHANGEVALUE(ov, nv);
+                    };
+                    DataBridge.MainScreen.Dispatcher.Invoke(action);
+                }
+
+                
+            };
+
+            NOREAD.ChangeValue += (ov, nv) =>
+            {
+                //Если новое или старое значение не bool
+                var errortr = (ov is bool) == false;
+                errortr = errortr || (nv is bool) == false;
+
+                if (errortr == true)
+                {
+                    return;
+                }
+
+                //В случае, если ппроисходит 
+                //сброс тэга - код не выполняем
+                if ((bool)ov == false && (bool)nv == true)
+                {
+                    
+                    //Стирание данных из рузультата сканирования
+                    GTIN.Write(string.Empty);
+                    SERIALNUMBER.Write(string.Empty);
+
+                    IS_GOOD_FLAG.Write(false);
+
+                    //Взвод флага для перемещения изделия
+                    //в колекцию коробов между сканером и отбраковщиком
+                    TRANSFER_CMD.Write(true);
+
+                    //Стираем GOODREAD и NOREAD
+                    //для того, чтоб процедура отработала один раз
+                    NOREAD.Write(false);
+                }
+
+                
             };
         }
 
@@ -154,8 +197,7 @@ namespace SortingStantion.TechnologicalObjects
             //Стираем GOODREAD и NOREAD
             //для того, чтоб процедура отработала один раз
             GOODREAD.Write(false);
-            NOREAD.Write(false);
-            IS_GOOD_FLAG.Write(false);
+            //IS_GOOD_FLAG.Write(false);
 
             /*
                 Если линия не в работе (определяется по таймеру остановки в TIA) 

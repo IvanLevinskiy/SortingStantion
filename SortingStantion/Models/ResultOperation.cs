@@ -283,11 +283,6 @@ namespace SortingStantion.Models
             }
         }
 
-        string dtFormat(DateTime date)
-        {
-            return date.ToString("yyyy-MM-ddTHH:mm:ss+03:00");
-        }
-
 
         /// <summary>
         /// Метод для сохранения
@@ -329,8 +324,8 @@ namespace SortingStantion.Models
             {
                 id = this.CurrentWorkAssignment.ID,
                 operators = this.operators,
-                startTime = startTime,
-                endTime = endTime,
+                startTime = this.startTime,
+                endTime = DateTime.Now.GetDateTimeFormats()[43],
                 defectiveCodes = this.defectiveCodes,
                 Packs = this.Codes,
                 repeatPacks = this.repeatPacks
@@ -372,6 +367,35 @@ namespace SortingStantion.Models
                 this.Codes = reportBackupFile.Packs;
 
             }
+        }
+
+        /// <summary>
+        /// метод для отправки отчета
+        /// </summary>
+        public void SendReport()
+        {
+            Reset();
+        }
+
+        /// <summary>
+        /// Метод для сброса результата операций
+        /// </summary>
+        public void Reset()
+        {
+            //Удаление файла
+            if (File.Exists(@"AppData\Task.json") == true)
+            {
+                File.Delete(@"AppData\Task.json");
+            }
+
+            //Обнуление результата
+            this.ID = string.Empty;
+            this.operators = new List<UserAuthorizationHistotyItem>();
+            this.repeatPacks = new List<RepeatPack>();
+            this.startTime = string.Empty;
+            this.endTime = string.Empty;
+            this.defectiveCodes = new List<string>();
+            this.Codes = new List<string>();
         }
     }
 }

@@ -35,7 +35,12 @@ namespace SortingStantion.MainScreen
         /// <param name="e"></param>
         private void MainScreen_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //Останоака ленты
             DataBridge.Conveyor.Stop();
+
+            //Запись файла с результатом
+            //операций (если отчет не отправлен)
+            DataBridge.Report.Save();
         }
 
         /// <summary>

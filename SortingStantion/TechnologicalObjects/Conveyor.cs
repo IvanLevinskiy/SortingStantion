@@ -106,11 +106,11 @@ namespace SortingStantion.TechnologicalObjects
         public Conveyor()
         {
             //Тэг для запуска - останова линии
-            Run = new S7BOOL("", "DB1.DBX132.0", group);
+            Run = new S7BOOL("", "DB1.DBX98.0", group);
 
             //Тэг, указывающий, что линия установлена с учетом задержки
             //на останов
-            IsStopFromTimerTag = new S7BOOL("", "DB1.DBX120.1", group);
+            IsStopFromTimerTag = new S7BOOL("", "DB1.DBX86.1", group);
 
             //Подпись на событие по изминеию статуса работы
             //линии
@@ -193,9 +193,6 @@ namespace SortingStantion.TechnologicalObjects
                 //Запись статуса в ПЛК
                 Run.Write(false);
 
-                //Внесение в базу данных сообщения об остановке комплекса
-                DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТОП. Линия остановлена", Models.MessageType.Event);
-
                 return;
             }
         }
@@ -210,6 +207,9 @@ namespace SortingStantion.TechnologicalObjects
             {
                 return new DelegateCommand((obj) =>
                 {
+                    //Внесение в базу данных сообщения об остановке комплекса
+                    DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТОП. Линия остановлена", Models.MessageType.Event);
+
                     Stop();
                 },
                 (obj) => (true));
