@@ -256,7 +256,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7TextBox Address="DB1.DBD268-STR40" 
+                    <controls:S7TextBox Address="DB1.DBD234-STR40" 
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
@@ -282,7 +282,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7TextBox Address="DB1.DBD226-STR40" 
+                    <controls:S7TextBox Address="DB1.DBD192-STR40" 
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
@@ -308,7 +308,7 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7TextBox Address="DB1.DBD352-STR40" 
+                    <controls:S7TextBox Address="DB1.DBD318-STR40" 
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"

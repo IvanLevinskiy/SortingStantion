@@ -103,6 +103,13 @@ namespace S7Communication
             }
         }
 
+        
+        public bool IsRun
+        { 
+            get;
+            set;
+        }
+
         /// <summary>
         /// Свойство, указывающее доступно ли
         /// устройство Plc

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S7Communication", "S7Commun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication", "ModbusCommunication\Communication.csproj", "{F4D9B4DD-D6B1-43F7-87A3-62218218FA2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScanTest", "ScanTest\ScanTest.csproj", "{2716ACA2-6891-449B-9FF9-47882306B2DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{F4D9B4DD-D6B1-43F7-87A3-62218218FA2D}.Release|x64.Build.0 = Release|x64
 		{F4D9B4DD-D6B1-43F7-87A3-62218218FA2D}.Release|x86.ActiveCfg = Release|x86
 		{F4D9B4DD-D6B1-43F7-87A3-62218218FA2D}.Release|x86.Build.0 = Release|x86
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Debug|x64.Build.0 = Debug|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Debug|x86.Build.0 = Debug|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Release|x64.ActiveCfg = Release|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Release|x64.Build.0 = Release|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{2716ACA2-6891-449B-9FF9-47882306B2DF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

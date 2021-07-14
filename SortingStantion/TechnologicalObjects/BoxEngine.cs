@@ -197,7 +197,6 @@ namespace SortingStantion.TechnologicalObjects
             //Стираем GOODREAD и NOREAD
             //для того, чтоб процедура отработала один раз
             GOODREAD.Write(false);
-            //IS_GOOD_FLAG.Write(false);
 
             /*
                 Если линия не в работе (определяется по таймеру остановки в TIA) 

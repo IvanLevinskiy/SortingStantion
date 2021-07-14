@@ -261,9 +261,18 @@ namespace S7Communication
         {
             foreach (var device in Devices)
             {
+                //Если устроство уже запущено
+                //пропускаем процедуру запуска
+                if(device.IsRun == true)
+                { 
+                    continue;
+                }
+
+                //Запуск потока для обработки данных
                 device.ProccesStream = new Thread(device.loop);
                 device.ProccesStream.IsBackground = true;
                 device.ProccesStream.Start();
+                device.IsRun = true;
             }
 
             IsRun = true;
@@ -289,25 +298,7 @@ namespace S7Communication
 
         }
 
-        /// <summary>
-        /// Метод для однократного чтения тэгов
-        /// </summary>
-        public void Read()
-        {
-            Task.Factory.StartNew(() =>
-            {
-                foreach (var device in Devices)
-                {
-
-                    //SimaticQueryData sqd = new SimaticQueryData(Converter.CollectionToArray(device.SelectedTags), device);
-
-                    //while (sqd.Execute())
-                    //{
-
-                    //}
-                }
-            });
-        }
+        
 
 
 
@@ -420,21 +411,6 @@ namespace S7Communication
 
             //Если ничего не нашли, тогда пишем нуль в переменную
             SelectElement = null;
-        }
-
-        /// <summary>
-        /// Чтение значений
-        /// </summary>
-        public ICommand ReadCMD
-        {
-            get
-            {
-                return new DelegateCommand((obj) =>
-                {
-                    Read();
-                },
-                (obj) => (true));
-            }
         }
 
       
