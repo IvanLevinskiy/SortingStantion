@@ -129,6 +129,7 @@ namespace SortingStantion.Controls
             //Смена имени порта, к которому подключен
             //ручной сканер
             DataBridge.Scaner.Load(newvalue);
+            DataBridge.Scaner.Start();
 
             //Записываем в базу данных информацию об изминении
             DataBridge.AlarmLogging.AddMessage($"Изменен порт ручного сканера на : '{newvalue}'", MessageType.Event);

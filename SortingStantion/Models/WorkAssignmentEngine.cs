@@ -367,13 +367,13 @@ namespace SortingStantion.Models
             var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
 
             //Регистрация url
-            NetAclChecker.AddAddress("http://localhost:8080/iswms-client/strong/");
+            NetAclChecker.AddAddress("http://192.168.3.97:7081/jobs/");
 
             //Инициализация экземпляра  listener
             HttpListener listener = new HttpListener();
 
             //Установка адресов  listener
-            listener.Prefixes.Add("http://localhost:8080/iswms-client/strong/");
+            listener.Prefixes.Add("http://192.168.3.97:7081/jobs/");
 
             //Запуск слушателя
             try

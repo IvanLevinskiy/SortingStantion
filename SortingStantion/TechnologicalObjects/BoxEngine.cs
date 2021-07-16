@@ -160,23 +160,20 @@ namespace SortingStantion.TechnologicalObjects
                 //сброс тэга - код не выполняем
                 if ((bool)ov == false && (bool)nv == true)
                 {
-                    
+                    //Стираем GOODREAD и NOREAD
+                    //для того, чтоб процедура отработала один раз
+                    NOREAD.Write(false);
+
                     //Стирание данных из рузультата сканирования
                     GTIN.Write(string.Empty);
-                    SERIALNUMBER.Write(string.Empty);
+                    SERIALNUMBER.Write("NO READ ");
 
                     IS_GOOD_FLAG.Write(false);
 
                     //Взвод флага для перемещения изделия
                     //в колекцию коробов между сканером и отбраковщиком
                     TRANSFER_CMD.Write(true);
-
-                    //Стираем GOODREAD и NOREAD
-                    //для того, чтоб процедура отработала один раз
-                    NOREAD.Write(false);
                 }
-
-                
             };
         }
 

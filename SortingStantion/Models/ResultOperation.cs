@@ -239,22 +239,20 @@ namespace SortingStantion.Models
                     repeatPack.quantity ++;
                     return;
                 }
-
-                //Если кода повтора нет, удаляем код
-                //из результата
-                RemoteCode(serialnumber);
-
-                //Добавляем экземпляр повтора кода
-                var repeatPackItem = new RepeatPack()
-                {
-                    num = serialnumber,
-                    quantity = 1
-                };
-
-                repeatPacks.Add(repeatPackItem);
-
-
             }
+
+            //Если кода повтора нет, удаляем код
+            //из результата
+            RemoteCode(serialnumber);
+
+            //Добавляем экземпляр повтора кода
+            var repeatPackItem = new RepeatPack()
+            {
+                num = serialnumber,
+                quantity = 1
+            };
+
+            repeatPacks.Add(repeatPackItem);
         }
 
         /// <summary>

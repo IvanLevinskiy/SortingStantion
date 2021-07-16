@@ -97,6 +97,10 @@ namespace SortingStantion.TechnologicalObjects
             //Если порт был открыт - закрываем его
             if (port != null)
             {
+                //Отписка от приема сообщений из последовательного порта
+                port.DataReceived -= Port_DataReceived;
+
+                //Закрытие порта
                 port.Close();
             }
 
