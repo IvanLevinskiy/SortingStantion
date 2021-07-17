@@ -124,6 +124,54 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
+        /// Общее количество изделий
+        /// </summary>
+        S7DWORD QUANTITY_WORKSPACE
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Счетчик коробов
+        /// </summary>
+        S7DWORD QUANTITY_BOXS
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Количество изделий, 
+        /// отбракованых отбраковщиком автоматически
+        /// </summary>
+        S7DWORD QUANTITY_WORKSPACE_AUTO_REJECTED
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Количество изделий, отбракованых вручную
+        /// </summary>
+        S7DWORD QUANTITY_WORKSPACE_MANUAL_REJECTED
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Счетчик дефектного продукта
+        /// </summary>
+        S7DWORD DEFECT_COUNTER
+        {
+            get;
+            set;
+        }
+
+
+
+        /// <summary>
         /// Метод для инициализации данных
         // хранящихся в ПЛК
         /// </summary>
@@ -152,7 +200,7 @@ namespace SortingStantion.Models
             };
 
             ///Номер производственной серии
-            LOT_NO_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD3182-STR40");
+            LOT_NO_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD318-STR40");
             LOT_NO_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 Lot_No = LOT_NO_TAG.StatusText;
@@ -167,6 +215,12 @@ namespace SortingStantion.Models
 
             NUM_PACKS_IN_BOX_TAG = (S7WORD)device.GetTagByAddress("DB1.DBW362-WORD");
             NUM_PACKS_IN_SERIES_TAG = (S7WORD)device.GetTagByAddress("DB1.DBW364-WORD");
+
+            QUANTITY_WORKSPACE = (S7DWORD)device.GetTagByAddress("DB1.DBD16-DWORD");
+            QUANTITY_BOXS = (S7DWORD)device.GetTagByAddress("DB1.DBD20-DWORD");
+            QUANTITY_WORKSPACE_AUTO_REJECTED = (S7DWORD)device.GetTagByAddress("DB1.DBD24-DWORD");
+            QUANTITY_WORKSPACE_MANUAL_REJECTED = (S7DWORD)device.GetTagByAddress("DB1.DBD28-DWORD");
+            DEFECT_COUNTER = (S7DWORD)device.GetTagByAddress("DB1.DBD30-DWORD");
         }
 
 
@@ -527,6 +581,12 @@ namespace SortingStantion.Models
                     //Обнуление счетчиков изделий
                     NUM_PACKS_IN_BOX_TAG.Write(0);
                     NUM_PACKS_IN_SERIES_TAG.Write(0);
+
+                    QUANTITY_WORKSPACE.Write(0);
+                    QUANTITY_BOXS.Write(0);
+                    QUANTITY_WORKSPACE_AUTO_REJECTED.Write(0);
+                    QUANTITY_WORKSPACE_MANUAL_REJECTED.Write(0);
+                    DEFECT_COUNTER.Write(0);
 
                     //Выключение конвейера
                     DataBridge.Conveyor.Stop();
