@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace S7Communication
+namespace S7Communication.Utilites
 {
     internal class ByteArray
 	{

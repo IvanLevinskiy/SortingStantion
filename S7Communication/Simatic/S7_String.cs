@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace S7Communication
 {
-    public class S7_WSTRING : simaticTagBase
+    public class S7_String : simaticTagBase
     {
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public S7_WSTRING(string name, string address, SimaticGroup simaticGroup)
+        public S7_String(string name, string address, SimaticGroup simaticGroup)
         {
             this.Name = name;
             this.Address = address.Split('-')[0];
@@ -28,9 +27,9 @@ namespace S7Communication
         /// <returns></returns>
         int GetLenght(string s7operand)
         {
-            var str = s7operand.Replace("STR", "\n");
+            var str = s7operand.Replace("STR", "\n"); 
             str = str.Split('\n')[1];
-            return int.Parse(str) * 2 + 4;
+            return int.Parse(str) + 2;
         }
 
         /// <summary>
@@ -50,7 +49,7 @@ namespace S7Communication
             //указатель
             if (value == null)
             {
-                StatusText = string.Empty;
+                //StatusText = string.Empty;
                 return;
             }
 
@@ -80,47 +79,25 @@ namespace S7Communication
                 return;
             }
 
-           
             //Собираем строку
             List<byte> bytes_array = new List<byte>();
 
             //Получаем длину сообщения из строки
-            var stringlenght = bytes[offset + 3];
-
-            //Индекс первого символа
-            var firstSymbolIndex = offset + 4;
-
-            //Индекс последнего символа
-            var lastSymbolIndex = firstSymbolIndex + stringlenght * 2;
-
-            byte lastsymbol = 0;
+            var stringlenght = bytes[offset + 1];
 
             //Переносим данные из списка в массив
-            for (int i = firstSymbolIndex; i < lastSymbolIndex; i++)
+            for (int i = offset + 2; i < offset + stringlenght + 2; i++)
             {
-                if (bytes.Length < i)
+                if (bytes.Length - 1 < i)
                 {
                     return;
                 }
 
-                var symbol = bytes[i];
-
-                if (symbol == 4)
-                {
-                    symbol = 209;
-                }
-
-                if (lastsymbol == 209)
-                {
-                    symbol += 64;
-                }
-
-                bytes_array.Add(symbol);
-                lastsymbol = symbol;
+                bytes_array.Add(bytes[i]);
             }
 
             //Получаем строку из байтов
-            string str = Encoding.UTF8.GetString(bytes_array.ToArray());
+            string str = Encoding.GetEncoding(1251).GetString(bytes_array.ToArray());
             str = str.Replace("\0", "");
             Status = StatusText = str;
         }
@@ -177,13 +154,18 @@ namespace S7Communication
             //Вставляем длину строки
             btslist.Insert(0, (byte)btslist.Count);
 
-            bool result = true;
-
             //Записываем значения в ПЛК
-            this.device.WriteBytes(DataType, DBNumber, StartByteAddress + 1, btslist.ToArray());
+            var result = this.device.WriteBytes(DataType, DBNumber, StartByteAddress + 1, btslist.ToArray());
 
+            //Если запись прошла успешно,
+            //устанавливаем статус текст
+            if (result == true)
+            {
+                this.StatusText = value;
+            }
+
+            //Возвращаем результат записи тэга
             return result;
         }
-
     }
 }

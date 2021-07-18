@@ -7,7 +7,7 @@ namespace SortingStantion.S7Extension
     /// <summary>
     /// Класс, описывающий дисткетное сообщение
     /// </summary>
-    public class S7DiscreteAlarm : S7BOOL
+    public class S7DiscreteAlarm : S7_Boolean
     {
         /// <summary>
         /// Текст сообщения

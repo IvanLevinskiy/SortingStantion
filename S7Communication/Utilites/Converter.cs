@@ -1,4 +1,5 @@
-﻿using System;
+﻿using S7Communication.Enumerations;
+using System;
 using System.Collections.ObjectModel;
 using System.Xml;
 

@@ -1,4 +1,5 @@
-﻿using S7Communication.Utilites;
+﻿using S7Communication.Enumerations;
+using S7Communication.Utilites;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

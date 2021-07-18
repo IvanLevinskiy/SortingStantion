@@ -1,4 +1,5 @@
 ﻿using S7Communication;
+using S7Communication.Enumerations;
 using SortingStantion.Models;
 using SortingStantion.TechnologicalObjects;
 using System.Windows.Controls;

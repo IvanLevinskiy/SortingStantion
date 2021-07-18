@@ -45,7 +45,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Тэ для сброса ошибок
         /// </summary>
-        public S7BOOL ResetAlarmsTag;
+        public S7_Boolean ResetAlarmsTag;
 
         /// <summary>
         /// Ошибка 1 - Посторонний продукт (GTIN не совпадает с заданием)
@@ -109,7 +109,7 @@ namespace SortingStantion.Models
         {
             //Инициализация тэга по которому осуществляется сброс
             //всех сообщений
-            ResetAlarmsTag = (S7BOOL)device.GetTagByAddress("DB1.DBX132.1");
+            ResetAlarmsTag = (S7_Boolean)device.GetTagByAddress("DB1.DBX132.1");
 
             /*
                 Неисправность фотодатчика FS1

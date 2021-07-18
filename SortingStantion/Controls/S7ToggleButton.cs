@@ -57,7 +57,7 @@ namespace SortingStantion.Controls
             {
                 address = value;
 
-                S7TAG = (S7BOOL)DataBridge.S7Server.Devices[0].GetTagByAddress(address);
+                S7TAG = (S7_Boolean)DataBridge.S7Server.Devices[0].GetTagByAddress(address);
 
                 //Если регистр не найден
                 if (S7TAG == null)
@@ -77,7 +77,7 @@ namespace SortingStantion.Controls
         /// <summary>
         /// Поле - связанный бит
         /// </summary>
-        public S7BOOL S7TAG
+        public S7_Boolean S7TAG
         {
             get;
             set;

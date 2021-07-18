@@ -50,7 +50,7 @@ namespace SortingStantion.TechnologicalObjects
         /// <summary>
         /// Команда ПУСК-ОСТАНОВКА
         /// </summary>
-        public S7BOOL Run
+        public S7_Boolean Run
         {
             get;
             set;
@@ -60,7 +60,7 @@ namespace SortingStantion.TechnologicalObjects
         /// Тэг, полученный от сканера,
         /// что линия остановлена
         /// </summary>
-        public S7BOOL IsStopFromTimerTag
+        public S7_Boolean IsStopFromTimerTag
         {
             get;
             set;
@@ -106,11 +106,11 @@ namespace SortingStantion.TechnologicalObjects
         public Conveyor()
         {
             //Тэг для запуска - останова линии
-            Run = new S7BOOL("", "DB1.DBX98.0", group);
+            Run = new S7_Boolean("", "DB1.DBX98.0", group);
 
             //Тэг, указывающий, что линия установлена с учетом задержки
             //на останов
-            IsStopFromTimerTag = new S7BOOL("", "DB1.DBX86.1", group);
+            IsStopFromTimerTag = new S7_Boolean("", "DB1.DBX86.1", group);
 
             //Подпись на событие по изминеию статуса работы
             //линии

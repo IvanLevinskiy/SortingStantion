@@ -224,8 +224,8 @@ namespace S7Communication
                 //case "BOOL":  tag = new mbSingleRegister(address, Types.Short); break;
                 //case "BYTE": tag = new mbSingleRegister(address, Types.Ushort); break;
                 //case "WORD":   tag = new mbRealRegister(address); break;
-                case "DWORD": tag = new S7DWORD(name, address, this); break;
-                case "REAL": tag = new S7REAL(name, address, this); break;
+                case "DWORD": tag = new S7_DWord(name, address, this); break;
+                case "REAL": tag = new S7_Real(name, address, this); break;
             }
 
             //возвращаем регистр

@@ -52,44 +52,44 @@ namespace SortingStantion.TechnologicalObjects
         /// <summary>
         /// Сигнал от сканера GOODREAD
         /// </summary>
-        S7BOOL GOODREAD;
+        S7_Boolean GOODREAD;
 
         /// <summary>
         /// Сигналь от сканера NOREAD
         /// </summary>
-        S7BOOL NOREAD;
+        S7_Boolean NOREAD;
 
         /// <summary>
         /// Сигнал для перемещения данных
         /// просканированного изделия в коллекцию
         /// </summary>
-        S7BOOL TRANSFER_CMD;
+        S7_Boolean TRANSFER_CMD;
 
         /// <summary>
         /// Тэг GTIN
         /// </summary>
-        S7_STRING GTIN;
+        S7_String GTIN;
 
         /// <summary>
         /// Тэг ID
         /// </summary>
-        S7_STRING SERIALNUMBER;
+        S7_String SERIALNUMBER;
 
         /// <summary>
         /// Результат сканирования
         /// </summary>
-        S7_CHARS_ARRAY SCAN_DATA;
+        S7_CharsArray SCAN_DATA;
 
         /// <summary>
         /// Тэг - разрешить повтор кода продукта
         /// </summary>
-        S7BOOL REPEAT_ENABLE;
+        S7_Boolean REPEAT_ENABLE;
 
         /// <summary>
         /// Тэг, указывающий на то, что отбраковка продукта
         /// не нужна
         /// </summary>
-        S7BOOL IS_GOOD_FLAG;
+        S7_Boolean IS_GOOD_FLAG;
 
 
         /// <summary>
@@ -104,17 +104,17 @@ namespace SortingStantion.TechnologicalObjects
         public BoxEngine()
         {
             //Инициализация сигналов от сканера
-            GOODREAD = (S7BOOL)device.GetTagByAddress("DB1.DBX380.0");
-            NOREAD   = (S7BOOL)device.GetTagByAddress("DB1.DBX380.1");
-            TRANSFER_CMD = (S7BOOL)device.GetTagByAddress("DB1.DBX380.2");
-            IS_GOOD_FLAG = (S7BOOL)device.GetTagByAddress("DB1.DBX380.3");
-            REPEAT_ENABLE = (S7BOOL)device.GetTagByAddress("DB1.DBX134.0");
+            GOODREAD = (S7_Boolean)device.GetTagByAddress("DB1.DBX380.0");
+            NOREAD   = (S7_Boolean)device.GetTagByAddress("DB1.DBX380.1");
+            TRANSFER_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX380.2");
+            IS_GOOD_FLAG = (S7_Boolean)device.GetTagByAddress("DB1.DBX380.3");
+            REPEAT_ENABLE = (S7_Boolean)device.GetTagByAddress("DB1.DBX134.0");
 
-            GTIN = (S7_STRING)device.GetTagByAddress("DB1.DBD382-STR14");
-            SERIALNUMBER = (S7_STRING)device.GetTagByAddress("DB1.DBD398-STR6");
+            GTIN = (S7_String)device.GetTagByAddress("DB1.DBD382-STR14");
+            SERIALNUMBER = (S7_String)device.GetTagByAddress("DB1.DBD398-STR6");
      
             //Данные из сканера
-            SCAN_DATA = (S7_CHARS_ARRAY)device.GetTagByAddress("DB9.DBD14-CHARS100");
+            SCAN_DATA = (S7_CharsArray)device.GetTagByAddress("DB9.DBD14-CHARS100");
             //SCAN_DATA.Write("010460456789012621F&8h3W93h(0F");
 
             //Подписываемся на событие по изминению

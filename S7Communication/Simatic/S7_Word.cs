@@ -5,12 +5,12 @@ using System.Text;
 
 namespace S7Communication
 {
-    public class S7WORD : simaticTagBase
+    public class S7_Word : simaticTagBase
     {
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public S7WORD(string name, string address, SimaticGroup simaticGroup)
+        public S7_Word(string name, string address, SimaticGroup simaticGroup)
         {
             this.Name = name;
             this.Address = address;

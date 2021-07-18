@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using S7Communication.Enumerations;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace S7Communication

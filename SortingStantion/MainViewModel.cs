@@ -140,7 +140,7 @@ namespace SortingStantion.MainScreen
         /// Команда принять - завершить
         /// задание
         /// </summary>
-        public S7BOOL TaskTag
+        public S7_Boolean TaskTag
         {
             get;
             set;
@@ -151,7 +151,7 @@ namespace SortingStantion.MainScreen
         /// наличие или отсутсвие связи с ПЛК
         /// (данный флаг надо циклически взводить)
         /// </summary>
-        public S7BOOL ConnectFlag
+        public S7_Boolean ConnectFlag
         {
             get;
             set;
@@ -168,7 +168,7 @@ namespace SortingStantion.MainScreen
             CurrentTime = new TimeUpdater();
                         
             //Тэг который сбрасывает дисконект
-            ConnectFlag = new S7BOOL("ConnectFlag", "DB1.DBX0.0", group);
+            ConnectFlag = new S7_Boolean("ConnectFlag", "DB1.DBX0.0", group);
 
             //Запуск сервера
             server.Start();

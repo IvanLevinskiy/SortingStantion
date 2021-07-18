@@ -52,7 +52,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Тэг, отвечающий за Принять - завершить задание
         /// </summary>
-        S7BOOL BUZZER_TAG
+        S7_Boolean BUZZER_TAG
         {
             get;
             set;
@@ -63,7 +63,7 @@ namespace SortingStantion.Models
         /// </summary>
         public Buzzer()
         {
-            BUZZER_TAG = (S7BOOL)device.GetTagByAddress("DB1.DBX120.0");
+            BUZZER_TAG = (S7_Boolean)device.GetTagByAddress("DB1.DBX120.0");
         }
 
         /// <summary>

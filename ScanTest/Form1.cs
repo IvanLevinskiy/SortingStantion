@@ -24,10 +24,10 @@ namespace ScanTest
             set;
         }
 
-        S7BOOL GoodRead;
-        S7BOOL NoRead;
-        S7BOOL FS1;
-        S7_CHARS_ARRAY SCAN_DATA;
+        S7_Boolean GoodRead;
+        S7_Boolean NoRead;
+        S7_Boolean FS1;
+        S7_CharsArray SCAN_DATA;
         string barcode;
 
         public Form1()
@@ -40,10 +40,10 @@ namespace ScanTest
             var group = new SimaticGroup();
             device.AddGroup(group);
 
-            GoodRead = new S7BOOL("", "M8.0", group);
-            NoRead = new S7BOOL("", "M8.1", group);
-            FS1 = new S7BOOL("", "M8.2", group);
-            SCAN_DATA = (S7_CHARS_ARRAY)device.GetTagByAddress("DB9.DBD14-CHARS100");
+            GoodRead = new S7_Boolean("", "M8.0", group);
+            NoRead = new S7_Boolean("", "M8.1", group);
+            FS1 = new S7_Boolean("", "M8.2", group);
+            SCAN_DATA = (S7_CharsArray)device.GetTagByAddress("DB9.DBD14-CHARS100");
 
             server.Start();
 

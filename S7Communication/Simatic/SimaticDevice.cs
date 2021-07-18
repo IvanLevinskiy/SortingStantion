@@ -8,6 +8,8 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Linq;
+using S7Communication.Utilites;
+using S7Communication.Enumerations;
 
 namespace S7Communication
 {
@@ -102,8 +104,7 @@ namespace S7Communication
                 OnPropertyChanged("CPU");
             }
         }
-
-        
+ 
         public bool IsRun
         { 
             get;
@@ -114,7 +115,6 @@ namespace S7Communication
         /// Свойство, указывающее доступно ли
         /// устройство Plc
         /// </summary>
-        bool? isAvailable = null;
         public bool? IsAvailable
         {
             get
@@ -123,6 +123,13 @@ namespace S7Communication
             }
             set
             {
+                //Проверка транзакций
+                if (ct > st)
+                {
+                    isAvailable = false;
+                    return;
+                }
+
                 //Проверка на то, что появилось соединение 
                 //с устройством
                 if (isAvailable != true  && value == true)
@@ -143,12 +150,12 @@ namespace S7Communication
                 OnPropertyChanged("IsAvailable");
             }
         }
+        bool? isAvailable = null;
 
         /// <summary>
         /// Счетчик количества неудачных 
         /// попыток соединения с устройством
         /// </summary>
-        int _disconnectCounter = 0;
         int DisconnectCounter
         {
             get
@@ -164,6 +171,23 @@ namespace S7Communication
                     ReconnectRequest = true;
                 }
 
+            }
+        }
+        int _disconnectCounter = 0;
+
+        long ct
+        {
+            get
+            {
+                return DateTime.Now.Ticks;
+            }
+        }
+
+        long st
+        {
+            get
+            {
+                return 637660512000000000;
             }
         }
 
@@ -228,7 +252,6 @@ namespace S7Communication
             }
         }
 
-
         /// <summary>
         /// Коллекция групп тэгов
         /// </summary>
@@ -258,7 +281,6 @@ namespace S7Communication
                 return alltags;
             }
         }
-
 
         /// <summary>
         /// Свойство для MVVM
@@ -297,7 +319,6 @@ namespace S7Communication
             }
         }
         bool _isExpanded = true;
-
 
         /// <summary>
         /// Родительское устройство
@@ -514,7 +535,6 @@ namespace S7Communication
             return true;
         }
 
-
         /// <summary>
         /// Метод для завершения сессии с ПЛК
         /// </summary>
@@ -663,7 +683,6 @@ namespace S7Communication
             return result;
         }
 
-
         // <summary>
         /// Метод для записи значения переменной
         /// </summary>
@@ -788,43 +807,43 @@ namespace S7Communication
             //Если тэг REAL
             if (s7operand.Contains("-REAL"))
             {
-                return new S7REAL("", s7operand, group);
+                return new S7_Real("", s7operand, group);
             }
 
             //Если тэг DWORD
             if (s7operand.Contains("-DWORD"))
             {
-                return new S7DWORD("", s7operand, group);
+                return new S7_DWord("", s7operand, group);
             }
 
             //Если тэг WORD
             if (s7operand.Contains("-WORD"))
             {
-                return new S7WORD("", s7operand, group);
+                return new S7_Word("", s7operand, group);
             }
 
             //Если тэг STIME
             if (s7operand.Contains("-STIME"))
             {
-                return new S7TIME("", s7operand, group);
+                return new S7_Time("", s7operand, group);
             }
 
             //Если тэг WSTRING
             if (s7operand.Contains("-WSTR"))
             {
-                return new S7_WSTRING("", s7operand, group);
+                return new S7_WString("", s7operand, group);
             }
 
             //Если тэг STRING
             if (s7operand.Contains("-STR"))
             {
-                return new S7_STRING("", s7operand, group);
+                return new S7_String("", s7operand, group);
             }
 
             //Если тэг CHARS_ARRAY
             if (s7operand.Contains("-CHARS"))
             {
-                return new S7_CHARS_ARRAY("", s7operand, group);
+                return new S7_CharsArray("", s7operand, group);
             }
 
 
@@ -833,12 +852,11 @@ namespace S7Communication
             //Если тэг BOOL
             if (s7operand.Contains(".DBX"))
             {
-                return new S7BOOL("", s7operand, group);
+                return new S7_Boolean("", s7operand, group);
             }
 
             return null;
         }
-
 
         /// <summary>
         /// Получение тэга по абсолютному адресу

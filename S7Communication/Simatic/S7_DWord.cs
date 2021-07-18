@@ -2,17 +2,20 @@
 
 namespace S7Communication
 {
-    public class S7TIME : simaticTagBase
+    public class S7_DWord : simaticTagBase
     {
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public S7TIME(string name, string address, SimaticGroup simaticGroup)
+        public S7_DWord(string name, string address, SimaticGroup simaticGroup)
         {
             this.Name = name;
             this.Address = address;
             this.group = simaticGroup;
             this.Lenght = 4;
+
+            //Разбор адреса операнда
+            ParseAddress(Address);
 
             //Добавление тэга в группу
             simaticGroup.Tags.Add(this);
@@ -36,12 +39,12 @@ namespace S7Communication
             //указатель
             if (value == null)
             {
-                //StatusText = string.Empty;
+                StatusText = string.Empty;
                 return;
             }
 
             //Преобразуем значения
-            var locstatus = Convert.ToDouble(value);
+            var locstatus = Convert.ToInt32(value);
 
             //Получаем текстовый вид
             StatusText = string.Format("{0:0}", locstatus);
@@ -51,7 +54,7 @@ namespace S7Communication
         /// Метод для построения статуса из байт
         /// </summary>
         /// <param name="bytes"></param>
-        /// <param name="startbytefromrequest"></param>
+        /// <param name="offset"></param>
         public override void BuildStatus(byte[] bytes, int startbytefromrequest)
         {
             int offset = StartByteAddress - startbytefromrequest;
@@ -60,28 +63,20 @@ namespace S7Communication
             //выходим из функции
             if (bytes == null)
             {
-                Status = null;
-                StatusText = string.Empty;
+                //Status = null;
+                //StatusText = string.Empty;
                 return;
             }
 
-            if (bytes.Length < 4)
+            if (bytes.Length < offset + 4)
             {
-                Status = null;
-                StatusText = string.Empty;
+                //Status = null;
+                //StatusText = string.Empty;
                 return;
             }
-
-            var btsarr = new byte[]
-            {
-                bytes[offset + 3],
-                bytes[offset + 2],
-                bytes[offset + 1],
-                bytes[offset + 0],
-            };
 
             //Построение статуса из байтов
-            Status = BitConverter.ToInt32(btsarr, 0);
+            Status = (UInt32)(bytes[0 + offset] << 32) | (UInt32)(bytes[1 + offset] << 16) | (UInt32)(bytes[2 + offset] << 8) | ((UInt32)(bytes[3 + offset]));
         }
 
         /// <summary>
@@ -90,7 +85,7 @@ namespace S7Communication
         /// <param name="value"></param>
         public override bool Write(object value)
         {
-            UInt32 uvalue = Convert.ToUInt32(value);
+            Int32 uvalue = Convert.ToInt32(value);
             var array = BitConverter.GetBytes(uvalue);
             this.device.WriteBytes(DataType, DBNumber, StartByteAddress, array);
             return true;
@@ -102,17 +97,7 @@ namespace S7Communication
         /// <param name="value"></param>
         public override bool Write(string value)
         {
-            //Преобразование с обработкой ошибки
-            //ввода
-            UInt32 uvalue = 0;
-            var result = UInt32.TryParse(value, out uvalue);
-
-            //Обработка ошибки ввода
-            if (result == false)
-            {
-                return false;
-            }
-
+            Int32 uvalue = Convert.ToInt32(value);
             var array = BitConverter.GetBytes(uvalue);
 
             //Переворачиваем байты как у симатика
@@ -128,6 +113,5 @@ namespace S7Communication
             this.device.WriteBytes(DataType, DBNumber, StartByteAddress, rotaryarray);
             return true;
         }
-
     }
 }

@@ -2,12 +2,12 @@
 
 namespace S7Communication
 {
-    public class S7REAL : simaticTagBase
+    public class S7_Real : simaticTagBase
     {
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public S7REAL(string name, string address, SimaticGroup simaticGroup)
+        public S7_Real(string name, string address, SimaticGroup simaticGroup)
         {
             this.Name = name;
             this.Address = address;

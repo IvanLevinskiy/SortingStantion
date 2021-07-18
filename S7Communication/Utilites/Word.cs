@@ -1,9 +1,10 @@
-﻿using System;
+﻿using S7Communication.Utilites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace S7Communication
+namespace S7Communication.Utilites
 {
 	public static class Word
 	{

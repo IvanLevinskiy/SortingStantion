@@ -62,7 +62,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Тэг, отвечающий за Принять - завершить задание
         /// </summary>
-        S7BOOL IN_WORK_TAG
+        S7_Boolean IN_WORK_TAG
         {
             get;
             set;
@@ -71,7 +71,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Уникальный идентификатор задания.
         /// </summary>
-        S7_STRING TASK_ID_TAG
+        S7_String TASK_ID_TAG
         {
             get;
             set;
@@ -80,7 +80,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Номер GTIN. (14 символов)
         /// </summary>
-        S7_STRING GTIN_TAG
+        S7_String GTIN_TAG
         {
             get;
             set;
@@ -89,7 +89,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Наименование продукта (UTF-8)
         /// </summary>
-        S7_STRING PRODUCT_NAME_TAG
+        S7_String PRODUCT_NAME_TAG
         {
             get;
             set;
@@ -98,7 +98,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Номер производственной серии (до 20 символов) 
         /// </summary>
-        S7_STRING LOT_NO_TAG
+        S7_String LOT_NO_TAG
         {
             get;
             set;
@@ -107,7 +107,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Кол-во продуктов в коробе. 
         /// </summary>
-        S7WORD NUM_PACKS_IN_BOX_TAG
+        S7_Word NUM_PACKS_IN_BOX_TAG
         {
             get;
             set;
@@ -117,7 +117,7 @@ namespace SortingStantion.Models
         /// Ожидаемое количество продуктов в серии 
         /// (определяется по заданию на производство серии) 
         /// </summary>
-        S7WORD NUM_PACKS_IN_SERIES_TAG
+        S7_Word NUM_PACKS_IN_SERIES_TAG
         {
             get;
             set;
@@ -126,7 +126,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Общее количество изделий
         /// </summary>
-        S7DWORD QUANTITY_WORKSPACE
+        S7_DWord QUANTITY_WORKSPACE
         {
             get;
             set;
@@ -135,7 +135,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Счетчик коробов
         /// </summary>
-        S7DWORD QUANTITY_BOXS
+        S7_DWord QUANTITY_BOXS
         {
             get;
             set;
@@ -145,7 +145,7 @@ namespace SortingStantion.Models
         /// Количество изделий, 
         /// отбракованых отбраковщиком автоматически
         /// </summary>
-        S7DWORD QUANTITY_WORKSPACE_AUTO_REJECTED
+        S7_DWord QUANTITY_WORKSPACE_AUTO_REJECTED
         {
             get;
             set;
@@ -154,7 +154,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Количество изделий, отбракованых вручную
         /// </summary>
-        S7DWORD QUANTITY_WORKSPACE_MANUAL_REJECTED
+        S7_DWord QUANTITY_WORKSPACE_MANUAL_REJECTED
         {
             get;
             set;
@@ -163,7 +163,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Счетчик дефектного продукта
         /// </summary>
-        S7DWORD DEFECT_COUNTER
+        S7_DWord DEFECT_COUNTER
         {
             get;
             set;
@@ -178,7 +178,7 @@ namespace SortingStantion.Models
         void PlcDataInit()
         {
             //Инициализация тэгов
-            IN_WORK_TAG = (S7BOOL)device.GetTagByAddress("DB1.DBX148.0");
+            IN_WORK_TAG = (S7_Boolean)device.GetTagByAddress("DB1.DBX148.0");
             IN_WORK_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 InWork = (bool)newvalue;
@@ -186,41 +186,41 @@ namespace SortingStantion.Models
             };
 
             //ID задания
-            TASK_ID_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD150-STR40");
+            TASK_ID_TAG = (S7_String)device.GetTagByAddress("DB1.DBD150-STR40");
             TASK_ID_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 TaskID = TASK_ID_TAG.StatusText;
             };
 
             //GTIN
-            GTIN_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD192-STR40");
+            GTIN_TAG = (S7_String)device.GetTagByAddress("DB1.DBD192-STR40");
             GTIN_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 GTIN = GTIN_TAG.StatusText;
             };
 
             ///Номер производственной серии
-            LOT_NO_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD318-STR40");
+            LOT_NO_TAG = (S7_String)device.GetTagByAddress("DB1.DBD318-STR40");
             LOT_NO_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 Lot_No = LOT_NO_TAG.StatusText;
             };
 
             //Наименорвание продукта
-            PRODUCT_NAME_TAG = (S7_STRING)device.GetTagByAddress("DB1.DBD234-STR82");
+            PRODUCT_NAME_TAG = (S7_String)device.GetTagByAddress("DB1.DBD234-STR82");
             PRODUCT_NAME_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 Product_Name = PRODUCT_NAME_TAG.StatusText;
             };
 
-            NUM_PACKS_IN_BOX_TAG = (S7WORD)device.GetTagByAddress("DB1.DBW362-WORD");
-            NUM_PACKS_IN_SERIES_TAG = (S7WORD)device.GetTagByAddress("DB1.DBW364-WORD");
+            NUM_PACKS_IN_BOX_TAG = (S7_Word)device.GetTagByAddress("DB1.DBW362-WORD");
+            NUM_PACKS_IN_SERIES_TAG = (S7_Word)device.GetTagByAddress("DB1.DBW364-WORD");
 
-            QUANTITY_WORKSPACE = (S7DWORD)device.GetTagByAddress("DB1.DBD16-DWORD");
-            QUANTITY_BOXS = (S7DWORD)device.GetTagByAddress("DB1.DBD20-DWORD");
-            QUANTITY_WORKSPACE_AUTO_REJECTED = (S7DWORD)device.GetTagByAddress("DB1.DBD24-DWORD");
-            QUANTITY_WORKSPACE_MANUAL_REJECTED = (S7DWORD)device.GetTagByAddress("DB1.DBD28-DWORD");
-            DEFECT_COUNTER = (S7DWORD)device.GetTagByAddress("DB1.DBD30-DWORD");
+            QUANTITY_WORKSPACE = (S7_DWord)device.GetTagByAddress("DB1.DBD16-DWORD");
+            QUANTITY_BOXS = (S7_DWord)device.GetTagByAddress("DB1.DBD20-DWORD");
+            QUANTITY_WORKSPACE_AUTO_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD24-DWORD");
+            QUANTITY_WORKSPACE_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28-DWORD");
+            DEFECT_COUNTER = (S7_DWord)device.GetTagByAddress("DB1.DBD30-DWORD");
         }
 
 
@@ -230,7 +230,6 @@ namespace SortingStantion.Models
         /// Флаг возвращает или задает
         /// принято ли задание
         /// </summary>
-        bool inWorkFeedBack = false;
         public bool InWork
         {
             get
@@ -244,11 +243,12 @@ namespace SortingStantion.Models
                 OnPropertyChanged("InWork");
             }
         }
+        bool inWorkFeedBack = false;
 
         /// <summary>
-        /// Флаг, указывающий, что задание не принять в работу
+        /// Флаг, указывающий, 
+        /// что задание не принято в работу
         /// </summary>
-        bool inNotWork = false;
         public bool InNotWork
         {
             get
@@ -261,11 +261,11 @@ namespace SortingStantion.Models
                 OnPropertyChanged("InNotWork");
             }
         }
+        bool inNotWork = false;
 
         /// <summary>
         /// Уникальный идентификатор задания.
         /// </summary>
-        string taskID = string.Empty;
         public string TaskID
         {
             get
@@ -279,11 +279,11 @@ namespace SortingStantion.Models
                 OnPropertyChanged("TaskID");
             }
         }
+        string taskID = string.Empty;
 
         /// <summary>
         /// Номер GTIN. (14 символов)
         /// </summary>
-        string gtin = string.Empty;
         public string GTIN
         {
             get
@@ -297,12 +297,11 @@ namespace SortingStantion.Models
                 OnPropertyChanged("GTIN");
             }
         }
-
+        string gtin = string.Empty;
 
         /// <summary>
         /// Наименование продукта (UTF-8)
         /// </summary>
-        string product_Name = string.Empty;
         public string Product_Name
         {
             get
@@ -316,11 +315,11 @@ namespace SortingStantion.Models
                 OnPropertyChanged("Product_Name");
             }
         }
+        string product_Name = string.Empty;
 
         /// <summary>
         /// Номер производственной серии (до 20 символов) 
         /// </summary>
-        string lot_No = string.Empty;
         public string Lot_No
         {
             get
@@ -334,6 +333,7 @@ namespace SortingStantion.Models
                 OnPropertyChanged("Lot_No");
             }
         }
+        string lot_No = string.Empty;
 
         /// <summary>
         /// Коллекция рабочих заданий
@@ -407,116 +407,7 @@ namespace SortingStantion.Models
             });
         }
 
-        /// <summary>
-        /// Метод для запуcка http listener
-        /// </summary>
-        async void StartListener()
-        {
-            //Получение адреса ПК, запросы от которого необходимо
-            //прослушивать для получения задания
-            var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
-
-            //Регистрация url
-            NetAclChecker.AddAddress("http://192.168.100.3:7081/jobs/");
-
-            //Инициализация экземпляра  listener
-            HttpListener listener = new HttpListener();
-
-            //Установка адресов  listener
-            listener.Prefixes.Add("http://192.168.100.3:7081/jobs/");
-            listener.Prefixes.Add("http://localhost:7081/jobs/");
-
-            //Запуск слушателя
-            try
-            {
-                listener.Start();
-            }
-            catch (Exception ex)
-            {
-                //Запись в лог
-                Logger.AddExeption("WorkAssignmentEngine.cs", ex);
-
-                //Выход из функции
-                return;
-            }
-                     
-
-            //Цикл для бесконечной прослушки listener
-            while (true)
-            {
-                //метод GetContext блокирует текущий поток, ожидая получение запроса
-                HttpListenerContext context = listener.GetContext();
-                HttpListenerRequest request = context.Request;
-
-                // получаем объект ответа
-                HttpListenerResponse response = context.Response;
-
-                //Читаем  данные из ответа
-                string data = string.Empty;
-                using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
-                {
-                    data = reader.ReadToEnd();
-                }
-
-                //Если данные не пустая строка - производим десериализацию
-                var workAssignment = JsonConvert.DeserializeObject<WorkAssignment>(data);
-
-                // создаем ответ в виде кода html
-                string responseStr = "201";
-
-                //Проверка задания и перенос задачи в текущую задачу
-                var result = CheckTask(workAssignment);
-
-                //Объявление локального делегата
-                Action action = null;
-
-                //В случае, если проверка прошла 
-                //успешно
-                if (result == true)
-                {
-                    action = () =>
-                    {
-                        var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание может быть принято в работу", DataBridge.myGreen);
-                        DataBridge.MSGBOX.Add(msg);
-                    };                   
-                    
-                    //Перенос свойств в задание которое может быть
-                    //принято в работу
-                    WorkAssignments[0] = workAssignment;
-                }
-
-                //В случае, если в процедуре принятия задания
-                //произошла ошибка
-                if (result == false)
-                {
-                    action = () =>
-                    {
-                        var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание имеет неверный формат", DataBridge.myRed);
-                        DataBridge.MSGBOX.Add(msg);
-                    };
-                    
-                    //формирование ответа                   
-                    responseStr = "404 Bad Request";
-                }
-                               
-                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseStr);
-
-                // получаем поток ответа и пишем в него ответ
-                response.ContentLength64 = buffer.Length;
-                Stream output = response.OutputStream;
-                output.Write(buffer, 0, buffer.Length);
-
-                //Выводим в потоке UI сообщение
-                DataBridge.MainScreen.Dispatcher.Invoke(action);
-
-                // закрываем поток
-                output.Close();
-            }
-
-            // останавливаем прослушивание подключений
-            listener.Stop();
-        }
-
+       
         bool CheckTask(WorkAssignment workAssignment)
         {
             //Результат проверки
@@ -698,12 +589,132 @@ namespace SortingStantion.Models
                     IN_WORK_TAG.Write(false);
 
                     //Сброс результата 
-                    DataBridge.Report.SendReport();
+                    try
+                    {
+                        DataBridge.Report.SendReport();
+                    }
+                    catch (Exception ex)
+                    {
+                        //Запись в базу данных
+                        message = $"Ошибка отправки отчета";
+                        msg = new UserMessage(message, DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(msg);
+                    }    
 
                     return;
                 },
                 (obj) => (true));
             }
+        }
+
+        /// <summary>
+        /// Метод для запуcка http listener
+        /// </summary>
+        async void StartListener()
+        {
+            //Получение адреса ПК, запросы от которого необходимо
+            //прослушивать для получения задания
+            var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
+
+            //Регистрация url
+            NetAclChecker.AddAddress("http://192.168.100.3:7081/jobs/");
+
+            //Инициализация экземпляра  listener
+            HttpListener listener = new HttpListener();
+
+            //Установка адресов  listener
+            listener.Prefixes.Add("http://192.168.100.3:7081/jobs/");
+            listener.Prefixes.Add("http://localhost:7081/jobs/");
+
+            //Запуск слушателя
+            try
+            {
+                listener.Start();
+            }
+            catch (Exception ex)
+            {
+                //Запись в лог
+                Logger.AddExeption("WorkAssignmentEngine.cs", ex);
+
+                //Выход из функции
+                return;
+            }
+
+
+            //Цикл для бесконечной прослушки listener
+            while (true)
+            {
+                //метод GetContext блокирует текущий поток, ожидая получение запроса
+                HttpListenerContext context = listener.GetContext();
+                HttpListenerRequest request = context.Request;
+
+                // получаем объект ответа
+                HttpListenerResponse response = context.Response;
+
+                //Читаем  данные из ответа
+                string data = string.Empty;
+                using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
+                {
+                    data = reader.ReadToEnd();
+                }
+
+                //Если данные не пустая строка - производим десериализацию
+                var workAssignment = JsonConvert.DeserializeObject<WorkAssignment>(data);
+
+                // создаем ответ в виде кода html
+                string responseStr = "201";
+
+                //Проверка задания и перенос задачи в текущую задачу
+                var result = CheckTask(workAssignment);
+
+                //Объявление локального делегата
+                Action action = null;
+
+                //В случае, если проверка прошла 
+                //успешно
+                if (result == true)
+                {
+                    action = () =>
+                    {
+                        var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание может быть принято в работу", DataBridge.myGreen);
+                        DataBridge.MSGBOX.Add(msg);
+                    };
+
+                    //Перенос свойств в задание которое может быть
+                    //принято в работу
+                    WorkAssignments[0] = workAssignment;
+                }
+
+                //В случае, если в процедуре принятия задания
+                //произошла ошибка
+                if (result == false)
+                {
+                    action = () =>
+                    {
+                        var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание имеет неверный формат", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(msg);
+                    };
+
+                    //формирование ответа                   
+                    responseStr = "404 Bad Request";
+                }
+
+                byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseStr);
+
+                // получаем поток ответа и пишем в него ответ
+                response.ContentLength64 = buffer.Length;
+                Stream output = response.OutputStream;
+                output.Write(buffer, 0, buffer.Length);
+
+                //Выводим в потоке UI сообщение
+                DataBridge.MainScreen.Dispatcher.Invoke(action);
+
+                // закрываем поток
+                output.Close();
+            }
+
+            // останавливаем прослушивание подключений
+            listener.Stop();
         }
 
 

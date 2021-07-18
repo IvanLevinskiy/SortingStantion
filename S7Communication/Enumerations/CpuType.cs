@@ -1,4 +1,4 @@
-﻿namespace S7Communication
+﻿namespace S7Communication.Enumerations
 {
     public enum CpuType
     {

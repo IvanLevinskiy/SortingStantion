@@ -4,7 +4,7 @@ using System.Text;
 
 namespace S7Communication
 {
-    public class S7_CHARS_ARRAY : simaticTagBase
+    public class S7_CharsArray : simaticTagBase
     {
         /// <summary>
         /// Текст из массива
@@ -26,7 +26,7 @@ namespace S7Communication
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public S7_CHARS_ARRAY(string name, string address, SimaticGroup simaticGroup)
+        public S7_CharsArray(string name, string address, SimaticGroup simaticGroup)
         {
             this.Name = name;
             this.Address = address.Split('-')[0];

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace S7Communication
+namespace S7Communication.Enumerations
 {
     //Тип тэга
     public enum SimaticType

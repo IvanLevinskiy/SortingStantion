@@ -2,7 +2,7 @@
 
 namespace S7Communication
 {
-    public class S7BOOL : simaticTagBase
+    public class S7_Boolean : simaticTagBase
     {
         /// <summary>
         /// Байт, в котором хранится
@@ -27,7 +27,7 @@ namespace S7Communication
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public S7BOOL(string name, string address, SimaticGroup simaticGroup)
+        public S7_Boolean(string name, string address, SimaticGroup simaticGroup)
         {
             this.Name = name;
             this.Address = address;
