@@ -421,13 +421,14 @@ namespace SortingStantion.Models
             var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
 
             //Регистрация url
-            NetAclChecker.AddAddress("http://192.168.3.97:7081/jobs/");
+            NetAclChecker.AddAddress("http://192.168.100.3:7081/jobs/");
 
             //Инициализация экземпляра  listener
             HttpListener listener = new HttpListener();
 
             //Установка адресов  listener
-            listener.Prefixes.Add("http://192.168.3.97:7081/jobs/");
+            listener.Prefixes.Add("http://192.168.100.3:7081/jobs/");
+            listener.Prefixes.Add("http://localhost:7081/jobs/");
 
             //Запуск слушателя
             try
@@ -462,11 +463,29 @@ namespace SortingStantion.Models
                 }
 
                 //Если данные не пустая строка - производим десериализацию
-                var tprices = JsonConvert.DeserializeObject<WorkAssignment>(data);
-
+                var workAssignment = JsonConvert.DeserializeObject<WorkAssignment>(data);
 
                 // создаем ответ в виде кода html
                 string responseStr = "201";
+
+                //Проверка задания и перенос задачи в текущую задачу
+                var result = CheckTask(workAssignment);
+
+                if (result == false)
+                {
+                    DataBridge.MSGBOX.Add(new UserMessage("На ПК поступило задание. Задание может быть принято в работу", DataBridge.myGreen));
+                    
+                    //Перенос свойств в задание которое может быть
+                    //принято в работу
+                    WorkAssignments[0] = workAssignment;
+                }
+
+                if (result == false)
+                {
+                    DataBridge.MSGBOX.Add(new UserMessage("На ПК поступило задание. В заднии имеются ошибки", DataBridge.myRed));
+                    responseStr = "404 Bad Request";
+                }
+                               
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseStr);
 
                 // получаем поток ответа и пишем в него ответ
@@ -480,6 +499,62 @@ namespace SortingStantion.Models
 
             // останавливаем прослушивание подключений
             listener.Stop();
+        }
+
+        bool CheckTask(WorkAssignment workAssignment)
+        {
+            //Результат проверки
+            bool result = true;
+
+            if (this.InWork == false)
+            {
+                //Проверка ID
+                if (string.IsNullOrEmpty(workAssignment.ID) == true)
+                {
+                    return false;
+                }
+
+                //Проверка GTIN
+                if (string.IsNullOrEmpty(workAssignment.gtin) == true)
+                {
+                    return false;
+                }
+
+                //Проверка lineNum
+                if (string.IsNullOrEmpty(workAssignment.lineNum) == true)
+                {
+                    return false;
+                }
+
+                //Проверка lotNo
+                if (string.IsNullOrEmpty(workAssignment.lotNo) == true)
+                {
+                    return false;
+                }
+
+                //Проверка productName
+                if (string.IsNullOrEmpty(workAssignment.productName) == true)
+                {
+                    return false;
+                }
+
+                //Проверка numPacksInSeries
+                if (workAssignment.numPacksInSeries == 0)
+                {
+                    return false;
+                }
+
+                //Проверка numРacksInBox
+                //if (workAssignment.numРacksInBox == 0)
+                //{
+                //    return false;
+                //}
+
+                //Ели проверка пройдена
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
