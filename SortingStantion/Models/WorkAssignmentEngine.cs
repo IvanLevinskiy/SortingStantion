@@ -335,7 +335,6 @@ namespace SortingStantion.Models
             }
         }
 
-
         /// <summary>
         /// Коллекция рабочих заданий
         /// </summary>
@@ -360,7 +359,6 @@ namespace SortingStantion.Models
             }
         }
 
-
         /// <summary>
         /// Событие, генерируемое при принятии
         /// нового задания
@@ -372,7 +370,6 @@ namespace SortingStantion.Models
         /// рабочего задания
         /// </summary>
         public event Action<WorkAssignment> WorkOrderCompletionNotification;
-
 
         /// <summary>
         /// Конструктор класса
@@ -409,7 +406,6 @@ namespace SortingStantion.Models
                
             });
         }
-
 
         /// <summary>
         /// Метод для запуcка http listener
@@ -471,18 +467,35 @@ namespace SortingStantion.Models
                 //Проверка задания и перенос задачи в текущую задачу
                 var result = CheckTask(workAssignment);
 
-                if (result == false)
+                //Объявление локального делегата
+                Action action = null;
+
+                //В случае, если проверка прошла 
+                //успешно
+                if (result == true)
                 {
-                    DataBridge.MSGBOX.Add(new UserMessage("На ПК поступило задание. Задание может быть принято в работу", DataBridge.myGreen));
+                    action = () =>
+                    {
+                        var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание может быть принято в работу", DataBridge.myGreen);
+                        DataBridge.MSGBOX.Add(msg);
+                    };                   
                     
                     //Перенос свойств в задание которое может быть
                     //принято в работу
                     WorkAssignments[0] = workAssignment;
                 }
 
+                //В случае, если в процедуре принятия задания
+                //произошла ошибка
                 if (result == false)
                 {
-                    DataBridge.MSGBOX.Add(new UserMessage("На ПК поступило задание. В заднии имеются ошибки", DataBridge.myRed));
+                    action = () =>
+                    {
+                        var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание имеет неверный формат", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(msg);
+                    };
+                    
+                    //формирование ответа                   
                     responseStr = "404 Bad Request";
                 }
                                
@@ -492,6 +505,9 @@ namespace SortingStantion.Models
                 response.ContentLength64 = buffer.Length;
                 Stream output = response.OutputStream;
                 output.Write(buffer, 0, buffer.Length);
+
+                //Выводим в потоке UI сообщение
+                DataBridge.MainScreen.Dispatcher.Invoke(action);
 
                 // закрываем поток
                 output.Close();

@@ -4,6 +4,7 @@ using SortingStantion.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 
 namespace SortingStantion.Models
 {
@@ -281,6 +282,28 @@ namespace SortingStantion.Models
             }
         }
 
+        /// <summary>
+        /// Метод для сериализации отчета
+        /// </summary>
+        /// <returns></returns>
+        string Serialize()
+        {
+            //Создание бэкап файла
+            var reportBackupFile = new ReportBackupFile()
+            {
+                id = this.CurrentWorkAssignment.ID,
+                operators = this.operators,
+                startTime = this.startTime,
+                endTime = DateTime.Now.GetDateTimeFormats()[43],
+                defectiveCodes = this.defectiveCodes,
+                Packs = this.Codes,
+                repeatPacks = this.repeatPacks
+            };
+
+            //Сериализация
+            return JsonSerializer.Serialize<ReportBackupFile>(reportBackupFile);
+        }
+
 
         /// <summary>
         /// Метод для сохранения
@@ -293,45 +316,8 @@ namespace SortingStantion.Models
                 return;
             }
 
-            //CurrentWorkAssignment = new WorkAssignment();
-            //CurrentWorkAssignment.ID = "108-500056";
-
-            //this.operators = new List<UserAuthorizationHistotyItem>()
-            //{
-            //    new UserAuthorizationHistotyItem()
-            //    { 
-            //        startTime = "2018-12-18T10:42:06+03:00",
-            //        endTime = "2018-12-18T10:42:37+03:00",
-            //        id="101"
-            //    }
-            //};
-
-            //this.defectiveCodes = new List<string>()
-            //{
-            //    "Y№BBf2", "2Ft^o9"
-            //};
-
-            //this.Codes = new List<string>()
-            //{
-            //    "bF3%hI", "I<GM>j", "P0)8df", "P\".Yj>", "h6#fR0", "R_hw\"", "0EDFj+"
-            //};
-
-
-            //Создание бэкап файла
-            var reportBackupFile = new ReportBackupFile()
-            {
-                id = this.CurrentWorkAssignment.ID,
-                operators = this.operators,
-                startTime = this.startTime,
-                endTime = DateTime.Now.GetDateTimeFormats()[43],
-                defectiveCodes = this.defectiveCodes,
-                Packs = this.Codes,
-                repeatPacks = this.repeatPacks
-
-            };
-
-            //Сериализация
-            string json = JsonSerializer.Serialize<ReportBackupFile>(reportBackupFile);
+            //Получение сериализованного отчета
+            string json = Serialize();
 
             //Сохранение файла
             StreamWriter sr = new StreamWriter(@"AppData\Task.json");
@@ -370,9 +356,48 @@ namespace SortingStantion.Models
         /// <summary>
         /// метод для отправки отчета
         /// </summary>
-        public void SendReport()
+        public bool SendReport()
         {
-            Reset();
+            //Результат операции отправки
+            //отчета
+            bool resultoperation = false;
+
+            //Получен ие настройки с данными конечного получателя отчетов
+            var setting = DataBridge.SettingsFile.GetSetting("SrvL3UrlReport");
+
+            //Получение получателя отчета
+            var endPoint = setting.Value;
+
+            //Формирование http запроса с отчетом
+            var httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(endPoint);
+            httpWebRequest.ContentType = "applicaion/json";
+            httpWebRequest.Method = "POST";
+
+            //Отправка отчета конечному получателю
+            using (var sw = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                string json = Serialize();
+                sw.Write(json);
+            }
+
+            //Прием ответа от получателя отчетов
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using (var sr = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = sr.ReadToEnd();
+
+                //Если в ответа содержится 201
+                //возвращаем true
+                if (result.Contains("201"))
+                {
+                    //Сброс текущего результата
+                    Reset();
+
+                    resultoperation = true;
+                }
+            }
+
+            return resultoperation;
         }
 
         /// <summary>
