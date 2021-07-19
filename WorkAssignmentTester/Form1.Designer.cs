@@ -66,7 +66,7 @@
             this.tbxEndPoint.Name = "tbxEndPoint";
             this.tbxEndPoint.Size = new System.Drawing.Size(689, 26);
             this.tbxEndPoint.TabIndex = 2;
-            this.tbxEndPoint.Text = "http://192.168.100.3:7081/jobs/";
+            this.tbxEndPoint.Text = "http://192.168.3.97:7080/jobs/";
             // 
             // label1
             // 
