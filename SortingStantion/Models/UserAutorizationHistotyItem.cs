@@ -48,7 +48,7 @@ namespace SortingStantion.Models
         public UserAuthorizationHistotyItem(User user)
         {
             this.id = user.ID;
-            endTime = DateTime.Now.ToString();
+            startTime = DateTime.Now.GetDateTimeFormats()[43];
         }
 
 

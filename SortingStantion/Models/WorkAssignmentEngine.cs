@@ -382,13 +382,6 @@ namespace SortingStantion.Models
             //Инициализация переменных ПЛК
             PlcDataInit();
 
-            StreamReader sr = new StreamReader("json.txt");
-            var text = sr.ReadToEnd();
-            sr.Close();
-            var datacontant = JsonConvert.DeserializeObject<WorkAssignment>(text);
-
-            WorkAssignments.Add(datacontant);
-
             //Запуск задачи по прослушиванию
             //http
             Task.Factory.StartNew(() =>
@@ -399,12 +392,28 @@ namespace SortingStantion.Models
                 }
                 catch (System.Net.HttpListenerException ex)
                 {
-                    SolidColorBrush brush = new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
-                    UserMessage messageItem = new Controls.UserMessage(ex.Message, MSGTYPE.ERROR);
+                    UserMessage messageItem = new Controls.UserMessage(ex.Message, DataBridge.myRed);
                     DataBridge.MSGBOX.Add(messageItem);
                 }
                
             });
+
+            //Подгрузка текущего задания
+            device.FirstScan += () =>
+            {
+                if (InWork == true)
+                {
+                    var wA = new WorkAssignment();
+                    wA.gtin = GTIN;
+                    wA.ID = TaskID;
+                    wA.productName = Product_Name;
+                    wA.numРacksInBox = int.Parse(NUM_PACKS_IN_BOX_TAG.StatusText);
+                    wA.numPacksInSeries = int.Parse(NUM_PACKS_IN_SERIES_TAG.StatusText);
+
+                    WorkAssignments.Add(wA);
+                    WorkOrderAcceptanceNotification?.Invoke(wA);
+                }
+            };
         }
 
        
@@ -413,41 +422,88 @@ namespace SortingStantion.Models
             //Результат проверки
             bool result = true;
 
+            Action action = null;
+            string messege = string.Empty;
+
+
             if (this.InWork == false)
             {
                 //Проверка ID
                 if (string.IsNullOrEmpty(workAssignment.ID) == true)
                 {
+                    action = () =>
+                    {
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не заполнено поле: ID", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(messageItem);
+                    };
+                    DataBridge.UIDispatcher.Invoke(action);
+
                     return false;
                 }
 
                 //Проверка GTIN
                 if (string.IsNullOrEmpty(workAssignment.gtin) == true)
                 {
+                    action = () =>
+                    {
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не заполнено поле: GTIN", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(messageItem);
+                    };
+                    DataBridge.UIDispatcher.Invoke(action);
+
                     return false;
                 }
 
                 //Проверка lineNum
                 if (string.IsNullOrEmpty(workAssignment.lineNum) == true)
                 {
+                    action = () =>
+                    {
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не заполнено поле: LineNum", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(messageItem);
+                    };
+                    DataBridge.UIDispatcher.Invoke(action);
+
                     return false;
                 }
 
                 //Проверка lotNo
                 if (string.IsNullOrEmpty(workAssignment.lotNo) == true)
                 {
+
+                    action = () =>
+                    {
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не заполнено поле: LotNo", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(messageItem);
+                    };
+                    DataBridge.UIDispatcher.Invoke(action);
+
                     return false;
                 }
 
                 //Проверка productName
                 if (string.IsNullOrEmpty(workAssignment.productName) == true)
                 {
+                    action = () =>
+                    {
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не заполнено поле: ProductName", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(messageItem);
+                    };
+                    DataBridge.UIDispatcher.Invoke(action);
+
                     return false;
                 }
 
                 //Проверка numPacksInSeries
                 if (workAssignment.numPacksInSeries == 0)
                 {
+                    action = () =>
+                    {
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не заполнено поле: numPacksInSeries", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(messageItem);
+                    };
+                    DataBridge.UIDispatcher.Invoke(action);
+
                     return false;
                 }
 
@@ -460,6 +516,15 @@ namespace SortingStantion.Models
                 //Ели проверка пройдена
                 return true;
             }
+
+            action = () =>
+            {
+                UserMessage messageItem = new Controls.UserMessage("Новое задание не может быть принято в работу поскольку текущее задание не завершено", DataBridge.myRed);
+                DataBridge.MSGBOX.Add(messageItem);
+            };
+            DataBridge.UIDispatcher.Invoke(action);
+
+            return false;
 
             return false;
         }
@@ -624,9 +689,9 @@ namespace SortingStantion.Models
             HttpListener listener = new HttpListener();
 
             //Установка адресов  listener
-            //listener.Prefixes.Add("http://192.168.3.97:7080/jobs/");
-            NetAclChecker.AddAddress("http://192.168.3.97:7080/jobs/");
-            listener.Prefixes.Add("http://localhost:7080/jobs/");
+            listener.Prefixes.Add("http://192.168.3.97:7080/jobs/");
+            //NetAclChecker.AddAddress("http://192.168.3.97:7080/jobs/");
+            //listener.Prefixes.Add("http://localhost:7080/jobs/");
 
             //Запуск слушателя
             try
@@ -655,7 +720,7 @@ namespace SortingStantion.Models
 
                 //Читаем  данные из ответа
                 string data = string.Empty;
-                using (var reader = new StreamReader(request.InputStream, request.ContentEncoding))
+                using (var reader = new StreamReader(request.InputStream, System.Text.Encoding.UTF8))
                 {
                     data = reader.ReadToEnd();
                 }
@@ -676,11 +741,15 @@ namespace SortingStantion.Models
                 //успешно
                 if (result == true)
                 {
+                    //Инициализация делегата
                     action = () =>
                     {
                         var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание может быть принято в работу", DataBridge.myGreen);
                         DataBridge.MSGBOX.Add(msg);
                     };
+
+                    //Выводим в потоке UI сообщение
+                    DataBridge.MainScreen.Dispatcher.Invoke(action);
 
                     //Перенос свойств в задание которое может быть
                     //принято в работу
@@ -691,12 +760,6 @@ namespace SortingStantion.Models
                 //произошла ошибка
                 if (result == false)
                 {
-                    action = () =>
-                    {
-                        var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание имеет неверный формат", DataBridge.myRed);
-                        DataBridge.MSGBOX.Add(msg);
-                    };
-
                     //формирование ответа                   
                     responseStr = "404 Bad Request";
                 }
@@ -707,9 +770,6 @@ namespace SortingStantion.Models
                 response.ContentLength64 = buffer.Length;
                 Stream output = response.OutputStream;
                 output.Write(buffer, 0, buffer.Length);
-
-                //Выводим в потоке UI сообщение
-                DataBridge.MainScreen.Dispatcher.Invoke(action);
 
                 // закрываем поток
                 output.Close();

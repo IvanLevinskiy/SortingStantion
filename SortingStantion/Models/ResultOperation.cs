@@ -288,6 +288,14 @@ namespace SortingStantion.Models
         /// <returns></returns>
         string Serialize()
         {
+            //Если время раюоты последнего оператора не указано
+            //уазываем его
+            if (string.IsNullOrEmpty(LastOperator.endTime) == true)
+            {
+                LastOperator.endTime = DateTime.Now.GetDateTimeFormats()[43];
+            }
+            
+
             //Создание бэкап файла
             var reportBackupFile = new ReportBackupFile()
             {

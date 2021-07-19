@@ -213,6 +213,11 @@ namespace S7Communication
         public event Action DataUpdated;
 
         /// <summary>
+        /// Событие, генерируемое по завершению первого скана
+        /// </summary>
+        public event Action FirstScan;
+
+        /// <summary>
         /// Событие, вызываемое при 
         /// получении соединения с устройством
         /// </summary>
@@ -330,6 +335,11 @@ namespace S7Communication
         /// за один запрос
         /// </summary>
         private List<simaticPackage> simaticPackages = new List<simaticPackage>();
+
+        /// <summary>
+        /// Флаг, указывающий на то, что флаг первый
+        /// </summary>
+        private bool firstScanFlag = true;
 
         /// <summary>
         /// Конструктор для получения устройства из XmlNode
@@ -970,13 +980,22 @@ namespace S7Communication
                     }
 
                     IsAvailable = true;
-                    Processing();  
+                    Processing();
                 //}
 
                 //Извещение подписчиков,
-                //что данные обновлены
-                DataUpdated?.Invoke();
+                //что первый скан завершен
+                if (firstScanFlag == true)
+                {
+                    FirstScan?.Invoke();
+                    firstScanFlag = false;
+                }
 
+                //Извещение подписчиков,
+                //что данные обновлены
+                DataUpdated?.Invoke();         
+                
+                //Технологическая пауза
                 Thread.Sleep(server.Timeout);
             }
 
