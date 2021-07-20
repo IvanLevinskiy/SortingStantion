@@ -366,6 +366,8 @@ namespace SortingStantion.Models
         /// </summary>
         public bool SendReport()
         {
+            return true;
+
             //Результат операции отправки
             //отчета
             bool resultoperation = false;

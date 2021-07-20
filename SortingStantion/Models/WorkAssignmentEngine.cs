@@ -753,7 +753,15 @@ namespace SortingStantion.Models
 
                     //Перенос свойств в задание которое может быть
                     //принято в работу
-                    WorkAssignments[0] = workAssignment;
+                    if (WorkAssignments.Count == 0)
+                    {
+                        WorkAssignments.Add(workAssignment);
+                    }
+                    else
+                    {
+                        WorkAssignments[0] = workAssignment;
+                    }
+                    
                 }
 
                 //В случае, если в процедуре принятия задания
