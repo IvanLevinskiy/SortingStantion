@@ -199,11 +199,11 @@ namespace SortingStantion.Models
             al_6.MessageAction = () =>
             {
                 //Если линия выключена
-                if (DataBridge.Conveyor.LineIsRun == false)
-                {
-                    al_6.Write(false);
-                    return;
-                }
+                //if (DataBridge.Conveyor.LineIsRun == false)
+                //{
+                //    al_6.Write(false);
+                //    return;
+                //}
 
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();

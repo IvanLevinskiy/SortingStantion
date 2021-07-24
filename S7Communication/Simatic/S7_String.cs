@@ -141,6 +141,13 @@ namespace S7Communication
             //Переводим данные в строку
             var data = value;
 
+            //Проверка на нулевой указатель
+            if (data == null)
+            {
+                return false;
+            }
+
+
             //Получаем байты из строки
             var bts = Encoding.GetEncoding(1251).GetBytes(data);
 

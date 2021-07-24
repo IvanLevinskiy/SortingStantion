@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace SortingStantion.MainScreen
 {
@@ -10,6 +11,18 @@ namespace SortingStantion.MainScreen
         public MainScreen()
         {
             InitializeComponent();
+
+            //Sharp7.S7Client s7Client = new Sharp7.S7Client();
+            //var result = s7Client.ConnectTo("192.168.3.70", 0, 1);
+            //var array = new byte[2274];
+            //result = s7Client.DBRead(5, 0, 2274, array);
+            //var ec = s7Client.ErrorText(result);
+
+            //int dt = 0;
+
+            //result = s7Client.PlcGetStatus(ref dt);
+            //ec = s7Client.ErrorText(result);
+
 
             //Внесение в базу данных сообщения о запуске приложения 
             DataBridge.AlarmLogging.AddMessage("Запуск приложения", Models.MessageType.Event);

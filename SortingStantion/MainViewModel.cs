@@ -170,6 +170,9 @@ namespace SortingStantion.MainScreen
             //Тэг который сбрасывает дисконект
             ConnectFlag = new S7_Boolean("ConnectFlag", "DB1.DBX0.0", group);
 
+            //Установка таймаута
+            server.Timeout = 0;
+
             //Запуск сервера
             server.Start();
 

@@ -133,16 +133,10 @@ namespace SortingStantion.TechnologicalObjects
 
                 //В случае, если ппроисходит 
                 //сброс тэга - код не выполняем
-                if ((bool)ov == false && (bool)nv == true )
+                if ((bool)ov == false && (bool)nv == true)
                 {
-                    Action action = () =>
-                    {
-                        BARCODESCANER_CHANGEVALUE(ov, nv);
-                    };
-                    DataBridge.MainScreen.Dispatcher.Invoke(action);
-                }
-
-                
+                    SCAN_DATA.DataUpdated += SCAN_DATA_DataUpdated;
+                }            
             };
 
             NOREAD.ChangeValue += (ov, nv) =>
@@ -178,18 +172,29 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Метод, вызываемый при обновлении массива данных
+        /// от сканера
+        /// </summary>
+        /// <param name="obj"></param>
+        private void SCAN_DATA_DataUpdated(object obj)
+        {
+            //В случае, если ппроисходит 
+            //сброс тэга - код не выполняем
+            Action action = () =>
+            {
+                BARCODESCANER_CHANGEVALUE(null, null);
+                SCAN_DATA.DataUpdated -= SCAN_DATA_DataUpdated;
+            };
+            DataBridge.MainScreen.Dispatcher.Invoke(action);
+        }
+
+        /// <summary>
         /// Событие, вызываемое при изменении статуса GOODREAD или NOREAD
         /// </summary>
         /// <param name="svalue"></param>
         private void BARCODESCANER_CHANGEVALUE(object oldvalue, object newvalue)
         {
-            bool? value = (bool?)newvalue;
-
-            //Если новое значение не true - выходим
-            if (value != true)
-            {
-                return;
-            }
+            
 
             //Стираем GOODREAD и NOREAD
             //для того, чтоб процедура отработала один раз
