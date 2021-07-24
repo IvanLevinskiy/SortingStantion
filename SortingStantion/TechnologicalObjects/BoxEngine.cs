@@ -50,46 +50,20 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
-        /// Сигнал от сканера GOODREAD
-        /// </summary>
-        S7_Boolean GOODREAD;
-
-        /// <summary>
-        /// Сигналь от сканера NOREAD
-        /// </summary>
-        S7_Boolean NOREAD;
-
-        /// <summary>
         /// Сигнал для перемещения данных
         /// просканированного изделия в коллекцию
         /// </summary>
-        S7_Boolean TRANSFER_CMD;
-
-        /// <summary>
-        /// Тэг GTIN
-        /// </summary>
-        S7_String GTIN;
-
-        /// <summary>
-        /// Тэг ID
-        /// </summary>
-        S7_String SERIALNUMBER;
+        S7_Boolean READ_CMD;
 
         /// <summary>
         /// Результат сканирования
         /// </summary>
-        S7_CharsArray SCAN_DATA;
+        S7_String SCAN_DATA;
 
         /// <summary>
         /// Тэг - разрешить повтор кода продукта
         /// </summary>
         S7_Boolean REPEAT_ENABLE;
-
-        /// <summary>
-        /// Тэг, указывающий на то, что отбраковка продукта
-        /// не нужна
-        /// </summary>
-        S7_Boolean IS_GOOD_FLAG;
 
 
         /// <summary>
@@ -104,23 +78,18 @@ namespace SortingStantion.TechnologicalObjects
         public BoxEngine()
         {
             //Инициализация сигналов от сканера
-            GOODREAD = (S7_Boolean)device.GetTagByAddress("DB1.DBX380.0");
-            NOREAD   = (S7_Boolean)device.GetTagByAddress("DB1.DBX380.1");
-            TRANSFER_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX380.2");
-            IS_GOOD_FLAG = (S7_Boolean)device.GetTagByAddress("DB1.DBX380.3");
             REPEAT_ENABLE = (S7_Boolean)device.GetTagByAddress("DB1.DBX134.0");
 
-            GTIN = (S7_String)device.GetTagByAddress("DB1.DBD382-STR14");
-            SERIALNUMBER = (S7_String)device.GetTagByAddress("DB1.DBD398-STR6");
-     
+            //Команда для считывания кода сканера
+            READ_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX378.0");
+
             //Данные из сканера
-            SCAN_DATA = (S7_CharsArray)device.GetTagByAddress("DB9.DBD14-CHARS100");
-            //SCAN_DATA.Write("010460456789012621F&8h3W93h(0F");
+            SCAN_DATA = (S7_String)device.GetTagByAddress("DB1.DBD494-STR100");
 
             //Подписываемся на событие по изминению
-            //тэга GOODREAD и NOREAD  и осуществляем вызов
+            //тэга READ_CMD  и осуществляем вызов
             //метода в потоке UI
-            GOODREAD.ChangeValue += (ov, nv) =>
+            READ_CMD.ChangeValue += (ov, nv) =>
             {
                 //Если новое или старое значение не bool
                 var errortr = (ov is bool) == false;
@@ -137,37 +106,6 @@ namespace SortingStantion.TechnologicalObjects
                 {
                     SCAN_DATA.DataUpdated += SCAN_DATA_DataUpdated;
                 }            
-            };
-
-            NOREAD.ChangeValue += (ov, nv) =>
-            {
-                //Если новое или старое значение не bool
-                var errortr = (ov is bool) == false;
-                errortr = errortr || (nv is bool) == false;
-
-                if (errortr == true)
-                {
-                    return;
-                }
-
-                //В случае, если ппроисходит 
-                //сброс тэга - код не выполняем
-                if ((bool)ov == false && (bool)nv == true)
-                {
-                    //Стираем GOODREAD и NOREAD
-                    //для того, чтоб процедура отработала один раз
-                    NOREAD.Write(false);
-
-                    //Стирание данных из рузультата сканирования
-                    GTIN.Write(string.Empty);
-                    SERIALNUMBER.Write("NO READ ");
-
-                    IS_GOOD_FLAG.Write(false);
-
-                    //Взвод флага для перемещения изделия
-                    //в колекцию коробов между сканером и отбраковщиком
-                    TRANSFER_CMD.Write(true);
-                }
             };
         }
 
@@ -194,11 +132,9 @@ namespace SortingStantion.TechnologicalObjects
         /// <param name="svalue"></param>
         private void BARCODESCANER_CHANGEVALUE(object oldvalue, object newvalue)
         {
-            
-
-            //Стираем GOODREAD и NOREAD
+            //Стираем флаг READ_CMD
             //для того, чтоб процедура отработала один раз
-            GOODREAD.Write(false);
+            READ_CMD.Write(false);
 
             /*
                 Если линия не в работе (определяется по таймеру остановки в TIA) 
@@ -359,15 +295,6 @@ namespace SortingStantion.TechnologicalObjects
             //Добавляем просканированное изделие
             //в коллекцию изделий результата
             DataBridge.Report.AddBox(scaner_serialnumber);
-
-            //Запись текущих GTIN и SerialNumber в ПЛК
-            GTIN.Write(scaner_gtin);
-            SERIALNUMBER.Write(scaner_serialnumber);
-            IS_GOOD_FLAG.Write(true);
-
-            //Взвод флага для перемещения изделия
-            //в колекцию коробов между сканером и отбраковщиком
-            TRANSFER_CMD.Write(true);
         }
     }
 }

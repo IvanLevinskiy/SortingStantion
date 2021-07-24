@@ -154,13 +154,19 @@
 
                 </Grid>
 
-                
+
 
             </Border>
 
-            <ScrollViewer Margin="0,68,0,60">
-                <StackPanel>
+            <Grid Margin="0,68,0,60">
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!--ЛЕВАЯ КОЛОНКА-->
+                <StackPanel Grid.Column="0">
                     <!--НАСТРОЙКИ СКАНЕРА-->
                     <StackPanel VerticalAlignment="Top"
                                 Margin="0,0,10,0"
@@ -251,18 +257,18 @@
 
                             <controls:S7TextBox Address="DB1.DBD110-STIME"
                                                 ParametrName="Время передачи данных"
-                                      Foreground="{StaticResource TextColor}"
-                                      Background="{StaticResource LightColor}"
-                                          FontSize="{StaticResource fontSizeData}"
-                                          FontFamily="{StaticResource fontFamilyData}"
-                                          VerticalContentAlignment="Center"
-                                      BorderThickness="0"
-                                      Height="40"
-                                      Width="100"
-                                      Margin="100,7,5,7"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"
-                                      HorizontalContentAlignment="Center"/>
+                                                Foreground="{StaticResource TextColor}"
+                                                Background="{StaticResource LightColor}"
+                                                FontSize="{StaticResource fontSizeData}"
+                                                FontFamily="{StaticResource fontFamilyData}"
+                                                VerticalContentAlignment="Center"
+                                                BorderThickness="0"
+                                                Height="40"
+                                                Width="100"
+                                                Margin="100,7,5,7"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Center"
+                                                HorizontalContentAlignment="Center"/>
 
                             <Rectangle Fill="{StaticResource GridColor}"
                                        Opacity="1"
@@ -273,10 +279,92 @@
 
                     </StackPanel>
 
+                    <!--НАСТРОЙКИ ПК-->
+                    <StackPanel Grid.Column="0"
+                                Grid.Row="1"
+                                VerticalAlignment="Top"
+                                Margin="0,10,10,0"
+                                Background="#FF1E1E1E">
+
+                        <Grid   Height="80"
+                                Margin="0"
+                                Background="{StaticResource LightColor}">
+
+                            <TextBlock  Text="Настройки ПК"
+                                        Margin="20,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="{StaticResource fontSizeData}"
+                                        FontFamily="{StaticResource fontFamilyData}"
+                                        Foreground="{StaticResource TextColor}"/>
+                        </Grid>
+
+                        <Grid Height="50" Margin="0,10,0,0">
+                            <TextBlock  Text="Порт ручного сканера:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                                Foreground="{StaticResource TextColor}"/>
+
+                            <controls:ComboBoxSerialPorts 
+                                      Foreground="{StaticResource TextColor}"
+                                      Background="{StaticResource LightColor}"
+                                      FontSize="{StaticResource fontSizeData}"
+                                      FontFamily="{StaticResource fontFamilyData}"
+                                      VerticalContentAlignment="Center"
+                                      BorderThickness="0"
+                                      Width="100"
+                                      Height="40"
+                                      Margin="100,7,5,7"
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          HorizontalContentAlignment="Center"/>
+
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
+
+                        </Grid>
+
+                        <Grid Height="50">
+                            <TextBlock Text="Игнорировать повтор продукта:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                           Foreground="{StaticResource TextColor}"/>
+
+                            <controls:S7ToggleButton Address="DB1.DBX134.0"
+                                                     Style="{StaticResource s7ToggleButton}"
+                                                     VerticalContentAlignment="Center"
+                                                     Width="80"
+                                                     Height="40"
+                                                     Margin="80,10,15,10"
+                                                     MinAccesLevel="1"
+                                                     HorizontalAlignment="Right"
+                                                     VerticalAlignment="Center"/>
+
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
+
+                        </Grid>
+
+
+
+                    </StackPanel>
+
+                </StackPanel>
+
+                <!--ПРАВАЯ КОЛОНКА-->
+                <StackPanel Grid.Column="1">
+
                     <!--НАСТРОЙКИ ОТБРАКОВЩИКА-->
                     <StackPanel Grid.Column="1"
                         VerticalAlignment="Top"
-                        Margin="0,5,10,0"
+                        Margin="0,0,10,0"
                         Background="#FF1E1E1E">
 
                         <Grid Height="80"
@@ -385,86 +473,11 @@
 
                     </StackPanel>
 
-                    <!--НАСТРОЙКИ ПК-->
-                    <StackPanel Grid.Column="0"
-                        VerticalAlignment="Top"
-                        Margin="0,5,10,0"
-                        Background="#FF1E1E1E">
-
-                        <Grid   Height="80"
-                        Margin="0"
-                        Background="{StaticResource LightColor}">
-
-                            <TextBlock  Text="Настройки ПК"
-                                Margin="20,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="{StaticResource fontSizeData}"
-                                FontFamily="{StaticResource fontFamilyData}"
-                                Foreground="{StaticResource TextColor}"/>
-                        </Grid>
-
-                        <Grid Height="50" Margin="0,10,0,0">
-                            <TextBlock  Text="Порт ручного сканера:"
-                                Margin="20,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="{StaticResource fontSizeData}"
-                                FontFamily="{StaticResource fontFamilyData}"
-                                Foreground="{StaticResource TextColor}"/>
-
-                            <controls:ComboBoxSerialPorts 
-                                      Foreground="{StaticResource TextColor}"
-                                      Background="{StaticResource LightColor}"
-                                      FontSize="{StaticResource fontSizeData}"
-                                      FontFamily="{StaticResource fontFamilyData}"
-                                      VerticalContentAlignment="Center"
-                                      BorderThickness="0"
-                                      Width="100"
-                                      Height="40"
-                                      Margin="100,7,5,7"
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center"
-                                          HorizontalContentAlignment="Center"/>
-
-                            <Rectangle Fill="{StaticResource GridColor}"
-                                       Opacity="1"
-                                       Height="1"
-                                       VerticalAlignment="Bottom"/>
-
-                        </Grid>
-
-                        <Grid Height="50">
-                            <TextBlock Text="Игнорировать повтор продукта:"
-                                Margin="20,0,0,0"
-                                VerticalAlignment="Center"
-                                FontSize="{StaticResource fontSizeData}"
-                                FontFamily="{StaticResource fontFamilyData}"
-                           Foreground="{StaticResource TextColor}"/>
-
-                            <controls:S7ToggleButton Address="DB1.DBX134.0"
-                                                     Style="{StaticResource s7ToggleButton}"
-                                                     VerticalContentAlignment="Center"
-                                                     Width="80"
-                                                     Height="40"
-                                                     Margin="80,10,15,10"
-                                                     MinAccesLevel="1"
-                                                     HorizontalAlignment="Right"
-                                                     VerticalAlignment="Center"/>
-
-                            <Rectangle Fill="{StaticResource GridColor}"
-                                       Opacity="1"
-                                       Height="1"
-                                       VerticalAlignment="Bottom"/>
-
-                        </Grid>
-
-
-
-                    </StackPanel>
-
                     <!--НАСТРОЙКИ ПЛК-->
                     <StackPanel Grid.Column="1"
+                            Grid.Row="1"
                         VerticalAlignment="Top"
-                        Margin="0,5,10,0"
+                        Margin="0,10,10,0"
                         Background="#FF1E1E1E">
 
                         <Grid   Height="80"
@@ -541,15 +554,13 @@
 
                     </StackPanel>
 
+
                 </StackPanel>
 
-            </ScrollViewer>
-         
+               
+            </Grid>
+
         </Grid>
-
-
-
-      
 
         <!--НИЖНЯЯ СТРОКА-->
         <Grid Height="60"

@@ -643,7 +643,6 @@ namespace S7Communication
             //операций перед запуском сервера
             PreparingForStartup();
 
-
             //Проверка на то, доступно ли устройство
             M1: if (Ping() == false)
             {
