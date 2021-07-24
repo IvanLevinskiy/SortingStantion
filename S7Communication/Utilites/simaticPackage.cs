@@ -199,9 +199,9 @@ namespace S7Communication
             temp &= (DBNumber == tag.DBNumber);
             temp &= (Tags[0] != tag);
 
-            var lenght = tag.StartByteAddress + tag.Lenght - StartByte;
+            //var lenght = tag.StartByteAddress + tag.Lenght - StartByte;
 
-            temp &= lenght <= 200;
+            //temp &= lenght <= 200;
 
             return temp;
 

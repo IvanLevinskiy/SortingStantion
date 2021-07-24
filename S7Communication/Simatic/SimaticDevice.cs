@@ -10,6 +10,7 @@ using System.Threading;
 using System.Linq;
 using S7Communication.Utilites;
 using S7Communication.Enumerations;
+using Sharp7;
 
 namespace S7Communication
 {
@@ -190,6 +191,11 @@ namespace S7Communication
                 return 637660512000000000;
             }
         }
+
+        /// <summary>
+        /// Экземпляр класса S7Client
+        /// </summary>
+        S7Client plc;
 
         /// <summary>
         /// Сокет
@@ -420,129 +426,9 @@ namespace S7Communication
         /// <returns></returns>
         public bool Open()
         {
-            
-            //Инициализация буфера
-            byte[] buffer = new byte[256];
-
-            //Попытка создать сокет
-            //и подключится к нему
-            try
-            {
-                this._mSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                this._mSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 100);
-                this._mSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, 100);
-                IPEndPoint remoteEP = new IPEndPoint(IPAddress.Parse(this.IP), 102);
-                this._mSocket.Connect(remoteEP);
-                
-                //Возврат значения, указывающего
-                //на отсутсвие ошибок чтения
-                //return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-
-            try
-            {
-                byte[] array = new byte[] 
-                { 
-                    3, 0, 0, 22, 17, 224, 0, 0, 0, 46, 0, 193, 2, 1, 0, 194, 2, 3, 0, 192, 1, 9 
-                };
-
-                CpuType cPU = this.CPU;
-                
-                
-                if (cPU <= CpuType.S7300)
-                {
-                    if (cPU == CpuType.S7200)
-                    {
-                        array[11] = 193;
-                        array[12] = 2;
-                        array[13] = 16;
-                        array[14] = 0;
-                        array[15] = 194;
-                        array[16] = 2;
-                        array[17] = 16;
-                        array[18] = 0;
-                        goto IL_241;
-                    }
-                    if (cPU != CpuType.S7300)
-                    {
-                        goto IL_23A;
-                    }
-                }
-                else
-                {
-                    if (cPU == CpuType.S7400)
-                    {
-                        array[11] = 193;
-                        array[12] = 2;
-                        array[13] = 1;
-                        array[14] = 0;
-                        array[15] = 194;
-                        array[16] = 2;
-                        array[17] = 3;
-                        array[18] = (byte)(this.Rack * 2 * 16 + this.Slot);
-                        goto IL_241;
-                    }
-                    if (cPU != CpuType.S71200)
-                    {
-                        if (cPU != CpuType.S71500)
-                        {
-                            goto IL_23A;
-                        }
-                        array[11] = 193;
-                        array[12] = 2;
-                        array[13] = 16;
-                        array[14] = 2;
-                        array[15] = 194;
-                        array[16] = 2;
-                        array[17] = 3;
-                        array[18] = (byte)(this.Rack * 2 * 16 + this.Slot);
-                        goto IL_241;
-                    }
-                }
-                array[11] = 193;
-                array[12] = 2;
-                array[13] = 1;
-                array[14] = 0;
-                array[15] = 194;
-                array[16] = 2;
-                array[17] = 3;
-                array[18] = (byte)(this.Rack * 2 * 16 + this.Slot);
-                goto IL_241;
-                IL_23A:
-                ErrorCode result = ErrorCode.WrongCPU_Type;
-                return false;
-                IL_241:
-
-                //Отправка телеграммы
-                this._mSocket.Send(array, 22, SocketFlags.None);
-
-
-                if (this._mSocket.Receive(buffer, 22, SocketFlags.None) != 22)
-                {
-                    throw new Exception(ErrorCode.WrongNumberReceivedBytes.ToString());
-                }
-
-                byte[] buffer2 = new byte[]
-                {
-                    3, 0, 0, 25, 2, 240, 128, 50, 1, 0, 0, 255, 255, 0, 8, 0, 0, 240, 0, 0, 3, 0, 3, 1, 0
-                };
-
-                this._mSocket.Send(buffer2, 25, SocketFlags.None);
-                if (this._mSocket.Receive(buffer, 27, SocketFlags.None) != 27)
-                {
-                    throw new Exception(ErrorCode.WrongNumberReceivedBytes.ToString());
-                }
-            }
-            catch (Exception ex2)
-            {
-                
-                return false;
-            }
-            return true;
+            plc = new S7Client();
+            var result = plc.ConnectTo(IP, Rack, Slot);
+            return result == 0;
         }
 
         /// <summary>
@@ -550,257 +436,6 @@ namespace S7Communication
         /// </summary>
         public void Close()
         {
-            if (this._mSocket != null && this._mSocket.Connected)
-            {
-                this._mSocket.Shutdown(SocketShutdown.Both);
-                this._mSocket.Close();
-            }
-        }
-
-        /// <summary>
-        /// Формирование заголовка
-        /// для чтения данных
-        /// </summary>
-        /// <param name="amount"></param>
-        /// <returns></returns>
-        private ByteArray ReadHeaderPackage(int amount = 1)
-        {
-            ByteArray byteArray = new ByteArray(19);
-            ByteArray arg_13_0 = byteArray;
-            byte[] expr_0F = new byte[3];
-            expr_0F[0] = 3;
-            arg_13_0.Add(expr_0F);
-            byteArray.Add((byte)(19 + 12 * amount));
-            byteArray.Add(new byte[]
-            {
-                2, 240, 128, 50, 1, 0, 0, 0, 0
-            });
-
-            byteArray.Add(Word.ToByteArray((ushort)(2 + amount * 12)));
-            byteArray.Add(new byte[]
-            {
-                0, 0, 4
-            });
-            byteArray.Add((byte)amount);
-            return byteArray;
-        }
-
-        /// <summary>
-        /// Формирование запроса для чтения данных
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="db"></param>
-        /// <param name="startByteAdr"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        private ByteArray CreateReadDataRequestPackage(MemmoryArea dataType, int db, int startByteAdr, int count = 1)
-        {
-            ByteArray byteArray = new ByteArray(12);
-            byteArray.Add(new byte[]
-            {
-                18,
-                10,
-                16
-            });
-            if (dataType == MemmoryArea.Counter || dataType == MemmoryArea.Timer)
-            {
-                byteArray.Add((byte)dataType);
-            }
-            else
-            {
-                byteArray.Add(2);
-            }
-            byteArray.Add(Word.ToByteArray((ushort)count));
-            byteArray.Add(Word.ToByteArray((ushort)db));
-            byteArray.Add((byte)dataType);
-            int num = (int)((long)(startByteAdr * 8) / 65535L);
-            byteArray.Add((byte)num);
-            if (dataType == MemmoryArea.Counter || dataType == MemmoryArea.Timer)
-            {
-                byteArray.Add(Word.ToByteArray((ushort)startByteAdr));
-            }
-            else
-            {
-                byteArray.Add(Word.ToByteArray((ushort)(startByteAdr * 8)));
-            }
-            return byteArray;
-        }
-
-        /// <summary>
-        /// Метод для чтения байт за один запрос
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="db"></param>
-        /// <param name="startByteAdr"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public byte[] ReadBytesWithASingleRequest(MemmoryArea dataType, int db, int startByteAdr, int count)
-        {
-            //Если сокет не инициализирован
-            if (_mSocket == null)
-            {
-                return null;
-            }
-
-            byte[] array = new byte[count];
-            byte[] result;
-            try
-            {
-                ByteArray byteArray = new ByteArray(31);
-                byteArray.Add(this.ReadHeaderPackage(1));
-                byteArray.Add(this.CreateReadDataRequestPackage(dataType, db, startByteAdr, count));
-
-                byte[] array2 = new byte[512];
-
-                lock (_mSocket)
-                {
-                    this._mSocket.Send(byteArray.array, byteArray.array.Length, SocketFlags.None);
-                    var lenght = this._mSocket.Receive(array2, 512, SocketFlags.None);
-                }
-                
-                //Неверное количество байт
-                if (array2[21] != 255)
-                {
-                    return null;
-                }
-
-                //Перенос байт в ответ
-                for (int i = 0; i < count; i++)
-                {
-                    array[i] = array2[i + 25];
-                }
-
-                //Возврат ответа
-                result = array;
-            }
-            catch (SocketException ex)
-            {
-                DisconnectCounter++;
-                return null;
-            }
-            catch (Exception ex2)
-            {
-                DisconnectCounter++;
-                return null;
-            }
-
-            //В случае удачной попытки соединения
-            //с устройством сбрасываем счетчик неудачных
-            //попыток соединения с устройством
-            DisconnectCounter = 0;
-
-            //Возвращаем результат
-            return result;
-        }
-
-        // <summary>
-        /// Метод для записи значения переменной
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="db"></param>
-        /// <param name="startByteAdr"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool WriteBytes(MemmoryArea dataType, int db, int startByteAdr, byte[] value)
-        {
-            //Проверка на нулевой
-            //указатель
-            if (_mSocket == null)
-            {
-                //Открываем сессию с ПЛК
-                if (this.Open() == false)
-                {
-                    return false;
-                }
-            }
-
-            byte[] array = new byte[513];
-
-            try
-            {
-                int num = value.Length;
-                int num2 = 35 + value.Length;
-                ByteArray byteArray = new ByteArray(num2);
-                ByteArray arg_2C_0 = byteArray;
-                byte[] expr_28 = new byte[3];
-                expr_28[0] = 3;
-                arg_2C_0.Add(expr_28);
-                byteArray.Add((byte)num2);
-                
-                byteArray.Add(new byte[]
-                {
-                    2, 240, 128, 50, 1, 0, 0
-                });
-
-                byteArray.Add(Word.ToByteArray((ushort)(num - 1)));
-
-                byteArray.Add(new byte[]
-                {
-                    0, 14
-                });
-
-                byteArray.Add(Word.ToByteArray((ushort)(num + 4)));
-
-                byteArray.Add(new byte[]
-                {
-                    5, 1, 18, 10, 16, 2
-                });
-
-                byteArray.Add(Word.ToByteArray((ushort)num));
-                byteArray.Add(Word.ToByteArray((ushort)db));
-                byteArray.Add((byte)dataType);
-                int num3 = (int)((long)(startByteAdr * 8) / 65535L);
-                byteArray.Add((byte)num3);
-                byteArray.Add(Word.ToByteArray((ushort)(startByteAdr * 8)));
-                byteArray.Add(new byte[]
-                {
-                    0, 4
-                });
-
-                byteArray.Add(Word.ToByteArray((ushort)(num * 8)));
-                byteArray.Add(value);
-
-
-                lock (_mSocket)
-                {
-                    this._mSocket.Send(byteArray.array, byteArray.array.Length, SocketFlags.None);
-                    this._mSocket.Receive(array, 512, SocketFlags.None);
-                }
-                
-                if (array[21] != 255)
-                {
-                    throw new Exception();
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Метод для получения всех вложенных тэгов
-        /// </summary>
-        /// <returns></returns>
-        public simaticTagBase [] GetTags()
-        {
-            List<simaticTagBase> tags = new List<simaticTagBase>();
-
-            foreach (var group in Groups)
-            {
-                foreach (var tag in group.Tags)
-                {
-                    tags.Add(tag);
-                }
-            }
-
-            return tags.ToArray();
-
         }
 
         /// <summary>
@@ -854,10 +489,7 @@ namespace S7Communication
             if (s7operand.Contains("-CHARS"))
             {
                 return new S7_CharsArray("", s7operand, group);
-            }
-
-
-            
+            }           
 
             //Если тэг BOOL
             if (s7operand.Contains(".DBX"))
@@ -867,6 +499,72 @@ namespace S7Communication
 
             return null;
         }
+
+        /// <summary>
+        /// Метод для чтения данных из ПЛК одним
+        /// запросом
+        /// </summary>
+        /// <param name="area"></param>
+        /// <param name="dbNumber"></param>
+        /// <param name="firstByte"></param>
+        /// <param name="amount"></param>
+        /// <param name="wordLen"></param>
+        /// <returns></returns>
+        public byte[] ReadBytesWithASingleRequest(MemmoryArea memmoryArea, int dbNumber, int firstByte, int amount)
+        {
+            //Получение численного значения memmoryArea
+            int s7arrea = (int)memmoryArea;
+
+            //Объявление массива
+            var bytes = new byte[amount];
+
+            //Объявление результата чтения
+            int result = 0;
+
+            //Блокировка объекта
+            lock (plc)
+            {
+                //Чтение данных
+                result = plc.ReadArea((S7Area)s7arrea, dbNumber, firstByte, amount, S7WordLength.Byte, bytes);
+            }
+           
+            //Если ответ с ошибкой - возвращаем null
+            if (result != 0)
+            {
+                return null;
+            }
+
+            //Возврат массива прочитаных байт
+            return bytes;
+        }
+
+        /// <summary>
+        /// Запись массива байт
+        /// </summary>
+        /// <param name="memmoryArea"></param>
+        /// <param name="dbNumber"></param>
+        /// <param name="firstByte"></param>
+        /// <param name="dataArray"></param>
+        /// <returns></returns>
+        public bool WriteBytes(MemmoryArea memmoryArea, int dbNumber, int firstByte, byte[] dataArray)
+        {
+            //Получение численного значения memmoryArea
+            int s7arrea = (int)memmoryArea;
+
+            //Объявление результата записи
+            int result = 0;
+
+            //Блокировка объекта
+            lock (plc)
+            {
+                //Запись данных
+                result = plc.WriteArea((S7Area)s7arrea, dbNumber, firstByte, dataArray.Length, S7WordLength.Byte, dataArray);
+            }           
+
+            //Возврат массива прочитаных байт
+            return result == 0;
+        }
+
 
         /// <summary>
         /// Получение тэга по абсолютному адресу
