@@ -1,4 +1,5 @@
-﻿using SortingStantion.Controls;
+﻿using S7Communication;
+using SortingStantion.Controls;
 using SortingStantion.Models;
 using System.Windows;
 
@@ -16,8 +17,41 @@ namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
         /// </summary>
         UserMessage userMessage;
 
+        /// <summary>
+        /// Указатель на главный Simatic TCP сервер
+        /// </summary>
+        SimaticServer server
+        {
+            get
+            {
+                return DataBridge.S7Server;
+            }
+        }
+
+        /// <summary>
+        /// Указатель на экземпляр ПЛК
+        /// </summary>
+        SimaticDevice device
+        {
+            get
+            {
+                return server.Devices[0];
+            }
+        }
+
+        /// <summary>
+        /// Тэг, хранящий количество изделий, отбраковыных вручную
+        /// </summary>
+        S7_DWord QUANTITY_PRODUCTS_MANUAL_REJECTED;
+
+        /// <summary>
+        /// GTIN
+        /// </summary>
         string GTIN;
 
+        /// <summary>
+        /// SerialNumber
+        /// </summary>
         string serialnumber;
 
         /// <summary>
@@ -30,6 +64,9 @@ namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
         {
             //Инициализация UI
             InitializeComponent();
+
+            //Количество изделий, отбракованых вручную
+            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28");
 
             //Перенос полей в буфер
             this.serialnumber = serialnumber;
@@ -138,6 +175,11 @@ namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
         /// <param name="e"></param>
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
+            //Инкремент счетчика отбракованых изделий вручную
+            var value = (int)QUANTITY_PRODUCTS_MANUAL_REJECTED.Status + 1;
+            QUANTITY_PRODUCTS_MANUAL_REJECTED.Write(value);
+
+
             DataBridge.MSGBOX.Remove(userMessage);
             this.Closing -= Window_Closing;
             DataBridge.Scaner.NewDataNotification -= Scaner_NewDataNotification;

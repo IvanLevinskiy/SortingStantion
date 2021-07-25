@@ -98,6 +98,13 @@ namespace SortingStantion.Models
         public S7DiscreteAlarm al_13;
 
         /// <summary>
+        /// Количесво изделий,
+        /// отбракованых вручную
+        /// </summary>
+        public S7_DWord QUANTITY_PRODUCTS_MANUAL_REJECTED;
+        
+
+        /// <summary>
         /// Сообщение о том, что соединение с ПЛК потеряно
         /// </summary>
         Controls.UserMessage msgLostConnection;
@@ -110,6 +117,9 @@ namespace SortingStantion.Models
             //Инициализация тэга по которому осуществляется сброс
             //всех сообщений
             ResetAlarmsTag = (S7_Boolean)device.GetTagByAddress("DB1.DBX132.1");
+
+            //Тэг, хранящий количество изделий, отбраковыных вручную
+            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28");
 
             /*
                 Неисправность фотодатчика FS1
