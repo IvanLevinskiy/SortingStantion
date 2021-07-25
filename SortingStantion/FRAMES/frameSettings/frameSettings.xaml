@@ -382,7 +382,6 @@
                                     Foreground="{StaticResource IconColor}"
                                     BorderThickness="0"
                                     BorderBrush="Transparent"
-                                    IsEnabled="{Binding Conveyor.LineIsRun}"
                                     Command="{Binding Conveyor.forceStopLineCMD}">
                         <TextBlock TextAlignment="Center"
                                    FontSize="{StaticResource fontSizeButtons}">

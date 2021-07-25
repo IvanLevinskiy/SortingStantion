@@ -288,7 +288,14 @@ namespace SortingStantion.Models
         /// <returns></returns>
         string Serialize()
         {
-            //Если время раюоты последнего оператора не указано
+            //Если за время работы никто не авторизировался
+            //сериализацию результата не производим
+            if (LastOperator == null)
+            {
+                return "";
+            }
+
+            //Если время работы последнего оператора
             //уазываем его
             if (string.IsNullOrEmpty(LastOperator.endTime) == true)
             {
@@ -326,6 +333,12 @@ namespace SortingStantion.Models
 
             //Получение сериализованного отчета
             string json = Serialize();
+
+            //Если ответ не сериализирован, выходим
+            if (string.IsNullOrEmpty(json) == true)
+            {
+                return;
+            }
 
             //Сохранение файла
             StreamWriter sr = new StreamWriter(@"AppData\Task.json");
@@ -388,6 +401,13 @@ namespace SortingStantion.Models
             using (var sw = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
                 string json = Serialize();
+
+                //Если ответ не сериализирован, выходим
+                if (string.IsNullOrEmpty(json) == true)
+                {
+                    return false;
+                }
+
                 sw.Write(json);
             }
 

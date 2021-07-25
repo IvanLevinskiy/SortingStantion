@@ -621,11 +621,10 @@ namespace S7Communication
             }
 
             //Сортировка тэгов по первому байту
-            //Сортировка тэгов по первому байту
             tags = Tags.OrderBy(o => o.StartByteAddress).ToList();
 
             //Распределение тэгов по 
-            //коллекции
+            //пакетам
             do
             {
                 var package = new simaticPackage(tags, this);
@@ -664,21 +663,19 @@ namespace S7Communication
             ReconnectRequest = false;
 
             while (true)
-            {             
-                //lock (_mSocket)
-                //{
+            {
+
                 //Если имеется запрос на переподключение
                 //пытаемся переподключиться
                 if (ReconnectRequest == true)
-                    {
-                        Close();
-                        IsAvailable = false;
-                        goto M1;
-                    }
+                {
+                    Close();
+                    IsAvailable = false;
+                    goto M1;
+                }
 
-                    IsAvailable = true;
-                    Processing();
-                //}
+                IsAvailable = true;
+                Processing();
 
                 //Извещение подписчиков,
                 //что первый скан завершен

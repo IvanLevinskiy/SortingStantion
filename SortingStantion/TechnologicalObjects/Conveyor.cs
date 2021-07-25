@@ -3,6 +3,7 @@ using SortingStantion.Controls;
 using SortingStantion.Utilites;
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows.Input;
 
 namespace SortingStantion.TechnologicalObjects
@@ -186,7 +187,7 @@ namespace SortingStantion.TechnologicalObjects
                 {
                     Run.Write(true);
                 },
-                (obj) => (true));
+                (obj) => (LineIsRun == false));
             }
         }
 
@@ -244,7 +245,7 @@ namespace SortingStantion.TechnologicalObjects
                 {
                     Run.Write(false);
                 },
-                (obj) => (true));
+                (obj) => (LineIsRun == true));
             }
         }
 
@@ -255,6 +256,10 @@ namespace SortingStantion.TechnologicalObjects
         /// <param name="obj"></param>
         private void Run_ChangeValue(object oldvalue, object newvalue)
         {
+            //Уведомление UI
+            OnPropertyChanged("LineIsRun");
+            OnPropertyChanged("LineIsStop");
+
             //Защита от неверных типов данных
             if (newvalue is bool? == false)
             {
