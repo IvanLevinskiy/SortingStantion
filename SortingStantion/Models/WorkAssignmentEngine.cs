@@ -351,6 +351,16 @@ namespace SortingStantion.Models
         {
             get
             {
+                if (WorkAssignments == null)
+                {
+                    return null;
+                }
+
+                if (WorkAssignments.Count <= 0)
+                {
+                    return null;
+                }
+
                 return WorkAssignments[0];
             }
             set
@@ -542,7 +552,7 @@ namespace SortingStantion.Models
                     //пишем ошибку - "Задание не может быть принято в работу"
                     if (SelectedWorkAssignment == null)
                     {
-                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу", DataBridge.myRed);
+                        UserMessage messageItem = new Controls.UserMessage("В буфере нет заданий, которые могут быть приняты в работу", DataBridge.myRed);
                         DataBridge.MSGBOX.Add(messageItem);
                         return;
                     }
@@ -635,9 +645,6 @@ namespace SortingStantion.Models
                     QUANTITY_WORKSPACE_MANUAL_REJECTED.Write(0);
                     DEFECT_COUNTER.Write(0);
 
-                    //Выключение конвейера
-                    DataBridge.Conveyor.Stop();
-
                     //Уведомление подписчиков о завершении задания
                     WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
 
@@ -657,6 +664,7 @@ namespace SortingStantion.Models
                     try
                     {
                         DataBridge.Report.SendReport();
+                        WorkAssignments.Clear();
                     }
                     catch (Exception ex)
                     {
