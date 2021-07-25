@@ -1,4 +1,5 @@
 ﻿using SortingStantion.Models;
+using SortingStantion.TechnologicalObjects;
 using System.Windows.Controls;
 
 namespace SortingStantion.frameSettings
@@ -17,6 +18,21 @@ namespace SortingStantion.frameSettings
             get
             {
                 return DataBridge.ScreenEngine;
+            }
+        }
+
+        /// <summary>
+        /// Технологический объект - конвейер
+        /// </summary>
+        public Conveyor Conveyor
+        {
+            get
+            {
+                return DataBridge.Conveyor;
+            }
+            set
+            {
+                Conveyor = value;
             }
         }
 

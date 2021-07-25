@@ -175,6 +175,22 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Команда для принудительного запуска
+        /// конвейера
+        /// </summary>
+        public ICommand forceStartLineCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    Run.Write(true);
+                },
+                (obj) => (true));
+            }
+        }
+
+        /// <summary>
         /// Метод для остановки конвейера
         /// </summary>
         public void Stop()
@@ -211,6 +227,22 @@ namespace SortingStantion.TechnologicalObjects
                     DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТОП. Линия остановлена", Models.MessageType.Event);
 
                     Stop();
+                },
+                (obj) => (true));
+            }
+        }
+
+        /// <summary>
+        /// Команда для принулительного останова
+        /// конвейера
+        /// </summary>
+        public ICommand forceStopLineCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    Run.Write(false);
                 },
                 (obj) => (true));
             }

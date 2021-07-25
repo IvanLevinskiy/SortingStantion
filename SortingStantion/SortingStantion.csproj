@@ -153,7 +153,6 @@
     <Compile Include="FRAMES\frameSettings\frameSettings.xaml.cs">
       <DependentUpon>frameSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FRAMES\frameSettings\frameSettingsViewModel.cs" />
     <Compile Include="FRAMES\frameSettings\windowExit.xaml.cs">
       <DependentUpon>windowExit.xaml</DependentUpon>
     </Compile>

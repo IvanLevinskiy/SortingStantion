@@ -356,6 +356,42 @@
 
                     </StackPanel>
 
+                    <!--КНОПКА Запуска ЛИНИИ-->
+                    <controls:xButton 
+                                Height="50"
+                                Margin="20,20,20,5"
+                                Style="{StaticResource btnStyle}"
+                                Background="#FF6DC27A"
+                                Foreground="{StaticResource IconColor}"
+                                MinAccesLevel="1"
+                                BorderThickness="0"
+                                BorderBrush="Transparent"
+                                Command="{Binding Conveyor.forceStartLineCMD}">
+                                <TextBlock  TextAlignment="Center"
+                                            FontSize="{StaticResource fontSizeButtons}">
+                                        <Run>ЗАПУСТИТЬ ЛИНИЮ</Run>
+                                </TextBlock>
+                    </controls:xButton>
+
+                    <!--КНОПКА ОСТАНОВА ЛИНИИ-->
+                    <controls:xButton Height="50"
+                                      Margin="20,5,20,20"
+                                      MinAccesLevel="1"
+                                       Style="{StaticResource btnStyle}"
+                                    Background="#FFDB4969"
+                                    Foreground="{StaticResource IconColor}"
+                                    BorderThickness="0"
+                                    BorderBrush="Transparent"
+                                    IsEnabled="{Binding Conveyor.LineIsRun}"
+                                    Command="{Binding Conveyor.forceStopLineCMD}">
+                        <TextBlock TextAlignment="Center"
+                                   FontSize="{StaticResource fontSizeButtons}">
+                                <Run>ОСТАНОВИТЬ ЛИНИЮ</Run>
+                        </TextBlock>
+                    </controls:xButton >
+
+
+
                 </StackPanel>
 
                 <!--ПРАВАЯ КОЛОНКА-->
