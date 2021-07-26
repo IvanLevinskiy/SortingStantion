@@ -119,7 +119,7 @@ namespace SortingStantion.Models
             ResetAlarmsTag = (S7_Boolean)device.GetTagByAddress("DB1.DBX132.1");
 
             //Тэг, хранящий количество изделий, отбраковыных вручную
-            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28");
+            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28-DWORD");
 
             /*
                 Неисправность фотодатчика FS1

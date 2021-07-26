@@ -48,7 +48,8 @@ namespace SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode
             //Инициализация UI
             InitializeComponent();
 
-            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28");
+            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28-DWORD");
+
 
             //Передача указателя на сообщение в зоне
             //информации, которое надо удалить при нажатии кнопки Отмена
