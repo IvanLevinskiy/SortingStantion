@@ -20,42 +20,12 @@ namespace SortingStantion.TOOL_WINDOWS.windowPusherError
         S7DiscreteAlarm alarm;
 
         /// <summary>
-        /// Указатель на главный Simatic TCP сервер
-        /// </summary>
-        SimaticServer server
-        {
-            get
-            {
-                return DataBridge.S7Server;
-            }
-        }
-
-        /// <summary>
-        /// Указатель на экземпляр ПЛК
-        /// </summary>
-        SimaticDevice device
-        {
-            get
-            {
-                return server.Devices[0];
-            }
-        }
-
-        /// <summary>
-        /// Тэг, хранящий количество изделий, отбраковыных вручную
-        /// </summary>
-        S7_DWord QUANTITY_PRODUCTS_MANUAL_REJECTED;
-
-        /// <summary>
         /// Конструктор класса
         /// </summary>
         public windowPusherError(S7DiscreteAlarm alarm)
         {
             //Инициализация UI
             InitializeComponent();
-
-            //Количество изделий, отбракованых вручную
-            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28");
 
             //Передача окна, в уентре которого выводить окно
             this.Owner = DataBridge.MainScreen;
@@ -162,10 +132,6 @@ namespace SortingStantion.TOOL_WINDOWS.windowPusherError
         {
             //Квитирование ошибки
             alarm.Write(false);
-
-            //Инкремент счетчика отбракованых изделий вручную
-            var value = (int)QUANTITY_PRODUCTS_MANUAL_REJECTED.Status + 1;
-            QUANTITY_PRODUCTS_MANUAL_REJECTED.Write(value);
 
             //Закрытие окна
             this.Close();

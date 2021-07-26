@@ -1,4 +1,5 @@
-﻿using SortingStantion.Controls;
+﻿using S7Communication;
+using SortingStantion.Controls;
 using System;
 using System.Windows;
 using System.Windows.Threading;
@@ -16,6 +17,33 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
         /// при бездействии
         /// </summary>
         DispatcherTimer ShutdownTimer;
+
+        /// <summary>
+        /// Указатель на главный Simatic TCP сервер
+        /// </summary>
+        SimaticServer server
+        {
+            get
+            {
+                return DataBridge.S7Server;
+            }
+        }
+
+        /// <summary>
+        /// Указатель на экземпляр ПЛК
+        /// </summary>
+        SimaticDevice device
+        {
+            get
+            {
+                return server.Devices[0];
+            }
+        }
+
+        /// <summary>
+        /// Тэг, хранящий количество изделий, отбраковыных вручную
+        /// </summary>
+        S7_DWord QUANTITY_PRODUCTS_MANUAL_REJECTED;
 
         /// <summary>
         /// Строка, содержащая серийный номер
@@ -68,6 +96,9 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
 
             //Подписка на обытие по получению данных от сканера
             DataBridge.Scaner.NewDataNotification += Scaner_NewDataNotification;
+
+            //Количество изделий, отбракованых вручную
+            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28");
 
             //Инициализация и запуск таймера для закрытия окна
             //при бездейсвии
@@ -158,6 +189,10 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
             //через акцессор заблокировать кнопку Добавить и сбросить
             //таймер по которому отсчитывается время бездействия
             CurrentSerialNumber = string.Empty;
+
+            //Инкремент счетчика отбракованых изделий вручную
+            var value = (int)QUANTITY_PRODUCTS_MANUAL_REJECTED.Status + 1;
+            QUANTITY_PRODUCTS_MANUAL_REJECTED.Write(value);
 
 
         }
