@@ -70,6 +70,17 @@ namespace SortingStantion.MainScreen
         }
 
         /// <summary>
+        /// Модель для создания результата операции
+        /// </summary>
+        public ResultOperation ResultOperation
+        {
+            get
+            {
+                return DataBridge.Report;
+            }
+        }
+
+        /// <summary>
         /// Указатель на главный Simatic TCP сервер
         /// </summary>
         public SimaticServer server

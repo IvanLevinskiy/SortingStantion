@@ -6,11 +6,13 @@
              xmlns:local="clr-namespace:SortingStantion.frameMain"
              xmlns:controls="clr-namespace:SortingStantion.Controls"
              xmlns:converters="clr-namespace:SortingStantion.Converters"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="1024">
     <Grid Background="#FF262626">
 
         <Grid.Resources>
+            
             <Style TargetType="controls:S7TextBox">
                 <Setter Property="Background" Value="{StaticResource DarkColor}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
@@ -18,6 +20,139 @@
                 <Setter Property="Margin" Value="5"/>
                 <Setter Property="IsReadOnly" Value="True"/>
             </Style>
+
+            <Style x:Key="ScrollBarTrackThumb"
+        TargetType="{x:Type Thumb}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Thumb}">
+                            <Grid x:Name="Grid">
+                                <Rectangle HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Width="Auto"
+                                Height="Auto"
+                                Fill="Transparent" />
+                                <Border x:Name="CornerScrollBarRectangle"
+                            CornerRadius="5"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Width="Auto"
+                            Height="Auto"
+                            Margin="0,1,0,1"
+                            Background="{TemplateBinding Background}" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Tag"
+                                Value="Horizontal">
+                                    <Setter TargetName="CornerScrollBarRectangle"
+                                Property="Width"
+                                Value="Auto" />
+                                    <Setter TargetName="CornerScrollBarRectangle"
+                                Property="Height"
+                                Value="6" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="{x:Type ScrollBar}">
+                <Setter Property="Stylus.IsFlicksEnabled"
+            Value="false" />
+                <Setter Property="Foreground"
+            Value="#ADABAB" />
+                <Setter Property="Background"
+            Value="Transparent" />
+                <Setter Property="Width"
+            Value="7" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                            <Grid x:Name="GridRoot"
+                        Width="7"
+                        Background="{TemplateBinding Background}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.00001*" />
+                                </Grid.RowDefinitions>
+                                <Track x:Name="PART_Track"
+                            Grid.Row="0"
+                            IsDirectionReversed="true"
+                            Focusable="false">
+                                    <Track.Thumb>
+                                        <Thumb x:Name="Thumb"
+                                    Background="{TemplateBinding Foreground}"
+                                    Style="{DynamicResource ScrollBarTrackThumb}" />
+                                    </Track.Thumb>
+                                    <Track.IncreaseRepeatButton>
+                                        <RepeatButton x:Name="PageUp"
+                                            Command="ScrollBar.PageDownCommand"
+                                            Opacity="0"
+                                            Focusable="false" />
+                                    </Track.IncreaseRepeatButton>
+                                    <Track.DecreaseRepeatButton>
+                                        <RepeatButton x:Name="PageDown"
+                                            Command="ScrollBar.PageUpCommand"
+                                            Opacity="0"
+                                            Focusable="false" />
+                                    </Track.DecreaseRepeatButton>
+                                </Track>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger SourceName="Thumb"
+                                Property="IsMouseOver"
+                                Value="true">
+                                    <Setter Value="{DynamicResource ButtonSelectBrush}"
+                                TargetName="Thumb"
+                                Property="Background" />
+                                </Trigger>
+                                <Trigger SourceName="Thumb"
+                                Property="IsDragging"
+                                Value="true">
+                                    <Setter Value="{DynamicResource DarkBrush}"
+                                TargetName="Thumb"
+                                Property="Background" />
+                                </Trigger>
+
+                                <Trigger Property="IsEnabled"
+                                Value="false">
+                                    <Setter TargetName="Thumb"
+                                Property="Visibility"
+                                Value="Collapsed" />
+                                </Trigger>
+                                <Trigger Property="Orientation"
+                                Value="Horizontal">
+                                    <Setter TargetName="GridRoot"
+                                Property="LayoutTransform">
+                                        <Setter.Value>
+                                            <RotateTransform Angle="-90" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="PART_Track"
+                                Property="LayoutTransform">
+                                        <Setter.Value>
+                                            <RotateTransform Angle="-90" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Width"
+                                Value="Auto" />
+                                    <Setter Property="Height"
+                                Value="8" />
+                                    <Setter TargetName="Thumb"
+                                Property="Tag"
+                                Value="Horizontal" />
+                                    <Setter TargetName="PageDown"
+                                Property="Command"
+                                Value="ScrollBar.PageLeftCommand" />
+                                    <Setter TargetName="PageUp"
+                                Property="Command"
+                                Value="ScrollBar.PageRightCommand" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
         </Grid.Resources>
 
         <StackPanel Orientation="Vertical"
@@ -428,22 +563,22 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7TextBox Address="DB1.DBD22"
-                                      Height="40"
-                                      FontSize="{StaticResource fontSizeData}"
-                                      VerticalContentAlignment="Center"
-                                      IsReadOnly="False"
-                                      Margin="280,0,10,0"
-                                      Text="0"/>
+                    <controls:S7TextBox Address="DB1.DBD36-DWORD"
+                                          Height="40"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          VerticalContentAlignment="Center"
+                                          IsReadOnly="False"
+                                          Margin="280,0,10,0"
+                                          Text="0"/>
 
                 </Grid>
 
             </Grid>
 
             <!--КНОПКИ-->
-            <Grid Height="100"
+            <Grid Height="200"
               Margin="10,30,10,0"
-              Background="{StaticResource LightColor}"
+              Background="Transparent"
               VerticalAlignment="Top">
 
                 <Grid.ColumnDefinitions>
@@ -452,67 +587,113 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <!--КНОПКА Запуска ЛИНИИ-->
-                <Button     Grid.Column="0"
-                        Margin="20"
-                        Style="{StaticResource btnStyle}"
-                        Background="#FF6DC27A"
-                        Foreground="{StaticResource IconColor}"
-                        BorderThickness="0"
-                        BorderBrush="Transparent"
-                        Command="{Binding Conveyor.StartLineCMD}">
-                    <TextBlock TextAlignment="Center"
-                           FontSize="{StaticResource fontSizeButtons}">
-                        <Run>СТАРТ</Run>
-                    </TextBlock>
-                </Button>
+                <Grid Background="{StaticResource LightColor}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
-                <!--КНОПКА ОСТАНОВА ЛИНИИ-->
-                <Button Grid.Column="6"
-                        Margin="20"
-                        Style="{StaticResource btnStyle}"
-                        Background="#FFDB4969"
-                        Foreground="{StaticResource IconColor}"
-                        BorderThickness="0"
-                        BorderBrush="Transparent"
-                        IsEnabled="{Binding Conveyor.LineIsRun}"
-                        Command="{Binding Conveyor.StopLineCMD}">
-                    <TextBlock TextAlignment="Center"
-                           FontSize="{StaticResource fontSizeButtons}">
-                        <Run>СТОП</Run>
-                    </TextBlock>
-                </Button>
+                    <!--КНОПКА Запуска ЛИНИИ-->
+                    <controls:xButton   Grid.Row="0"
+                                        Margin="20,5,20,5"
+                                        Style="{StaticResource btnStyle}"
+                                        Background="#FF6DC27A"
+                                        Foreground="{StaticResource IconColor}"
+                                        BorderThickness="0"
+                                        BorderBrush="Transparent"
+                                        MinAccesLevel="1"
+                                        IsEnabled="{Binding Conveyor.LineIsStop}"
+                                        Command="{Binding Conveyor.StartLineCMD}">
+                                        <TextBlock  TextAlignment="Center"
+                                                    FontSize="{StaticResource fontSizeButtons}">
+                                                    <Run>СТАРТ</Run>
+                                        </TextBlock>
+                    </controls:xButton>
+
+                    <!--СТАТУСЫ-->
+                    <Grid Grid.Row="1"
+                          Background="{StaticResource LightColor}"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center">
+
+                        <Grid HorizontalAlignment="Left"
+                              Margin="20,0,0,0">
+                            <ContentPresenter Content="{converters:SwitchBinding Scaner.IsAvailable, {StaticResource IconOk}, {StaticResource IconError}}"/>
+                        </Grid>
+
+                        <TextBlock Text="СКАНЕР"
+                                   Margin="75,0,0,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="{StaticResource fontSizeData}"
+                                   FontFamily="{StaticResource fontFamilyData}"
+                                   Foreground="{StaticResource TextColor}"/>
+
+                    </Grid>
+
+                    <!--КНОПКА ОСТАНОВА ЛИНИИ-->
+                    <controls:xButton   Grid.Row="2"
+                                        Margin="20,5,20,5"
+                                        Style="{StaticResource btnStyle}"
+                                        Background="#FFDB4969"
+                                        Foreground="{StaticResource IconColor}"
+                                        BorderThickness="0"
+                                        BorderBrush="Transparent"
+                                        IsEnabled="{Binding Conveyor.LineIsRun}"
+                                        MinAccesLevel="1"
+                                        Command="{Binding Conveyor.StopLineCMD}">
+                                        <TextBlock  TextAlignment="Center"
+                                                    FontSize="{StaticResource fontSizeButtons}">
+                                                    <Run>СТОП</Run>
+                                        </TextBlock>
+                    </controls:xButton>
 
 
-            </Grid>
-
-            <!--СТАТУСЫ-->
-            <Grid Height="100"
-              Margin="10,30,10,0"
-              Background="{StaticResource LightColor}"
-              VerticalAlignment="Top">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-
-                <Grid HorizontalAlignment="Left"
-                      Margin="20,0,0,0">
-                    <ContentPresenter Content="{converters:SwitchBinding Scaner.IsAvailable, {StaticResource IconOk}, {StaticResource IconError}}"/>
                 </Grid>
 
-                <TextBlock Text="СКАНЕР"
-                           Margin="75,38,15,38"
-                           VerticalAlignment="Center"
-                           FontSize="{StaticResource fontSizeData}"
-                           FontFamily="{StaticResource fontFamilyData}"
-                           Foreground="{StaticResource TextColor}"
-                           />
+                <Grid Grid.Column="2">
+                    <!--ItemsSource="{Binding ResultOperation.AllCodes}"-->
+                    <ListView x:Name="listView"
+                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              Background="{StaticResource LightColor}"
+                              ItemsSource="{Binding ResultOperation.AllCodes}"
+                              BorderBrush="{StaticResource GridColor}">
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="29"
+                                      Width="{Binding ElementName=listView, Path=ActualWidth}">
+                                    <TextBlock Text="{Binding}" 
+                                               FontSize="{StaticResource fontSizeData}"
+                                               Foreground="{StaticResource TextColor}"/>
+
+                                    <Rectangle Height="1"
+                                               VerticalAlignment="Bottom"
+                                               Fill="{StaticResource GridColor}"/>
+
+                                </Grid>
+                               
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <!--<ListView.Items>
+                            <sys:String>dffdfdf</sys:String>
+                            <sys:String>dffdfdf</sys:String>
+                            <sys:String>dffdfdf</sys:String>
+                            <sys:String>dffdfdf</sys:String>
+                            <sys:String>dffdfdf</sys:String>
+                            <sys:String>dffdfdf</sys:String>
+                            <sys:String>dffdfdf</sys:String>
+                            <sys:String>dffdfdf</sys:String>
+                        </ListView.Items>-->
+                    </ListView>
+                </Grid>
+
+
 
             </Grid>
 
+           
+            
         </StackPanel>
 
        

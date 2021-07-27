@@ -349,6 +349,7 @@
     <None Include="Docs\A2-2 СОПы работы и наладки.docx" />
     <None Include="Docs\quickscan_i_family_prg_rus.pdf" />
     <None Include="Docs\Описание ПО L2 сериализация вер.2.docx" />
+    <None Include="Docs\2021_07_27_Тестирование S1.docx" />
     <None Include="Docs\Техническое_требование_к_программному_обеспечению_ПЛК.docx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

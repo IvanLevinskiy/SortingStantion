@@ -169,6 +169,15 @@ namespace SortingStantion.Models
             set;
         }
 
+        /// <summary>
+        /// Счетчик повторов
+        /// </summary>
+        S7_DWord REPEAT_COUNTER
+        {
+            get;
+            set;
+        }
+
 
 
         /// <summary>
@@ -221,6 +230,8 @@ namespace SortingStantion.Models
             QUANTITY_WORKSPACE_AUTO_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD24-DWORD");
             QUANTITY_WORKSPACE_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28-DWORD");
             DEFECT_COUNTER = (S7_DWord)device.GetTagByAddress("DB1.DBD30-DWORD");
+            REPEAT_COUNTER = (S7_DWord)device.GetTagByAddress("DB1.DBD36-DWORD");
+            
         }
 
 
@@ -643,6 +654,7 @@ namespace SortingStantion.Models
                     QUANTITY_BOXS.Write(0);
                     QUANTITY_WORKSPACE_AUTO_REJECTED.Write(0);
                     QUANTITY_WORKSPACE_MANUAL_REJECTED.Write(0);
+                    REPEAT_COUNTER.Write(0);
                     DEFECT_COUNTER.Write(0);
 
                     //Уведомление подписчиков о завершении задания

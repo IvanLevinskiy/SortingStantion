@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Collections.ObjectModel;
+using S7Communication;
 
 namespace SortingStantion.Models
 {
@@ -53,6 +55,15 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
+        /// Список всех кодов, находящихся в результате
+        /// </summary>
+        public ObservableCollection<string> AllCodes
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Список всех номеров продуктов 
         /// </summary>
         public List<string> Codes = new List<string>();
@@ -77,10 +88,44 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
+        /// Указатель на главный Simatic TCP сервер
+        /// </summary>
+        SimaticServer server
+        {
+            get
+            {
+                return DataBridge.S7Server;
+            }
+        }
+
+        /// <summary>
+        /// Указатель на экземпляр ПЛК
+        /// </summary>
+        SimaticDevice device
+        {
+            get
+            {
+                return server.Devices[0];
+            }
+        }
+
+        /// <summary>
+        /// Счетчик повторов
+        /// </summary>
+        public S7_DWord QUANTITY_REPEAT_PRODUCTS;
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public ResultOperation()
         {
+            //Инициализация тэга - повтор продуктов
+            QUANTITY_REPEAT_PRODUCTS = (S7_DWord)device.GetTagByAddress("DB1.DBD36-DWORD");
+
+            //Инициализация коллекции всех кодов
+            //находящихся в результате
+            AllCodes = new ObservableCollection<string>();
+
             //Подпись на событие по принятию задания
             DataBridge.WorkAssignmentEngine.WorkOrderAcceptanceNotification += (workAssignment) =>
             {
@@ -193,10 +238,17 @@ namespace SortingStantion.Models
         public void AddBox(string serialnumber)
         {
             /*
+                Добавление продукта в список
+                продуктов
+            */
+            AllCodes.Insert(0, serialnumber);
+
+            /*
                 Объявление локальных переменных
             */
             var msg = string.Empty;
             UserMessage messageItem = null;
+                        
 
             /*
                 Если код повторяется 
@@ -210,6 +262,11 @@ namespace SortingStantion.Models
                 msg = $"Считан продукт с серийным номером {serialnumber}. Продукт добавлен в коллекцию кодов повторов";
                 messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
                 DataBridge.MSGBOX.Add(messageItem);
+
+                //Увеличение счетчика повторов
+                uint repeatCount = (uint)QUANTITY_REPEAT_PRODUCTS.Status;
+                repeatCount++;
+                QUANTITY_REPEAT_PRODUCTS.Write(repeatCount);
 
                 //Выход из процедуры
                 return;
@@ -450,6 +507,7 @@ namespace SortingStantion.Models
             this.endTime = string.Empty;
             this.defectiveCodes = new List<string>();
             this.Codes = new List<string>();
+            AllCodes.Clear();
         }
     }
 }

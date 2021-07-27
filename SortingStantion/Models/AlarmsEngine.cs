@@ -274,7 +274,6 @@ namespace SortingStantion.Models
                     DataBridge.MSGBOX.Add(msgLostConnection);
                 };
                 DataBridge.UIDispatcher?.Invoke(action);
-                
             };
 
             /*
