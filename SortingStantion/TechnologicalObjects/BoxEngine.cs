@@ -58,7 +58,7 @@ namespace SortingStantion.TechnologicalObjects
         /// <summary>
         /// Результат сканирования
         /// </summary>
-        S7_CharsArray SCAN_DATA;
+        S7_String SCAN_DATA;
 
         /// <summary>
         /// Тэг - разрешить повтор кода продукта
@@ -84,7 +84,7 @@ namespace SortingStantion.TechnologicalObjects
             READ_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX378.0");
 
             //Данные из сканера
-            SCAN_DATA = (S7_CharsArray)device.GetTagByAddress("DB1.DBD594-CHARS100");
+            SCAN_DATA = (S7_String)device.GetTagByAddress("DB1.DBD494-STR100");
 
             //Подписываемся на событие по изминению
             //тэга READ_CMD  и осуществляем вызов

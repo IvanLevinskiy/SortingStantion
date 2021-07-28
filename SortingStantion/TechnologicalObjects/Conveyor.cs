@@ -85,6 +85,33 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Разрешение для кнопки Старт линии
+        /// </summary>
+        public bool btnLineRunEnable
+        {
+            get
+            {
+                return LineIsRun == false && DataBridge.MainAccesLevelModel.CurrentUser != null;
+            }
+        }
+
+        /// <summary>
+        /// Разрешение для кнопки Старт линии
+        /// </summary>
+        public bool btnForceLineRunEnable
+        {
+            get
+            {
+                if (DataBridge.MainAccesLevelModel.CurrentUser == null)
+                {
+                    return false;
+                }
+
+                return LineIsRun == false && DataBridge.MainAccesLevelModel.CurrentUser.AccesLevel > 0;
+            }
+        }
+
+        /// <summary>
         /// Флаг, указывающий, что
         /// линия остановлена (для View Model)
         /// </summary>
@@ -98,6 +125,30 @@ namespace SortingStantion.TechnologicalObjects
                 }
 
                 return (bool)Run.Status == false;
+            }
+        }
+
+        /// <summary>
+        /// Разрешение для кнопки Старт линии
+        /// </summary>
+        public bool btnLineStopEnable
+        {
+            get
+            {
+                return LineIsRun == true && DataBridge.MainAccesLevelModel.CurrentUser != null;
+            }
+        }
+
+        public bool btnForceLineStopEnable
+        {
+            get
+            {
+                if (DataBridge.MainAccesLevelModel.CurrentUser == null)
+                {
+                    return false;
+                }
+
+                return LineIsRun == true && DataBridge.MainAccesLevelModel.CurrentUser.AccesLevel > 0;
             }
         }
 
@@ -116,6 +167,17 @@ namespace SortingStantion.TechnologicalObjects
             //Подпись на событие по изминеию статуса работы
             //линии
             Run.ChangeValue += Run_ChangeValue;
+
+            //Подписка на изменение пользователя
+            DataBridge.MainAccesLevelModel.ChangeUser += (s, d) =>
+            {
+                //Уведомление UI
+                OnPropertyChanged("btnLineRunEnable");
+                OnPropertyChanged("btnLineStopEnable");
+
+                OnPropertyChanged("btnForceLineRunEnable");
+                OnPropertyChanged("btnForceLineStopEnable");
+            };
 
             //Вывод сообщения в окно информации (начальное)
             UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
@@ -187,7 +249,7 @@ namespace SortingStantion.TechnologicalObjects
                 {
                     Run.Write(true);
                 },
-                (obj) => (LineIsRun == false));
+                (obj) => (true));
             }
         }
 
@@ -245,7 +307,7 @@ namespace SortingStantion.TechnologicalObjects
                 {
                     Run.Write(false);
                 },
-                (obj) => (LineIsRun == true));
+                (obj) => (true));
             }
         }
 
@@ -256,9 +318,7 @@ namespace SortingStantion.TechnologicalObjects
         /// <param name="obj"></param>
         private void Run_ChangeValue(object oldvalue, object newvalue)
         {
-            //Уведомление UI
-            OnPropertyChanged("LineIsRun");
-            OnPropertyChanged("LineIsStop");
+
 
             //Защита от неверных типов данных
             if (newvalue is bool? == false)
@@ -299,6 +359,13 @@ namespace SortingStantion.TechnologicalObjects
             //уведомление модели представления
             OnPropertyChanged("LineIsRun");
             OnPropertyChanged("LineIsStop");
+
+            //Уведомление UI
+            OnPropertyChanged("btnLineRunEnable");
+            OnPropertyChanged("btnLineStopEnable");
+
+            OnPropertyChanged("btnForceLineRunEnable");
+            OnPropertyChanged("btnForceLineStopEnable");
         }
 
         #region Реализация интерфейса INotifyPropertyChanged

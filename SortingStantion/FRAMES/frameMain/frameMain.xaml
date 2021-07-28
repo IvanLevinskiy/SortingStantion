@@ -595,21 +595,20 @@
                     </Grid.RowDefinitions>
 
                     <!--КНОПКА Запуска ЛИНИИ-->
-                    <controls:xButton   Grid.Row="0"
+                    <Button   Grid.Row="0"
                                         Margin="20,5,20,5"
                                         Style="{StaticResource btnStyle}"
                                         Background="#FF6DC27A"
                                         Foreground="{StaticResource IconColor}"
                                         BorderThickness="0"
                                         BorderBrush="Transparent"
-                                        MinAccesLevel="1"
-                                        IsEnabled="{Binding Conveyor.LineIsStop}"
+                                        IsEnabled="{Binding Conveyor.btnLineRunEnable}"
                                         Command="{Binding Conveyor.StartLineCMD}">
                                         <TextBlock  TextAlignment="Center"
                                                     FontSize="{StaticResource fontSizeButtons}">
                                                     <Run>СТАРТ</Run>
                                         </TextBlock>
-                    </controls:xButton>
+                    </Button>
 
                     <!--СТАТУСЫ-->
                     <Grid Grid.Row="1"
@@ -632,21 +631,20 @@
                     </Grid>
 
                     <!--КНОПКА ОСТАНОВА ЛИНИИ-->
-                    <controls:xButton   Grid.Row="2"
+                    <Button   Grid.Row="2"
                                         Margin="20,5,20,5"
                                         Style="{StaticResource btnStyle}"
                                         Background="#FFDB4969"
                                         Foreground="{StaticResource IconColor}"
                                         BorderThickness="0"
                                         BorderBrush="Transparent"
-                                        IsEnabled="{Binding Conveyor.LineIsRun}"
-                                        MinAccesLevel="1"
+                                        IsEnabled="{Binding Conveyor.btnLineStopEnable}"
                                         Command="{Binding Conveyor.StopLineCMD}">
                                         <TextBlock  TextAlignment="Center"
                                                     FontSize="{StaticResource fontSizeButtons}">
                                                     <Run>СТОП</Run>
                                         </TextBlock>
-                    </controls:xButton>
+                    </Button>
 
 
                 </Grid>

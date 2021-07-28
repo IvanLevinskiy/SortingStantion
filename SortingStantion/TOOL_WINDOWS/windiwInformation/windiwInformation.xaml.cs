@@ -106,23 +106,14 @@ namespace SortingStantion.TOOL_WINDOWS.windiwInformation
             bool isvalid = DataBridge.DataSpliter.IsValid;
             CurrentSerialNumber = DataBridge.DataSpliter.GetSerialNumber();
             CurrentGTIN = DataBridge.DataSpliter.GetGTIN();
-            DataBridge.Report.AddBox(CurrentSerialNumber);
-
+            
             // Сообщение из зоны информации
             string message = string.Empty;
 
             //Посторонний продукт
             if (isvalid == false)
             {
-                message = "Код другого продукта";
-                ShowMessage(message);
-                return;
-            }
-
-            //Посторонний GTIN
-            if (DataBridge.WorkAssignmentEngine.GTIN != CurrentGTIN)
-            {
-                message = "Код другого продукта";
+                message = "Посторонний продукт";
                 ShowMessage(message);
                 return;
             }
