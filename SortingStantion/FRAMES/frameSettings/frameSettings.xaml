@@ -589,6 +589,14 @@
 
                     </StackPanel>
 
+                    <Button Height="50"
+                            Style="{StaticResource btnStyle}"
+                            Background="{StaticResource DarkColor}"
+                            Foreground="{StaticResource TextColor}"
+                            BorderBrush="{StaticResource GridColor}"
+                            Command="{Binding  BoxEngine.ClearCollectionCMD}"
+                            Content="ОЧИСТИТЬ ОЧЕРЕДЬ ПЛК"/>
+
 
                 </StackPanel>
 

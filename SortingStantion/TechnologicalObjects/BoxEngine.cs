@@ -7,6 +7,8 @@ using SortingStantion.TOOL_WINDOWS.windowGtinFault;
 using SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode;
 using SortingStantion.TOOL_WINDOWS.windowProductIsDeffect;
 using SortingStantion.TOOL_WINDOWS.windowRepeatProduct;
+using System.Windows.Input;
+using SortingStantion.Utilites;
 
 namespace SortingStantion.TechnologicalObjects
 {
@@ -56,6 +58,11 @@ namespace SortingStantion.TechnologicalObjects
         S7_Boolean READ_CMD;
 
         /// <summary>
+        /// Тэг для очистки очереди в ПЛК
+        /// </summary>
+        S7_Boolean CLEAR_ITEMS_COLLECTION_CMD;
+
+        /// <summary>
         /// Результат сканирования
         /// </summary>
         S7_String SCAN_DATA;
@@ -82,6 +89,8 @@ namespace SortingStantion.TechnologicalObjects
 
             //Команда для считывания кода сканера
             READ_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX378.0");
+
+            CLEAR_ITEMS_COLLECTION_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX98.2");
 
             //Данные из сканера
             SCAN_DATA = (S7_String)device.GetTagByAddress("DB1.DBD494-STR100");
@@ -296,5 +305,22 @@ namespace SortingStantion.TechnologicalObjects
             //в коллекцию изделий результата
             DataBridge.Report.AddBox(scaner_serialnumber);
         }
+
+        /// <summary>
+        /// Команда для очистки коллекции в ПЛК
+        /// </summary>
+        public ICommand ClearCollectionCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    CLEAR_ITEMS_COLLECTION_CMD.Write(true);
+
+                },
+                (obj) => (true));
+            }
+        }
+
     }
 }

@@ -28,6 +28,13 @@ namespace SortingStantion
         /// </summary>
         public static SolidColorBrush myBlue = new SolidColorBrush();
 
+
+        /// <summary>
+        /// Зеленый цвет
+        /// </summary>
+        public static SolidColorBrush myOrange = new SolidColorBrush(Colors.Orange);
+
+
         /// <summary>
         /// Dispatcher GUI
         /// </summary>

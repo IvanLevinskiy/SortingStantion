@@ -186,7 +186,7 @@ namespace SortingStantion.Models
         /// <returns></returns>
         public bool AsAResult(string serialnumber)
         {
-            foreach (var code in Codes)
+            foreach (var code in AllCodes)
             {
                 if (code == serialnumber)
                 {
@@ -278,7 +278,7 @@ namespace SortingStantion.Models
             Codes.Add(serialnumber);
 
             //Вывод сообщений
-            msg = $"Считан продукт с серийным номером {serialnumber}. В результате {Codes.Count} коробов";
+            msg = $"Считан продукт с серийным номером {serialnumber}. В результате продуктов: {Codes.Count}";
             messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
             DataBridge.MSGBOX.Add(messageItem);
         }
@@ -320,6 +320,7 @@ namespace SortingStantion.Models
         public void AddDeffect(string serialnumber)
         {
             RemoteCode(serialnumber);
+            RemoteCodeFromFullResult(serialnumber);
             defectiveCodes.Add(serialnumber);
         }
 
@@ -334,6 +335,18 @@ namespace SortingStantion.Models
                 if (serialnumber == code)
                 {
                     Codes.Remove(code);
+                    goto M0;
+                }
+            }
+        }
+
+        void RemoteCodeFromFullResult(string serialnumber)
+        {
+        M0: foreach (var code in AllCodes)
+            {
+                if (serialnumber == code)
+                {
+                    AllCodes.Remove(code);
                     goto M0;
                 }
             }

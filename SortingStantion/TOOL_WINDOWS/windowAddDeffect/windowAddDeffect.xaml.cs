@@ -98,7 +98,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
             DataBridge.Scaner.NewDataNotification += Scaner_NewDataNotification;
 
             //Количество изделий, отбракованых вручную
-            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28");
+            QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28-DWORD");
 
             //Инициализация и запуск таймера для закрытия окна
             //при бездейсвии
@@ -159,7 +159,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
                 return;
             }
 
-            DataBridge.Report.AddDeffect(CurrentSerialNumber);
+            //DataBridge.Report.AddDeffect(CurrentSerialNumber);
 
             //Формируем сообщение для зоны иноформации
             message = $"Считан продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber}";
@@ -176,14 +176,30 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
         /// <param name="e"></param>
         private void btnAddDeffect_Click(object sender, RoutedEventArgs e)
         {
-            //Проверка - 
+            //Объявление локальных переменных
+            string message = string.Empty;
+            UserMessage msg = null; 
+
+            //Проверка - на то, имеется ли продукт в браке
+            if (DataBridge.Report.IsDeffect(CurrentSerialNumber) == true)
+            {
+                //Добавление в базу данных (лог) записи
+                message = $"Продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber} уже числится в браке";
+                msg = new UserMessage(message, DataBridge.myOrange);
+                DataBridge.MSGBOX.Add(msg);
+                return;
+            }
 
             //Добавление номера продукта в список брака
             DataBridge.Report.AddDeffect(CurrentSerialNumber);
 
             //Добавление в базу данных (лог) записи
-            string message = $"Продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber} добавлен в список брака";
+            message = $"Продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber} добавлен в список брака";
             DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
+
+            //Добавление сообщения в зону информации
+            msg = new UserMessage(message, DataBridge.myOrange);
+            DataBridge.MSGBOX.Add(msg);
 
             //Стирание серийного номера для того, чтоб
             //через акцессор заблокировать кнопку Добавить и сбросить
@@ -191,7 +207,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
             CurrentSerialNumber = string.Empty;
 
             //Инкремент счетчика отбракованых изделий вручную
-            var value = (int)QUANTITY_PRODUCTS_MANUAL_REJECTED.Status + 1;
+            var value = Convert.ToInt32(QUANTITY_PRODUCTS_MANUAL_REJECTED.Status) + 1;
             QUANTITY_PRODUCTS_MANUAL_REJECTED.Write(value);
 
 

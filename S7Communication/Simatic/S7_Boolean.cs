@@ -92,10 +92,10 @@ namespace S7Communication
                 var result = device.WriteBytes(DataType, DBNumber, StartByteAddress, array);
 
                 //Если запись успешна - обновляем статус
-                if (result == true)
-                {
-                    Status = value;
-                }
+                //if (result == true)
+                //{
+                //    Status = value;
+                //}
 
                 return result;
             }

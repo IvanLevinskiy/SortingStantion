@@ -580,7 +580,9 @@ namespace S7Communication
             //в коллекции устройства
             foreach (var tag in Tags)
             {
-                if (tag.Address == s7address)
+                var abAddress = tag.Address.Split('-')[0];
+
+                if (abAddress == s7address)
                 {
                     return tag;
                 }

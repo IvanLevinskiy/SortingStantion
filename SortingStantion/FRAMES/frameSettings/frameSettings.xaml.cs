@@ -36,6 +36,19 @@ namespace SortingStantion.frameSettings
             }
         }
 
+
+        /// <summary>
+        /// Указатель на экземпляр класса, управляющий 
+        /// сканированием продукта
+        /// </summary>
+        public BoxEngine BoxEngine
+        {
+            get
+            {
+                return DataBridge.BoxEngine;
+            }
+        }
+
         /// <summary>
         /// Конструктор класса
         /// </summary>
