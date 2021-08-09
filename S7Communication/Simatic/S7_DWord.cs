@@ -85,9 +85,38 @@ namespace S7Communication
         /// <param name="value"></param>
         public override bool Write(object value)
         {
-            Int32 uvalue = Convert.ToInt32(value);
-            var array = BitConverter.GetBytes(uvalue);
-            this.device.WriteBytes(DataType, DBNumber, StartByteAddress, array);
+            if (value is UInt32)
+            {
+                UInt32 uvalue = Convert.ToUInt32(value);
+                var array = BitConverter.GetBytes(uvalue);
+
+                //Перестановка байт
+                var newarray = new byte[]
+                {
+                        array[3], array[2], array[1], array[0]
+                };
+
+                this.device.WriteBytes(DataType, DBNumber, StartByteAddress, newarray);
+
+                return true;
+            }
+
+            if (value is Int32)
+            {
+                Int32 uvalue = Convert.ToInt32(value);
+                var array = BitConverter.GetBytes(uvalue);
+
+                //Перестановка байт
+                var newarray = new byte[]
+                {
+                        array[3], array[2], array[1], array[0]
+                };
+
+                this.device.WriteBytes(DataType, DBNumber, StartByteAddress, newarray);
+
+                return true;
+            }
+           
             return true;
         }
 

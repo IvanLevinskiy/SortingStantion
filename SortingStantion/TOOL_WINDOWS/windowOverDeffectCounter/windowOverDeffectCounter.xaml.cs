@@ -29,6 +29,9 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
             //Передача экземпляра тэга со счетчиком ошибок
             this.DEFFECT_PRODUCTS_COUNTER = DEFFECT_PRODUCTS_COUNTER;
 
+            //Подписка на изменение значение счетчика
+            this.DEFFECT_PRODUCTS_COUNTER.ChangeValue += DEFFECT_PRODUCTS_COUNTER_ChangeValue;
+
             //Передача указателя на сообщение в зоне
             //информации, которое надо удалить при нажатии кнопки Отмена
             this.alarm = alarm;
@@ -45,6 +48,22 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
         }
 
         /// <summary>
+        /// Изменение значения счетчика
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="arg2"></param>
+        private void DEFFECT_PRODUCTS_COUNTER_ChangeValue(object arg1, object arg2)
+        {
+            Action action = () =>
+            {
+                //Формирование правиьного сообщения
+                txMessage.Text = $"     Конвейер остановлен после {DEFFECT_PRODUCTS_COUNTER.StatusText} продуктов, отбракованных подряд.";
+
+            };
+            DataBridge.UIDispatcher.Invoke(action);
+        }
+
+        /// <summary>
         /// Метод, вызываемый при клике по кнопке - ОТМЕНА
         /// </summary>
         /// <param name="sender"></param>
@@ -55,12 +74,19 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
             alarm.Write(false);
 
             //Уменьшение счетчика подряд идущего брака на единицу
-            var counter = (UInt32)DEFFECT_PRODUCTS_COUNTER.Status;
-            counter = counter - 1;
-            DEFFECT_PRODUCTS_COUNTER.Write(counter);
+            UInt32 counter = Convert.ToUInt32(DEFFECT_PRODUCTS_COUNTER.Status) - 1;
 
+            //Если новое значение счетчика больше 0
+            if (counter >= 0)
+            {
+                DEFFECT_PRODUCTS_COUNTER.Write(counter);
+            }
+            
             //Отписка от метода, вызываемого при закрытии окна
             this.Closing -= Window_Closing;
+
+            //Отписка от изменения значение счетчика
+            this.DEFFECT_PRODUCTS_COUNTER.ChangeValue -= DEFFECT_PRODUCTS_COUNTER_ChangeValue;
 
             //Закрытие окна
             this.Close();
