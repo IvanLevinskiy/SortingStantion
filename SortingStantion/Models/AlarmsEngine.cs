@@ -1,6 +1,7 @@
 ﻿using S7Communication;
 using SortingStantion.Controls;
 using SortingStantion.S7Extension;
+using SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter;
 using SortingStantion.TOOL_WINDOWS.windowPusherError;
 using System;
 
@@ -102,7 +103,12 @@ namespace SortingStantion.Models
         /// отбракованых вручную
         /// </summary>
         public S7_DWord QUANTITY_PRODUCTS_MANUAL_REJECTED;
-        
+
+        /// <summary>
+        /// Счетчик брака
+        /// </summary>
+        public S7_DWord DEFFECT_PRODUCTS_COUNTER;
+
 
         /// <summary>
         /// Сообщение о том, что соединение с ПЛК потеряно
@@ -120,6 +126,9 @@ namespace SortingStantion.Models
 
             //Тэг, хранящий количество изделий, отбраковыных вручную
             QUANTITY_PRODUCTS_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28-DWORD");
+
+            //Тэг, хранящий счетчик подряд отбракованых продуктов
+            DEFFECT_PRODUCTS_COUNTER = (S7_DWord)device.GetTagByAddress("DB1.DBD32-DWORD");
 
             /*
                 Неисправность фотодатчика FS1
@@ -243,6 +252,10 @@ namespace SortingStantion.Models
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Массовый брак", MessageType.Alarm);
+
+                //Вывод окна ошибки
+                windowOverDeffectCounter windowOverDeffectCounter = new windowOverDeffectCounter(DEFFECT_PRODUCTS_COUNTER, al_7);
+                windowOverDeffectCounter.ShowDialog();
             };
 
             /*

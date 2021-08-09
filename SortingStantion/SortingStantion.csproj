@@ -171,6 +171,9 @@
     <Compile Include="TOOL_WINDOWS\windowExtraneousBarcode\windowExtraneousBarcode.xaml.cs">
       <DependentUpon>windowExtraneousBarcode.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TOOL_WINDOWS\windowOverDeffectCounter\windowOverDeffectCounter.xaml.cs">
+      <DependentUpon>windowOverDeffectCounter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TOOL_WINDOWS\windowProductIsDeffect\windowProductIsDeffect.xaml.cs">
       <DependentUpon>windowProductIsDeffect.xaml</DependentUpon>
     </Compile>
@@ -279,6 +282,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TOOL_WINDOWS\windowExtraneousBarcode\windowExtraneousBarcode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TOOL_WINDOWS\windowOverDeffectCounter\windowOverDeffectCounter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
