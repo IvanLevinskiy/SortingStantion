@@ -301,8 +301,16 @@
 
                             <Button Background="Transparent"
                                     Style="{StaticResource btnStyle}" 
-                                    MouseLeftButtonDown="Button_MouseLeftButtonDown"
-                                    MouseDoubleClick="Button_MouseDoubleClick"/>
+                                    MouseDoubleClick="Button_MouseDoubleClick">
+
+                                <Grid Width="250"
+                                      Height="60" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
+                                    <Rectangle Fill="Transparent" VerticalAlignment="Stretch"/>
+                                </Grid>
+
+                               
+
+                            </Button>
 
 
                         </Grid>

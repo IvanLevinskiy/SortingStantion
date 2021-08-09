@@ -13,18 +13,6 @@ namespace SortingStantion.frameMain
             DataBridge.UserMessagePresenter = this.msgConteiner;
         }
 
-        private void Button_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            try
-            {
-                DataBridge.MainScreen.DragMove();
-            }
-            catch
-            { 
-            
-            }
-        }
-
         private void Button_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var mainscreen = DataBridge.MainScreen;
@@ -39,6 +27,18 @@ namespace SortingStantion.frameMain
             {
                 mainscreen.WindowState = System.Windows.WindowState.Normal;
                 return;
+            }
+        }
+
+        private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                DataBridge.MainScreen.DragMove();
+            }
+            catch
+            {
+
             }
         }
     }

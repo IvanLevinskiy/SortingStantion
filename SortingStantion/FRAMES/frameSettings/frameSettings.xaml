@@ -585,6 +585,35 @@
 
                         </Grid>
 
+                        <Grid Height="50">
+                            <TextBlock Text="Время дребезга контактов, ms:"
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource fontSizeData}"
+                                FontFamily="{StaticResource fontFamilyData}"
+                           Foreground="{StaticResource TextColor}"/>
+
+                            <controls:S7TextBox Address="DB1.DBD136-STIME"
+                                      Foreground="{StaticResource TextColor}"
+                                      Background="{StaticResource LightColor}"
+                                          FontSize="{StaticResource fontSizeData}"
+                                          FontFamily="{StaticResource fontFamilyData}"
+                                          VerticalContentAlignment="Center"
+                                      BorderThickness="0"
+                                      Width="100"
+                                      Height="40"
+                                      Margin="100,7,5,7"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"
+                                      HorizontalContentAlignment="Center"/>
+
+                            <Rectangle Fill="{StaticResource GridColor}"
+                                       Opacity="1"
+                                       Height="1"
+                                       VerticalAlignment="Bottom"/>
+
+                        </Grid>
+
 
 
                     </StackPanel>
