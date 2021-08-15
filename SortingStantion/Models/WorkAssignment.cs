@@ -86,9 +86,6 @@ namespace SortingStantion.Models
 
         }
 
-
-
-
         #region Реализация интерфейса INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string property)

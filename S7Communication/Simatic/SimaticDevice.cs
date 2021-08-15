@@ -497,6 +497,13 @@ namespace S7Communication
                 return new S7_Boolean("", s7operand, group);
             }
 
+            //Если тэг содержит точку
+            if (s7operand.Contains("."))
+            {
+                return new S7_Boolean("", s7operand, group);
+            }
+
+
             return null;
         }
 

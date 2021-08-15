@@ -9,6 +9,10 @@ namespace Simulator.Controls
     /// </summary>
     public partial class Conveyor : UserControl
     {
+        DispatcherTimer timer;
+
+        Random r;
+
         public Conveyor()
         {
             //Инициализация UI
@@ -24,19 +28,48 @@ namespace Simulator.Controls
 
 
             //Объявление рандома
-            Random r = new Random();
+            r = new Random();
 
             //Создание моделей боксов с рандомным периодом
-            DispatcherTimer timer = new DispatcherTimer();
+            timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0,0,0,3);
-            timer.Start();
             timer.Tick += (e, s) =>
             {
                 Box box = new Box(canvas);
-                var random = r.Next(3, 6);
+                var random = r.Next(5, 10);
                 timer.Interval = new TimeSpan(0, 0, 0, random);
             };
+
+            this.Loaded += Conveyor_Loaded;           
            
+        }
+
+        private void Conveyor_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DataBridge.LineIsRun.ChangeValue += (o, n) =>
+            {
+                if (o is bool == false)
+                {
+                    return;
+                }
+
+                var lineisstart = (bool)o == false && (bool)n == true;
+                var lineisstop =  (bool)o == true && (bool)n == false;
+                
+
+                if (lineisstart == true)
+                {
+                    timer.Start();
+                    return;
+                }
+
+
+                if (lineisstop == true)
+                {
+                    timer.Stop();
+                    return;
+                }
+            };
         }
     }
 }

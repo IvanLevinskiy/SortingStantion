@@ -5,8 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Simulator.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="50">
-    <Grid Background="Orange">
+             d:DesignHeight="150" 
+             d:DesignWidth="50">
+    <Grid Background="White">
+        <Border BorderBrush="Black"
+                Background="Orange"
+                Height="50"
+                VerticalAlignment="Bottom"
+                BorderThickness="1">
             
+            
+        </Border>
     </Grid>
 </UserControl>

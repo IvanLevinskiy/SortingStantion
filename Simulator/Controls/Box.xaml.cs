@@ -22,10 +22,10 @@ namespace Simulator.Controls
 
             canvas.Children.Add(this);
 
-            this.Height = 100;
-            this.Width = 100;
+            this.Height = 150;
+            this.Width = 50;
 
-            Canvas.SetTop(this, 30);
+            Canvas.SetTop(this, -30);
             Canvas.SetLeft(this, 0);
 
             DataBridge.timer.Tick += Timer_Tick;
@@ -54,7 +54,7 @@ namespace Simulator.Controls
         public bool GetPhotoSensorState(double FSPostion)
         {
             var startpos = Canvas.GetLeft(this);
-            var endpos = startpos + this.ActualHeight;
+            var endpos = startpos + this.ActualWidth;
 
             return startpos <= FSPostion && FSPostion <= endpos;
         }

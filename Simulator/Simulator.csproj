@@ -63,6 +63,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Matrix.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\PhotoSensor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -80,6 +84,9 @@
     </Compile>
     <Compile Include="Controls\Conveyor.xaml.cs">
       <DependentUpon>Conveyor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Matrix.xaml.cs">
+      <DependentUpon>Matrix.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PhotoSensor.xaml.cs">
       <DependentUpon>PhotoSensor.xaml</DependentUpon>
@@ -115,6 +122,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\S7Communication\S7Communication.csproj">
+      <Project>{e7f2b419-5ba7-42fb-a537-496120fad2b1}</Project>
+      <Name>S7Communication</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="barcodes.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

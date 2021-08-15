@@ -123,7 +123,9 @@
                     <Grid>
 
                         <Viewbox>
-                            <ContentPresenter x:Name="image" Content="{StaticResource IconTougleOn}"/>
+                            <ContentPresenter x:Name="image" 
+                                              Margin="7"
+                                              Content="{StaticResource IconTougleOn}"/>
                         </Viewbox>
 
                         <Grid x:Name="warning" Visibility="Hidden">

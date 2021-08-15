@@ -21,10 +21,22 @@
         <Rectangle Grid.Column="1"
                        Fill="#FF8F05A4"/>
 
-        <Rectangle x:Name="Rama"
-                   Fill="#FF1E1E1E"
-                   Grid.Row="1"
-                   Grid.ColumnSpan="3"/>
+        <Grid Height="50"
+              Width="50"
+              Grid.Row="1"
+              Grid.ColumnSpan="3">
+
+            <Ellipse x:Name="Rama"
+                     Fill="#FF1E1E1E"/>
+
+            <TextBlock Text="{Binding Caption}"
+                       Foreground="Wheat"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+
+        </Grid>
+
+        
 
     </Grid>
 </UserControl>

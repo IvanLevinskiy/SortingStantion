@@ -5,26 +5,39 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Simulator.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="280" d:DesignWidth="800">
+             d:DesignHeight="280" d:DesignWidth="800"
+             Background="White">
     <Viewbox>
         <Canvas x:Name="canvas"
                 Height="280"
                 Width="800">
 
             <local:PhotoSensor x:Name="fs1"
-                               Canvas.Left="10"
+                               S7Operand="DB15.DBX4.0"
+                               Caption="FS1"
+                               Canvas.Left="124"
                                Height="200"
                                Width="50"/>
 
             <local:PhotoSensor  x:Name="fs2"
-                                Canvas.Left="400"
+                                S7Operand="DB15.DBX4.1"
+                                Caption="FS2"
+                                Canvas.Left="465"
                                 Height="200"
                                 Width="50"/>
 
             <local:PhotoSensor  x:Name="fs3"
+                                S7Operand="DB15.DBX5.2"
+                                Caption="FS3"
                                 Canvas.Left="600"
                                 Height="200"
                                 Width="50"/>
+
+            <local:Matrix Canvas.Left="177" 
+                          Canvas.Top="93" 
+                          Height="105" 
+                          Width="80"/>
+
 
         </Canvas>
     </Viewbox>

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using S7Communication;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -7,8 +9,39 @@ namespace Simulator.Controls
     /// <summary>
     /// Логика взаимодействия для PhotoSensor.xaml
     /// </summary>
-    public partial class PhotoSensor : UserControl
+    public partial class PhotoSensor : UserControl, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Надпись в фотодатчике
+        /// </summary>
+        public string Caption
+        {
+            get
+            {
+                return caption;
+            }
+            set
+            {
+                caption = value;
+                OnPropertyChanged("Caption");
+
+            }
+        }
+        string caption = "FS ***";
+
+        S7_Boolean tag;
+
+        /// <summary>
+        /// Операнд в памяти ПЛК
+        /// </summary>
+        public string S7Operand
+        {
+            set
+            {
+                tag = (S7_Boolean)DataBridge.Device.GetTagByAddress(value);
+            }
+        }
+
         /// <summary>
         /// Положение луча на канвасе
         /// </summary>
@@ -20,6 +53,8 @@ namespace Simulator.Controls
         public PhotoSensor()
         {
             InitializeComponent();
+
+            DataContext = this;
 
             Loaded += (e, s) =>
             {
@@ -58,10 +93,12 @@ namespace Simulator.Controls
             if (state == true)
             {
                 Rama.Fill = Brushes.Green;
+                tag.Write(true);
             }
             else
             {
                 Rama.Fill = new SolidColorBrush(Color.FromRgb(0x1E, 0x1E, 0x1E));
+                tag.Write(false);
             }
 
         }
@@ -80,5 +117,19 @@ namespace Simulator.Controls
 
             return boxes.ToArray();
         }
+
+
+        #region Реализация интерфейса INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+
+        }
+        #endregion
+
     }
 }
