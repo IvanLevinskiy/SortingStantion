@@ -27,7 +27,7 @@
                                 Width="50"/>
 
             <local:PhotoSensor  x:Name="fs3"
-                                S7Operand="DB15.DBX5.2"
+                                S7Operand="DB15.DBX4.2"
                                 Caption="FS3"
                                 Canvas.Left="600"
                                 Height="200"
@@ -37,6 +37,10 @@
                           Canvas.Top="93" 
                           Height="105" 
                           Width="80"/>
+            
+            <local:Pusher Canvas.Left="540" 
+                          Width="38" Height="126" 
+                          Canvas.Top="74"/>
 
 
         </Canvas>

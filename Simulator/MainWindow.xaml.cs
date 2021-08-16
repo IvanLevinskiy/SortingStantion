@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using S7Communication;
 
 namespace Simulator
@@ -12,7 +15,7 @@ namespace Simulator
         {
             InitializeComponent();
 
-            
+
             this.Loaded += (s, e) =>
             {
                 DataBridge.Server.Start();

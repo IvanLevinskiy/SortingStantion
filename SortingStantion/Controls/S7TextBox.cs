@@ -134,6 +134,7 @@ namespace SortingStantion.Controls
             this.KeyDown += MbTextBox_KeyDown;
             this.GotKeyboardFocus += MbTextBox_GotKeyboardFocus;
             this.TextChanged += MbTextBox_TextChanged;
+            this.GotFocus += S7TextBox_GotFocus;
         }
 
 
@@ -163,6 +164,25 @@ namespace SortingStantion.Controls
             SetText(S7TAG.StatusText);
         }
 
+        /// <summary>
+        /// Метод, вызываемый при получении логического фокуса
+        /// элементом управления
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void S7TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //Открытие клавиатуры
+            Keypad keypadWindow = new Keypad(this, DataBridge.MainScreen);
+
+            //Если нажата кнопка Enter - 
+            //запись значения в поле
+            if (keypadWindow.ShowDialog() == true)
+            {
+                this.originalTextBox.Text = keypadWindow.Result;
+                WriteValue(this.originalTextBox.Text);
+            }
+        }
 
         /// <summary>
         /// При потере фокуса клавиатурой
@@ -203,26 +223,8 @@ namespace SortingStantion.Controls
             //записываем значение в регистр
             if (e.Key == Key.Enter)
             {
-                this.Text = originalsourse.Text;
 
-                //Если регистра нет, пишем по умолчанию ***
-                if (S7TAG == null)
-                {
-                    SetText("***");
-                    deFocus();
-                    return;
-                }
-
-                //Запоинаем текст в контроле
-                if ((bool)S7TAG?.Write(this.Text))
-                {
-                    text = Text;
-                    deFocus();
-
-                    //Записываем в базу данных информацию об изминении
-                    DataBridge.AlarmLogging.AddMessage($"Значение параметра: '{ParametrName}' изменено на {this.Text}", MessageType.Event);
-                }
-
+                WriteValue(this.originalTextBox.Text);
                 return;
             }
 
@@ -232,6 +234,33 @@ namespace SortingStantion.Controls
             {
                 //S7TAG_ChangeValue(true);
                 //DataBridge.FocusElement.Focus();
+            }
+        }
+
+        /// <summary>
+        /// Метод для записи значения
+        /// </summary>
+        /// <param name="value"></param>
+        void WriteValue(string value)
+        {
+            this.Text = value;
+
+            //Если регистра нет, пишем по умолчанию ***
+            if (S7TAG == null)
+            {
+                SetText("***");
+                deFocus();
+                return;
+            }
+
+            //Запоинаем текст в контроле
+            if ((bool)S7TAG?.Write(this.Text))
+            {
+                text = Text;
+                deFocus();
+
+                //Записываем в базу данных информацию об изминении
+                DataBridge.AlarmLogging.AddMessage($"Значение параметра: '{ParametrName}' изменено на {this.Text}", MessageType.Event);
             }
         }
 

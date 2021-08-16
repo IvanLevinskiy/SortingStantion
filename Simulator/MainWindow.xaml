@@ -13,6 +13,8 @@
         <Controls:Conveyor Height="400" 
                            Margin="5,0" 
                            VerticalAlignment="Top"/>
+        
+     
 
     </Grid>
 </Window>

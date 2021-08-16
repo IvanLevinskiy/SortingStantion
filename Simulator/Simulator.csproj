@@ -71,6 +71,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Pusher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -90,6 +94,9 @@
     </Compile>
     <Compile Include="Controls\PhotoSensor.xaml.cs">
       <DependentUpon>PhotoSensor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Pusher.xaml.cs">
+      <DependentUpon>Pusher.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataBridge.cs" />
     <Compile Include="MainWindow.xaml.cs">

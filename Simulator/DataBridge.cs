@@ -37,6 +37,11 @@ namespace Simulator
         public static SimaticServer Server;
 
         /// <summary>
+        /// Указатель на отбраковщик
+        /// </summary>
+        public static Pusher Pusher;
+
+        /// <summary>
         /// Simatic Device
         /// </summary>
         public static SimaticDevice Device
@@ -94,7 +99,7 @@ namespace Simulator
             if(timer == null)
             {
                 timer = new System.Windows.Threading.DispatcherTimer();
-                timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
+                timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
 
 
                 DataBridge.LineIsRun.ChangeValue += (o, n) =>

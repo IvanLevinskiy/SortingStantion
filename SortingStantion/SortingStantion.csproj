@@ -131,6 +131,9 @@
     <Compile Include="Controls\ComboBoxSerialPorts.xaml.cs">
       <DependentUpon>ComboBoxSerialPorts.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Keypad.xaml.cs">
+      <DependentUpon>Keypad.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\xButton.cs" />
     <Compile Include="Controls\customMessageBox.xaml.cs">
       <DependentUpon>customMessageBox.xaml</DependentUpon>
@@ -222,6 +225,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\customMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Keypad.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

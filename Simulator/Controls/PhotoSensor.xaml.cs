@@ -78,7 +78,9 @@ namespace Simulator.Controls
         /// <param name="e"></param>
         private void Timer_Tick(object sender, System.EventArgs e)
         {
-            var boxs = GetBoxs();
+            //получение списка коробов,
+            //находящихсмя на ленте
+            var boxs = Box.GetBoxs();
 
             var state = false;
 
@@ -103,20 +105,7 @@ namespace Simulator.Controls
 
         }
 
-        Box [] GetBoxs()
-        {
-            List<Box> boxes = new List<Box>();
 
-            foreach (var element in DataBridge.canvas.Children)
-            {
-                if (element is Box)
-                {
-                    boxes.Add((Box)element);
-                }
-            }
-
-            return boxes.ToArray();
-        }
 
 
         #region Реализация интерфейса INotifyPropertyChanged
