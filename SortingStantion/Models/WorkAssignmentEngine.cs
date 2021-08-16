@@ -702,15 +702,15 @@ namespace SortingStantion.Models
             var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
 
             //Регистрация url
-            //NetAclChecker.AddAddress("http://192.168.3.97:7080/jobs/");
-            NetAclChecker.AddAddress("http://localhost:7080/jobs/");
+            NetAclChecker.AddAddress("http://192.168.3.97:7080/jobs/");
+            //NetAclChecker.AddAddress("http://localhost:7080/jobs/");
 
             //Инициализация экземпляра  listener
             HttpListener listener = new HttpListener();
 
             //Установка адресов  listener
-            //listener.Prefixes.Add("http://192.168.3.97:7080/jobs/");
-            listener.Prefixes.Add("http://localhost:7080/jobs/");
+            listener.Prefixes.Add("http://192.168.3.97:7080/jobs/");
+            //listener.Prefixes.Add("http://localhost:7080/jobs/");
 
             //Запуск слушателя
             try

@@ -55,10 +55,10 @@
         <Button Grid.Row="1"
                 Grid.Column="0" 
                 BorderThickness="1" 
-                BorderBrush="Gray" 
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 CommandParameter="NUMPAD7">7</Button>
@@ -70,6 +70,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="8" />
@@ -80,6 +81,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="9" />
@@ -89,6 +91,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 CommandParameter="BACK" >
@@ -111,6 +114,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="4"/>
@@ -121,6 +125,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="5" />
@@ -131,6 +136,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="6" />
@@ -141,6 +147,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="1"/>
@@ -151,6 +158,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="2"/>
@@ -161,6 +169,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="3" />
@@ -172,6 +181,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="Enter"/>
@@ -183,6 +193,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="0" />
@@ -193,6 +204,7 @@
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource DarkColor}"
                 Foreground="{StaticResource TextColor}"
+                 Click="button_Click" 
                 Margin="5"
                 FontSize="22"
                 Content="." />
