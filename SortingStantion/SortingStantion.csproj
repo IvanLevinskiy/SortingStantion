@@ -359,6 +359,7 @@
     </EmbeddedResource>
     <None Include="App.config" />
     <None Include="Docs\2021_06_12_Описание_ПО_L2_сериализация_вер_2_3.docx" />
+    <None Include="Docs\2021_08_17_Тестирование S1 %284%29.docx" />
     <None Include="Docs\A1-2 СОПы проверки.docx" />
     <None Include="Docs\A2-2 СОПы работы и наладки.docx" />
     <None Include="Docs\quickscan_i_family_prg_rus.pdf" />

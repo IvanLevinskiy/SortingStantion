@@ -244,6 +244,15 @@ namespace SortingStantion.Models
             AllCodes.Insert(0, serialnumber);
 
             /*
+                Если кодов больше 6
+                удаляем самый ранний
+            */
+            //if (AllCodes.Count > 6)
+            //{
+            //    AllCodes.RemoveAt(AllCodes.Count - 1);
+            //}
+
+            /*
                 Объявление локальных переменных
             */
             var msg = string.Empty;

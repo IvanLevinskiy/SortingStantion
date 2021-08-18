@@ -661,6 +661,7 @@
                     <!--ItemsSource="{Binding ResultOperation.AllCodes}"-->
                     <ListView x:Name="listView"
                               ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
                               Background="{StaticResource LightColor}"
                               ItemsSource="{Binding ResultOperation.AllCodes}"
                               BorderBrush="{StaticResource GridColor}">
