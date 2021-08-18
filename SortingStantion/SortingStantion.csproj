@@ -134,6 +134,9 @@
     <Compile Include="Controls\Keypad.xaml.cs">
       <DependentUpon>Keypad.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\S7Indicator.xaml.cs">
+      <DependentUpon>S7Indicator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\xButton.cs" />
     <Compile Include="Controls\customMessageBox.xaml.cs">
       <DependentUpon>customMessageBox.xaml</DependentUpon>
@@ -229,6 +232,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Keypad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\S7Indicator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -73,6 +73,17 @@ namespace SortingStantion.Models
             {
                 return new DelegateCommand((obj) =>
                 {
+                    //Вызываем окно авторизации
+                    SortingStantion.UserAdmin.frameAuthorization frameAuthorization = new SortingStantion.UserAdmin.frameAuthorization();
+                    frameAuthorization.ShowDialog();
+
+                    //Если результат авторизации не удачный, выходим
+                    if (frameAuthorization.AuthorizationResult == false)
+                    {
+                        return;
+                    }
+
+
                     CurrentScreen = frameSettings;
                 },
                 (obj) => (true));

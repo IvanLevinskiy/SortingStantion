@@ -12,7 +12,7 @@
     <Grid Background="#FF262626">
 
         <Grid.Resources>
-            
+
             <Style TargetType="controls:S7TextBox">
                 <Setter Property="Background" Value="{StaticResource DarkColor}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
@@ -285,7 +285,7 @@
                         BorderThickness="1,1,0,1">
 
                     <Grid>
-                      
+
                         <Grid Background="#FF676767"
                               Grid.RowSpan="2"
                               Margin="5,1,5,1">
@@ -308,7 +308,7 @@
                                     <Rectangle Fill="Transparent" VerticalAlignment="Stretch"/>
                                 </Grid>
 
-                               
+
 
                             </Button>
 
@@ -321,24 +321,24 @@
 
                 <!--КНОПКА ВЫЗОВА НАСТРОЕК-->
                 <Button Grid.Column="4"
-                    Margin="0,0,0,2"
-                    BorderThickness="1"
-                    Style="{StaticResource btnStyle}"
-                    DataContext="{Binding ScreenEngine}"
-                    Command="{Binding OpenSettingsScreenCMD}"
-                    BorderBrush="{StaticResource GridColor}"
-                    Background="#FF292929">
+                            Margin="0,0,0,2"
+                            BorderThickness="1"
+                            Style="{StaticResource btnStyle}"
+                            DataContext="{Binding ScreenEngine}"
+                            Command="{Binding OpenSettingsScreenCMD}"
+                            BorderBrush="{StaticResource GridColor}"
+                            Background="#FF292929">
                     <Grid>
                         <Viewbox Margin="10,0,10,10"
-                                 VerticalAlignment="Top">
+                                     VerticalAlignment="Top">
                             <ContentPresenter  Content="{StaticResource IconSettings}"/>
                         </Viewbox>
 
                         <TextBlock Text="НАСТРОЙКИ"
-                                   VerticalAlignment="Bottom"
-                                   HorizontalAlignment="Center"
-                                   Foreground="{StaticResource IconColor}"
-                                   FontSize="8"/>
+                                       VerticalAlignment="Bottom"
+                                       HorizontalAlignment="Center"
+                                       Foreground="{StaticResource IconColor}"
+                                       FontSize="8"/>
                     </Grid>
                 </Button>
 
@@ -612,16 +612,17 @@
                                         BorderBrush="Transparent"
                                         IsEnabled="{Binding Conveyor.btnLineRunEnable}"
                                         Command="{Binding Conveyor.StartLineCMD}">
-                                        <TextBlock  TextAlignment="Center"
+                        <TextBlock  TextAlignment="Center"
                                                     FontSize="{StaticResource fontSizeButtons}">
                                                     <Run>СТАРТ</Run>
-                                        </TextBlock>
+                        </TextBlock>
                     </Button>
 
                     <!--СТАТУСЫ-->
                     <Grid Grid.Row="1"
+                          Margin="20,0,0,0"
                           Background="{StaticResource LightColor}"
-                          HorizontalAlignment="Center"
+                          HorizontalAlignment="Left"
                           VerticalAlignment="Center">
 
                         <Grid HorizontalAlignment="Left"
@@ -638,6 +639,31 @@
 
                     </Grid>
 
+                    <Grid Grid.Row="1"
+                          Margin="230,0,0,0"
+                          Background="{StaticResource LightColor}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Center">
+
+                        <Grid HorizontalAlignment="Left"
+                              Margin="20,0,0,0">
+
+                            <controls:S7Indicator S7Operand="DB1.DBX134.0"
+                                                  IconTrue="{StaticResource IconOk}"
+                                                  IconFalse="{StaticResource IconError}"/>
+                        </Grid>
+
+                        <TextBlock Text="ПОВТОРЫ КОДОВ"
+                                   Margin="75,0,0,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="{StaticResource fontSizeData}"
+                                   FontFamily="{StaticResource fontFamilyData}"
+                                   Foreground="{StaticResource TextColor}"/>
+                        
+                       
+
+                    </Grid>
+
                     <!--КНОПКА ОСТАНОВА ЛИНИИ-->
                     <Button   Grid.Row="2"
                                         Margin="20,5,20,5"
@@ -648,10 +674,10 @@
                                         BorderBrush="Transparent"
                                         IsEnabled="{Binding Conveyor.btnLineStopEnable}"
                                         Command="{Binding Conveyor.StopLineCMD}">
-                                        <TextBlock  TextAlignment="Center"
+                        <TextBlock  TextAlignment="Center"
                                                     FontSize="{StaticResource fontSizeButtons}">
                                                     <Run>СТОП</Run>
-                                        </TextBlock>
+                        </TextBlock>
                     </Button>
 
 
@@ -679,7 +705,7 @@
                                                Fill="{StaticResource GridColor}"/>
 
                                 </Grid>
-                               
+
                             </DataTemplate>
                         </ListView.ItemTemplate>
                         <!--<ListView.Items>
@@ -699,12 +725,12 @@
 
             </Grid>
 
-           
-            
+
+
         </StackPanel>
 
-       
-        
+
+
         <!--ТАБЛИЦА СИМУЛЯЦИЯ-->
         <Grid Background="#FF1E1E1E" 
               Visibility="Hidden"
