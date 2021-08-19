@@ -2,6 +2,7 @@
 using SortingStantion.Controls;
 using SortingStantion.S7Extension;
 using SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter;
+using SortingStantion.TOOL_WINDOWS.windowProductsAreTooCloseToEachOther;
 using SortingStantion.TOOL_WINDOWS.windowPusherError;
 using System;
 
@@ -89,7 +90,7 @@ namespace SortingStantion.Models
         public S7DiscreteAlarm al_8;
 
         /// <summary>
-        /// Ошибка 9 - Ошибка отбраковщика (продукт не отбраковался)
+        /// Ошибка 9 - Продукт слишком близко друг другу
         /// </summary>
         public S7DiscreteAlarm al_9;
 
@@ -257,6 +258,30 @@ namespace SortingStantion.Models
                 windowOverDeffectCounter windowOverDeffectCounter = new windowOverDeffectCounter(DEFFECT_PRODUCTS_COUNTER, al_7);
                 windowOverDeffectCounter.ShowDialog();
             };
+
+            /*
+                Продукт слишком близко к предыдущему, удалите его с конвейера
+            */
+            al_9 = new S7DiscreteAlarm("Продукт слишком близко к предыдущему, удалите его с конвейера", "DB6.DBX13.0", group);
+            al_9.MessageAction = () =>
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Продукт слишком близко к предыдущему", MessageType.Alarm);
+
+                //Сброс ошибки
+                al_9.Write(false);
+
+                //Вывод окна ошибки
+                windowProductsAreTooCloseToEachOther windowProductsAreTooCloseToEachOther = new windowProductsAreTooCloseToEachOther();
+                windowProductsAreTooCloseToEachOther.ShowDialog();
+            };
+
 
             /*
                 Ошибка питания UPS (ИБП)

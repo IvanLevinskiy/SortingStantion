@@ -74,7 +74,6 @@ namespace SortingStantion.Controls
             set
             {
                 contentPr.Content = value;
-                //OnPropertyChanged("xContent");
             }
         }
         object _content;
