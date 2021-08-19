@@ -194,7 +194,7 @@ namespace SortingStantion.TechnologicalObjects
             //команды
             if (Run.Status is bool? == false)
             {
-                return;
+                Run.Status = false;
             }
 
             //Если конвейер остановлен, запускаем его
