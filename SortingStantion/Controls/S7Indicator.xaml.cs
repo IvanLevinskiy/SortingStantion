@@ -1,5 +1,6 @@
 ﻿using S7Communication;
 using System;
+using System.ComponentModel;
 using System.Windows.Controls;
 
 namespace SortingStantion.Controls
@@ -7,7 +8,7 @@ namespace SortingStantion.Controls
     /// <summary>
     /// Логика взаимодействия для S7Indicator.xaml
     /// </summary>
-    public partial class S7Indicator : UserControl
+    public partial class S7Indicator : UserControl, INotifyPropertyChanged
     {
         #region SIMATIC СУЩНОСТИ 
 
@@ -66,27 +67,48 @@ namespace SortingStantion.Controls
         }
 
         /// <summary>
+        /// Содержимое главного экрана
+        /// </summary>
+        public object xContent
+        {
+            set
+            {
+                contentPr.Content = value;
+                //OnPropertyChanged("xContent");
+            }
+        }
+        object _content;
+
+        /// <summary>
         /// Метод, вызываемый при изминении тэга
         /// </summary>
         /// <param name="arg1"></param>
         /// <param name="arg2"></param>
         private void Tag_ChangeValue(object arg1, object arg2)
         {
-            bool value = (bool)arg2;
+            //Если значение не является bool
+            if (arg1 is bool == false)
+            {
+                return;
+            }
+
+            //Приведение типов
+            bool oldvalue = (bool)arg1;
+            bool newvalue = (bool)arg2;
 
             Action action = () =>
             {
                 //Если тэг изменил состояние на TRUE
-                if (value == true)
+                if (newvalue == true)
                 {
-                    content.Content = IconTrue;
+                    xContent = IconTrue;
                     return;
                 }
 
-                //Если тэг изменил состояние на FALSE
-                if (value == false)
+                ////Если тэг изменил состояние на FALSE
+                if (newvalue == false)
                 {
-                    content.Content = IconFalse;
+                    xContent = IconFalse;
                     return;
                 }
             };
@@ -103,13 +125,16 @@ namespace SortingStantion.Controls
             //Инициализация UI
             InitializeComponent();
 
-            //Метод, вызываемый при загрузке 
-            //элемента управлекния
-            this.Loaded += (s, e) =>
-            {
-                content.Content = IconFalse;
-            };
-            
+            DataContext = this;
         }
+
+
+        #region РЕАЛИЗАЦИЯ ИНТЕРФЕЙСА INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+        #endregion
     }
 }

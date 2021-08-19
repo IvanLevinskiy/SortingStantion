@@ -4,8 +4,6 @@ using SortingStantion.TechnologicalObjects;
 using SortingStantion.UserAdmin;
 using SortingStantion.Utilites;
 using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace SortingStantion.MainScreen
@@ -187,15 +185,15 @@ namespace SortingStantion.MainScreen
             //Запуск сервера
             server.Start();
 
-            //Запуск задачи, взводящий флаг ConnectFlag
-            Task.Factory.StartNew(() =>
-            {
-                while (true)
-                {
-                    //ConnectFlag.Write(true);
-                    //Thread.Sleep(500);
-                }
-            });
+            ////Запуск задачи, взводящий флаг ConnectFlag
+            //Task.Factory.StartNew(() =>
+            //{
+            //    while (true)
+            //    {
+            //        //ConnectFlag.Write(true);
+            //        //Thread.Sleep(500);
+            //    }
+            //});
         }
 
 

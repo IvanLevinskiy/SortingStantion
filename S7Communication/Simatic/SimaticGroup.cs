@@ -16,9 +16,6 @@ namespace S7Communication
         /// <summary>
         /// Символьное имя
         /// </summary>
-        [DisplayName("Имя")]
-        [Description("Имя группы тэгов")]
-        [Category("Свойства группы тэгов")]
         public string Name
         {
             get
@@ -48,70 +45,11 @@ namespace S7Communication
         /// <summary>
         /// Коллекция тэгов
         /// </summary>
-        [DisplayName("Список тэгов")]
-        [Description("Список тэгов входящих в группу тэгов")]
-        [Category("Параметры группы тэгов")]
-        [Browsable(false)]
         public ObservableCollection<simaticTagBase> Tags
         {
             get;
             set;
         }
-
-        /// <summary>
-        /// Путь в сервере
-        /// </summary>
-        [DisplayName("Путь")]
-        [Description("Полный путь до группы тэгов в сервере")]
-        [Category("Информация о группе тэгов")]
-        [ReadOnly(true)]
-        [Browsable(false)]
-        public string FullPatch
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Свойство для MVVM, указывающее
-        /// на то, выбран ли объект
-        /// </summary>
-        [Browsable(false)]
-        public bool IsSelected
-        {
-            get
-            {
-                return _isSelected;
-            }
-            set
-            {
-                _isSelected = value;
-                OnPropertyChanged("IsSelected");
-
-                //Костыль
-                ParentDevice.server.FindeSelectedElement();
-            }
-        }
-        bool _isSelected;
-
-        /// <summary>
-        /// Свойство для MVVM, указывающее
-        /// на то, развернут ли узел
-        /// </summary>
-        [Browsable(false)]
-        public bool IsExpanded
-        {
-            get
-            {
-                return _isExpanded;
-            }
-            set
-            {
-                _isExpanded = value;
-                OnPropertyChanged("IsExpanded");
-            }
-        }
-        bool _isExpanded = true;
 
 
         delegate void function();

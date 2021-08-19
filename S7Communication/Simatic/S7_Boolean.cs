@@ -25,6 +25,11 @@ namespace S7Communication
         }
 
         /// <summary>
+        /// Статус тэга в предыдущем скане
+        /// </summary>
+        bool? oldStatus = null;
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public S7_Boolean(string name, string address, SimaticGroup simaticGroup)
@@ -61,7 +66,6 @@ namespace S7Communication
         /// <param name="value"></param>
         public override bool Write(object value)
         {
-            
             //Приводим записываемое значение к типу bool 
             var _value = Convert.ToBoolean(value);
 
@@ -92,10 +96,10 @@ namespace S7Communication
                 var result = device.WriteBytes(DataType, DBNumber, StartByteAddress, array);
 
                 //Если запись успешна - обновляем статус
-                //if (result == true)
-                //{
-                //    Status = value;
-                //}
+                if (result == true)
+                {
+                    Status = value;
+                }
 
                 return result;
             }
@@ -168,10 +172,8 @@ namespace S7Communication
         /// <param name="offset"></param>
         public override void BuildStatus(byte[] bytes, int startbytefromrequest)
         {
-
+            //Получение смещение байта адреса
             int offset = StartByteAddress - startbytefromrequest;
-
-            var v =  this.Address;
 
             //Если отсутсвует указатель
             //на массив байт - выходим
@@ -193,7 +195,31 @@ namespace S7Communication
 
             //Построение статуса из байтов
             statusByte = bytes[offset];
-            Status = GetBitState();
+
+            //Получаем новое значение тэга
+            bool? newStatus = (bool?)GetBitState();
+
+            //Если хначение изменилось
+            if (newStatus != oldStatus)
+            {
+                //Получение нового значения
+                var nv = (bool)newStatus;
+
+                //Получение значения в прошлом скане
+                var ov = false;
+
+                //Защита от нулевого указателя
+                if (oldStatus != null)
+                {
+                    ov = (bool)oldStatus;
+
+                }
+
+                //Извещение подписчиков
+                Invoke(ov, nv);
+
+            }
+
         }
     }
 }

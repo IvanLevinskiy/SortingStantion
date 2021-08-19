@@ -30,9 +30,6 @@ namespace S7Communication
             {
                 _isSelected = value;
                 OnPropertyChanged("IsSelected");
-
-                //Ищем выбранный узел
-                FindeSelectedElement();
             }
         }
         bool _isSelected;
@@ -366,52 +363,6 @@ namespace S7Communication
         }
 
         #endregion
-
-
-
-        /// <summary>
-        /// Метод для поиска
-        /// выбранного элемента в сервере (для MVVM)
-        /// </summary>
-        public void FindeSelectedElement()
-        {
-            //Если выбран Сервер
-            if (this.IsSelected)
-            {
-                SelectElement = this;
-                return;
-            }
-
-            foreach (SimaticDevice device in Devices)
-            {
-                if (device.IsSelected)
-                {
-                    SelectElement = device;
-                    return;
-                }
-
-                foreach (SimaticGroup group in device.Groups)
-                {
-                    if (group.IsSelected)
-                    {
-                        SelectElement = group;
-                        return;
-                    }
-
-                    foreach (simaticTagBase _tag in group.Tags)
-                    {
-                        if (_tag.IsSelected)
-                        {
-                            SelectElement = _tag;
-                            return;
-                        }
-                    }
-                }
-            }
-
-            //Если ничего не нашли, тогда пишем нуль в переменную
-            SelectElement = null;
-        }
 
       
         #region Реализация интерфейса INotifyPropertyChanged

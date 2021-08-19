@@ -294,26 +294,6 @@ namespace S7Communication
         }
 
         /// <summary>
-        /// Свойство для MVVM
-        /// </summary>
-        public bool IsSelected
-        {
-            get
-            {
-                return _isSelected;
-            }
-            set
-            {
-                _isSelected = value;
-                OnPropertyChanged("IsSelected");
-
-                //Костыль
-                server.FindeSelectedElement();
-            }
-        }
-        bool _isSelected;
-
-        /// <summary>
         /// Флаг, указывающий на то, 
         /// развернуто ли устройство в дереве
         /// </summary>

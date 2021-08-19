@@ -122,11 +122,11 @@ namespace S7Communication
 
                     //Сохранение нового статуса
                     status = value;
-                    UpdatedValue(value);
 
                     //Извещение подписчиков
                     ChangeValue?.Invoke(oldstatus, value);
 
+                    UpdatedValue(value);
 
                     OnPropertyChanged("Status");
                 }
@@ -149,26 +149,7 @@ namespace S7Communication
         /// </summary>
         public event Action<object> DataUpdated;
 
-        /// <summary>
-        /// Свойство для MVVM
-        /// </summary>
-        public bool IsSelected
-        {
-            get
-            {
-                return _isSelected;
-            }
-            set
-            {
-                _isSelected = value;
-                OnPropertyChanged("IsSelected");
-
-                //Костыль
-                group.ParentDevice.server.FindeSelectedElement();
-            }
-        }
-        bool _isSelected;
-
+        
         /// <summary>
         /// Тип данных ПЛК
         /// </summary>
@@ -437,6 +418,11 @@ namespace S7Communication
             //Преобразование
             var bts = GetBytes(bytes, statrindex, 4);
             return bts[3] | (uint)(bts[2] << 8) | (uint)(bts[1] << 16) | (uint)(bts[0] << 24);
+        }
+
+        public void Invoke(object ov, object nv)
+        {
+            ChangeValue?.Invoke(ov, nv);
         }
 
 

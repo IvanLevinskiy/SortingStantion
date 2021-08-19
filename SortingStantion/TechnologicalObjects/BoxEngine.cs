@@ -90,7 +90,9 @@ namespace SortingStantion.TechnologicalObjects
             //Команда для считывания кода сканера
             READ_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX378.0");
 
+            //Тэг для очистки коллекции изделий
             CLEAR_ITEMS_COLLECTION_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX98.2");
+
 
             //Данные из сканера
             SCAN_DATA = (S7_String)device.GetTagByAddress("DB1.DBD494-STR100");
@@ -114,7 +116,15 @@ namespace SortingStantion.TechnologicalObjects
                 if ((bool)ov == false && (bool)nv == true)
                 {
                     SCAN_DATA.DataUpdated += SCAN_DATA_DataUpdated;
-                }            
+                }
+            };
+
+            //При первом скане очищаем коллекцию
+            //продуктов в очереди ПЛК
+            device.FirstScan += () =>
+            {
+                //Очистка коллекции продуктов в очереди ПЛК
+                CLEAR_ITEMS_COLLECTION_CMD.Write(true);
             };
         }
 

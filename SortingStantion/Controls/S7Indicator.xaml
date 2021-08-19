@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:SortingStantion.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="30">
-    <Grid>
-        <ContentControl x:Name="content"/>
+    <Grid x:Name="grid">
+        <ContentPresenter x:Name="contentPr"/>
     </Grid>
 </UserControl>
