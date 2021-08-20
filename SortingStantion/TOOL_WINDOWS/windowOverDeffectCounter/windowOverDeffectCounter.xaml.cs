@@ -41,7 +41,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
             this.Owner = DataBridge.MainScreen;
 
             //Формирование правиьного сообщения
-            txMessage.Text = $"     Конвейер остановлен после {DEFFECT_PRODUCTS_COUNTER.StatusText} продуктов, отбракованных подряд.";
+            txMessage.Text = $"     Конвейер остановлен после {DEFFECT_PRODUCTS_COUNTER.StatusText} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
 
             //Подписка на события
             this.Closing += Window_Closing;
@@ -57,7 +57,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
             Action action = () =>
             {
                 //Формирование правиьного сообщения
-                txMessage.Text = $"     Конвейер остановлен после {DEFFECT_PRODUCTS_COUNTER.StatusText} продуктов, отбракованных подряд.";
+                txMessage.Text = $"     Конвейер остановлен после {DEFFECT_PRODUCTS_COUNTER.StatusText} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
 
             };
             DataBridge.UIDispatcher.Invoke(action);
@@ -73,15 +73,9 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
             //Квитирование аварии
             alarm.Write(false);
 
-            //Уменьшение счетчика подряд идущего брака на единицу
-            UInt32 counter = Convert.ToUInt32(DEFFECT_PRODUCTS_COUNTER.Status) - 1;
+            //Обнуление счетчика дефектных продуктов
+            DEFFECT_PRODUCTS_COUNTER.Write(0);
 
-            //Если новое значение счетчика больше 0
-            if (counter >= 0)
-            {
-                DEFFECT_PRODUCTS_COUNTER.Write(counter);
-            }
-            
             //Отписка от метода, вызываемого при закрытии окна
             this.Closing -= Window_Closing;
 

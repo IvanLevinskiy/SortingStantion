@@ -1,6 +1,8 @@
 ﻿using SortingStantion.TOOL_WINDOWS.windiwInformation;
 using SortingStantion.TOOL_WINDOWS.windowAddDeffect;
+using SortingStantion.TOOL_WINDOWS.windowClearCollectionRequest;
 using SortingStantion.Utilites;
+using System;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -11,7 +13,6 @@ namespace SortingStantion.Models
     /// </summary>
     public class ScreenEngine : INotifyPropertyChanged
     {
-
         /// <summary>
         /// Главный экран
         /// </summary>
@@ -99,10 +100,14 @@ namespace SortingStantion.Models
             {
                 return new DelegateCommand((obj) =>
                 {
-                    frameSettings.windowExit windowExit = new frameSettings.windowExit();
-                    windowExit.Owner = DataBridge.MainScreen;
-                    windowExit.ShowDialog();
+                    Action action = () =>
+                    {
+                        frameSettings.windowExit windowExit = new frameSettings.windowExit();
+                        windowExit.Owner = DataBridge.MainScreen;
+                        windowExit.ShowDialog();
+                    };
 
+                    windowClearCollectionRequest windowClearCollectionRequest = new windowClearCollectionRequest(action);
                 },
                 (obj) => (true));
             }
@@ -159,6 +164,7 @@ namespace SortingStantion.Models
                 (obj) => (true));
             }
         }
+
 
         #region Реализация интерфейса INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

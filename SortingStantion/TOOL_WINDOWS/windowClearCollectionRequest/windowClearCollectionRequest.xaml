@@ -35,21 +35,19 @@
             </Grid.ColumnDefinitions>
 
             <Button Content="Продолжить"
-                    Click="ButtonCancel_Click"
                     Style="{StaticResource btnStyle}"
                     Background="{StaticResource DarkColor}"
                     Foreground="{StaticResource TextColor}"
                     FontSize="{StaticResource fontSizeButtons}"
-                    Margin="0,0,10,0"/>
+                    Margin="0,0,10,0" Click="BtnContinueClick"/>
 
             <Button Content="Отменить"
                     Grid.Column="1"
-                    Click="ButtonCancel_Click"
                     Style="{StaticResource btnStyle}"
                     Background="{StaticResource DarkColor}"
                     Foreground="{StaticResource TextColor}"
                     FontSize="{StaticResource fontSizeButtons}"
-                    Margin="10,0,0,0"/>
+                    Margin="10,0,0,0" Click="BtnCancelClick"/>
 
         </Grid>
     </Grid>

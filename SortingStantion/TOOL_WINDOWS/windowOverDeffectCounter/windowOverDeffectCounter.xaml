@@ -36,7 +36,7 @@
                            Margin="10,10,10,0">
                 </TextBlock>
 
-                <Button Content="Отмена"
+                <Button Content="Закрыть"
                         Click="ButtonCancel_Click"
                         Style="{StaticResource btnStyle}"
                         Background="{StaticResource DarkColor}"

@@ -47,11 +47,18 @@ namespace SortingStantion.Controls
         /// </summary>
         public customMessageBox(string caption, string message)
         {
+            //Инициализация UI
             InitializeComponent();
 
+            //Передача свойств
             Message = message;
             Caption = caption;
 
+            //Передача указателя на окно, в центе которого 
+            //надо разместить окна
+            this.Owner = DataBridge.MainScreen;
+
+            //Передача датаконтекста
             DataContext = this;
         }
 

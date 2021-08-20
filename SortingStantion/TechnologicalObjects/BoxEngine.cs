@@ -72,6 +72,11 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         S7_Boolean REPEAT_ENABLE;
 
+        /// <summary>
+        /// Количество отсканированных, но не выпущенных
+        /// продуктов
+        /// </summary>
+        S7_DWord ProductCollectionLenght;
 
         /// <summary>
         /// Объект, осуществляющий разбор телеграммы
@@ -93,9 +98,11 @@ namespace SortingStantion.TechnologicalObjects
             //Тэг для очистки коллекции изделий
             CLEAR_ITEMS_COLLECTION_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX98.2");
 
-
             //Данные из сканера
             SCAN_DATA = (S7_String)device.GetTagByAddress("DB1.DBD494-STR100");
+
+            //Количество отсканированных но не выпущенных объектов
+            ProductCollectionLenght = (S7_DWord)device.GetTagByAddress("DB5.DBD0-DWORD");
 
             //Подписываемся на событие по изминению
             //тэга READ_CMD  и осуществляем вызов

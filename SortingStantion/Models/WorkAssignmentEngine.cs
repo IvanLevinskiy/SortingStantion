@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using S7Communication;
 using SortingStantion.Controls;
+using SortingStantion.TOOL_WINDOWS.windowClearCollectionRequest;
 using SortingStantion.Utilites;
 using System;
 using System.Collections.ObjectModel;
@@ -640,51 +641,59 @@ namespace SortingStantion.Models
                         return;
                     }
 
-                    //Стирание данных в ПЛК
-                    GTIN_TAG.Write("");
-                    TASK_ID_TAG.Write("");
-                    PRODUCT_NAME_TAG.Write("");
-                    LOT_NO_TAG.Write("");
-
-                    //Обнуление счетчиков изделий
-                    NUM_PACKS_IN_BOX_TAG.Write(0);
-                    NUM_PACKS_IN_SERIES_TAG.Write(0);
-
-                    QUANTITY_WORKSPACE.Write(0);
-                    QUANTITY_BOXS.Write(0);
-                    QUANTITY_WORKSPACE_AUTO_REJECTED.Write(0);
-                    QUANTITY_WORKSPACE_MANUAL_REJECTED.Write(0);
-                    REPEAT_COUNTER.Write(0);
-                    DEFECT_COUNTER.Write(0);
-
-                    //Уведомление подписчиков о завершении задания
-                    WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
-
-                    //Запись в базу данных
-                    var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
-
-                    //Запись в базу данных о принятии задания
-                    DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
-
-                    var msg = new UserMessage(message, MSGTYPE.SUCCES);
-                    DataBridge.MSGBOX.Add(msg);
-
-                    //Запись статуса в ПЛК
-                    IN_WORK_TAG.Write(false);
-
-                    //Сброс результата 
-                    try
+                    Action action = () =>
                     {
-                        DataBridge.Report.SendReport();
-                        WorkAssignments.Clear();
-                    }
-                    catch (Exception ex)
-                    {
+                        //Стирание данных в ПЛК
+                        GTIN_TAG.Write("");
+                        TASK_ID_TAG.Write("");
+                        PRODUCT_NAME_TAG.Write("");
+                        LOT_NO_TAG.Write("");
+
+                        //Обнуление счетчиков изделий
+                        NUM_PACKS_IN_BOX_TAG.Write(0);
+                        NUM_PACKS_IN_SERIES_TAG.Write(0);
+
+                        QUANTITY_WORKSPACE.Write(0);
+                        QUANTITY_BOXS.Write(0);
+                        QUANTITY_WORKSPACE_AUTO_REJECTED.Write(0);
+                        QUANTITY_WORKSPACE_MANUAL_REJECTED.Write(0);
+                        REPEAT_COUNTER.Write(0);
+                        DEFECT_COUNTER.Write(0);
+
+                        //Уведомление подписчиков о завершении задания
+                        WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
+
                         //Запись в базу данных
-                        message = $"Ошибка отправки отчета";
-                        msg = new UserMessage(message, DataBridge.myRed);
+                        var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
+
+                        //Запись в базу данных о принятии задания
+                        DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
+
+                        var msg = new UserMessage(message, MSGTYPE.SUCCES);
                         DataBridge.MSGBOX.Add(msg);
-                    }    
+
+                        //Запись статуса в ПЛК
+                        IN_WORK_TAG.Write(false);
+
+                        //Сброс результата 
+                        try
+                        {
+                            DataBridge.Report.SendReport();
+                            WorkAssignments.Clear();
+                        }
+                        catch (Exception ex)
+                        {
+                            //Запись в базу данных
+                            message = $"Ошибка отправки отчета";
+                            msg = new UserMessage(message, DataBridge.myRed);
+                            DataBridge.MSGBOX.Add(msg);
+                        }
+                    };
+
+                    var wcr = new windowClearCollectionRequest(action);
+
+
+
 
                     return;
                 },

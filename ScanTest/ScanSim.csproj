@@ -79,11 +79,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\S7Communication\S7Communication.csproj">
-      <Project>{e7f2b419-5ba7-42fb-a537-496120fad2b1}</Project>
-      <Name>S7Communication</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
