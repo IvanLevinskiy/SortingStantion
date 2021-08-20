@@ -117,6 +117,11 @@ namespace SortingStantion.Models
         Controls.UserMessage msgLostConnection;
 
         /// <summary>
+        /// Окно ошибки "МАССОВЫЙ БРАК"
+        /// </summary>
+        windowOverDeffectCounter windowOverDeffectCounter;
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public AlarmsEngine()
@@ -219,11 +224,11 @@ namespace SortingStantion.Models
             al_6.MessageAction = () =>
             {
                 //Если линия выключена
-                //if (DataBridge.Conveyor.LineIsRun == false)
-                //{
-                //    al_6.Write(false);
-                //    return;
-                //}
+                if (DataBridge.Conveyor.LineIsRun == false)
+                {
+                    //al_6.Write(false);
+                    return;
+                }
 
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
@@ -245,6 +250,12 @@ namespace SortingStantion.Models
             al_7 = new S7DiscreteAlarm("Массовый брак", "DB6.DBX12.6", group);
             al_7.MessageAction = () =>
             {
+                //Если линия выключена
+                if (DataBridge.Conveyor.LineIsRun == false)
+                {
+                    return;
+                }
+
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
@@ -255,8 +266,12 @@ namespace SortingStantion.Models
                 DataBridge.AlarmLogging.AddMessage("Массовый брак", MessageType.Alarm);
 
                 //Вывод окна ошибки
-                windowOverDeffectCounter windowOverDeffectCounter = new windowOverDeffectCounter(DEFFECT_PRODUCTS_COUNTER, al_7);
-                windowOverDeffectCounter.ShowDialog();
+                //if (windowOverDeffectCounter == null)
+                //{
+                    windowOverDeffectCounter = new windowOverDeffectCounter(DEFFECT_PRODUCTS_COUNTER, al_7);
+                    windowOverDeffectCounter.ShowDialog();
+                    //windowOverDeffectCounter = null;
+                //}
             };
 
             /*

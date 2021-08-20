@@ -63,7 +63,7 @@ namespace SortingStantion.Models
         /// </summary>
         public Buzzer()
         {
-            BUZZER_TAG = (S7_Boolean)device.GetTagByAddress("DB1.DBX120.0");
+            BUZZER_TAG = (S7_Boolean)device.GetTagByAddress("DB1.DBX86.0");
         }
 
         /// <summary>

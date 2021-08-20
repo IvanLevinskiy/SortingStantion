@@ -1,6 +1,7 @@
 ﻿using S7Communication;
 using SortingStantion.S7Extension;
 using System;
+using System.Threading;
 using System.Windows;
 
 namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
@@ -40,8 +41,10 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
             //надо разместить окна
             this.Owner = DataBridge.MainScreen;
 
+            var newvalue = Convert.ToUInt32(DEFFECT_PRODUCTS_COUNTER.Status);
+
             //Формирование правиьного сообщения
-            txMessage.Text = $"     Конвейер остановлен после {DEFFECT_PRODUCTS_COUNTER.StatusText} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
+            txMessage.Text = $"     Конвейер остановлен после {newvalue} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
 
             //Подписка на события
             this.Closing += Window_Closing;
@@ -56,8 +59,10 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
         {
             Action action = () =>
             {
+                var newvalue = Convert.ToUInt32(arg2);
+
                 //Формирование правиьного сообщения
-                txMessage.Text = $"     Конвейер остановлен после {DEFFECT_PRODUCTS_COUNTER.StatusText} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
+                txMessage.Text = $"     Конвейер остановлен после {newvalue} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
 
             };
             DataBridge.UIDispatcher.Invoke(action);
@@ -70,11 +75,11 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
         /// <param name="e"></param>
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            //Квитирование аварии
-            alarm.Write(false);
-
             //Обнуление счетчика дефектных продуктов
             DEFFECT_PRODUCTS_COUNTER.Write(0);
+
+            //Квитирование аварии
+            alarm.Write(false);
 
             //Отписка от метода, вызываемого при закрытии окна
             this.Closing -= Window_Closing;

@@ -162,10 +162,21 @@ namespace SortingStantion.TechnologicalObjects
             //для того, чтоб процедура отработала один раз
             READ_CMD.Write(false);
 
+
+            //Получение статуса линии
+            //с учетом таймера, учитывающего время
+            //остановки линии
+            var lineistop = false;
+
+            if (DataBridge.Conveyor.IsStopFromTimerTag.Status is bool)
+            {
+                lineistop = (bool)DataBridge.Conveyor.IsStopFromTimerTag.Status;
+            }
+
             /*
                 Если линия не в работе (определяется по таймеру остановки в TIA) 
             */
-            if ((bool)DataBridge.Conveyor.IsStopFromTimerTag.Status == true)
+            if (lineistop == true)
             {
                
                 //Подача звукового сигнала
@@ -286,8 +297,20 @@ namespace SortingStantion.TechnologicalObjects
             /*
                 Повтор кода запрещен
             */
-            var RepeatEnable = (bool)REPEAT_ENABLE.Status;
+            //Получение статуса тэга
+            //ПОВТОР КОДА
+            //остановки линии
+            var RepeatEnable = false;
+
+            if (DataBridge.Conveyor.IsStopFromTimerTag.Status is bool)
+            {
+                RepeatEnable = (bool)REPEAT_ENABLE.Status;
+            }
+
+            //Флаг, указывающий на то, является ли код повтором
             var IsRepeat = DataBridge.Report.IsRepeat(scaner_serialnumber);
+
+
             if (RepeatEnable == false && IsRepeat == true)
             {
                 //Остановка конвейера
