@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E7F2B419-5BA7-42FB-A537-496120FAD2B1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>S7Communication</RootNamespace>
+    <AssemblyName>S7Communication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Sharp7, Version=1.1.79.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sharp7.1.1.79\lib\net40\Sharp7.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Utilites\ByteArray.cs" />
+    <Compile Include="Enumerations\CpuType.cs" />
+    <Compile Include="Enumerations\ErrorCode.cs" />
+    <Compile Include="Enumerations\MemmoryArea.cs" />
+    <Compile Include="Enumerations\SimaticType.cs" />
+    <Compile Include="Simatic\S7_Boolean.cs" />
+    <Compile Include="Simatic\S7_Time.cs" />
+    <Compile Include="Simatic\S7_Word.cs" />
+    <Compile Include="Simatic\S7_CharsArray.cs" />
+    <Compile Include="Simatic\S7_String.cs" />
+    <Compile Include="Simatic\S7_WString.cs" />
+    <Compile Include="Interfaces\ISimaticTagsContainer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simatic\SimaticDevice.cs" />
+    <Compile Include="Simatic\SimaticGroup.cs" />
+    <Compile Include="Simatic\SimaticServer.cs" />
+    <Compile Include="Simatic\S7_DTL.cs" />
+    <Compile Include="Simatic\S7_DWord.cs" />
+    <Compile Include="Simatic\S7_Real.cs" />
+    <Compile Include="Simatic\simaticTagBase.cs" />
+    <Compile Include="Utilites\DelegateCommand.cs" />
+    <Compile Include="Utilites\Converter.cs" />
+    <Compile Include="Utilites\simaticPackage.cs" />
+    <Compile Include="Utilites\Word.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
