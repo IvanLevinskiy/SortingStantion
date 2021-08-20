@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         Background="#FF323232"
         WindowStartupLocation="CenterOwner"
-        Title="Добавление деффекта" Width="550" Height="250">
+        Title="Ошибка отбраковки" Width="550" Height="250">
     <Grid >
 
         <Grid Height="80"
