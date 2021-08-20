@@ -29,6 +29,18 @@ namespace SortingStantion.MainScreen
         }
 
         /// <summary>
+        /// Акцессо для доступа к модели управления
+        /// доступом к кнопкам приложения
+        /// </summary>
+        public ButtonsEnableModel ButtonsEnableModel
+        {
+            get
+            {
+                return DataBridge.ButtonsEnableModel;
+            }
+        }
+
+        /// <summary>
         /// Текущий пользователь
         /// </summary>
         public AuthorizationEngine AccesLevelModel

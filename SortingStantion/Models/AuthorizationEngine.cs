@@ -14,10 +14,10 @@ namespace SortingStantion.Models
     public enum AccesLevels
     {
         [Description("Мастер")]
-        Мастер = 0,
+        Мастер = 1,
 
         [Description("Наладчик")]
-        Наладчик = 1,
+        Наладчик = 2,
     }
 
     /// <summary>

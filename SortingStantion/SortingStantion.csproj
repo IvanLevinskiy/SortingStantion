@@ -166,6 +166,7 @@
     <Compile Include="FRAMES\frameSettings\windowExit.xaml.cs">
       <DependentUpon>windowExit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ButtonsEnableModel.cs" />
     <Compile Include="Models\Buzzer.cs" />
     <Compile Include="Models\NetAclChecker.cs" />
     <Compile Include="Models\RepeatPack.cs" />

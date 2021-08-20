@@ -153,6 +153,12 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Событие, н=генерируемое при 
+        /// изменении состояния работы конвейера
+        /// </summary>
+        public event Action ChangeState;
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public Conveyor()
@@ -311,6 +317,16 @@ namespace SortingStantion.TechnologicalObjects
             }
         }
 
+        bool ToBool(object value)
+        {
+            if (value is bool? == false)
+            {
+                return false;
+            }
+
+            return (bool)value;
+        }
+
         /// <summary>
         /// Метод, вызываемый при изминении
         /// статуса работы линии
@@ -319,15 +335,14 @@ namespace SortingStantion.TechnologicalObjects
         private void Run_ChangeValue(object oldvalue, object newvalue)
         {
 
+            //Получение статуса работы конвейера
+            bool _value = ToBool(newvalue);
+            bool _oldvalue = ToBool(oldvalue);
 
-            //Защита от неверных типов данных
-            if (newvalue is bool? == false)
+            if (_value == _oldvalue)
             {
                 return;
             }
-
-            //Получение статуса работы конвейера
-            bool _value = (bool)newvalue;
 
             //Если конвейер запущен
             if (_value == true)
@@ -339,9 +354,14 @@ namespace SortingStantion.TechnologicalObjects
                     UserMessage msg = new UserMessage("Линия запущена", MSGTYPE.SUCCES);
                     DataBridge.MSGBOX.Add(msg);
 
-                    
+                    //Уведомление подписчиков об изменении
+                    //состояния линии
+                    ChangeState?.Invoke();
+
                 };
                 DataBridge.UIDispatcher.Invoke(action);
+
+                
             }
 
             //Если конвейер остановлен
@@ -352,6 +372,10 @@ namespace SortingStantion.TechnologicalObjects
                     //Вывод сообщения в окно информации
                     UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
                     DataBridge.MSGBOX.Add(msg);
+
+                    //Уведомление подписчиков об изменении
+                    //состояния линии
+                    ChangeState?.Invoke();
                 };
                 DataBridge.UIDispatcher.Invoke(action);
             }

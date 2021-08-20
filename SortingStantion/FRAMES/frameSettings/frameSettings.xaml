@@ -311,7 +311,6 @@
                                       Background="{StaticResource LightColor}"
                                       FontSize="{StaticResource fontSizeData}"
                                       FontFamily="{StaticResource fontFamilyData}"
-                                      VerticalContentAlignment="Center"
                                       BorderThickness="0"
                                       Width="100"
                                       Height="40"
@@ -341,7 +340,6 @@
                                                      Width="80"
                                                      Height="40"
                                                      Margin="80,10,15,10"
-                                                     MinAccesLevel="1"
                                                      HorizontalAlignment="Right"
                                                      VerticalAlignment="Center"/>
 
@@ -665,7 +663,7 @@
                               FontFamily="{StaticResource fontFamilyButtons}"
                               FontSize="{StaticResource fontSizeButtons}"
                               Command="{Binding ShutdownCMD}"
-                              MinAccesLevel="1"
+                              MinAccesLevel="2"
                     />
 
             <Button Grid.Column="1" 

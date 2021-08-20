@@ -12,6 +12,28 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
     public partial class windowOverDeffectCounter : Window
     {
         /// <summary>
+        /// Указатель на главный Simatic TCP сервер
+        /// </summary>
+        SimaticServer server
+        {
+            get
+            {
+                return DataBridge.S7Server;
+            }
+        }
+
+        /// <summary>
+        /// Указатель на экземпляр ПЛК
+        /// </summary>
+        SimaticDevice device
+        {
+            get
+            {
+                return server.Devices[0];
+            }
+        }
+
+        /// <summary>
         /// Указательн на сообщение
         /// в зоне информации, которое надо удалить
         /// </summary>
@@ -22,6 +44,12 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
         /// </summary>
         S7_DWord DEFFECT_PRODUCTS_COUNTER;
 
+        /// <summary>
+        /// Тэг для очистки очереди в ПЛК
+        /// </summary>
+        S7_Boolean CLEAR_ITEMS_COLLECTION_CMD;
+
+
         public windowOverDeffectCounter(S7_DWord DEFFECT_PRODUCTS_COUNTER, S7DiscreteAlarm alarm)
         {
             //Инициализация UI
@@ -29,6 +57,9 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
 
             //Передача экземпляра тэга со счетчиком ошибок
             this.DEFFECT_PRODUCTS_COUNTER = DEFFECT_PRODUCTS_COUNTER;
+
+            //Тэг для очистки коллекции изделий
+            CLEAR_ITEMS_COLLECTION_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX98.2");
 
             //Подписка на изменение значение счетчика
             this.DEFFECT_PRODUCTS_COUNTER.ChangeValue += DEFFECT_PRODUCTS_COUNTER_ChangeValue;
@@ -77,6 +108,9 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
         {
             //Обнуление счетчика дефектных продуктов
             DEFFECT_PRODUCTS_COUNTER.Write(0);
+
+            //Очистка коллекции невыпущенных продуктов
+            CLEAR_ITEMS_COLLECTION_CMD.Write(true);
 
             //Квитирование аварии
             alarm.Write(false);

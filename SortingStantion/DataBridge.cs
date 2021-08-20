@@ -2,6 +2,7 @@
 using S7Communication.Enumerations;
 using SortingStantion.Models;
 using SortingStantion.TechnologicalObjects;
+using System;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -66,6 +67,17 @@ namespace SortingStantion
         public static SimaticServer S7Server;
 
         /// <summary>
+        /// Событие, генерируемо по завершению
+        /// загрузки
+        /// </summary>
+        public static event Action LoadComplete;
+
+        public static void LoadCompleteNotification()
+        {
+            LoadComplete?.Invoke();
+        }
+
+        /// <summary>
         /// Метод для создания Simatic Server
         /// </summary>
         public static void CreateSimaticServer()
@@ -98,6 +110,11 @@ namespace SortingStantion
         /// Модель управляющая экранами
         /// </summary>
         public static ScreenEngine ScreenEngine = new ScreenEngine();
+
+        /// <summary>
+        /// Модель управляющая разрешением доступа к кнопкам
+        /// </summary>
+        public static ButtonsEnableModel ButtonsEnableModel = new ButtonsEnableModel();
 
         /// <summary>
         /// **********   ТЕХНОЛОГИЧЕСКИЕ ОБЪЕКТЫ ***************

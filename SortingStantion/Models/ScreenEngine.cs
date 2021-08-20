@@ -41,6 +41,18 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
+        /// Акцессо для доступа к модели управления
+        /// доступом к кнопкам приложения
+        /// </summary>
+        public ButtonsEnableModel ButtonsEnableModel
+        {
+            get
+            {
+                return DataBridge.ButtonsEnableModel;
+            }
+        }
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         public ScreenEngine()

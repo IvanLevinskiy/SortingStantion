@@ -209,7 +209,7 @@ namespace S7Communication
             if (newStatus != oldStatus)
             {
                 //Получение нового значения
-                var nv = (bool)newStatus;
+                Status = (bool)newStatus;
 
                 //Получение значения в прошлом скане
                 var ov = false;
@@ -222,9 +222,11 @@ namespace S7Communication
                 }
 
                 //Извещение подписчиков
-                Invoke(ov, nv);
+                Invoke(ov, Status);
 
             }
+
+            Status = (bool)newStatus;
 
         }
     }

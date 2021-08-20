@@ -432,6 +432,12 @@ namespace SortingStantion.Models
                     wA.numРacksInBox = int.Parse(NUM_PACKS_IN_BOX_TAG.StatusText);
                     wA.numPacksInSeries = int.Parse(NUM_PACKS_IN_SERIES_TAG.StatusText);
 
+                    //Разрешаем доступ к кнопке "АВТОРИЗАЦИЯ"
+                    DataBridge.ButtonsEnableModel.BtnAutorizationEnable = true;
+
+                    DataBridge.ButtonsEnableModel.BtnFinishTaskEnable = true;
+                    DataBridge.ButtonsEnableModel.BtnAcceptTaskEnable = false;
+
                     WorkAssignments.Add(wA);
                     WorkOrderAcceptanceNotification?.Invoke(wA);
                 }
@@ -590,11 +596,12 @@ namespace SortingStantion.Models
                         NUM_PACKS_IN_BOX_TAG.Write(SelectedWorkAssignment.numРacksInBox);
                         NUM_PACKS_IN_SERIES_TAG.Write(SelectedWorkAssignment.numPacksInSeries);
 
-                        //Уведомление подписчиков о принятии задания
-                        WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
-
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(true);
+
+                        //Уведомление подписчиков о принятии задания
+                        WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
+                                              
 
                         string message = $"Задание {TASK_ID_TAG.StatusText} принято в работу";
 
@@ -603,6 +610,13 @@ namespace SortingStantion.Models
 
                         var msg = new UserMessage(message, MSGTYPE.SUCCES);
                         DataBridge.MSGBOX.Add(msg);
+
+                        //Разрешаем доступ к кнопке "АВТОРИЗАЦИЯ"
+                        DataBridge.ButtonsEnableModel.BtnAutorizationEnable = true;
+
+                        //Разрешаем доступ к кнопкам "СТАРТ - СТОП" на главном окне
+                        DataBridge.ButtonsEnableModel.BtnStartEnable = true;
+                        DataBridge.ButtonsEnableModel.BtnStopEnable = true;
 
                         return;
                     }
@@ -660,8 +674,9 @@ namespace SortingStantion.Models
                         REPEAT_COUNTER.Write(0);
                         DEFECT_COUNTER.Write(0);
 
-                        //Уведомление подписчиков о завершении задания
-                        WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
+
+                        //Запись статуса в ПЛК
+                        IN_WORK_TAG.Write(false);
 
                         //Запись в базу данных
                         var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
@@ -672,14 +687,28 @@ namespace SortingStantion.Models
                         var msg = new UserMessage(message, MSGTYPE.SUCCES);
                         DataBridge.MSGBOX.Add(msg);
 
-                        //Запись статуса в ПЛК
-                        IN_WORK_TAG.Write(false);
+                        //Запрещаем доступ к кнопке "АВТОРИЗАЦИЯ"
+                        DataBridge.ButtonsEnableModel.BtnAutorizationEnable = false;
+
+                        //Запрещаем доступ к кнопкам "СТАРТ - СТОП" на главном окне
+                        DataBridge.ButtonsEnableModel.BtnStartEnable = false;
+                        DataBridge.ButtonsEnableModel.BtnStopEnable = false;
+
+                        ////Запрещаем доступ к кнопкам Принять задание
+                        //DataBridge.ButtonsEnableModel.BtnAcceptTaskEnable = false;
+
+                        ////Разрешаем доступ к кнопке Завершить задание
+                        //DataBridge.ButtonsEnableModel.BtnFinishTaskEnable = true;
 
                         //Сброс результата 
                         try
                         {
                             DataBridge.Report.SendReport();
-                            WorkAssignments.Clear();
+
+                            //Уведомление подписчиков о завершении задания
+                            WorkOrderCompletionNotification?.Invoke(SelectedWorkAssignment);
+
+                            WorkAssignments.Clear();                            
                         }
                         catch (Exception ex)
                         {
@@ -772,6 +801,12 @@ namespace SortingStantion.Models
                     //Инициализация делегата
                     action = () =>
                     {
+                        //Разрешаем доступ к кнопкам Принять задание
+                        DataBridge.ButtonsEnableModel.BtnAcceptTaskEnable = true;
+
+                        //Запрещаем доступ к кнопке Завершить задание
+                        DataBridge.ButtonsEnableModel.BtnFinishTaskEnable = false;
+
                         var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание может быть принято в работу", DataBridge.myGreen);
                         DataBridge.MSGBOX.Add(msg);
                     };

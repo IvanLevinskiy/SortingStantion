@@ -27,6 +27,10 @@ namespace SortingStantion.MainScreen
             DataBridge.S7Server.Devices[0].IsAvailable = false;
 
             this.Closing += MainScreen_Closing;
+
+            //Уведомление подписчиков о завершении
+            //загрузки приложения
+            DataBridge.LoadCompleteNotification();
         }
 
         /// <summary>

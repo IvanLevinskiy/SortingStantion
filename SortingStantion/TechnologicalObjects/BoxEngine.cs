@@ -301,11 +301,11 @@ namespace SortingStantion.TechnologicalObjects
             //ПОВТОР КОДА
             //остановки линии
             var RepeatEnable = false;
-
-            if (DataBridge.Conveyor.IsStopFromTimerTag.Status is bool)
+            if (REPEAT_ENABLE.Status is bool)
             {
                 RepeatEnable = (bool)REPEAT_ENABLE.Status;
             }
+            
 
             //Флаг, указывающий на то, является ли код повтором
             var IsRepeat = DataBridge.Report.IsRepeat(scaner_serialnumber);

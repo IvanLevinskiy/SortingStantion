@@ -177,8 +177,9 @@
                         Foreground="{StaticResource IconColor}"
                         BorderThickness="0"
                         BorderBrush="Transparent"
-                        Command="{Binding AuthorizationCMD}">
-
+                        Command="{Binding AuthorizationCMD}"
+                        IsEnabled="{Binding ButtonsEnableModel.BtnAutorizationEnable}">
+                        
                     <Grid Width="250">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="60"/>
@@ -211,7 +212,7 @@
                         Foreground="{StaticResource IconColor}"
                         BorderThickness="0"
                         BorderBrush="Transparent"
-                        IsEnabled="{Binding WorkAssignment.InNotWork}"
+                        IsEnabled="{Binding ButtonsEnableModel.BtnAcceptTaskEnable}"
                         Command="{Binding WorkAssignment.AcceptTaskCMD}">
 
                     <Grid Width="200">
@@ -247,7 +248,7 @@
                         Foreground="{StaticResource IconColor}"
                         BorderThickness="0"
                         BorderBrush="Transparent"
-                        IsEnabled="{Binding WorkAssignment.InWork}"
+                        IsEnabled="{Binding ButtonsEnableModel.BtnFinishTaskEnable}"
                         Command="{Binding WorkAssignment.FinishTaskCMD}">
 
                     <Grid Width="200">
@@ -323,6 +324,7 @@
                 <Button Grid.Column="4"
                             Margin="0,0,0,2"
                             BorderThickness="1"
+                            IsEnabled="{Binding ButtonsEnableModel.BtnSettingsEnable}"
                             Style="{StaticResource btnStyle}"
                             DataContext="{Binding ScreenEngine}"
                             Command="{Binding OpenSettingsScreenCMD}"
@@ -610,7 +612,7 @@
                                         Foreground="{StaticResource IconColor}"
                                         BorderThickness="0"
                                         BorderBrush="Transparent"
-                                        IsEnabled="{Binding Conveyor.btnLineRunEnable}"
+                                        IsEnabled="{Binding ButtonsEnableModel.BtnStartEnable}"
                                         Command="{Binding Conveyor.StartLineCMD}">
                         <TextBlock  TextAlignment="Center"
                                                     FontSize="{StaticResource fontSizeButtons}">
@@ -672,7 +674,7 @@
                                         Foreground="{StaticResource IconColor}"
                                         BorderThickness="0"
                                         BorderBrush="Transparent"
-                                        IsEnabled="{Binding Conveyor.btnLineStopEnable}"
+                                        IsEnabled="{Binding ButtonsEnableModel.BtnStopEnable}"
                                         Command="{Binding Conveyor.StopLineCMD}">
                         <TextBlock  TextAlignment="Center"
                                                     FontSize="{StaticResource fontSizeButtons}">
@@ -835,8 +837,9 @@
                 </Style>
             </Grid.Resources>
 
-            <Button Grid.Column="0"
+            <controls:xButton Grid.Column="0"
                     Content="БРАК"
+                    MinAccesLevel="1"
                     Style="{StaticResource btnStyle}"
                     Background="{StaticResource DarkColor}"
                     Foreground="{StaticResource TextColor}"
@@ -844,7 +847,8 @@
                     FontSize="{StaticResource fontSizeButtons}"
                     Command="{Binding AddingDeffectCMD}"/>
 
-            <Button Grid.Column="1" 
+            <controls:xButton Grid.Column="1" 
+                              MinAccesLevel="1"
                     Content="СПРАВКА" 
                     Style="{StaticResource btnStyle}"
                     Background="{StaticResource DarkColor}"
@@ -853,7 +857,8 @@
                     FontFamily="{StaticResource fontFamilyButtons}"
                     FontSize="{StaticResource fontSizeButtons}"/>
 
-            <Button Grid.Column="2"
+            <controls:xButton Grid.Column="2"
+                              MinAccesLevel="1"
                      Content="ДОБАВИТЬ" 
                      Style="{StaticResource btnStyle}"
                      Background="{StaticResource DarkColor}"
