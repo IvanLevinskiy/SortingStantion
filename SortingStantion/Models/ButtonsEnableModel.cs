@@ -15,7 +15,7 @@ namespace SortingStantion.Models
         {
             get
             {
-                return _btnSettingsEnable && DataBridge.MainAccesLevelModel.CurrentUser != null;
+                return _btnSettingsEnable;
             }
             set
             {
@@ -23,7 +23,7 @@ namespace SortingStantion.Models
                 OnPropertyChanged("BtnSettingsEnable");
             }
         }
-        bool _btnSettingsEnable = false;
+        bool _btnSettingsEnable = true;
 
         /// <summary>
         /// Флаг, разрешающий использовать кнопку
@@ -159,7 +159,8 @@ namespace SortingStantion.Models
                 BtnFinishTaskEnable = true;
             };
 
-            //Подпись на событие по принятию нового задания
+            //Подпись на событие по завершению задания
+            //и отправке результата
             DataBridge.WorkAssignmentEngine.WorkOrderCompletionNotification += (o) =>
             {
                 BtnAcceptTaskEnable = false;
