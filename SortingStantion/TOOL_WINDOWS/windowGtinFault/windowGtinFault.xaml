@@ -27,7 +27,7 @@
 
                 <TextBlock x:Name="txMessage"    
                            Foreground="{StaticResource TextColor}"
-                           Text="           Считан посторонний продукт GTIN ___ номер ___ Найдите его ручным сканером и удалите с конвейера."
+                           Text="Считан посторонний продукт GTIN ___ номер ___ Найдите его ручным сканером и удалите с конвейера."
                            TextAlignment="Justify"
                            VerticalAlignment="Top"
                            TextWrapping="Wrap"

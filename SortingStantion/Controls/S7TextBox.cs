@@ -33,6 +33,40 @@ namespace SortingStantion.Controls
         int minAccesLevel = 1;
 
         /// <summary>
+        /// Максимально допустимая величина
+        /// значения
+        /// </summary>
+        public int HightValue
+        {
+            get
+            {
+                return hightValue;
+            }
+            set
+            {
+                hightValue = value;
+            }
+        }
+        int hightValue = 32767;
+
+        /// <summary>
+        /// Минимально допустимая величина
+        /// значения
+        /// </summary>
+        public int LowValue
+        {
+            get
+            {
+                return lowValue;
+            }
+            set
+            {
+                lowValue = value;
+            }
+        }
+        int lowValue = 0;
+
+        /// <summary>
         /// Имя параметра (для записи в базу данных)
         /// </summary>
         public string ParametrName
@@ -223,7 +257,6 @@ namespace SortingStantion.Controls
             //записываем значение в регистр
             if (e.Key == Key.Enter)
             {
-
                 WriteValue(this.originalTextBox.Text);
                 return;
             }
@@ -243,6 +276,14 @@ namespace SortingStantion.Controls
         /// <param name="value"></param>
         void WriteValue(string value)
         {
+            //Проверка на лимиты
+            var result = CheckLimits(value);
+            if (result == false)
+            {
+                deFocus();
+                return;
+            }
+
             this.Text = value;
 
             //Если регистра нет, пишем по умолчанию ***
@@ -262,6 +303,41 @@ namespace SortingStantion.Controls
                 //Записываем в базу данных информацию об изминении
                 DataBridge.AlarmLogging.AddMessage($"Значение параметра: '{ParametrName}' изменено на {this.Text}", MessageType.Event);
             }
+        }
+
+        /// <summary>
+        ///  Метод для проверки значений для записи
+        /// </summary>
+        /// <returns></returns>
+        bool CheckLimits(string tValue)
+        {
+            //Преобразуем введеное текстовое значение
+            //к типу uint
+            uint value = 0;
+            var resultconvertion = uint.TryParse(tValue, out value);
+
+            //Если ввседеное значение не удается преобразовать в число
+            //возвращаем отрицательный результат
+            if (resultconvertion == false)
+            {
+                return false;
+            }
+
+            //Если Введеное значение ниже нижнего предела
+            if (value < LowValue)
+            {
+                return false;
+            }
+
+            //Если Введеное значение выше верхнего предела
+            if (value > HightValue)
+            {
+                return false;
+            }
+
+            //Если все проверки пройдены, 
+            //возвращаем положительный результат проверки
+            return true;
         }
 
         /// <summary>

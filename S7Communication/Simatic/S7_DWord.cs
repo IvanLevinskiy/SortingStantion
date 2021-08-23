@@ -4,6 +4,7 @@ namespace S7Communication
 {
     public class S7_DWord : simaticTagBase
     {
+
         /// <summary>
         /// Конструктор класса
         /// </summary>

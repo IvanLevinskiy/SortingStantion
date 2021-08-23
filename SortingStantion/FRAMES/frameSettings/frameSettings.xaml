@@ -538,6 +538,7 @@
                                           Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
                                           FontFamily="{StaticResource fontFamilyData}"
+                                          LowValue="2"
                                           VerticalContentAlignment="Center"
                                           BorderThickness="0"
                                           Width="100"

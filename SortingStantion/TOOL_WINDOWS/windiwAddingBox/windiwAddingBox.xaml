@@ -16,7 +16,7 @@
               Margin="20,30,20,0"
               VerticalAlignment="Top">
 
-            <TextBlock Text="      Считайте ручным сканером код добавляемого продукта."
+            <TextBlock Text="Считайте ручным сканером код добавляемого продукта."
                        TextWrapping="Wrap"
                        TextAlignment="Justify"
                        Foreground="{StaticResource TextColor}"

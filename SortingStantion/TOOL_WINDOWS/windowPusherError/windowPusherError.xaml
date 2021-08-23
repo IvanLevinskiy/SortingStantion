@@ -16,7 +16,7 @@
               Margin="20,30,20,0"
               VerticalAlignment="Top">
 
-            <TextBlock Text="      Ошибка отбраковки, продукт остался на конвейере. Найдите его после отбраковщика и удалите."
+            <TextBlock Text="Ошибка отбраковки, продукт остался на конвейере. Найдите его после отбраковщика и удалите."
                        TextWrapping="Wrap"
                        TextAlignment="Justify"
                        Foreground="{StaticResource TextColor}"

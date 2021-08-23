@@ -75,7 +75,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
             var newvalue = Convert.ToUInt32(DEFFECT_PRODUCTS_COUNTER.Status);
 
             //Формирование правиьного сообщения
-            txMessage.Text = $"     Конвейер остановлен после {newvalue} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
+            txMessage.Text = $"Конвейер остановлен после {newvalue} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
 
             //Подписка на события
             this.Closing += Window_Closing;

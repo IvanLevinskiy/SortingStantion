@@ -40,7 +40,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowProductIsDeffect
             this.Owner = DataBridge.MainScreen;
 
             //Формирование правиьного сообщения
-            txMessage.Text = $"     Продукт {serialnumberdeffect} числится в браке. Найдите его ручным сканером и удалите с конвейера.";
+            txMessage.Text = $"Продукт {serialnumberdeffect} числится в браке. Найдите его ручным сканером и удалите с конвейера.";
 
             //Подписка на события
             this.Closing += Window_Closing;

@@ -28,7 +28,7 @@
 
                 <TextBlock x:Name="txMessage"    
                            Foreground="{StaticResource TextColor}"
-                           Text="           Конвейер остановлен после ___ продуктов, отбракованных подряд."
+                           Text="Конвейер остановлен после ___ продуктов, отбракованных подряд."
                            TextAlignment="Justify"
                            VerticalAlignment="Top"
                            TextWrapping="Wrap"

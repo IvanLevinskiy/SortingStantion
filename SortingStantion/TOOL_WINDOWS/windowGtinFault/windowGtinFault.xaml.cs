@@ -36,7 +36,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
             this.Owner = DataBridge.MainScreen;
 
             //Формирование правиьного сообщения
-            txMessage.Text = $"     Считан посторонний продукт GTIN {GTIN} номер {serialNumber}. Найдите его ручным сканером и удалите с конвейера.";
+            txMessage.Text = $"Считан посторонний продукт GTIN {GTIN} номер {serialNumber}. Найдите его ручным сканером и удалите с конвейера.";
 
             //Подписка на события
             this.Closing += Window_Closing;
