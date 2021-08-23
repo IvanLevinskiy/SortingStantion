@@ -15,15 +15,47 @@ namespace SortingStantion.Models
         {
             get
             {
-                return _btnSettingsEnable;
-            }
-            set
-            {
-                _btnSettingsEnable = value;
-                OnPropertyChanged("BtnSettingsEnable");
+                //Флаг, указывающий на то, принято ли задание в работу
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
+                //Указатель на список принятых от L3 заданий
+                var workAssignmentsList = DataBridge.WorkAssignmentEngine.WorkAssignments;
+
+                //Указатель на текущего авторизованного пользователя
+                var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
+
+                //1. Задание не прислано в комплекс
+                //   - АКТИВНА
+                if (workAssignmentsList.Count == 0 && inwork == false)
+                {
+                    return true;
+                }
+
+                //2. Задание прислано в комплекс
+                //   но в работу не принято - НЕ АКТИВНА
+                if (workAssignmentsList.Count > 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //3. Задание прислано в комплекс
+                //   и принято в работу, но пользователь не авторизирован - НЕ АКТИВНА
+                if (inwork == true && currentUser == null)
+                {
+                    return false;
+                }
+
+                //4. Задание прислано в комплекс
+                //   и принято в работу, пользователь авторизирован - АКТИВНА
+                if (inwork == true && currentUser != null)
+                {
+                    return true;
+                }
+
+                //Возврат false
+                return false;
             }
         }
-        bool _btnSettingsEnable = true;
 
         /// <summary>
         /// Флаг, разрешающий использовать кнопку
@@ -33,12 +65,44 @@ namespace SortingStantion.Models
         {
             get
             {
-                return _btnAutorizationEnable;
-            }
-            set
-            {
-                _btnAutorizationEnable = value;
-                OnPropertyChanged("BtnAutorizationEnable");
+                //Флаг, указывающий на то, принято ли задание в работу
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
+                //Указатель на список принятых от L3 заданий
+                var workAssignmentsList = DataBridge.WorkAssignmentEngine.WorkAssignments;
+
+                //Указатель на текущего авторизованного пользователя
+                var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
+
+                //1. Задание не прислано в комплекс - НЕ АКТИВНА
+                if (workAssignmentsList.Count == 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //2. Задание прислано в комплекс
+                //   но в работу не принято - НЕ АКТИВНА
+                if (workAssignmentsList.Count > 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //3. Задание прислано в комплекс
+                //   и принято в работу, но пользователь не авторизирован - АКТИВНА
+                if (inwork == true && currentUser == null)
+                {
+                    return true;
+                }
+
+                //4. Задание прислано в комплекс
+                //   и принято в работу, пользователь авторизирован - АКТИВНА
+                if (inwork == true && currentUser != null)
+                {
+                    return true;
+                }
+
+                //Возврат false
+                return false;
             }
         }
         bool _btnAutorizationEnable = false;
@@ -51,15 +115,51 @@ namespace SortingStantion.Models
         {
             get
             {
-                return _btnStartEnable && DataBridge.Conveyor.LineIsRun == false;
+                //Флаг, указывающий на то, принято ли задание в работу
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
+                //Указатель на список принятых от L3 заданий
+                var workAssignmentsList = DataBridge.WorkAssignmentEngine.WorkAssignments;
+
+                //Указатель на текущего авторизованного пользователя
+                var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
+
+                //Флаг, указывающий на то, запущен ли конвейер
+                var lineisrun = DataBridge.Conveyor.LineIsRun;
+
+                //1. Задание не прислано в комплекс
+                //   - НЕ АКТИВНА
+                if (workAssignmentsList.Count == 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //2. Задание прислано в комплекс
+                //   но в работу не принято - НЕ АКТИВНА
+                if (workAssignmentsList.Count > 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //3. Задание прислано в комплекс
+                //   и принято в работу, но пользователь не авторизирован - НЕ АКТИВНА
+                if (inwork == true && currentUser == null)
+                {
+                    return false;
+                }
+
+                //4. Задание прислано в комплекс
+                //   и принято в работу, пользователь авторизирован - АКТИВНА и линия не запущена
+                if (inwork == true && currentUser != null && lineisrun == false)
+                {
+                    return true;
+                }
+
+                //Возврат false
+                return false;
             }
-            set
-            {
-                _btnStartEnable = value;
-                OnPropertyChanged("BtnStartEnable");
-            }
+
         }
-        bool _btnStartEnable = false;
 
         /// <summary>
         /// Флаг, разрешающий использовать кнопку
@@ -69,15 +169,50 @@ namespace SortingStantion.Models
         {
             get
             {
-                return _btnStopEnable && DataBridge.Conveyor.LineIsRun == true;
-            }
-            set
-            {
-                _btnStopEnable = value;
-                OnPropertyChanged("BtnStopEnable");
+                //Флаг, указывающий на то, принято ли задание в работу
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
+                //Указатель на список принятых от L3 заданий
+                var workAssignmentsList = DataBridge.WorkAssignmentEngine.WorkAssignments;
+
+                //Указатель на текущего авторизованного пользователя
+                var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
+
+                //Флаг, указывающий на то, запущен ли конвейер
+                var lineisrun = DataBridge.Conveyor.LineIsRun;
+
+                //1. Задание не прислано в комплекс
+                //   - НЕ АКТИВНА
+                if (workAssignmentsList.Count == 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //2. Задание прислано в комплекс
+                //   но в работу не принято - НЕ АКТИВНА
+                if (workAssignmentsList.Count > 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //3. Задание прислано в комплекс
+                //   и принято в работу, но пользователь не авторизирован - НЕ АКТИВНА
+                if (inwork == true && currentUser == null)
+                {
+                    return false;
+                }
+
+                //4. Задание прислано в комплекс
+                //   и принято в работу, пользователь авторизирован - АКТИВНА и линия запущена
+                if (inwork == true && currentUser != null && lineisrun == true)
+                {
+                    return true;
+                }
+
+                //Возврат false
+                return false;
             }
         }
-        bool _btnStopEnable = false;
 
         /// <summary>
         /// Флаг, разрешающий использовать кнопку
@@ -97,48 +232,168 @@ namespace SortingStantion.Models
         }
         bool _btnStartStopForceEnable = false;
 
+        /// <summary>
+        /// Флаз, задающий режим доступа к кнопке 
+        /// ПРИНЯТЬ ЗАДАНИЕ на главном экране
+        /// </summary>
         public bool BtnAcceptTaskEnable
         {
             get
             {
-                return _btnAcceptTaskEnable && DataBridge.WorkAssignmentEngine.InWork == false;
-            }
-            set
-            {
-                _btnAcceptTaskEnable = value;
-                OnPropertyChanged("BtnAcceptTaskEnable");
+                //Флаг, указывающий на то, принято ли задание в работу
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
+                //Указатель на список принятых от L3 заданий
+                var workAssignmentsList = DataBridge.WorkAssignmentEngine.WorkAssignments;
+
+                //Указатель на текущего авторизованного пользователя
+                var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
+
+                //1. Задание не прислано в комплекс
+                //   - НЕ АКТИВНА
+                if (workAssignmentsList.Count == 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //2. Задание прислано в комплекс
+                //   - АКТИВНА
+                if (workAssignmentsList.Count > 0 && inwork == false)
+                {
+                    return true;
+                }
+
+                //Возврат false
+                return false;
             }
         }
-        bool _btnAcceptTaskEnable = false;
 
+        /// <summary>
+        /// Флаз, задающий режим доступа к кнопке 
+        /// ЗАВЕРШИТЬ ЗАДАНИЕ на главном экране
+        /// </summary>
         public bool BtnFinishTaskEnable
         {
             get
             {
-                return _btnFinishTaskEnable && DataBridge.WorkAssignmentEngine.InWork == true;
-            }
-            set
-            {
-                _btnFinishTaskEnable = value;
-                OnPropertyChanged("BtnFinishTaskEnable");
+                //Флаг, указывающий на то, принято ли задание в работу
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
+                //Указатель на список принятых от L3 заданий
+                var workAssignmentsList = DataBridge.WorkAssignmentEngine.WorkAssignments;
+
+                //Указатель на текущего авторизованного пользователя
+                var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
+
+                //1. Задание не прислано в комплекс - НЕ АКТИВНА
+                if (workAssignmentsList.Count == 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //2. Задание прислано в комплекс
+                //   но в работу не принято - НЕ АКТИВНА
+                if (workAssignmentsList.Count > 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //3. Задание прислано в комплекс
+                //   и принято в работу, но пользователь не авторизирован - АКТИВНА
+                if (inwork == true && currentUser == null)
+                {
+                    return true;
+                }
+
+                //4. Задание прислано в комплекс
+                //   и принято в работу, пользователь авторизирован - АКТИВНА
+                if (inwork == true && currentUser != null)
+                {
+                    return true;
+                }
+
+                //Возврат false
+                return false;
             }
         }
-        bool _btnFinishTaskEnable = false;
+
+        /// <summary>
+        /// Флаг, задающий режим доступа к кнопкам 
+        /// БРАК СПРАВКА ДОБАВИТЬ на главном экране
+        /// </summary>
+        public bool BtnToolsEnable
+        {
+            get
+            {
+                //Флаг, указывающий на то, принято ли задание в работу
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
+                //Указатель на список принятых от L3 заданий
+                var workAssignmentsList = DataBridge.WorkAssignmentEngine.WorkAssignments;
+
+                //Указатель на текущего авторизованного пользователя
+                var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
+
+                //1. Задание не прислано в комплекс - НЕ АКТИВНА
+                if (workAssignmentsList.Count == 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //2. Задание прислано в комплекс
+                //   но в работу не принято - НЕ АКТИВНА
+                if (workAssignmentsList.Count > 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //3. Задание прислано в комплекс
+                //   и принято в работу, но пользователь не авторизирован - НЕ АКТИВНА
+                if (inwork == true && currentUser == null)
+                {
+                    return false;
+                }
+
+                //4. Задание прислано в комплекс
+                //   и принято в работу, пользователь авторизирован - АКТИВНА
+                if (inwork == true && currentUser != null)
+                {
+                    return true;
+                }
+
+                //Возврат false
+                return false;
+            }
+        }
 
 
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
         public ButtonsEnableModel()
         {
             DataBridge.LoadComplete += DataBridge_LoadComplete;           
         }
 
+        /// <summary>
+        /// Метод, вызываемый по окончании инициализации
+        /// приложения
+        /// </summary>
         private void DataBridge_LoadComplete()
         {
+            //Подпись на событие по изменению пользователя
             DataBridge.MainAccesLevelModel.ChangeUser += (a1, a2) =>
             {
                 OnPropertyChanged("BtnStartEnable");
                 OnPropertyChanged("BtnStopEnable");
 
                 OnPropertyChanged("BtnSettingsEnable");
+
+                OnPropertyChanged("BtnAcceptTaskEnable");
+                OnPropertyChanged("BtnFinishTaskEnable");
+
+                OnPropertyChanged("BtnToolsEnable");
+                
 
             };
 
@@ -150,23 +405,51 @@ namespace SortingStantion.Models
                 OnPropertyChanged("BtnStopEnable");
             };
 
+            //Подписка на событие по получению нового
+            //задания от сервера L3
+            DataBridge.WorkAssignmentEngine.NewWorkOrderHasArrivedNotification += (oreder) =>
+            {
+                OnPropertyChanged("BtnSettingsEnable");
+                OnPropertyChanged("BtnAutorizationEnable");
+
+                OnPropertyChanged("BtnAcceptTaskEnable");
+                OnPropertyChanged("BtnFinishTaskEnable");
+
+                OnPropertyChanged("BtnStartEnable");
+                OnPropertyChanged("BtnStopEnable");
+
+                OnPropertyChanged("BtnToolsEnable");
+            };
+
             //Подпись на событие по принятию нового задания
             DataBridge.WorkAssignmentEngine.WorkOrderAcceptanceNotification += (o) =>
             {
-                BtnSettingsEnable = true;
+                OnPropertyChanged("BtnSettingsEnable");
+                OnPropertyChanged("BtnAutorizationEnable");
 
-                BtnAcceptTaskEnable = false;
-                BtnFinishTaskEnable = true;
+                OnPropertyChanged("BtnAcceptTaskEnable");
+                OnPropertyChanged("BtnFinishTaskEnable");
+
+                OnPropertyChanged("BtnStartEnable");
+                OnPropertyChanged("BtnStopEnable");
+
+                OnPropertyChanged("BtnToolsEnable");
             };
 
             //Подпись на событие по завершению задания
             //и отправке результата
             DataBridge.WorkAssignmentEngine.WorkOrderCompletionNotification += (o) =>
             {
-                BtnAcceptTaskEnable = false;
-                BtnFinishTaskEnable = false;
-                //OnPropertyChanged("BtnAcceptTaskEnable");
-                //OnPropertyChanged("BtnFinishTaskEnable");
+                OnPropertyChanged("BtnSettingsEnable");
+                OnPropertyChanged("BtnAutorizationEnable");
+
+                OnPropertyChanged("BtnAcceptTaskEnable");
+                OnPropertyChanged("BtnFinishTaskEnable");
+
+                OnPropertyChanged("BtnStartEnable");
+                OnPropertyChanged("BtnStopEnable");
+
+                OnPropertyChanged("BtnToolsEnable");
             };
         }
 

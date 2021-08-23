@@ -363,23 +363,14 @@ namespace SortingStantion.Models
         {
             get
             {
-                if (WorkAssignments == null)
-                {
-                    return null;
-                }
-
-                if (WorkAssignments.Count <= 0)
-                {
-                    return null;
-                }
-
-                return WorkAssignments[0];
+                return selectedWorkAssignment;
             }
             set
             {
-                WorkAssignments[0] = value;
+                selectedWorkAssignment = value;
             }
         }
+        WorkAssignment selectedWorkAssignment;
 
         /// <summary>
         /// Событие, генерируемое при принятии
@@ -392,6 +383,12 @@ namespace SortingStantion.Models
         /// рабочего задания
         /// </summary>
         public event Action<WorkAssignment> WorkOrderCompletionNotification;
+
+        /// <summary>
+        /// Событие, генерируемое при получении нового
+        /// рабочего задания от L3
+        /// </summary>
+        public event Action<WorkAssignment> NewWorkOrderHasArrivedNotification;
 
         /// <summary>
         /// Конструктор класса
@@ -432,13 +429,7 @@ namespace SortingStantion.Models
                     wA.numРacksInBox = int.Parse(NUM_PACKS_IN_BOX_TAG.StatusText);
                     wA.numPacksInSeries = int.Parse(NUM_PACKS_IN_SERIES_TAG.StatusText);
 
-                    //Разрешаем доступ к кнопке "АВТОРИЗАЦИЯ"
-                    DataBridge.ButtonsEnableModel.BtnAutorizationEnable = true;
-
-                    DataBridge.ButtonsEnableModel.BtnFinishTaskEnable = true;
-                    DataBridge.ButtonsEnableModel.BtnAcceptTaskEnable = false;
-
-                    WorkAssignments.Add(wA);
+                    SelectedWorkAssignment = wA;
                     WorkOrderAcceptanceNotification?.Invoke(wA);
                 }
             };
@@ -568,7 +559,7 @@ namespace SortingStantion.Models
                 {
                     //Если в коллекции заданий заданий нет -
                     //пишем ошибку - "Задание не может быть принято в работу"
-                    if (SelectedWorkAssignment == null)
+                    if (WorkAssignments.Count == 0)
                     {
                         UserMessage messageItem = new Controls.UserMessage("В буфере нет заданий, которые могут быть приняты в работу", DataBridge.myRed);
                         DataBridge.MSGBOX.Add(messageItem);
@@ -578,6 +569,13 @@ namespace SortingStantion.Models
                     //Если задание не принято в работу
                     if (InWork == false)
                     {
+                        //Переночим задание в выбраное задание
+                        SelectedWorkAssignment = WorkAssignments[0];
+
+                        //Удаление принятого задания из списка заданий
+                        WorkAssignments.Remove(SelectedWorkAssignment);
+
+
                         //Вызываем окно авторизации
                         SortingStantion.UserAdmin.frameAuthorization frameAuthorization = new SortingStantion.UserAdmin.frameAuthorization();
                         frameAuthorization.ShowDialog();
@@ -601,7 +599,6 @@ namespace SortingStantion.Models
 
                         //Уведомление подписчиков о принятии задания
                         WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
-                                              
 
                         string message = $"Задание {TASK_ID_TAG.StatusText} принято в работу";
 
@@ -610,13 +607,6 @@ namespace SortingStantion.Models
 
                         var msg = new UserMessage(message, MSGTYPE.SUCCES);
                         DataBridge.MSGBOX.Add(msg);
-
-                        //Разрешаем доступ к кнопке "АВТОРИЗАЦИЯ"
-                        DataBridge.ButtonsEnableModel.BtnAutorizationEnable = true;
-
-                        //Разрешаем доступ к кнопкам "СТАРТ - СТОП" на главном окне
-                        DataBridge.ButtonsEnableModel.BtnStartEnable = true;
-                        DataBridge.ButtonsEnableModel.BtnStopEnable = true;
 
                         return;
                     }
@@ -686,19 +676,6 @@ namespace SortingStantion.Models
 
                         var msg = new UserMessage(message, MSGTYPE.SUCCES);
                         DataBridge.MSGBOX.Add(msg);
-
-                        //Запрещаем доступ к кнопке "АВТОРИЗАЦИЯ"
-                        DataBridge.ButtonsEnableModel.BtnAutorizationEnable = false;
-
-                        //Запрещаем доступ к кнопкам "СТАРТ - СТОП" на главном окне
-                        DataBridge.ButtonsEnableModel.BtnStartEnable = false;
-                        DataBridge.ButtonsEnableModel.BtnStopEnable = false;
-
-                        ////Запрещаем доступ к кнопкам Принять задание
-                        //DataBridge.ButtonsEnableModel.BtnAcceptTaskEnable = false;
-
-                        ////Разрешаем доступ к кнопке Завершить задание
-                        //DataBridge.ButtonsEnableModel.BtnFinishTaskEnable = true;
 
                         //Сброс результата 
                         try
@@ -801,12 +778,6 @@ namespace SortingStantion.Models
                     //Инициализация делегата
                     action = () =>
                     {
-                        //Разрешаем доступ к кнопкам Принять задание
-                        DataBridge.ButtonsEnableModel.BtnAcceptTaskEnable = true;
-
-                        //Запрещаем доступ к кнопке Завершить задание
-                        DataBridge.ButtonsEnableModel.BtnFinishTaskEnable = false;
-
                         var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание может быть принято в работу", DataBridge.myGreen);
                         DataBridge.MSGBOX.Add(msg);
                     };
@@ -818,7 +789,11 @@ namespace SortingStantion.Models
                     //принято в работу
                     if (WorkAssignments.Count == 0)
                     {
+                        //Добавление принятого задания в коллекцию заданий
                         WorkAssignments.Add(workAssignment);
+
+                        //Уведомление подписчиков о получении нового задания от L3
+                        NewWorkOrderHasArrivedNotification?.Invoke(workAssignment);
                     }
                     else
                     {

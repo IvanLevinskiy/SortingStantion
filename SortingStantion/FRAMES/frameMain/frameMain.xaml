@@ -837,9 +837,9 @@
                 </Style>
             </Grid.Resources>
 
-            <controls:xButton Grid.Column="0"
+            <Button Grid.Column="0"
                     Content="БРАК"
-                    MinAccesLevel="1"
+                    IsEnabled="{Binding ButtonsEnableModel.BtnToolsEnable}"
                     Style="{StaticResource btnStyle}"
                     Background="{StaticResource DarkColor}"
                     Foreground="{StaticResource TextColor}"
@@ -847,9 +847,9 @@
                     FontSize="{StaticResource fontSizeButtons}"
                     Command="{Binding AddingDeffectCMD}"/>
 
-            <controls:xButton Grid.Column="1" 
-                              MinAccesLevel="1"
+            <Button Grid.Column="1" 
                     Content="СПРАВКА" 
+                    IsEnabled="{Binding ButtonsEnableModel.BtnToolsEnable}"
                     Style="{StaticResource btnStyle}"
                     Background="{StaticResource DarkColor}"
                     Foreground="{StaticResource TextColor}"
@@ -857,9 +857,9 @@
                     FontFamily="{StaticResource fontFamilyButtons}"
                     FontSize="{StaticResource fontSizeButtons}"/>
 
-            <controls:xButton Grid.Column="2"
-                              MinAccesLevel="1"
+            <Button Grid.Column="2"
                      Content="ДОБАВИТЬ" 
+                     IsEnabled="{Binding ButtonsEnableModel.BtnToolsEnable}"
                      Style="{StaticResource btnStyle}"
                      Background="{StaticResource DarkColor}"
                      Foreground="{StaticResource TextColor}"

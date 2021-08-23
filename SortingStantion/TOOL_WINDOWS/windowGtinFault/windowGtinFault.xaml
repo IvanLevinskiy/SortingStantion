@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortingStantion.TOOL_WINDOWS.windowGtinFault"
         AllowsTransparency="True" 
-        Style="{StaticResource VS2012WindowStyle}"
+        Style="{StaticResource WindowNotExitStyle}"
         WindowStartupLocation="CenterOwner" 
         Width="700" Height="300"
         Title="Посторонний продукт"

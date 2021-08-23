@@ -66,7 +66,8 @@ namespace SortingStantion.Models
                     return "Мастер:";
                 }
 
-                return $"{CurrentUser.AccesLevel}:\n{CurrentUser.Name}";
+                //return $"{CurrentUser.AccesLevel}:\n{CurrentUser.Name}";
+                return $"Мастер:\n{CurrentUser.Name}";
             }
         }
 
