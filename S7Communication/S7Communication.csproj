@@ -60,7 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simatic\SimaticDevice.cs" />
     <Compile Include="Simatic\SimaticGroup.cs" />
-    <Compile Include="Simatic\SimaticServer.cs" />
+    <Compile Include="Simatic\SimaticClient.cs" />
     <Compile Include="Simatic\S7_DTL.cs" />
     <Compile Include="Simatic\S7_DWord.cs" />
     <Compile Include="Simatic\S7_Real.cs" />

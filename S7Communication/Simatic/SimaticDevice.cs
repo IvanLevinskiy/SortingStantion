@@ -314,7 +314,7 @@ namespace S7Communication
         /// <summary>
         /// Родительское устройство
         /// </summary>
-        public SimaticServer server;
+        public SimaticClient server;
 
         /// <summary>
         /// Коллекция пакетов тэгов, опрашиваемых

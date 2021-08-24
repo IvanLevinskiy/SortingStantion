@@ -383,6 +383,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="DBBrowser\DB Browser for SQLite.rar" />
     <None Include="Docs\2021_06_12_Описание_ПО_L2_сериализация_вер_2_3.docx" />
     <None Include="Docs\2021_08_17_Тестирование S1 %284%29.docx" />
     <None Include="Docs\2021_08_19_Описание_уровней_доступа_к_органам_управления_HMI.docx" />
@@ -441,6 +442,7 @@
     <None Include="TIASortingStantion\XRef\XRef.db" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Libs\" />
     <Folder Include="TIASortingStantion\AdditionalFiles\CSS\" />
     <Folder Include="TIASortingStantion\Logs\" />
     <Folder Include="TIASortingStantion\TMP\" />

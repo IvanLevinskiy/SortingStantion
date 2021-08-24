@@ -69,7 +69,8 @@ namespace SortingStantion.TOOL_WINDOWS.windowClearCollectionRequest
             //Если количество невыпущенных продуктов
             //меньше нуля - высываем событие, которое вызывается при
             //нажатии кнопки "ПРОДОЛЖИТЬ"
-            var productquantity = (UInt32)ProductCollectionLenght.Status;
+            UInt32 productquantity = 0;
+            var resultconvertion = UInt32.TryParse(ProductCollectionLenght.Status.ToString(), out productquantity);
             if (productquantity == 0)
             {
                 BtnContinueClickEvent?.Invoke();
