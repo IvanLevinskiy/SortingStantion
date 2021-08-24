@@ -41,8 +41,9 @@ namespace SortingStantion.MainScreen
         /// <param name="e"></param>
         private void MainScreen_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //Останоака ленты
-            DataBridge.Conveyor.Stop();
+            //Уведомление подписчиков о 
+            //завершении работы комплекса 
+            DataBridge.ShutdownNotification();
 
             //Запись файла с результатом
             //операций (если отчет не отправлен)

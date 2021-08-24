@@ -22,6 +22,18 @@ namespace SortingStantion.frameSettings
         }
 
         /// <summary>
+        /// Акцессо для доступа к модели управления
+        /// доступом к кнопкам приложения
+        /// </summary>
+        public ButtonsEnableModel ButtonsEnableModel
+        {
+            get
+            {
+                return DataBridge.ButtonsEnableModel;
+            }
+        }
+
+        /// <summary>
         /// Технологический объект - конвейер
         /// </summary>
         public Conveyor Conveyor

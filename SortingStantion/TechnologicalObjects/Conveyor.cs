@@ -179,6 +179,16 @@ namespace SortingStantion.TechnologicalObjects
                     ChangeOfStateInForceMode?.Invoke();
                 }
             };
+
+            /*
+                 Процедура, вызываемая при закрытии приложения
+            */
+            DataBridge.Shutdown += () =>
+            {
+                //Выключение конвейера и комплекса
+                Run.Write(false);
+                RunForce.Write(false);
+            };
         }
 
         /// <summary>

@@ -363,7 +363,7 @@
                                 Foreground="{StaticResource IconColor}"
                                 BorderThickness="0"
                                 BorderBrush="Transparent"
-                                IsEnabled="{Binding Conveyor.btnForceLineRunEnable}"
+                                IsEnabled="{Binding ButtonsEnableModel.BtnStartForceEnable}"
                                 Command="{Binding Conveyor.forceStartLineCMD}">
                                 <TextBlock  TextAlignment="Center"
                                             FontSize="{StaticResource fontSizeButtons}">
@@ -379,7 +379,7 @@
                                     Foreground="{StaticResource IconColor}"
                                     BorderThickness="0"
                                     BorderBrush="Transparent"
-                                      IsEnabled="{Binding Conveyor.btnForceLineStopEnable}"
+                                      IsEnabled="{Binding ButtonsEnableModel.BtnStopForceEnable}"
                                     Command="{Binding Conveyor.forceStopLineCMD}">
                         <TextBlock TextAlignment="Center"
                                    FontSize="{StaticResource fontSizeButtons}">

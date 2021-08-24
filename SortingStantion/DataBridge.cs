@@ -67,14 +67,31 @@ namespace SortingStantion
         public static SimaticServer S7Server;
 
         /// <summary>
-        /// Событие, генерируемо по завершению
+        /// Событие, генерируемое по завершению
         /// загрузки
         /// </summary>
         public static event Action LoadComplete;
 
+        /// <summary>
+        /// Костыль для генерации события LoadComplete
+        /// </summary>
         public static void LoadCompleteNotification()
         {
             LoadComplete?.Invoke();
+        }
+
+        /// <summary>
+        /// Событие, генерируемое по завершению
+        /// работы комплекса
+        /// </summary>
+        public static event Action Shutdown;
+
+        /// <summary>
+        /// Костыль для генерации события Shutdown
+        /// </summary>
+        public static void ShutdownNotification()
+        {
+            Shutdown?.Invoke();
         }
 
         /// <summary>
