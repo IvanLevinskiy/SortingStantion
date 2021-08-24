@@ -15,14 +15,23 @@ namespace SortingStantion.Models
         {
             get
             {
-                //Флаг, указывающий на то, принято ли задание в работу
+                /*
+                    Флаг, указывающий на то, принято ли задание в работу 
+                */
                 var inwork = DataBridge.WorkAssignmentEngine.InWork;
 
-                //Указатель на список принятых от L3 заданий
+
+                /*
+                    Указатель на список принятых от L3 заданий
+                */
                 var workAssignmentsList = DataBridge.WorkAssignmentEngine.WorkAssignments;
 
-                //Указатель на текущего авторизованного пользователя
+
+                /*
+                    Указатель на текущего авторизованного пользователя
+                */
                 var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
+
 
                 //1. Задание не прислано в комплекс
                 //   - АКТИВНА
@@ -218,19 +227,46 @@ namespace SortingStantion.Models
         /// Флаг, разрешающий использовать кнопку
         /// "СТАРТ-СТОП" на экране настроек
         /// </summary>
-        public bool BtnStartStopForceEnable
+        public bool BtnStartForceEnable
         {
             get
             {
-                return _btnStartStopForceEnable;
+                //Флаг, указывающий на то, запущен ли конвейер в принудительном режиме
+                var lineisforcerun = DataBridge.Conveyor.LineIsForceRun;
+
+                //1. Если линия не запущена в принудительном режиме
+                if (lineisforcerun == false)
+                {
+                    return true;
+                }
+
+                //Возврат false
+                return false;
             }
-            set
+
+        }
+
+        /// <summary>
+        /// Флаг, разрешающий использовать кнопку
+        /// "СТАРТ-СТОП" на экране настроек
+        /// </summary>
+        public bool BtnStopForceEnable
+        {
+            get
             {
-                _btnStartStopForceEnable = value;
-                OnPropertyChanged("BtnStartStopForceEnable");
+                //Флаг, указывающий на то, запущен ли конвейер в принудительном режиме
+                var lineisforcerun = DataBridge.Conveyor.LineIsForceRun;
+
+                //1. Если линия запущена в принудительном режиме
+                if (lineisforcerun == true)
+                {
+                    return true;
+                }
+
+                //Возврат false
+                return false;
             }
         }
-        bool _btnStartStopForceEnable = false;
 
         /// <summary>
         /// Флаз, задающий режим доступа к кнопке 
@@ -398,11 +434,19 @@ namespace SortingStantion.Models
             };
 
             //Подпись на событие по изменению сотояния статуса
-            //линии
-            DataBridge.Conveyor.ChangeState += () =>
+            //линии в нормальном режиме
+            DataBridge.Conveyor.ChangeOfStateInNormalMode += () =>
             {
                 OnPropertyChanged("BtnStartEnable");
                 OnPropertyChanged("BtnStopEnable");
+            };
+
+            //Подпись на событие по изменению сотояния статуса
+            //линии в принудительном режиме
+            DataBridge.Conveyor.ChangeOfStateInForceMode += () =>
+            {
+                OnPropertyChanged("BtnStartForceEnable");
+                OnPropertyChanged("BtnStopForceEnable");
             };
 
             //Подписка на событие по получению нового

@@ -4,6 +4,7 @@ using SortingStantion.TOOL_WINDOWS.windowClearCollectionRequest;
 using SortingStantion.Utilites;
 using System;
 using System.ComponentModel;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace SortingStantion.Models
@@ -22,6 +23,11 @@ namespace SortingStantion.Models
         /// Экран настроек
         /// </summary>
         frameSettings.frameSettings frameSettings = new SortingStantion.frameSettings.frameSettings();
+
+        /// <summary>
+        /// Событие, генерируемое при смене экрана
+        /// </summary>
+        public event Action<UserControl> ChangeScreenNotification;
 
         /// <summary>
         /// Текущий экран
@@ -71,6 +77,7 @@ namespace SortingStantion.Models
                 return new DelegateCommand((obj) =>
                 {
                     CurrentScreen = frameMain;
+                    ChangeScreenNotification?.Invoke(frameMain);
                 },
                 (obj) => (true));
             }
@@ -98,6 +105,7 @@ namespace SortingStantion.Models
 
 
                     CurrentScreen = frameSettings;
+                    ChangeScreenNotification?.Invoke(frameSettings);
                 },
                 (obj) => (true));
             }

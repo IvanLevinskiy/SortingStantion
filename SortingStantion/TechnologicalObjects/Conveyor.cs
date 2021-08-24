@@ -49,9 +49,18 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
-        /// Команда ПУСК-ОСТАНОВКА
+        /// Команда ПУСК-ОСТАНОВКА в нормальном режиме
         /// </summary>
         public S7_Boolean Run
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Команда ПУСК-ОСТАНОВКА в принудительним режиме
+        /// </summary>
+        public S7_Boolean RunForce
         {
             get;
             set;
@@ -69,7 +78,7 @@ namespace SortingStantion.TechnologicalObjects
 
         /// <summary>
         /// Флаг, указывающий, что
-        /// линия запущена (для View Model)
+        /// линия запущена в нормальном режиме (для View Model)
         /// </summary>
         public bool LineIsRun
         {
@@ -85,29 +94,19 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
-        /// Разрешение для кнопки Старт линии
+        /// Флаг, указывающий, что 
+        /// линия запущена в принудительном режиме
         /// </summary>
-        public bool btnLineRunEnable
+        public bool LineIsForceRun
         {
             get
             {
-                return LineIsRun == false && DataBridge.MainAccesLevelModel.CurrentUser != null;
-            }
-        }
-
-        /// <summary>
-        /// Разрешение для кнопки Старт линии
-        /// </summary>
-        public bool btnForceLineRunEnable
-        {
-            get
-            {
-                if (DataBridge.MainAccesLevelModel.CurrentUser == null)
+                if (RunForce.Status is bool? == false)
                 {
                     return false;
                 }
 
-                return LineIsRun == false && DataBridge.MainAccesLevelModel.CurrentUser.AccesLevel > 0;
+                return (bool)RunForce.Status == true;
             }
         }
 
@@ -129,42 +128,29 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
-        /// Разрешение для кнопки Старт линии
+        /// Событие, генерируемое при 
+        /// изменении состояния работы конвейера
+        /// в нормальном режиме
         /// </summary>
-        public bool btnLineStopEnable
-        {
-            get
-            {
-                return LineIsRun == true && DataBridge.MainAccesLevelModel.CurrentUser != null;
-            }
-        }
-
-        public bool btnForceLineStopEnable
-        {
-            get
-            {
-                if (DataBridge.MainAccesLevelModel.CurrentUser == null)
-                {
-                    return false;
-                }
-
-                return LineIsRun == true && DataBridge.MainAccesLevelModel.CurrentUser.AccesLevel > 0;
-            }
-        }
+        public event Action ChangeOfStateInNormalMode;
 
         /// <summary>
-        /// Событие, н=генерируемое при 
+        /// Событие, генерируемое при 
         /// изменении состояния работы конвейера
+        /// в принудительном режиме
         /// </summary>
-        public event Action ChangeState;
+        public event Action ChangeOfStateInForceMode;
 
         /// <summary>
         /// Конструктор класса
         /// </summary>
         public Conveyor()
         {
-            //Тэг для запуска - останова линии
+            //Тэг для запуска - останова линии в нормальном режиме
             Run = new S7_Boolean("", "DB1.DBX98.0", group);
+
+            //Тэг для запуска - останова линии в принудительном режиме
+            RunForce = new S7_Boolean("", "DB1.DBX98.4", group);
 
             //Тэг, указывающий, что линия установлена с учетом задержки
             //на останов
@@ -174,20 +160,25 @@ namespace SortingStantion.TechnologicalObjects
             //линии
             Run.ChangeValue += Run_ChangeValue;
 
-            //Подписка на изменение пользователя
-            DataBridge.MainAccesLevelModel.ChangeUser += (s, d) =>
-            {
-                //Уведомление UI
-                OnPropertyChanged("btnLineRunEnable");
-                OnPropertyChanged("btnLineStopEnable");
-
-                OnPropertyChanged("btnForceLineRunEnable");
-                OnPropertyChanged("btnForceLineStopEnable");
-            };
-
             //Вывод сообщения в окно информации (начальное)
             UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
             DataBridge.MSGBOX.Add(msg);
+
+            /*
+                 Процедура, вызываемая при смене экрана
+            */
+            DataBridge.ScreenEngine.ChangeScreenNotification += (screen) =>
+            {
+                //Если линия была запущена в принудительном режиме и
+                //был сменен экран с НАСТРОЕК, выключаем принудительное
+                //включение линии
+                var lineisforcerun = ToBool(RunForce.Status);
+                if (lineisforcerun == true)
+                {
+                    RunForce.Write(false);
+                    ChangeOfStateInForceMode?.Invoke();
+                }
+            };
         }
 
         /// <summary>
@@ -243,21 +234,7 @@ namespace SortingStantion.TechnologicalObjects
             }
         }
 
-        /// <summary>
-        /// Команда для принудительного запуска
-        /// конвейера
-        /// </summary>
-        public ICommand forceStartLineCMD
-        {
-            get
-            {
-                return new DelegateCommand((obj) =>
-                {
-                    Run.Write(true);
-                },
-                (obj) => (true));
-            }
-        }
+
 
         /// <summary>
         /// Метод для остановки конвейера
@@ -302,6 +279,23 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Команда для принудительного запуска
+        /// конвейера
+        /// </summary>
+        public ICommand forceStartLineCMD
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    RunForce.Write(true);
+                    ChangeOfStateInForceMode?.Invoke();
+                },
+                (obj) => (true));
+            }
+        }
+
+        /// <summary>
         /// Команда для принулительного останова
         /// конвейера
         /// </summary>
@@ -311,12 +305,19 @@ namespace SortingStantion.TechnologicalObjects
             {
                 return new DelegateCommand((obj) =>
                 {
-                    Run.Write(false);
+                    RunForce.Write(false);
+                    ChangeOfStateInForceMode?.Invoke();
                 },
                 (obj) => (true));
             }
         }
 
+        /// <summary>
+        /// Метод, приводящий тип object к 
+        /// bool
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         bool ToBool(object value)
         {
             if (value is bool? == false)
@@ -356,7 +357,7 @@ namespace SortingStantion.TechnologicalObjects
 
                     //Уведомление подписчиков об изменении
                     //состояния линии
-                    ChangeState?.Invoke();
+                    ChangeOfStateInNormalMode?.Invoke();
 
                 };
                 DataBridge.UIDispatcher.Invoke(action);
@@ -375,7 +376,7 @@ namespace SortingStantion.TechnologicalObjects
 
                     //Уведомление подписчиков об изменении
                     //состояния линии
-                    ChangeState?.Invoke();
+                    ChangeOfStateInNormalMode?.Invoke();
                 };
                 DataBridge.UIDispatcher.Invoke(action);
             }
@@ -385,9 +386,6 @@ namespace SortingStantion.TechnologicalObjects
             OnPropertyChanged("LineIsStop");
 
             //Уведомление UI
-            OnPropertyChanged("btnLineRunEnable");
-            OnPropertyChanged("btnLineStopEnable");
-
             OnPropertyChanged("btnForceLineRunEnable");
             OnPropertyChanged("btnForceLineStopEnable");
         }
