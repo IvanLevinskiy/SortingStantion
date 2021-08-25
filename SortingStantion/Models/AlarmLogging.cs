@@ -118,58 +118,6 @@ namespace SortingStantion.Models
             return false;
         }
 
-       
-        /// <summary>
-        /// Метод для получени из базы данных
-        /// Истории аварий
-        /// </summary>
-        /// <param name="DateTimeStart"></param>
-        /// <param name="DateTimeStop"></param>
-        /// <returns></returns>
-        //public mbDiscreteAlarm[] GetAlarmList(DateTime DateTimeStart, DateTime DateTimeStop)
-        //{
-        //    //Форматируем дату-время для обращения к БД
-        //    string stStrt = DateTimeStart.ToString("yyyy-MM-dd HH:mm");
-        //    string stStp = DateTimeStop.ToString("yyyy-MM-dd HH:mm");
-
-        //    //Список архивных аварий
-        //    var list = new List<mbDiscreteAlarm>();
-
-        //    //Формируем запрос к базе данных с сортировкой
-        //    string Query = $"SELECT * FROM AlarmHistory WHERE ([dt] BETWEEN '{stStrt}' And '{stStp}') ORDER BY dt DESC;";
-        //    //string Query = $"SELECT * FROM AlarmHistory";
-
-        //    //Получение данных из базы данных
-        //    var items = Read(Query);
-
-        //    //Наполнение коллекции архивных аварий
-        //    foreach (var item in items)
-        //    {
-        //        //Разделение данных по разделителю
-        //        var components = item.Split('\t');
-
-        //        //Построение объекта DISCRET_ALARM
-        //        //из принятой строки
-        //        var alarmHistoryItem = new mbDiscreteAlarm();
-
-        //        //Получение даты-времени
-        //        alarmHistoryItem.DateTime = DateTime.Parse(components[2]);
-
-        //        //Передача данных экземпляру аварии
-        //        alarmHistoryItem.ID = components[1];
-        //        alarmHistoryItem.Message = components[4];
-        //        alarmHistoryItem.UserName = components[5];
-        //        alarmHistoryItem.MessageType = GetMessageType(components[3]);
-
-        //        //Формирование списка аварий
-        //        //(добавление аварии в начало коллекции)
-        //        list.Insert(0, alarmHistoryItem);
-        //    }
-
-        //    //Возврат данных в виде массива
-        //    return list.ToArray();
-        //}
-
         /// <summary>
         /// Получение типа сообщения из БД
         /// </summary>
