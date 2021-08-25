@@ -36,6 +36,8 @@ namespace SortingStantion.Controls
 
         #endregion
 
+        S7_Boolean tag;
+
         /// <summary>
         /// Подпись на изменение тэга
         /// </summary>
@@ -43,7 +45,7 @@ namespace SortingStantion.Controls
         {
             set
             { 
-                var tag = (S7_Boolean)device.GetTagByAddress(value);
+                tag = (S7_Boolean)device.GetTagByAddress(value);
                 tag.ChangeValue += Tag_ChangeValue;
             }
         }
@@ -100,13 +102,20 @@ namespace SortingStantion.Controls
                 //Если тэг изменил состояние на TRUE
                 if (newvalue == true)
                 {
+                    //Костыль
+                    tag.Status = true;
+
                     xContent = IconTrue;
+
                     return;
                 }
 
                 ////Если тэг изменил состояние на FALSE
                 if (newvalue == false)
                 {
+                    //Костыль
+                    tag.Status = false;
+
                     xContent = IconFalse;
                     return;
                 }

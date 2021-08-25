@@ -339,24 +339,42 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Предыдущее состояние работы линии
+        /// в нормальном режиме
+        /// </summary>
+        bool IsRunStateOldValue = false;
+
+        /// <summary>
+        /// Текущее состояние работы линии
+        /// в нормальном режиме
+        /// </summary>
+        bool IsRunStateCureentValue = false;
+
+        /// <summary>
         /// Метод, вызываемый при изминении
         /// статуса работы линии
         /// </summary>
         /// <param name="obj"></param>
         private void Run_ChangeValue(object oldvalue, object newvalue)
         {
+            //Получение текущего состояния работы линии
+            //в нормальном режиме
+            IsRunStateCureentValue = ToBool(Run.Status);
 
-            //Получение статуса работы конвейера
-            bool _value = ToBool(newvalue);
-            bool _oldvalue = ToBool(oldvalue);
-
-            if (_value == _oldvalue)
+            //Если состояние работы линии в нормальном режиме
+            //не изменилось, покидаем функцию
+            if (IsRunStateCureentValue == IsRunStateOldValue)
             {
                 return;
             }
 
+            //Запоминием состояние работы линии в 
+            //нормальном режиме
+            IsRunStateOldValue = IsRunStateCureentValue;
+
+
             //Если конвейер запущен
-            if (_value == true)
+            if (IsRunStateCureentValue == true)
             {
                 Action action = () =>
                 {
@@ -376,7 +394,7 @@ namespace SortingStantion.TechnologicalObjects
             }
 
             //Если конвейер остановлен
-            if (_value == false)
+            if (IsRunStateCureentValue == false)
             {
                 Action action = () =>
                 {

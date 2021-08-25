@@ -115,12 +115,33 @@ namespace SortingStantion.Models
         public S7_DWord QUANTITY_REPEAT_PRODUCTS;
 
         /// <summary>
+        /// Количество выпущеных продуктов
+        /// </summary>
+        public S7_DWord QUANTITY_PRODUCTS;
+
+        /// <summary>
+        /// Количество выпущеных коробов
+        /// </summary>
+        public S7_DWord QUANTITY_BOXS;
+
+        /// <summary>
+        /// Количество продуктов в коробе
+        /// </summary>
+        public S7_DWord NUM_PACKS_IN_BOX;
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public ResultOperation()
         {
             //Инициализация тэга - повтор продуктов
             QUANTITY_REPEAT_PRODUCTS = (S7_DWord)device.GetTagByAddress("DB1.DBD36-DWORD");
+
+            QUANTITY_PRODUCTS = (S7_DWord)device.GetTagByAddress("DB1.DBD16-DWORD");
+
+            QUANTITY_BOXS = (S7_DWord)device.GetTagByAddress("DB1.DBD20-DWORD");
+
+            NUM_PACKS_IN_BOX = (S7_DWord)device.GetTagByAddress("DB1.DBD362-DWORD");
 
             //Инициализация коллекции всех кодов
             //находящихся в результате
@@ -268,9 +289,9 @@ namespace SortingStantion.Models
                 AddRepeatProduct(serialnumber);
 
                 //Вывод сообщений
-                msg = $"Считан продукт с серийным номером {serialnumber}. Продукт добавлен в коллекцию кодов повторов";
-                messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
-                DataBridge.MSGBOX.Add(messageItem);
+                //msg = $"Считан продукт с серийным номером {serialnumber}. Продукт добавлен в коллекцию кодов повторов";
+                //messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
+                //DataBridge.MSGBOX.Add(messageItem);
 
                 //Увеличение счетчика повторов
                 uint repeatCount = (uint)QUANTITY_REPEAT_PRODUCTS.Status;
@@ -285,6 +306,13 @@ namespace SortingStantion.Models
                 Если код не повторяется 
             */
             Codes.Add(serialnumber);
+
+            /*
+                Увеличение счетчика выпущеных
+                продуктов в результате
+            */
+            AddQuantityProducts( num:1);
+
 
             //Вывод сообщений
             msg = $"Считан продукт с серийным номером {serialnumber}. В результате продуктов: {Codes.Count}";
@@ -312,6 +340,11 @@ namespace SortingStantion.Models
             //из результата
             RemoteCode(serialnumber);
 
+
+            //Удаление из счетчика выпущеных продуктов
+            //количества удаленных продуктов
+            AddQuantityProducts(num: -1);
+
             //Добавляем экземпляр повтора кода
             var repeatPackItem = new RepeatPack()
             {
@@ -328,7 +361,7 @@ namespace SortingStantion.Models
         /// <param name="serialnumber"></param>
         public void AddDeffect(string serialnumber)
         {
-            RemoteCode(serialnumber);
+            var  dcounter = RemoteCode(serialnumber);
             RemoteCodeFromFullResult(serialnumber);
             defectiveCodes.Add(serialnumber);
         }
@@ -337,18 +370,29 @@ namespace SortingStantion.Models
         /// Метод для удаления кодов из результата
         /// </summary>
         /// <param name="serialnumber"></param>
-        void RemoteCode(string serialnumber)
+        int RemoteCode(string serialnumber)
         {
+            int count = 0;
+
             M0: foreach (var code in Codes)
             {
                 if (serialnumber == code)
                 {
+                    count++;
+
                     Codes.Remove(code);
                     goto M0;
                 }
             }
+
+            return count;
         }
 
+        /// <summary>
+        /// Метод для удаления кода из полного
+        /// результата
+        /// </summary>
+        /// <param name="serialnumber"></param>
         void RemoteCodeFromFullResult(string serialnumber)
         {
         M0: foreach (var code in AllCodes)
@@ -358,6 +402,43 @@ namespace SortingStantion.Models
                     AllCodes.Remove(code);
                     goto M0;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Метод для добавления значения к количеству
+        /// выпущенных продуктов
+        /// </summary>
+        /// <param name="num"></param>
+        void AddQuantityProducts(int num)
+        {
+            /*
+                   Увеличение счетчика выпущеных
+                   продуктов в результате
+            */
+            int qp = 0;
+            var resultconvertion = int.TryParse(QUANTITY_PRODUCTS.Status.ToString(), out qp);
+
+            //Инкрементируем значение счетчика
+            qp += num;
+
+            int num_pacs_in_box = 0;
+            int.TryParse(NUM_PACKS_IN_BOX.Status.ToString(), out num_pacs_in_box);
+            
+            //Если ошибок при преобразовании 
+            //не возникло - увеличиваем счетчик продуктов на единицу
+            if (resultconvertion == true)
+            {
+                //Запись в ПЛК количества выпущеных продуктов
+                QUANTITY_PRODUCTS.Write(qp);
+
+                //Запись в ПЛК количества выпущеных коробов
+                if (num_pacs_in_box > 0)
+                {
+                    var quantityBoxs = qp / num_pacs_in_box;
+                    QUANTITY_BOXS.Write(quantityBoxs);
+                }
+
             }
         }
 

@@ -38,14 +38,15 @@
 
                 <Button Content="Отмена"
                         Click="ButtonCancel_Click"
-                        Style="{StaticResource btnStyle}"
-                        Background="{StaticResource DarkColor}"
-                        Foreground="{StaticResource TextColor}"
-                        FontSize="{StaticResource fontSizeButtons}"
-                        VerticalAlignment="Bottom"
-                        Margin="50,0,50,0"
                         Height="50"
-                        />
+                        Width="300"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,10,10"
+                        Style="{StaticResource btnStyle}"
+                        Background="{StaticResource LightColor}"
+                        Foreground="{StaticResource TextColor}"
+                        FontSize="{StaticResource fontSizeData}"/>
 
             </Grid>
 

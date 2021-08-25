@@ -35,16 +35,16 @@
                            Text="Продукт GTIN ___ номер ___ считан повторно. Найдите его ручным сканером и удалите с конвейера.">
                 </TextBlock>
 
-                <Button Content="Отмена"
-                        Click="ButtonCancel_Click"
-                        Style="{StaticResource btnStyle}"
-                        Background="{StaticResource DarkColor}"
-                        Foreground="{StaticResource TextColor}"
-                        FontSize="{StaticResource fontSizeButtons}"
+                <Button Height="50"
+                        Width="300"
                         VerticalAlignment="Bottom"
-                        Margin="50,0,50,0"
-                        Height="50"
-                        />
+                        HorizontalAlignment="Center"
+                        Margin="0,0,10,10"
+                        Style="{StaticResource btnStyle}"
+                        Background="{StaticResource LightColor}"
+                        Foreground="{StaticResource TextColor}"
+                        FontSize="{StaticResource fontSizeData}"
+                        Content="Отмена" Click="ButtonCancel_Click"/>
 
             </Grid>
 

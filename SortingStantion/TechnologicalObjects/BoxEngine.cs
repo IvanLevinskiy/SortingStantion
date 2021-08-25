@@ -327,9 +327,13 @@ namespace SortingStantion.TechnologicalObjects
                 var msg = new UserMessage(message, DataBridge.myRed);
                 DataBridge.MSGBOX.Add(msg);
 
+                //Добавление повтора в отчет
+                DataBridge.Report.AddRepeatProduct(scaner_serialnumber);
+
                 //Вызов окна
                 var windowRepeatProduct = new windowRepeatProduct(scaner_gtin, scaner_serialnumber, msg);
                 windowRepeatProduct.ShowDialog();
+                               
 
                 //Выход из метода
                 return;
