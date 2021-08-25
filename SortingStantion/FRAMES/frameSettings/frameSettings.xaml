@@ -534,6 +534,7 @@
                                 Foreground="{StaticResource TextColor}"/>
 
                             <controls:S7TextBox Address="DB1.DBD130-DWORD"
+                                                ParametrName="Массовый брак"
                                           Foreground="{StaticResource TextColor}"
                                           Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -564,6 +565,7 @@
                            Foreground="{StaticResource TextColor}"/>
 
                             <controls:S7TextBox Address="DB1.DBD126-STIME"
+                                                ParametrName="Время задержки остановки"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"
@@ -593,6 +595,7 @@
                            Foreground="{StaticResource TextColor}"/>
 
                             <controls:S7TextBox Address="DB1.DBD136-STIME"
+                                                ParametrName="Время дребезга контактов"
                                       Foreground="{StaticResource TextColor}"
                                       Background="{StaticResource LightColor}"
                                           FontSize="{StaticResource fontSizeData}"

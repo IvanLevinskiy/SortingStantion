@@ -785,6 +785,12 @@ namespace SortingStantion.Models
                     //Выводим в потоке UI сообщение
                     DataBridge.MainScreen.Dispatcher.Invoke(action);
 
+                    //Запись в базу данных о том, что получено новое задание
+                    string message = $"От L3 поступило новое задание: {workAssignment.ID}";
+
+                    //Запись в базу данных о принятии задания
+                    DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
+
                     //Перенос свойств в задание которое может быть
                     //принято в работу
                     if (WorkAssignments.Count == 0)

@@ -301,7 +301,7 @@ namespace SortingStantion.Controls
                 deFocus();
 
                 //Записываем в базу данных информацию об изминении
-                DataBridge.AlarmLogging.AddMessage($"Значение параметра: '{ParametrName}' изменено на {this.Text}", MessageType.Event);
+                DataBridge.AlarmLogging.AddMessage($"Значение параметра: {ParametrName} изменено на {this.Text}", MessageType.Event);
             }
         }
 
