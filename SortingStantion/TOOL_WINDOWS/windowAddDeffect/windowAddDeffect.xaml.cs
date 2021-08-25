@@ -1,7 +1,9 @@
 ﻿using S7Communication;
 using SortingStantion.Controls;
+using SortingStantion.Models;
 using System;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
@@ -44,30 +46,6 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
         /// Тэг, хранящий количество изделий, отбраковыных вручную
         /// </summary>
         S7_DWord QUANTITY_PRODUCTS_MANUAL_REJECTED;
-
-        /// <summary>
-        /// Строка, содержащая серийный номер
-        /// продукта, добавляемого в брак
-        /// </summary>
-        string CurrentSerialNumber
-        {
-            get
-            {
-                return currentSerialNumber;
-            }
-            set
-            {
-                currentSerialNumber = value;
-
-                //Управление Enable кнопки ДОБАВИТЬ
-                btnAddDeffect.IsEnabled = string.IsNullOrEmpty(currentSerialNumber) == false;
-
-                //Сброс таймера отсчета времени бездействия
-                ShutdownTimer.Stop();
-                ShutdownTimer.Start();
-            }
-        }
-        string currentSerialNumber;
 
         /// <summary>
         /// Текущий, просканированый 
@@ -124,48 +102,109 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
         /// <param name="obj"></param>
         private void Scaner_NewDataNotification(string datastring)
         {
+            //Сброс таймера отсчитывающего временя бездействия
+            TimerReset();
+
             //Текст сообщения в зоне информации
             string message = string.Empty;
 
-            //Разбор данных по полям
-            var inputdata = datastring;
-            DataBridge.DataSpliter.Split(ref inputdata);
+            //Инициализируем разделитель по полям
+            var spliter = new DataSpliter();
 
-            //Если код не распознан (поля не соответствуют шаблону)
-            if (DataBridge.DataSpliter.IsValid == false)
+            //Копируем входные данные в буфер
+            var istr = datastring;
+
+            //Разделяем входные данные по полям
+            spliter.Split(ref istr);
+
+            /*
+                Посторонний код
+            */
+            if (spliter.IsValid == false)
             {
-                message = $"Код не распознан";
-                ShowMessageInformationZone(message);
+                //Вывод сообщения в окно информации
+                message = $"Код не распознан.";
+                ShowMessage(message, DataBridge.myBlue);
 
                 //Выход из функции
                 return;
             }
 
-            //Добавление номера продукта в буфер текущего окна
-            CurrentSerialNumber = DataBridge.DataSpliter.GetSerialNumber();
-            CurrentGTIN = DataBridge.DataSpliter.GetGTIN();
+            //Получение GTIN и SN
+            var gtin = spliter.GTIN;
+            var serialnumber = spliter.SerialNumber;
 
-            //Если GTIN не соответсвтвует заданию
-            if (CurrentGTIN != DataBridge.WorkAssignmentEngine.GTIN)
+            /*
+                Если Посторонний продукт
+            */
+            if (DataBridge.WorkAssignmentEngine.GTIN != gtin)
             {
+                //Вывод сообщения в окно информации
                 message = $"Посторонний продукт не может быть добавлен в брак.";
-                ShowMessageInformationZone(message);
-                
-                //Стирание старой информации
-                CurrentSerialNumber = string.Empty;
-                CurrentGTIN = string.Empty;
+                ShowMessage(message, DataBridge.myBlue);
 
                 //Выход из функции
                 return;
             }
 
-            //DataBridge.Report.AddDeffect(CurrentSerialNumber);
+            /*
+                Продукт в браке
+            */
+            if (DataBridge.Report.IsDeffect(serialnumber) == true)
+            {
+                message = $"Продукт номер {serialnumber} уже числиться в браке.";
+                ShowMessage(message, DataBridge.myBlue);
+                return;
+            }
 
-            //Формируем сообщение для зоны иноформации
-            message = $"Считан продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber}";
-            ShowMessageInformationZone(message);
+            /*
+                Добавление номера продукта в список брака
+            */
+            DataBridge.Report.AddDeffect(serialnumber);
+
+            /*
+                Текст сообщения
+            */
+            message = $"Продукт номер {serialnumber} перемещен из результата в брак.";
+
+            /*
+                Добавление в базу данных (лог) записи
+            */
+            DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
+
+            /*
+                Добавление сообщения в зону информации
+            */
+            ShowMessage(message, DataBridge.myOrange);
 
 
+            //Инкремент счетчика отбракованых изделий вручную
+            var value = Convert.ToInt32(QUANTITY_PRODUCTS_MANUAL_REJECTED.Status) + 1;
+            QUANTITY_PRODUCTS_MANUAL_REJECTED.Write(value);
+        }
+
+        /// <summary>
+        /// Метод для отображения сообщения в зоне информации
+        /// </summary>
+        /// <param name="message"></param>
+        void ShowMessage(string message, Brush color)
+        {
+            Action action = () =>
+            {
+                var msgitem = new UserMessage(message, color);
+                DataBridge.MSGBOX.Add(msgitem);
+            };
+            DataBridge.UIDispatcher.Invoke(action);
+        }
+
+        /// <summary>
+        /// Метод для сброса таймера,
+        /// по которому определяется бездействие
+        /// </summary>
+        void TimerReset()
+        {
+            ShutdownTimer.Stop();
+            ShutdownTimer.Start();
         }
 
         /// <summary>
@@ -174,43 +213,9 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnAddDeffect_Click(object sender, RoutedEventArgs e)
+        private void btnCloseClick(object sender, RoutedEventArgs e)
         {
-            //Объявление локальных переменных
-            string message = string.Empty;
-            UserMessage msg = null; 
-
-            //Проверка - на то, имеется ли продукт в браке
-            if (DataBridge.Report.IsDeffect(CurrentSerialNumber) == true)
-            {
-                //Добавление в базу данных (лог) записи
-                message = $"Продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber} уже числится в браке";
-                msg = new UserMessage(message, DataBridge.myOrange);
-                DataBridge.MSGBOX.Add(msg);
-                return;
-            }
-
-            //Добавление номера продукта в список брака
-            DataBridge.Report.AddDeffect(CurrentSerialNumber);
-
-            //Добавление в базу данных (лог) записи
-            message = $"Продукт GTIN:{CurrentGTIN} SN:{CurrentSerialNumber} добавлен в список брака";
-            DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
-
-            //Добавление сообщения в зону информации
-            msg = new UserMessage(message, DataBridge.myOrange);
-            DataBridge.MSGBOX.Add(msg);
-
-            //Стирание серийного номера для того, чтоб
-            //через акцессор заблокировать кнопку Добавить и сбросить
-            //таймер по которому отсчитывается время бездействия
-            CurrentSerialNumber = string.Empty;
-
-            //Инкремент счетчика отбракованых изделий вручную
-            var value = Convert.ToInt32(QUANTITY_PRODUCTS_MANUAL_REJECTED.Status) + 1;
-            QUANTITY_PRODUCTS_MANUAL_REJECTED.Write(value);
-
-
+            this.Close();
         }
 
         /// <summary>

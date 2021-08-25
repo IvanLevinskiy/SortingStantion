@@ -229,7 +229,7 @@ namespace SortingStantion.TechnologicalObjects
                 DataBridge.AlarmLogging.AddMessage($"От автоматического сканера получен посторонний код: {spliter.SourseData}  (код не является СИ)", MessageType.Alarm);
 
                 //Вывод сообщения в зоне информации
-                string message = $"Посторонний код (код не является СИ)";
+                string message = $"Посторонний код (не является КМ)";
                 var msg = new UserMessage(message, DataBridge.myRed);
                 DataBridge.MSGBOX.Add(msg);
 
@@ -323,7 +323,7 @@ namespace SortingStantion.TechnologicalObjects
                 DataBridge.AlarmLogging.AddMessage($"Продукт GTIN {scaner_gtin} номер {scaner_serialnumber} считан повторно", MessageType.Alarm);
 
                 //Вывод сообщения в окно информации
-                string message = $"Продукт GTIN {scaner_gtin} номер {scaner_serialnumber} считан повторно";
+                string message = $"Продукт номер {scaner_serialnumber} считан повторно.";
                 var msg = new UserMessage(message, DataBridge.myRed);
                 DataBridge.MSGBOX.Add(msg);
 
@@ -334,7 +334,6 @@ namespace SortingStantion.TechnologicalObjects
                 var windowRepeatProduct = new windowRepeatProduct(scaner_gtin, scaner_serialnumber, msg);
                 windowRepeatProduct.ShowDialog();
                                
-
                 //Выход из метода
                 return;
             }

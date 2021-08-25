@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortingStantion.TOOL_WINDOWS.windiwInformation"
         mc:Ignorable="d"
-           Style="{StaticResource VS2012WindowStyle}"
+           Style="{StaticResource WindowNotExitStyle}"
         ResizeMode="NoResize"
         Background="#FF323232"
         WindowStartupLocation="CenterOwner"
@@ -35,7 +35,7 @@
                 Background="{StaticResource LightColor}"
                 Foreground="{StaticResource TextColor}"
                 FontSize="{StaticResource fontSizeData}"
-                Content="Отмена" 
+                Content="Закрыть" 
                 Click="btnCancel_Click"
             />
     </Grid>

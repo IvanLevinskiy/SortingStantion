@@ -8,7 +8,7 @@
         Style="{StaticResource WindowNotExitStyle}"
         WindowStartupLocation="CenterOwner" 
         Width="700" Height="300"
-        Title="Посторонний продукт"
+        Title="Ошибка. Продукт слишком близко к предыдущему"
         Background="#FF323232">
     <Border BorderBrush="#FF1E1E1E"
             BorderThickness="2" 

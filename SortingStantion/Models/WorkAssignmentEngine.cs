@@ -390,6 +390,8 @@ namespace SortingStantion.Models
         /// </summary>
         public event Action<WorkAssignment> NewWorkOrderHasArrivedNotification;
 
+
+
         /// <summary>
         /// Конструктор класса
         /// </summary>

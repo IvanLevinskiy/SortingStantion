@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortingStantion.windiwAddingBox"
         mc:Ignorable="d"
-        Style="{StaticResource VS2012WindowStyle}"
+        Style="{StaticResource WindowNotExitStyle}"
         ResizeMode="NoResize"
         Background="#FF323232"
         WindowStartupLocation="CenterOwner"
-        Title="Добавление продукта" Width="550" Height="250">
+        Title="Ручное добавление продукта." Width="550" Height="250">
     <Grid >
 
         <Grid Height="50"
@@ -21,6 +21,7 @@
                        TextAlignment="Justify"
                        Foreground="{StaticResource TextColor}"
                        FontSize="{StaticResource fontSizeData}"/>
+            
 
         </Grid>
 
@@ -48,20 +49,19 @@
 
         </Grid>-->
 
-        <!--КНОПКА - ДОБАВИТЬ-->
-        <!--<Button x:Name="btnAddBox"
-                IsEnabled="False"
+        <!--КНОПКА - Закрыть-->
+        <Button x:Name="btnCloseClick"
                 Height="50"
                 Width="300"
                 VerticalAlignment="Bottom"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Center"
                 Margin="0,0,10,10"
                 Style="{StaticResource btnStyle}"
                 Background="{StaticResource LightColor}"
                 Foreground="{StaticResource TextColor}"
                 FontSize="{StaticResource fontSizeData}"
-                Content="Добавить" Click="btnAddBoxClick"
-            />-->
+                Content="Закрыть" Click="btnCloseClick"
+            />
 
 
 

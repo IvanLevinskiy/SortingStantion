@@ -587,7 +587,7 @@
                         </Grid>
 
                         <Grid Height="50">
-                            <TextBlock Text="Время дребезга контактов, ms:"
+                            <TextBlock Text="Время дребезжания датчиков, ms:"
                                 Margin="20,0,0,0"
                                 VerticalAlignment="Center"
                                 FontSize="{StaticResource fontSizeData}"

@@ -8,7 +8,7 @@
         Style="{StaticResource WindowNotExitStyle}"
         WindowStartupLocation="CenterOwner" 
         Width="700" Height="300"
-        Title="Посторонний продукт"
+        Title="Ошибка. Посторонний код."
         Background="#FF323232">
     <Border BorderBrush="#FF1E1E1E"
             BorderThickness="2" 
@@ -36,7 +36,7 @@
                     <Run Text="От автоматического сканера получен посторонний код. Найдите его ручным сканером и удалите с конвейера."></Run>
                 </TextBlock>
 
-                <Button Content="Отмена"
+                <Button Content="Закрыть"
                         Click="ButtonCancel_Click"
                         Height="50"
                         Width="300"

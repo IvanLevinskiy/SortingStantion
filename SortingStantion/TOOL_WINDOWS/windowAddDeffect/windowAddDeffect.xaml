@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SortingStantion.TOOL_WINDOWS.windowAddDeffect"
         mc:Ignorable="d"
-        Style="{StaticResource VS2012WindowStyle}"
+        Style="{StaticResource WindowNotExitStyle}"
         ResizeMode="NoResize"
         Background="#FF323232"
         WindowStartupLocation="CenterOwner"
-        Title="Добавление деффекта" Width="550" Height="250">
+        Title="Ручная отбраковка продукции" Width="550" Height="250">
     <Grid >
 
         <Grid Height="50"
@@ -48,7 +48,7 @@
 
         </Grid>-->
 
-        <!--КНОПКА - ДОБАВИТЬ-->
+        <!--КНОПКА - Закрыть-->
         <Button x:Name="btnAddDeffect"
                 Height="50"
                 Width="300"
@@ -59,7 +59,7 @@
                 Background="{StaticResource LightColor}"
                 Foreground="{StaticResource TextColor}"
                 FontSize="{StaticResource fontSizeData}"
-                Content="Добавить брак" Click="btnAddDeffect_Click"
+                Content="Закрыть" Click="btnCloseClick"
             />
 
 

@@ -16,7 +16,7 @@
               Margin="20,30,20,0"
               VerticalAlignment="Top">
 
-            <TextBlock Text="Ошибка отбраковки, продукт остался на конвейере. Найдите его после отбраковщика и удалите."
+            <TextBlock Text="Ошибка отбраковки, продукт остался на конвейере. Найдите его на конвейере после автоматического сканера и удалите."
                        TextWrapping="Wrap"
                        TextAlignment="Justify"
                        Foreground="{StaticResource TextColor}"
@@ -35,6 +35,6 @@
                 Background="{StaticResource LightColor}"
                 Foreground="{StaticResource TextColor}"
                 FontSize="{StaticResource fontSizeData}"
-                Content="Отмена" Click="btnCancel_Click"/>
+                Content="Закрыть" Click="btnCancel_Click"/>
     </Grid>
 </Window>

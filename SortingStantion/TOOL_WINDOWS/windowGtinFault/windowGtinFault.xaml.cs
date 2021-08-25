@@ -1,7 +1,9 @@
 ﻿using S7Communication;
 using SortingStantion.Controls;
 using SortingStantion.Models;
+using System;
 using System.Windows;
+using System.Windows.Media;
 
 namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
 {
@@ -49,6 +51,9 @@ namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
         /// <param name="obj"></param>
         private void Scaner_NewDataNotification(string inputdata)
         {
+            //Текст сообщения в зоне информации
+            string message = string.Empty;
+
             //Инициализируем разделитель по полям
             var spliter = new DataSpliter();
 
@@ -59,19 +64,19 @@ namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
             spliter.Split(ref istr);
 
             /*
-               Если код не распознан
-           */
+                Посторонний код
+            */
             if (spliter.IsValid == false)
             {
                 //Вывод сообщения в окно информации
-                string message = $"Код не распознан. Удалите продукт с конвейера.";
-                var msg = new UserMessage(message, DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
+                message = $"Код не распознан. Удалите продукт с конвейера.";
+                ShowMessage(message, DataBridge.myRed);
 
                 //Выход из функции
                 return;
             }
 
+            //Получение GTIN и SN
             var gtin = spliter.GTIN;
             var serialnumber = spliter.SerialNumber;
 
@@ -81,43 +86,80 @@ namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
             if (DataBridge.WorkAssignmentEngine.GTIN != gtin)
             {
                 //Вывод сообщения в окно информации
-                string message = $"Посторонний продукт GTIN {gtin} номер {serialnumber}. Удалите его с конвейера.";
-                var msg = new UserMessage(message, DataBridge.myGreen);
-                DataBridge.MSGBOX.Add(msg);
+                message = $"Посторонний продукт GTIN {gtin} номер {serialnumber}. Удалите его с конвейера.";
+                ShowMessage(message, DataBridge.myGreen);
 
                 //Выход из функции
                 return;
             }
 
             /*
-                Если код не распознан. 
+                Продукт в результате 
             */
             if (DataBridge.Report.AsAResult(serialnumber) == true)
             {
                 //Вывод сообщения в окно информации
-                string message = $"Продукт GTIN {gtin} номер {serialnumber} в результате.";
-                var msg = new UserMessage(message, DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
+                message = $"Продукт GTIN {gtin} номер {serialnumber} в результате.";
+                ShowMessage(message, DataBridge.myRed);
 
                 //Выход из функции
                 return;
             }
 
             /*
-                Если код доступен для сериализации
+               Продукт в браке
             */
-            //if (DataBridge.Report.AsAResult(serialnumber) == true)
-            //{
-            //    //Вывод сообщения в окно информации
-            //    string message = $"Продукт GTIN {gtin} номер {serialnumber} доступен для сериализации.";
-            //    var msg = new UserMessage(message, DataBridge.myRed);
-            //    DataBridge.MSGBOX.Add(msg);
+            if (DataBridge.Report.IsDeffect(serialnumber) == true)
+            {
+                message = $"Продукт номер {serialnumber} числиться в браке. Удалите его с конвейера.";
+                ShowMessage(message, DataBridge.myRed);
+                return;
+            }
 
-            //    //Выход из функции
-            //    return;
-            //}
+            /*
+               Продукт считан повторно 
+            */
+            if (DataBridge.Report.IsRepeat(serialnumber) == true)
+            {
+                message = $"Продукт номер {serialnumber} считан повторно. Удалите его с конвейера.";
+                ShowMessage(message, DataBridge.myRed);
+                return;
+            }
+
+
+            /*
+                Если код в результате. 
+            */
+            if (DataBridge.Report.AsAResult(serialnumber) == true)
+            {
+                //Вывод сообщения в окно информации
+                message = $"Продукт GTIN {gtin} номер {serialnumber} в результате.";
+                ShowMessage(message, DataBridge.myRed);
+
+                //Выход из функции
+                return;
+            }
+
+            /*
+               Продукт «s/n» доступен для сериализации
+            */
+            message = $"Продукт {serialnumber} доступен для сериализации.";
+            ShowMessage(message, DataBridge.myRed);
         }
 
+        /// <summary>
+        /// Метод для отображения сообщения в зоне информации
+        /// </summary>
+        /// <param name="message"></param>
+        void ShowMessage(string message, Brush color)
+        {
+            Action action = () =>
+            {
+                var msgitem = new UserMessage(message, color);
+                DataBridge.MSGBOX.Add(msgitem);
+            };
+            DataBridge.UIDispatcher.Invoke(action);
+        }
 
         /// <summary>
         /// Метод, вызываемый при клике по кнопке - ОТМЕНА

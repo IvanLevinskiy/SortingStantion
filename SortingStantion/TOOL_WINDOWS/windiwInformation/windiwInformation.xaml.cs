@@ -118,7 +118,7 @@ namespace SortingStantion.TOOL_WINDOWS.windiwInformation
             //Продукт в браке
             if (DataBridge.Report.IsDeffect(CurrentSerialNumber) == true)
             {
-                message = $"Продукт «{CurrentSerialNumber}» в браке.";
+                message = $"Продукт {CurrentSerialNumber} в браке.";
                 ShowMessage(message);
                 return;
             }
@@ -126,13 +126,13 @@ namespace SortingStantion.TOOL_WINDOWS.windiwInformation
             //Продукт в результате
             if (DataBridge.Report.AsAResult(CurrentSerialNumber) == true)
             {
-                message = $"Продукт «{CurrentSerialNumber}» в результате.";
+                message = $"Продукт {CurrentSerialNumber} в результате.";
                 ShowMessage(message);
                 return;
             }
 
             //Продукт «s/n» доступен для сериализации
-            message = $"Продукт «{CurrentSerialNumber}» доступен для сериализации.";
+            message = $"Продукт {CurrentSerialNumber} доступен для сериализации.";
             ShowMessage(message);
 
 
