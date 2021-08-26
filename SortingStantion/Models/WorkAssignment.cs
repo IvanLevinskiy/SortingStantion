@@ -43,12 +43,12 @@ namespace SortingStantion.Models
         /// <summary>
         /// Номер линии для, которой сформировано это задание.
         /// </summary>
-        [JsonProperty("lineNum")]
-        public string lineNum
-        {
-            get;
-            set;
-        }
+        //[JsonProperty("lineNum")]
+        //public string lineNum
+        //{
+        //    get;
+        //    set;
+        //}
 
         /// <summary>
         /// Кол-во продуктов в коробе

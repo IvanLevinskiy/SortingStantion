@@ -218,9 +218,10 @@ namespace SortingStantion.MainScreen
             {
                 return new DelegateCommand((obj) =>
                 {
-                    frameAuthorization frameAuthorization = new frameAuthorization(false);
-                    frameAuthorization.Owner = DataBridge.MainScreen;
-                    frameAuthorization.ShowDialog();
+                    //Вызов окна для авторизации мастера
+                    SortingStantion.TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser(false);
+                    windowAuthorizationSuperUser.Owner = DataBridge.MainScreen;
+                    windowAuthorizationSuperUser.ShowDialog();
                 },
                 (obj) => (true));
             }

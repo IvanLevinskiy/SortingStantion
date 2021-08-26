@@ -79,6 +79,11 @@ namespace SortingStantion.TechnologicalObjects
         S7_DWord ProductCollectionLenght;
 
         /// <summary>
+        /// Счетчик повтора кодов
+        /// </summary>
+        S7_DWord RepeatProductCounter;
+
+        /// <summary>
         /// Объект, осуществляющий разбор телеграммы
         /// сканированного штрихкода
         /// </summary>
@@ -103,6 +108,9 @@ namespace SortingStantion.TechnologicalObjects
 
             //Количество отсканированных но не выпущенных объектов
             ProductCollectionLenght = (S7_DWord)device.GetTagByAddress("DB5.DBD0-DWORD");
+
+            //Счетчик повторов
+            RepeatProductCounter = (S7_DWord)device.GetTagByAddress("DB1.DBD36-DWORD");
 
             //Подписываемся на событие по изминению
             //тэга READ_CMD  и осуществляем вызов
@@ -338,6 +346,20 @@ namespace SortingStantion.TechnologicalObjects
                 return;
             }
 
+            /*
+               Если повтор - увеличиваем счетчик на единицу
+           */
+            //if (IsRepeat == true)
+            //{
+            //    uint value = 0;
+            //    var result = uint.TryParse(RepeatProductCounter.Status.ToString(), out value);
+            //    if (result == true)
+            //    {
+            //        value++;
+            //        RepeatProductCounter.Write(value);
+            //    }
+            //}
+            
 
             /*
                 Если проверка прошла успешно добавляем 

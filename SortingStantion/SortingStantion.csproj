@@ -173,6 +173,9 @@
     <Compile Include="Models\ReportBackupFile.cs" />
     <Compile Include="Models\UserAutorizationHistotyItem.cs" />
     <Compile Include="Models\ResultOperation.cs" />
+    <Compile Include="TOOL_WINDOWS\Authorization\windowAuthorizationSuperUser.xaml.cs">
+      <DependentUpon>windowAuthorizationSuperUser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TOOL_WINDOWS\windiwInformation\windiwInformation.xaml.cs">
       <DependentUpon>windiwInformation.xaml</DependentUpon>
     </Compile>
@@ -294,6 +297,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FRAMES\frameSettings\windowExit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TOOL_WINDOWS\Authorization\windowAuthorizationSuperUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

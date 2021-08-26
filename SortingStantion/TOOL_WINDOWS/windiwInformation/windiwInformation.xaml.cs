@@ -102,7 +102,7 @@ namespace SortingStantion.TOOL_WINDOWS.windiwInformation
             //Посторонний продукт
             if (isvalid == false)
             {
-                message = "Посторонний продукт";
+                message = "Посторонний код";
                 ShowMessage(message);
                 return;
             }

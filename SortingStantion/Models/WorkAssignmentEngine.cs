@@ -480,17 +480,17 @@ namespace SortingStantion.Models
                 }
 
                 //Проверка lineNum
-                if (string.IsNullOrEmpty(workAssignment.lineNum) == true)
-                {
-                    action = () =>
-                    {
-                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не заполнено поле: LineNum", DataBridge.myRed);
-                        DataBridge.MSGBOX.Add(messageItem);
-                    };
-                    DataBridge.UIDispatcher.Invoke(action);
+                //if (string.IsNullOrEmpty(workAssignment.lineNum) == true)
+                //{
+                //    action = () =>
+                //    {
+                //        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не заполнено поле: LineNum", DataBridge.myRed);
+                //        DataBridge.MSGBOX.Add(messageItem);
+                //    };
+                //    DataBridge.UIDispatcher.Invoke(action);
 
-                    return false;
-                }
+                //    return false;
+                //}
 
                 //Проверка lotNo
                 if (string.IsNullOrEmpty(workAssignment.lotNo) == true)
@@ -583,11 +583,13 @@ namespace SortingStantion.Models
 
 
                         //Вызываем окно авторизации
-                        SortingStantion.UserAdmin.frameAuthorization frameAuthorization = new SortingStantion.UserAdmin.frameAuthorization();
-                        frameAuthorization.ShowDialog();
+                        //Вызов окна для авторизации мастера
+                        SortingStantion.TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser();
+                        windowAuthorizationSuperUser.Owner = DataBridge.MainScreen;
+                        windowAuthorizationSuperUser.ShowDialog();
 
                         //Если результат авторизации не удачный, выходим
-                        if (frameAuthorization.AuthorizationResult == false)
+                        if (windowAuthorizationSuperUser.AuthorizationResult == false)
                         {
                             return; 
                         }
@@ -645,12 +647,14 @@ namespace SortingStantion.Models
                     }
 
 
-                    //Вызов окна авторизации
-                    SortingStantion.UserAdmin.frameAuthorization frameAuthorization = new SortingStantion.UserAdmin.frameAuthorization();
-                    frameAuthorization.ShowDialog();
+                    //Вызываем окно авторизации
+                    //Вызов окна для авторизации мастера
+                    SortingStantion.TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser();
+                    windowAuthorizationSuperUser.Owner = DataBridge.MainScreen;
+                    windowAuthorizationSuperUser.ShowDialog();
 
                     //Если результат авторизации не удачный, выходим
-                    if (frameAuthorization.AuthorizationResult == false)
+                    if (windowAuthorizationSuperUser.AuthorizationResult == false)
                     {
                         return;
                     }
@@ -674,7 +678,6 @@ namespace SortingStantion.Models
                         REPEAT_COUNTER.Write(0);
                         DEFECT_COUNTER.Write(0);
 
-
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(false);
 
@@ -691,35 +694,27 @@ namespace SortingStantion.Models
                         DataBridge.Report.Save("ReportArchive");
 
                         //Сброс результата 
-                        try
+                        //Отправка результата в отдельном
+                        //выделеном потоке
+                        DataBridge.Report.SendReport();
+
+                        //Уведомление подписчиков о завершении задания
+                        WorkOrderCompletionNotification?.Invoke(SelectedWorkAssignment);
+
+                        //Сохранение завершенного задания в файл
+                        SelectedWorkAssignment.Save("OrdersArhive");
+
+                        var fn = $@"Orders\{SelectedWorkAssignment.ID}.txt";
+
+                        //Удаление файла с заданием из папки Orders
+                        //по завершению задания
+                        if (File.Exists(fn))
                         {
-                            //Отправка результата ассинхронно
-                            var task = DataBridge.Report.SendReport();
-                            task.Wait();
-                            var result = task.Result;
-
-                            if (result == false)
-                            {
-                                DataBridge.Report.Save("Report");
-                            }
-                            
-
-                            //Уведомление подписчиков о завершении задания
-                            WorkOrderCompletionNotification?.Invoke(SelectedWorkAssignment);
-
-                            //Сохранение завершенного задания в файл
-                            SelectedWorkAssignment.Save("OrdersArhive");
-
-                            //Очистка буфера заданий
-                            WorkAssignments.Clear();                            
+                            File.Delete(fn);
                         }
-                        catch (Exception ex)
-                        {
-                            //Запись в базу данных
-                            message = $"Ошибка отправки отчета";
-                            msg = new UserMessage(message, DataBridge.myRed);
-                            DataBridge.MSGBOX.Add(msg);
-                        }
+
+                        //Очистка буфера заданий
+                        WorkAssignments.Clear();
                     };
 
                     var wcr = new windowClearCollectionRequest(action);

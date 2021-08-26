@@ -154,6 +154,18 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
             {
                 message = $"Продукт номер {serialnumber} уже числиться в браке.";
                 ShowMessage(message, DataBridge.myBlue);
+                DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
+                return;
+            }
+
+            /*
+                Продукт содержится в рузультате
+            */
+            if (DataBridge.Report.AsAResult(serialnumber) == true)
+            {
+                message = $"Продукт номер {serialnumber} перемещен из результата в брак.";
+                ShowMessage(message, DataBridge.myOrange);
+                DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
                 return;
             }
 
@@ -165,18 +177,18 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
             /*
                 Текст сообщения
             */
-            message = $"Продукт номер {serialnumber} перемещен из результата в брак.";
-
-            /*
-                Добавление в базу данных (лог) записи
-            */
-            DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
+            message = $"Продукт номер {serialnumber} добавлен в брак.";
 
             /*
                 Добавление сообщения в зону информации
             */
             ShowMessage(message, DataBridge.myOrange);
 
+            /*
+                Добавление в базу данных (лог) записи
+            */
+            DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
+            
 
             //Инкремент счетчика отбракованых изделий вручную
             var value = Convert.ToInt32(QUANTITY_PRODUCTS_MANUAL_REJECTED.Status) + 1;

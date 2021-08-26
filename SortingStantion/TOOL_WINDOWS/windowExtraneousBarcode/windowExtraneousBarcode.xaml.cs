@@ -137,7 +137,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode
             /*
                Продукт «s/n» доступен для сериализации
             */
-            message = $"Продукт {serialnumber} доступен для сериализации.";
+            message = $"Продукт GTIN {gtin} номер {serialnumber} доступен для сериализации.";
             ShowMessage(message, DataBridge.myRed);
 
 

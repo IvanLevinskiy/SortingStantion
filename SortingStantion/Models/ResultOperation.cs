@@ -8,6 +8,8 @@ using System.Net;
 using System.Collections.ObjectModel;
 using S7Communication;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Media;
 
 namespace SortingStantion.Models
 {
@@ -339,7 +341,7 @@ namespace SortingStantion.Models
 
             //Если кода повтора нет, удаляем код
             //из результата
-            RemoteCode(serialnumber);
+            //RemoteCode(serialnumber);
 
 
             //Удаление из счетчика выпущеных продуктов
@@ -573,10 +575,20 @@ namespace SortingStantion.Models
 
         /// <summary>
         /// метод для отправки отчета
+        /// Выполняется в отдельном потоке
         /// </summary>
-        async public Task<bool> SendReport()
+        public void SendReport()
         {
+            Thread thread = new Thread(SendReportToL3);
+            thread.IsBackground = true;
+            thread.Start();
+        }
 
+        /// <summary>
+        /// Метод для отправки результата на L3
+        /// </summary>
+        void SendReportToL3()
+        {
             //Результат операции отправки
             //отчета
             bool resultoperation = false;
@@ -592,23 +604,23 @@ namespace SortingStantion.Models
             httpWebRequest.ContentType = "applicaion/json";
             httpWebRequest.Method = "POST";
 
-            //Отправка отчета конечному получателю
-            using (var sw = new StreamWriter(httpWebRequest.GetRequestStream()))
+            try
             {
-                string json = Serialize();
-
-                //Если ответ не сериализирован, выходим
-                if (string.IsNullOrEmpty(json) == true)
+                //Отправка отчета конечному получателю
+                using (var sw = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
-                    return false;
+                    string json = Serialize();
+
+                    //Если ответ не сериализирован, выходим
+                    if (string.IsNullOrEmpty(json) == true)
+                    {
+                        return;
+                    }
+
+                    //Запись данных в поток вывода
+                    sw.Write(json);
                 }
 
-                sw.Write(json);
-            }
-
-            //Запуск ассинхронной задачи
-            await Task.Run(() =>
-            {
                 //Прием ответа от получателя отчетов
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 using (var sr = new StreamReader(httpResponse.GetResponseStream()))
@@ -625,11 +637,32 @@ namespace SortingStantion.Models
                         resultoperation = true;
                     }
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                //В случае невозможности отправить
+                //отчет на L3 - созраняем его в папке "Report"
+                this.Save("Report");
 
-           
+                //Вывод сообщения об отправке отчета
+                ShowMessage("Ошибка отправки отчета", DataBridge.myRed);
+            }
 
-            return resultoperation;
+
+        }
+
+        /// <summary>
+        /// Метод для отображения сообщения в зоне информации
+        /// </summary>
+        /// <param name="message"></param>
+        void ShowMessage(string message, Brush color)
+        {
+            Action action = () =>
+            {
+                var msgitem = new UserMessage(message, color);
+                DataBridge.MSGBOX.Add(msgitem);
+            };
+            DataBridge.UIDispatcher.Invoke(action);
         }
 
         /// <summary>

@@ -61,7 +61,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
             this.Owner = DataBridge.MainScreen;
 
             //Формирование правиьного сообщения
-            txMessage.Text = $"     Продукт GTIN {GTIN} номер {serialnumber} считан повторно. Найдите его ручным сканером и удалите с конвейера.";
+            txMessage.Text = $"Продукт GTIN {GTIN} номер {serialnumber} считан повторно. Найдите его ручным сканером и удалите с конвейера.";
 
             //Подписка на события
             this.Closing += Window_Closing;
@@ -165,7 +165,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
             /*
                Продукт «s/n» доступен для сериализации
             */
-            message = $"Продукт {serialnumber} доступен для сериализации.";
+            message = $"Продукт GTIN {gtin} номер {serialnumber} доступен для сериализации.";
             ShowMessage(message, DataBridge.myRed);
         }
 

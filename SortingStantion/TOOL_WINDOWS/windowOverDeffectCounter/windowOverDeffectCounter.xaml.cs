@@ -93,7 +93,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
                 var newvalue = Convert.ToUInt32(arg2);
 
                 //Формирование правиьного сообщения
-                txMessage.Text = $"     Конвейер остановлен после {newvalue} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
+                txMessage.Text = $"Конвейер остановлен после {newvalue} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
 
             };
             DataBridge.UIDispatcher.Invoke(action);
