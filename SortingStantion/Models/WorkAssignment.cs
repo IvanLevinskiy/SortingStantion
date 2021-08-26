@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
+using System.IO;
+using System.Text;
 
 namespace SortingStantion.Models
 {
@@ -83,6 +85,45 @@ namespace SortingStantion.Models
         /// </summary>
         public WorkAssignment()
         {
+
+        }
+
+        /// <summary>
+        /// Метод для сериализации задания
+        /// </summary>
+        /// <returns></returns>
+        string Serialize()
+        {
+            //Сериализация
+            return System.Text.Json.JsonSerializer.Serialize<WorkAssignment>(this);
+        }
+
+        /// <summary>
+        /// Метод для сохранения задания в файл
+        /// </summary>
+        /// <param name="dirName"></param>
+        public void Save(string dirName)
+        {
+            //Если директория не создана
+            //создаем её
+            if (Directory.Exists(dirName) == false)
+            {
+                Directory.CreateDirectory(dirName);
+            }
+
+            //Получение имени файла
+            var filename = $@"{dirName}\{this.ID}.txt";
+
+            //Получение содержимого файла
+            var content = Serialize();
+
+            //Получение массива байт
+            var bytes = Encoding.UTF8.GetBytes(content);
+
+            //Запись данных в файл
+            FileStream fs = new FileStream(filename, FileMode.OpenOrCreate);
+            fs.Write(bytes, 0, bytes.Length);
+            fs.Close();
 
         }
 

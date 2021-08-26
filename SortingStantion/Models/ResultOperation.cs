@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Collections.ObjectModel;
 using S7Communication;
+using System.Threading.Tasks;
 
 namespace SortingStantion.Models
 {
@@ -506,6 +507,42 @@ namespace SortingStantion.Models
             sr.Close();
         }
 
+        /// <summary>
+        /// Метод для сохранения
+        /// результата в файл в определенную папку
+        /// </summary>
+        public void Save(string dirName)
+        {
+            if (CurrentWorkAssignment == null)
+            {
+                return;
+            }
+
+            //Получение сериализованного отчета
+            var content = Serialize();
+
+            //Если ответ не сериализирован, выходим
+            if (string.IsNullOrEmpty(content) == true)
+            {
+                return;
+            }
+
+            //Если директория не создана
+            //создаем её
+            if (Directory.Exists(dirName) == false)
+            {
+                Directory.CreateDirectory(dirName);
+            }
+
+            //Получение имени файла
+            var filename = $@"{dirName}\{this.ID}.txt";
+
+            //Сохранение файла
+            StreamWriter sr = new StreamWriter($@"{filename}");
+            sr.Write(content);
+            sr.Close();
+        }
+
         async void Load()
         {
             //Если файла нет, выходим из функции
@@ -537,10 +574,8 @@ namespace SortingStantion.Models
         /// <summary>
         /// метод для отправки отчета
         /// </summary>
-        public bool SendReport()
+        async public Task<bool> SendReport()
         {
-            Reset();
-            return true;
 
             //Результат операции отправки
             //отчета
@@ -571,22 +606,28 @@ namespace SortingStantion.Models
                 sw.Write(json);
             }
 
-            //Прием ответа от получателя отчетов
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var sr = new StreamReader(httpResponse.GetResponseStream()))
+            //Запуск ассинхронной задачи
+            await Task.Run(() =>
             {
-                var result = sr.ReadToEnd();
-
-                //Если в ответа содержится 201
-                //возвращаем true
-                if (result.Contains("201"))
+                //Прием ответа от получателя отчетов
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var sr = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    //Сброс текущего результата
-                    Reset();
+                    var result = sr.ReadToEnd();
 
-                    resultoperation = true;
+                    //Если в ответа содержится 201
+                    //возвращаем true
+                    if (result.Contains("201"))
+                    {
+                        //Сброс текущего результата
+                        Reset();
+
+                        resultoperation = true;
+                    }
                 }
-            }
+            });
+
+           
 
             return resultoperation;
         }

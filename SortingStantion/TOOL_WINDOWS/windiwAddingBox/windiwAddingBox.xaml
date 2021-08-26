@@ -50,8 +50,7 @@
         </Grid>-->
 
         <!--КНОПКА - Закрыть-->
-        <Button x:Name="btnCloseClick"
-                Height="50"
+        <Button Height="50"
                 Width="300"
                 VerticalAlignment="Bottom"
                 HorizontalAlignment="Center"

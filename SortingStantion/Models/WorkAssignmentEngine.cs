@@ -391,7 +391,6 @@ namespace SortingStantion.Models
         public event Action<WorkAssignment> NewWorkOrderHasArrivedNotification;
 
 
-
         /// <summary>
         /// Конструктор класса
         /// </summary>
@@ -437,7 +436,12 @@ namespace SortingStantion.Models
             };
         }
 
-       
+       /// <summary>
+       /// Метод для проверки задания на наличае
+       /// всех полей
+       /// </summary>
+       /// <param name="workAssignment"></param>
+       /// <returns></returns>
         bool CheckTask(WorkAssignment workAssignment)
         {
             //Результат проверки
@@ -610,6 +614,10 @@ namespace SortingStantion.Models
                         var msg = new UserMessage(message, MSGTYPE.SUCCES);
                         DataBridge.MSGBOX.Add(msg);
 
+                        //Сохранение принятого задания в файл
+                        SelectedWorkAssignment.Save("Orders");
+
+                        //Выход из функции
                         return;
                     }
                 },
@@ -679,14 +687,30 @@ namespace SortingStantion.Models
                         var msg = new UserMessage(message, MSGTYPE.SUCCES);
                         DataBridge.MSGBOX.Add(msg);
 
+                        //Сохранение отчета
+                        DataBridge.Report.Save("ReportArchive");
+
                         //Сброс результата 
                         try
                         {
-                            DataBridge.Report.SendReport();
+                            //Отправка результата ассинхронно
+                            var task = DataBridge.Report.SendReport();
+                            task.Wait();
+                            var result = task.Result;
+
+                            if (result == false)
+                            {
+                                DataBridge.Report.Save("Report");
+                            }
+                            
 
                             //Уведомление подписчиков о завершении задания
                             WorkOrderCompletionNotification?.Invoke(SelectedWorkAssignment);
 
+                            //Сохранение завершенного задания в файл
+                            SelectedWorkAssignment.Save("OrdersArhive");
+
+                            //Очистка буфера заданий
                             WorkAssignments.Clear();                            
                         }
                         catch (Exception ex)
@@ -699,8 +723,6 @@ namespace SortingStantion.Models
                     };
 
                     var wcr = new windowClearCollectionRequest(action);
-
-
 
 
                     return;
@@ -832,7 +854,6 @@ namespace SortingStantion.Models
             // останавливаем прослушивание подключений
             listener.Stop();
         }
-
 
         #region Реализация интерфейса INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
