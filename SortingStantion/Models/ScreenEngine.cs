@@ -1,4 +1,5 @@
-﻿using SortingStantion.TOOL_WINDOWS.windiwInformation;
+﻿using SortingStantion.Controls;
+using SortingStantion.TOOL_WINDOWS.windiwInformation;
 using SortingStantion.TOOL_WINDOWS.windowAddDeffect;
 using SortingStantion.TOOL_WINDOWS.windowClearCollectionRequest;
 using SortingStantion.Utilites;
@@ -122,6 +123,16 @@ namespace SortingStantion.Models
                 {
                     Action action = () =>
                     {
+                        //Проверка - работает ли линия
+                        if (DataBridge.Conveyor.LineIsRun == true)
+                        {
+                            customMessageBox mb = new customMessageBox("Ошибка", "Линия в работе, перед завершением остановите конвейер.");
+                            mb.Owner = DataBridge.MainScreen;
+                            mb.ShowDialog();
+
+                            return;
+                        }
+
                         frameSettings.windowExit windowExit = new frameSettings.windowExit();
                         windowExit.Owner = DataBridge.MainScreen;
                         windowExit.ShowDialog();

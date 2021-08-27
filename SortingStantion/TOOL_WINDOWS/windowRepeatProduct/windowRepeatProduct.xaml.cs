@@ -117,19 +117,6 @@ namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
             }
 
             /*
-                Продукт в результате 
-            */
-            if (DataBridge.Report.AsAResult(serialnumber) == true)
-            {
-                //Вывод сообщения в окно информации
-                message = $"Продукт GTIN {gtin} номер {serialnumber} в результате.";
-                ShowMessage(message, DataBridge.myRed);
-
-                //Выход из функции
-                return;
-            }
-
-            /*
                Продукт в браке
             */
             if (DataBridge.Report.IsDeffect(serialnumber) == true)
@@ -144,8 +131,17 @@ namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
             */
             if (DataBridge.Report.IsRepeat(serialnumber) == true)
             {
+                var brush = DataBridge.myRed;
+
+                //Если мы считали тот код, на котором
+                //возникла ошибка - выводим сообщение на зеленом фоне
+                if (serialnumber == this.serialnumber)
+                {
+                    brush = DataBridge.myGreen;
+                }
+
                 message = $"Продукт номер {serialnumber} считан повторно. Удалите его с конвейера.";
-                ShowMessage(message, DataBridge.myGreen);
+                ShowMessage(message, brush);
                 return;
             }
 
@@ -161,6 +157,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
                 //Выход из функции
                 return;
             }
+
 
             /*
                Продукт «s/n» доступен для сериализации

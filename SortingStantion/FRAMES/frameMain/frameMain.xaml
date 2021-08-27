@@ -583,6 +583,11 @@
 
                 </Grid>
 
+                <!--БЛОКИРОВКА ДОСТУПА К КОНТРОЛАМ-->
+                <Rectangle Fill="Transparent"
+                           Grid.ColumnSpan="3"
+                           Grid.RowSpan="2"/>
+
             </Grid>
 
             <!--КНОПКИ-->
@@ -721,6 +726,10 @@
                             <sys:String>dffdfdf</sys:String>
                         </ListView.Items>-->
                     </ListView>
+    
+                    <!--Элемент, закрывающий доступ пользователя
+                    к списку-->
+                    <Rectangle Fill="Transparent"/>
                 </Grid>
 
 

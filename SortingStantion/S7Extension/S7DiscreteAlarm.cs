@@ -43,6 +43,9 @@ namespace SortingStantion.S7Extension
 
         }
 
+        bool oldstatus = false;
+        bool newstatus = false;
+
         /// <summary>
         /// Метод, вызываемый при изминении
         /// значения базового тэга
@@ -53,14 +56,19 @@ namespace SortingStantion.S7Extension
 
             Action action = () =>
             {
+                newstatus = ToBool(newvalue);
+
                 //Если новое значение не bool - выходим
-                if (newvalue is bool == false)
+                if (oldstatus == newstatus)
                 {
                     return;
                 }
 
+                oldstatus = newstatus;
+
+
                 //Если новое значение true, добавляем сообщение
-                if ((bool)newvalue == true)
+                if (newstatus == true)
                 {
                     msg = new UserMessage(Message, MSGTYPE.ERROR);
                     DataBridge.MSGBOX.Add(msg);
@@ -71,7 +79,7 @@ namespace SortingStantion.S7Extension
                 }
 
                 //Если новое значение false, удаляем сообщение
-                if ((bool)newvalue == false)
+                if (newstatus == false)
                 {
                     DataBridge.MSGBOX.Remove(msg);
                     return;
@@ -81,6 +89,16 @@ namespace SortingStantion.S7Extension
             DataBridge.UIDispatcher.BeginInvoke(action);
 
             
+        }
+
+        bool ToBool(object obj)
+        {
+            if (obj is bool == false)
+            {
+                return false;
+            }
+
+            return bool.Parse(obj.ToString());
         }
     }
 }

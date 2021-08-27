@@ -81,7 +81,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Номер GTIN. (14 символов)
         /// </summary>
-        S7_String GTIN_TAG
+        S7_String S7GTIN
         {
             get;
             set;
@@ -90,7 +90,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Наименование продукта (UTF-8)
         /// </summary>
-        S7_String PRODUCT_NAME_TAG
+        S7_String S7ProductName
         {
             get;
             set;
@@ -203,10 +203,10 @@ namespace SortingStantion.Models
             };
 
             //GTIN
-            GTIN_TAG = (S7_String)device.GetTagByAddress("DB1.DBD192-STR40");
-            GTIN_TAG.ChangeValue += (oldvalue, newvalue) =>
+            S7GTIN = (S7_String)device.GetTagByAddress("DB1.DBD192-STR40");
+            S7GTIN.ChangeValue += (oldvalue, newvalue) =>
             {
-                GTIN = GTIN_TAG.StatusText;
+                GTIN = S7GTIN.StatusText;
             };
 
             ///Номер производственной серии
@@ -217,10 +217,10 @@ namespace SortingStantion.Models
             };
 
             //Наименорвание продукта
-            PRODUCT_NAME_TAG = (S7_String)device.GetTagByAddress("DB1.DBD234-STR82");
-            PRODUCT_NAME_TAG.ChangeValue += (oldvalue, newvalue) =>
+            S7ProductName = (S7_String)device.GetTagByAddress("DB1.DBD234-STR82");
+            S7ProductName.ChangeValue += (oldvalue, newvalue) =>
             {
-                Product_Name = PRODUCT_NAME_TAG.StatusText;
+                Product_Name = S7ProductName.StatusText;
             };
 
             NUM_PACKS_IN_BOX_TAG = (S7_Word)device.GetTagByAddress("DB1.DBW362-WORD");
@@ -305,7 +305,7 @@ namespace SortingStantion.Models
             set
             {
                 gtin = value;
-                GTIN_TAG.Write(gtin);
+                S7GTIN.Write(gtin);
                 OnPropertyChanged("GTIN");
             }
         }
@@ -323,7 +323,7 @@ namespace SortingStantion.Models
             set
             {
                 product_Name = value;
-                PRODUCT_NAME_TAG.Write(product_Name);
+                S7ProductName.Write(product_Name);
                 OnPropertyChanged("Product_Name");
             }
         }
@@ -575,6 +575,9 @@ namespace SortingStantion.Models
                     //Если задание не принято в работу
                     if (InWork == false)
                     {
+                        //Очищаем отчет от предыдущих операций
+                        DataBridge.Report.ClearResult();
+
                         //Переночим задание в выбраное задание
                         SelectedWorkAssignment = WorkAssignments[0];
 
@@ -595,9 +598,9 @@ namespace SortingStantion.Models
                         }
 
                         //Запись атрибутов принятого задания в ПЛК
-                        GTIN_TAG.Write(SelectedWorkAssignment.gtin);
+                        S7GTIN.Write(SelectedWorkAssignment.gtin);
                         TASK_ID_TAG.Write(SelectedWorkAssignment.ID);
-                        PRODUCT_NAME_TAG.Write(SelectedWorkAssignment.productName);
+                        S7ProductName.Write(SelectedWorkAssignment.productName);
                         LOT_NO_TAG.Write(SelectedWorkAssignment.lotNo);
                         NUM_PACKS_IN_BOX_TAG.Write(SelectedWorkAssignment.numРacksInBox);
                         NUM_PACKS_IN_SERIES_TAG.Write(SelectedWorkAssignment.numPacksInSeries);
@@ -662,9 +665,9 @@ namespace SortingStantion.Models
                     Action action = () =>
                     {
                         //Стирание данных в ПЛК
-                        GTIN_TAG.Write("");
+                        S7GTIN.Write("");
                         TASK_ID_TAG.Write("");
-                        PRODUCT_NAME_TAG.Write("");
+                        S7ProductName.Write("");
                         LOT_NO_TAG.Write("");
 
                         //Обнуление счетчиков изделий

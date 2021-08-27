@@ -340,7 +340,7 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Вызов окна
                 var windowRepeatProduct = new windowRepeatProduct(scaner_gtin, scaner_serialnumber, msg);
-                windowRepeatProduct.ShowDialog();
+                windowRepeatProduct.Show();
                                
                 //Выход из метода
                 return;

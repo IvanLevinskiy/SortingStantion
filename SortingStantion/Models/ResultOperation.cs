@@ -167,15 +167,30 @@ namespace SortingStantion.Models
             //Подпись на событие по авторизации нового пользователя
             DataBridge.MainAccesLevelModel.ChangeUser += (accesslevel, currentuser) =>
             {
+                //ID последнего зарегестрировашегося пользователя
+                string lastOperatorID = string.Empty;
+
                 //Если оператор имеется,
                 //записываем время когда он вышел из логина
                 if (LastOperator != null)
                 {
                     LastOperator.endTime = DateTime.Now.GetDateTimeFormats()[43];
+                    lastOperatorID = LastOperator.id;
                 }
 
                 var historyitem = new UserAuthorizationHistotyItem(currentuser);
-                operators.Add(historyitem);
+
+                //Добавляем сведения об вторизации нового пользователя, 
+                //1. если изменился оператор
+                var newid = lastOperatorID != historyitem.id;
+
+                //2. задание в работе
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
+                if (newid == true)
+                {
+                    operators.Add(historyitem);
+                }
             };
 
             //Загрузка результата из файла
@@ -271,10 +286,10 @@ namespace SortingStantion.Models
                 Если кодов больше 6
                 удаляем самый ранний
             */
-            //if (AllCodes.Count > 6)
-            //{
-            //    AllCodes.RemoveAt(AllCodes.Count - 1);
-            //}
+            if (AllCodes.Count > 6)
+            {
+                AllCodes.RemoveAt(AllCodes.Count - 1);
+            }
 
             /*
                 Объявление локальных переменных
@@ -328,6 +343,10 @@ namespace SortingStantion.Models
         /// </summary>
         public void AddRepeatProduct(string serialnumber)
         {
+            //Увеличение счетчика повторов
+            AddValue(tag: QUANTITY_REPEAT_PRODUCTS, num: 1);
+
+            //Осуществляем поиск повтора из отчета
             foreach (var repeatPack in repeatPacks)
             {
                 //Если уже есть код продукта, который
@@ -335,18 +354,10 @@ namespace SortingStantion.Models
                 if (repeatPack.num == serialnumber)
                 {
                     repeatPack.quantity ++;
+
                     return;
                 }
             }
-
-            //Если кода повтора нет, удаляем код
-            //из результата
-            //RemoteCode(serialnumber);
-
-
-            //Удаление из счетчика выпущеных продуктов
-            //количества удаленных продуктов
-            AddQuantityProducts(num: -1);
 
             //Добавляем экземпляр повтора кода
             var repeatPackItem = new RepeatPack()
@@ -367,6 +378,10 @@ namespace SortingStantion.Models
             var  dcounter = RemoteCode(serialnumber);
             RemoteCodeFromFullResult(serialnumber);
             defectiveCodes.Add(serialnumber);
+
+            //Вычитание количества удаленных продуктов
+            //из счетчика выпущеных продуктов
+            AddQuantityProducts( -1 * dcounter);
         }
 
         /// <summary>
@@ -443,6 +458,31 @@ namespace SortingStantion.Models
                 }
 
             }
+        }
+
+        /// <summary>
+        /// Метод для добавления значения тэгу
+        /// </summary>
+        /// <param name="num"></param>
+        void AddValue(S7_DWord tag, int num)
+        {
+            /*
+                   Увеличение счетчика выпущеных
+                   продуктов в результате
+            */
+            int tv = 0;
+            var resultconvertion = int.TryParse(tag.Status.ToString(), out tv);
+
+            //Увеличиваем значение счетчика
+            tv += num;
+
+            //Производим запись нового значения
+            //в тэг
+            if (resultconvertion == true)
+            {
+                tag.Write(tv);
+            }
+            
         }
 
         /// <summary>
@@ -632,7 +672,7 @@ namespace SortingStantion.Models
                     if (result.Contains("201"))
                     {
                         //Сброс текущего результата
-                        Reset();
+                        ClearResult();
 
                         resultoperation = true;
                     }
@@ -666,9 +706,9 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
-        /// Метод для сброса результата операций
+        /// Метод для очистки результата операций
         /// </summary>
-        public void Reset()
+        public void ClearResult()
         {
             //Удаление файла
             if (File.Exists(@"AppData\Task.json") == true)

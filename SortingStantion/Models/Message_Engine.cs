@@ -70,13 +70,14 @@ namespace SortingStantion.Models
             var cm = (UserMessage)_CurrentMessage;
 
             //Если текущее сообщение не ошибка
-            if (cm.Type != MSGTYPE.ERROR)
-            {
+            //ПРИОРИТЕТ СООБЩЕНИЯ ОБ ОШИБКИ
+            //if (cm.Type != MSGTYPE.ERROR)
+            //{
                 _CurrentMessage = msg;
-            }
+            //}
 
-            //Добавляем сообщение в коллекцию
-            M0: MessageList.Add(msg);
+        //Добавляем сообщение в коллекцию
+        M0: MessageList.Add(msg);
 
             //Если сообщений больше 3
             //удаляем самое первое

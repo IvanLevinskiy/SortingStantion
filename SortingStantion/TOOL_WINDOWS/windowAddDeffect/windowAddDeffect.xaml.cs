@@ -159,6 +159,11 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
             }
 
             /*
+                Добавление номера продукта в список брака
+            */
+            DataBridge.Report.AddDeffect(serialnumber);
+
+            /*
                 Продукт содержится в рузультате
             */
             if (DataBridge.Report.AsAResult(serialnumber) == true)
@@ -168,11 +173,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
                 DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
                 return;
             }
-
-            /*
-                Добавление номера продукта в список брака
-            */
-            DataBridge.Report.AddDeffect(serialnumber);
+                        
 
             /*
                 Текст сообщения

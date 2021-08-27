@@ -154,12 +154,12 @@ namespace SortingStantion.TOOL_WINDOWS.windowPusherError
         /// <param name="message"></param>
         void ShowMessage(string message, Brush color)
         {
-            Action action = () =>
-            {
+            //Action action = () =>
+            //{
                 var msgitem = new UserMessage(message, color);
                 DataBridge.MSGBOX.Add(msgitem);
-            };
-            DataBridge.UIDispatcher.Invoke(action);
+            //};
+            //DataBridge.UIDispatcher.Invoke(action);
         }
 
         /// <summary>
