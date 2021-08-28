@@ -10,7 +10,6 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace SortingStantion.Models
 {
@@ -479,19 +478,6 @@ namespace SortingStantion.Models
                     return false;
                 }
 
-                //Проверка lineNum
-                //if (string.IsNullOrEmpty(workAssignment.lineNum) == true)
-                //{
-                //    action = () =>
-                //    {
-                //        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не заполнено поле: LineNum", DataBridge.myRed);
-                //        DataBridge.MSGBOX.Add(messageItem);
-                //    };
-                //    DataBridge.UIDispatcher.Invoke(action);
-
-                //    return false;
-                //}
-
                 //Проверка lotNo
                 if (string.IsNullOrEmpty(workAssignment.lotNo) == true)
                 {
@@ -532,12 +518,6 @@ namespace SortingStantion.Models
                     return false;
                 }
 
-                //Проверка numРacksInBox
-                //if (workAssignment.numРacksInBox == 0)
-                //{
-                //    return false;
-                //}
-
                 //Ели проверка пройдена
                 return true;
             }
@@ -549,8 +529,8 @@ namespace SortingStantion.Models
             };
             DataBridge.UIDispatcher.Invoke(action);
 
-            return false;
-
+            //Возврат отрицательного
+            //результата
             return false;
         }
 
@@ -575,16 +555,6 @@ namespace SortingStantion.Models
                     //Если задание не принято в работу
                     if (InWork == false)
                     {
-                        //Очищаем отчет от предыдущих операций
-                        DataBridge.Report.ClearResult();
-
-                        //Переночим задание в выбраное задание
-                        SelectedWorkAssignment = WorkAssignments[0];
-
-                        //Удаление принятого задания из списка заданий
-                        WorkAssignments.Remove(SelectedWorkAssignment);
-
-
                         //Вызываем окно авторизации
                         //Вызов окна для авторизации мастера
                         SortingStantion.TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser();
@@ -594,8 +564,29 @@ namespace SortingStantion.Models
                         //Если результат авторизации не удачный, выходим
                         if (windowAuthorizationSuperUser.AuthorizationResult == false)
                         {
-                            return; 
+                            return;
                         }
+
+                        //Очищаем отчет от предыдущих операций
+                        DataBridge.Report.ClearResult();
+
+                        //Запись в отчет первого мастера, вошедшего в систему
+                        var currentuser = DataBridge.MainAccesLevelModel.CurrentUser;
+                        var historyitem = new UserAuthorizationHistotyItem(currentuser);
+                        DataBridge.Report.operators.Add(historyitem);
+
+                        //Запись времени, когда принято задание
+                        var timeStart = historyitem.startTime;
+                        DataBridge.Report.startTime = timeStart;
+
+                        //Переночим задание в выбраное задание
+                        SelectedWorkAssignment = WorkAssignments[0];
+
+                        //Удаление принятого задания из списка заданий
+                        WorkAssignments.Remove(SelectedWorkAssignment);
+
+                        //Запись ID в отчет
+                        DataBridge.Report.ID = SelectedWorkAssignment.ID;
 
                         //Запись атрибутов принятого задания в ПЛК
                         S7GTIN.Write(SelectedWorkAssignment.gtin);
@@ -611,11 +602,13 @@ namespace SortingStantion.Models
                         //Уведомление подписчиков о принятии задания
                         WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
 
+                        //Формирование текста сообщения в зоне информации
                         string message = $"Задание {TASK_ID_TAG.StatusText} принято в работу";
 
                         //Запись в базу данных о принятии задания
                         DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
 
+                        //Вывод сообщения в зоне информации
                         var msg = new UserMessage(message, MSGTYPE.SUCCES);
                         DataBridge.MSGBOX.Add(msg);
 
@@ -664,26 +657,6 @@ namespace SortingStantion.Models
 
                     Action action = () =>
                     {
-                        //Стирание данных в ПЛК
-                        S7GTIN.Write("");
-                        TASK_ID_TAG.Write("");
-                        S7ProductName.Write("");
-                        LOT_NO_TAG.Write("");
-
-                        //Обнуление счетчиков изделий
-                        NUM_PACKS_IN_BOX_TAG.Write(0);
-                        NUM_PACKS_IN_SERIES_TAG.Write(0);
-
-                        QUANTITY_WORKSPACE.Write(0);
-                        QUANTITY_BOXS.Write(0);
-                        QUANTITY_WORKSPACE_AUTO_REJECTED.Write(0);
-                        QUANTITY_WORKSPACE_MANUAL_REJECTED.Write(0);
-                        REPEAT_COUNTER.Write(0);
-                        DEFECT_COUNTER.Write(0);
-
-                        //Запись статуса в ПЛК
-                        IN_WORK_TAG.Write(false);
-
                         //Запись в базу данных
                         var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
 
@@ -718,6 +691,27 @@ namespace SortingStantion.Models
 
                         //Очистка буфера заданий
                         WorkAssignments.Clear();
+
+                        //Стирание данных в ПЛК
+                        S7GTIN.Write("");
+                        TASK_ID_TAG.Write("");
+                        S7ProductName.Write("");
+                        LOT_NO_TAG.Write("");
+
+                        //Обнуление счетчиков изделий
+                        NUM_PACKS_IN_BOX_TAG.Write(0);
+                        NUM_PACKS_IN_SERIES_TAG.Write(0);
+
+                        QUANTITY_WORKSPACE.Write(0);
+                        QUANTITY_BOXS.Write(0);
+                        QUANTITY_WORKSPACE_AUTO_REJECTED.Write(0);
+                        QUANTITY_WORKSPACE_MANUAL_REJECTED.Write(0);
+                        REPEAT_COUNTER.Write(0);
+                        DEFECT_COUNTER.Write(0);
+
+                        //Запись статуса в ПЛК
+                        IN_WORK_TAG.Write(false);
+
                     };
 
                     var wcr = new windowClearCollectionRequest(action);
@@ -739,15 +733,15 @@ namespace SortingStantion.Models
             var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
 
             //Регистрация url
-            NetAclChecker.AddAddress("http://192.168.3.97:7080/jobs/");
-            //NetAclChecker.AddAddress("http://localhost:7080/jobs/");
+            //NetAclChecker.AddAddress("http://192.168.3.97:7080/jobs/");
+            NetAclChecker.AddAddress("http://*:7080/jobs/");
 
             //Инициализация экземпляра  listener
             HttpListener listener = new HttpListener();
 
             //Установка адресов  listener
-            listener.Prefixes.Add("http://192.168.3.97:7080/jobs/");
-            //listener.Prefixes.Add("http://localhost:7080/jobs/");
+            //listener.Prefixes.Add("http://192.168.3.97:7080/jobs/");
+            listener.Prefixes.Add("http://*:7080/jobs/");
 
             //Запуск слушателя
             try

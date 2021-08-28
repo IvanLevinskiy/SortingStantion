@@ -667,7 +667,6 @@
                               FontFamily="{StaticResource fontFamilyButtons}"
                               FontSize="{StaticResource fontSizeButtons}"
                               Command="{Binding ShutdownCMD}"
-                              MinAccesLevel="2"
                     />
 
             <Button Grid.Column="1" 

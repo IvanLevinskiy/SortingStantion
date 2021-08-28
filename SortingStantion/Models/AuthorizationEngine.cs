@@ -162,19 +162,28 @@ namespace SortingStantion.Models
                         return false;
                     }
 
-                    //В случае успешной авторизации
-                    CurrentUser = user;
-                    OnPropertyChanged("DisplayName");
-                    ChangeUser?.Invoke((int)CurrentUser.AccesLevel, user);
+                    //Новый уровень доступа
+                    var accesLevel = (int)user.AccesLevel;
 
-                    //Запись в базу данных
+                    //Сообщение
                     var message = $"Авторизован новый пользователь: {user.Name} с уровнем доступа: {user.AccesLevel.ToString()}";
+
+                    //В случае успешной авторизации МАСТЕРА
+                    if (accesLevel < 2)
+                    {
+                        CurrentUser = user;
+                        OnPropertyChanged("DisplayName");
+                        ChangeUser?.Invoke((int)CurrentUser.AccesLevel, user);
+
+                        //Выводим сообщение об успешной авторизации
+                        messageItem = new Controls.UserMessage(message, DataBridge.myGreen);
+                        DataBridge.MSGBOX.Add(messageItem);
+                    }
+                    
+                    //Добавление записи в базу данных
                     DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.ChangeUser);
 
-                    //Выводим сообщение об успешной авторизации
-                    messageItem = new Controls.UserMessage(message, DataBridge.myGreen);
-                    DataBridge.MSGBOX.Add(messageItem);
-
+                    //Возврат результата
                     return true;
                 }
             }

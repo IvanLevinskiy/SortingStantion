@@ -1,13 +1,11 @@
 ﻿using System.Text.Json;
 using SortingStantion.Controls;
-using SortingStantion.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Collections.ObjectModel;
 using S7Communication;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Media;
 
@@ -167,30 +165,52 @@ namespace SortingStantion.Models
             //Подпись на событие по авторизации нового пользователя
             DataBridge.MainAccesLevelModel.ChangeUser += (accesslevel, currentuser) =>
             {
-                //ID последнего зарегестрировашегося пользователя
-                string lastOperatorID = string.Empty;
+                //Если задание не в работое - запись в историю 
+                //регистрации в отчет не заносим
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+                if (inwork == false)
+                {
+                    return;
+                }               
 
-                //Если оператор имеется,
-                //записываем время когда он вышел из логина
+                //Если зарегистрирован не ОПЕРАТОР[0] или не МАСТЕР[1]
+                //сведения о регистрации пользователя в отчет не попадают
+                if (accesslevel > 1)
+                {
+                    return;
+                }
+
+                //Если оператор не изменился, в историю авторизации
+                //мастера не добавляем
+                var lastuser = string.Empty;
+
+                //Если указатель на последнего 
+                //пользователя не null
+                if (LastOperator != null)
+                {
+                    //Запоминаем ID последнего пользователя
+                    lastuser = LastOperator.id;
+                }
+
+                //Если последний оператор не
+                //поменялся
+                if (currentuser.ID == lastuser)
+                {
+                    return;
+                }
+
+                //Сохраняем время завершения работы
+                //предыдущего мастера
                 if (LastOperator != null)
                 {
                     LastOperator.endTime = DateTime.Now.GetDateTimeFormats()[43];
-                    lastOperatorID = LastOperator.id;
-                }
+                } 
 
+                //Создаем запись истории регистрации мастера
                 var historyitem = new UserAuthorizationHistotyItem(currentuser);
 
-                //Добавляем сведения об вторизации нового пользователя, 
-                //1. если изменился оператор
-                var newid = lastOperatorID != historyitem.id;
-
-                //2. задание в работе
-                var inwork = DataBridge.WorkAssignmentEngine.InWork;
-
-                if (newid == true)
-                {
-                    operators.Add(historyitem);
-                }
+                //Добавляем запись в журнал
+                operators.Add(historyitem);
             };
 
             //Загрузка результата из файла
