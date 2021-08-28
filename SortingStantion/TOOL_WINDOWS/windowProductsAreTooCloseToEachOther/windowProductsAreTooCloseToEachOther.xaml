@@ -7,8 +7,8 @@
             AllowsTransparency="True" 
         Style="{StaticResource WindowNotExitStyle}"
         WindowStartupLocation="CenterOwner" 
-        Width="700" Height="300"
-        Title="Ошибка. Продукт слишком близко к предыдущему"
+        Width="700" Height="350"
+        Title="Ошибка. Близкий продукт"
         Background="#FF323232">
     <Border BorderBrush="#FF1E1E1E"
             BorderThickness="2" 
@@ -32,7 +32,7 @@
                            TextWrapping="Wrap"
                            FontSize="26"
                            Margin="10,30,10,0"
-                           Text="Продукт слишком близко к предыдущему, удалите его с конвейера">
+                           Text="Продукт на фотодатчике 1 слишком близко к предыдущему. Удалите все продукты с линии между датчиками 1 и 2 и проверьте их коды операцией Справка.">
                 </TextBlock>
 
                 <Button Content="ОK"

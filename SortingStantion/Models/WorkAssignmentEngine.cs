@@ -657,6 +657,9 @@ namespace SortingStantion.Models
 
                     Action action = () =>
                     {
+                        //Запись статуса в ПЛК
+                        IN_WORK_TAG.Write(false);
+
                         //Запись в базу данных
                         var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
 
@@ -709,9 +712,6 @@ namespace SortingStantion.Models
                         REPEAT_COUNTER.Write(0);
                         DEFECT_COUNTER.Write(0);
 
-                        //Запись статуса в ПЛК
-                        IN_WORK_TAG.Write(false);
-
                     };
 
                     var wcr = new windowClearCollectionRequest(action);
@@ -733,15 +733,15 @@ namespace SortingStantion.Models
             var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
 
             //Регистрация url
-            //NetAclChecker.AddAddress("http://192.168.3.97:7080/jobs/");
-            NetAclChecker.AddAddress("http://*:7080/jobs/");
+            NetAclChecker.AddAddress("http://192.168.3.97:7080/jobs/");
+            //NetAclChecker.AddAddress("http://*:7080/jobs/");
 
             //Инициализация экземпляра  listener
             HttpListener listener = new HttpListener();
 
             //Установка адресов  listener
-            //listener.Prefixes.Add("http://192.168.3.97:7080/jobs/");
-            listener.Prefixes.Add("http://*:7080/jobs/");
+            listener.Prefixes.Add("http://192.168.3.97:7080/jobs/");
+            //listener.Prefixes.Add("http://*:7080/jobs/");
 
             //Запуск слушателя
             try

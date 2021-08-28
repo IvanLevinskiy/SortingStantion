@@ -62,7 +62,6 @@ namespace SortingStantion.TOOL_WINDOWS.windowClearCollectionRequest
             //Инициализация тэга - количество невыпущенных продуктов
             ProductCollectionLenght = (S7_DWord)device.GetTagByAddress("DB5.DBD0-DWORD");
 
-
             //Тэг для очистки коллекции изделий
             CLEAR_ITEMS_COLLECTION_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX98.2");
 
