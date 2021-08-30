@@ -91,7 +91,7 @@ namespace SortingStantion.Controls
                 //Если сервер не проинициализирован - инициализируем его
                 if (DataBridge.S7Server == null)
                 {
-                    DataBridge.CreateSimaticServer();
+                    DataBridge.CreateSimaticClient();
                 }
 
                 S7TAG = DataBridge.S7Server.Devices[0].GetTagByAddress(address);
@@ -103,7 +103,7 @@ namespace SortingStantion.Controls
                 }
 
                 //Подписка на изменение значение тэга
-                S7TAG.DataUpdated += S7TAG_ChangeValue;
+                S7TAG.ChangeValue += S7TAG_ChangeValue;
 
                 //Подписка на возобновление соединения с ПЛК
                 S7TAG.device.GotConnection += Device_GotConnection;
@@ -193,7 +193,7 @@ namespace SortingStantion.Controls
         /// состояния тэга
         /// </summary>
         /// <param name="obj"></param>
-        private void S7TAG_ChangeValue(object newvalue)
+        private void S7TAG_ChangeValue(object oldvalue, object newvalue)
         {
             SetText(S7TAG.StatusText);
         }
@@ -238,7 +238,7 @@ namespace SortingStantion.Controls
             originalsourse.Text = text;
 
             //Возвращаем подписку на изменение регистра
-            S7TAG.DataUpdated += S7TAG_ChangeValue;
+            S7TAG.ChangeValue += S7TAG_ChangeValue;
         }
 
         /// <summary>
@@ -413,7 +413,7 @@ namespace SortingStantion.Controls
             //значения тэга
             if (S7TAG != null)
             {
-                S7TAG.DataUpdated -= S7TAG_ChangeValue;
+                S7TAG.ChangeValue -= S7TAG_ChangeValue;
             }
         }
 

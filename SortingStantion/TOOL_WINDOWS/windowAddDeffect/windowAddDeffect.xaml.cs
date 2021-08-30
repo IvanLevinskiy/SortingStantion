@@ -23,7 +23,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
         /// <summary>
         /// Указатель на главный Simatic TCP сервер
         /// </summary>
-        SimaticServer server
+        SimaticClient server
         {
             get
             {
