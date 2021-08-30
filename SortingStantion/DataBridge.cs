@@ -177,7 +177,7 @@ namespace SortingStantion
         /// <summary>
         /// Класс, осуществляющий формирование отчета
         /// </summary>
-        public static ResultOperation Report = new ResultOperation();
+        public static Report Report = new Report();
 
         /// <summary>
         /// Модель, осуществляющая взаимодействие со звуковым излучателем

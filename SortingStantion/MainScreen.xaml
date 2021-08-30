@@ -23,15 +23,15 @@
 
     <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
         <!--<Viewbox>-->
             <!--ГЛАВНЫЙ ЭКРАН-->
-        <Grid Background="#FF262626">
-            <ContentControl Content="{Binding ScreenEngine.CurrentScreen}"/>
-        </Grid>
+        <Viewbox>
+            <Grid Background="#FF262626"
+               Height="768" Width="1024">
+                <ContentControl Content="{Binding ScreenEngine.CurrentScreen}"/>
+            </Grid>
+        </Viewbox>
+      
         <!--</Viewbox>-->
     </Grid>
 

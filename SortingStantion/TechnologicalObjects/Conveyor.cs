@@ -176,16 +176,8 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         public void Start()
         {
-            //Если статус не является
-            //булевым значением - игнорируем обработку
-            //команды
-            if (Run.Status is bool? == false)
-            {
-                Run.Status = false;
-            }
-
             //Если конвейер остановлен, запускаем его
-            if ((bool?)Run.Status == false)
+            if (Run.Value == false)
             {
                 //Если задание принято, то запускаем линию
                 //иначе уведомляем оператора сообщением
@@ -231,16 +223,8 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         public void Stop()
         {
-            //Если статус не является
-            //булевым значением - игнорируем обработку
-            //команды
-            if (Run.Status is bool? == false)
-            {
-                return;
-            }
-
             //Если конвейер запущен - останавливаем его
-            if ((bool?)Run.Status == true)
+            if (Run.Value == true)
             {
                 //Запись статуса в ПЛК
                 Run.Write(false);
@@ -337,7 +321,7 @@ namespace SortingStantion.TechnologicalObjects
         {
             //Получение текущего состояния работы линии
             //в нормальном режиме
-            IsRunStateCureentValue = ToBool(Run.Status);
+            IsRunStateCureentValue = ToBool(Run.Value);
 
             //Если состояние работы линии в нормальном режиме
             //не изменилось, покидаем функцию

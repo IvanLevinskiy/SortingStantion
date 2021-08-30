@@ -82,7 +82,7 @@ namespace SortingStantion.MainScreen
         /// <summary>
         /// Модель для создания результата операции
         /// </summary>
-        public ResultOperation ResultOperation
+        public Report ResultOperation
         {
             get
             {

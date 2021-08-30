@@ -53,6 +53,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="S7Communication, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\S7Communication.dll</HintPath>
+    </Reference>
     <Reference Include="Sharp7, Version=1.1.79.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Sharp7.1.1.79\lib\net40\Sharp7.dll</HintPath>
     </Reference>
@@ -168,7 +172,7 @@
     <Compile Include="Models\RepeatPack.cs" />
     <Compile Include="Models\ReportBackupFile.cs" />
     <Compile Include="Models\UserAutorizationHistotyItem.cs" />
-    <Compile Include="Models\ResultOperation.cs" />
+    <Compile Include="Models\Report.cs" />
     <Compile Include="TOOL_WINDOWS\Authorization\windowAuthorizationSuperUser.xaml.cs">
       <DependentUpon>windowAuthorizationSuperUser.xaml</DependentUpon>
     </Compile>

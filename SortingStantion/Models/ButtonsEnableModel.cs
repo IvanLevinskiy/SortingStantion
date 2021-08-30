@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using S7Communication;
+using System.ComponentModel;
 
 namespace SortingStantion.Models
 {
@@ -7,6 +8,28 @@ namespace SortingStantion.Models
     /// </summary>
     public class ButtonsEnableModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Указатель на главный Simatic TCP сервер
+        /// </summary>
+        SimaticClient server
+        {
+            get
+            {
+                return DataBridge.S7Server;
+            }
+        }
+
+        /// <summary>
+        /// Указатель на экземпляр ПЛК
+        /// </summary>
+        SimaticDevice device
+        {
+            get
+            {
+                return server.Devices[0];
+            }
+        }
+
         /// <summary>
         /// Флаг, разрешающий использовать кнопку
         /// "НАСТРОЙКИ"
@@ -483,6 +506,22 @@ namespace SortingStantion.Models
             //Подпись на событие по завершению задания
             //и отправке результата
             DataBridge.WorkAssignmentEngine.WorkOrderCompletionNotification += (o) =>
+            {
+                OnPropertyChanged("BtnSettingsEnable");
+                OnPropertyChanged("BtnAutorizationEnable");
+
+                OnPropertyChanged("BtnAcceptTaskEnable");
+                OnPropertyChanged("BtnFinishTaskEnable");
+
+                OnPropertyChanged("BtnStartEnable");
+                OnPropertyChanged("BtnStopEnable");
+
+                OnPropertyChanged("BtnToolsEnable");
+            };
+
+            //Инициализация тэгов
+            var IN_WORK_TAG = (S7_Boolean)device.GetTagByAddress("DB1.DBX148.0");
+            IN_WORK_TAG.ChangeValue += (oldvalue, newvalue) =>
             {
                 OnPropertyChanged("BtnSettingsEnable");
                 OnPropertyChanged("BtnAutorizationEnable");

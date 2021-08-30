@@ -72,10 +72,8 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
             //надо разместить окна
             this.Owner = DataBridge.MainScreen;
 
-            var newvalue = Convert.ToUInt32(DEFFECT_PRODUCTS_COUNTER.Status);
-
             //Формирование правиьного сообщения
-            txMessage.Text = $"Конвейер остановлен после {newvalue} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
+            txMessage.Text = $"Конвейер остановлен после {DEFFECT_PRODUCTS_COUNTER.Value} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
 
             //Подписка на события
             this.Closing += Window_Closing;
@@ -90,11 +88,8 @@ namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
         {
             Action action = () =>
             {
-                var newvalue = Convert.ToUInt32(arg2);
-
                 //Формирование правиьного сообщения
-                txMessage.Text = $"Конвейер остановлен после {newvalue} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
-
+                txMessage.Text = $"Конвейер остановлен после {DEFFECT_PRODUCTS_COUNTER.Value} продуктов, отбракованных подряд. Уберите все продукты между сканером и отбраковщиком, они не будут добавлены в результат.";
             };
             DataBridge.UIDispatcher.Invoke(action);
         }

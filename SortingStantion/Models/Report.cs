@@ -14,7 +14,7 @@ namespace SortingStantion.Models
     /// <summary>
     /// Класс, реализующий результат операций
     /// </summary>
-    public class ResultOperation
+    public class Report
     {
         /// <summary>
         /// Уникальный идентификатор задания. 
@@ -133,7 +133,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public ResultOperation()
+        public Report()
         {
             //Инициализация тэга - повтор продуктов
             QUANTITY_REPEAT_PRODUCTS = (S7_DWord)device.GetTagByAddress("DB1.DBD36-DWORD");
@@ -151,7 +151,7 @@ namespace SortingStantion.Models
             //Подпись на событие по принятию задания
             DataBridge.WorkAssignmentEngine.WorkOrderAcceptanceNotification += (workAssignment) =>
             {
-                startTime = DateTime.Now.GetDateTimeFormats()[43];
+                //startTime = DateTime.Now.GetDateTimeFormats()[43];
                 CurrentWorkAssignment = workAssignment;
             };
 
@@ -595,7 +595,7 @@ namespace SortingStantion.Models
             }
 
             //Получение имени файла
-            var filename = $@"{dirName}\{this.ID}.txt";
+            var filename = $@"{dirName}\{DataBridge.WorkAssignmentEngine.TaskID}.txt";
 
             //Сохранение файла
             StreamWriter sr = new StreamWriter($@"{filename}");
