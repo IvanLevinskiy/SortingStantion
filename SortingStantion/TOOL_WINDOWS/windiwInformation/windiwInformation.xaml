@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         Background="#FF323232"
         WindowStartupLocation="CenterOwner"
-        Title="Справка" Width="550" Height="250">
+        Title="Справка" Width="640" Height="200">
     <Grid >
 
         <Grid Height="50"

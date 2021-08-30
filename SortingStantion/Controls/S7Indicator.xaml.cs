@@ -15,7 +15,7 @@ namespace SortingStantion.Controls
         /// <summary>
         /// Указатель на главный Simatic TCP сервер
         /// </summary>
-        SimaticServer server
+        SimaticClient server
         {
             get
             {
@@ -87,35 +87,19 @@ namespace SortingStantion.Controls
         /// <param name="arg2"></param>
         private void Tag_ChangeValue(object arg1, object arg2)
         {
-            //Если значение не является bool
-            if (arg1 is bool == false)
-            {
-                return;
-            }
-
-            //Приведение типов
-            bool oldvalue = (bool)arg1;
-            bool newvalue = (bool)arg2;
 
             Action action = () =>
             {
                 //Если тэг изменил состояние на TRUE
-                if (newvalue == true)
+                if (tag.Value == true)
                 {
-                    //Костыль
-                    tag.Status = true;
-
                     xContent = IconTrue;
-
                     return;
                 }
 
                 ////Если тэг изменил состояние на FALSE
-                if (newvalue == false)
+                if (tag.Value == false)
                 {
-                    //Костыль
-                    tag.Status = false;
-
                     xContent = IconFalse;
                     return;
                 }

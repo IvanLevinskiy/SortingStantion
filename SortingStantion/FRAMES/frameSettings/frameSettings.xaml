@@ -335,6 +335,7 @@
                            Foreground="{StaticResource TextColor}"/>
 
                             <controls:S7ToggleButton Address="DB1.DBX134.0"
+                                                     IsEnabled="True"
                                                      Style="{StaticResource s7ToggleButton}"
                                                      VerticalContentAlignment="Center"
                                                      Width="80"
@@ -667,7 +668,7 @@
                               FontFamily="{StaticResource fontFamilyButtons}"
                               FontSize="{StaticResource fontSizeButtons}"
                               Command="{Binding ShutdownCMD}"
-                    />
+                              IsEnabled="True"/>
 
             <Button Grid.Column="1" 
                     Content="" 

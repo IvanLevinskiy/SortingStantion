@@ -18,7 +18,7 @@ namespace SortingStantion.TechnologicalObjects
         /// <summary>
         /// Указатель на главный Simatic TCP сервер
         /// </summary>
-        public SimaticServer server
+        public SimaticClient server
         {
             get
             {
@@ -84,12 +84,7 @@ namespace SortingStantion.TechnologicalObjects
         {
             get 
             {
-                if (Run.Status is bool? == false)
-                {
-                    return false;
-                }
-
-                return (bool)Run.Status == true;
+                return Run.Value;
             }
         }
 
@@ -101,29 +96,7 @@ namespace SortingStantion.TechnologicalObjects
         {
             get
             {
-                if (RunForce.Status is bool? == false)
-                {
-                    return false;
-                }
-
-                return (bool)RunForce.Status == true;
-            }
-        }
-
-        /// <summary>
-        /// Флаг, указывающий, что
-        /// линия остановлена (для View Model)
-        /// </summary>
-        public bool LineIsStop
-        {
-            get
-            {
-                if (Run.Status is bool? == false)
-                {
-                    return false;
-                }
-
-                return (bool)Run.Status == false;
+                return RunForce.Value;
             }
         }
 
@@ -178,6 +151,13 @@ namespace SortingStantion.TechnologicalObjects
                     RunForce.Write(false);
                     ChangeOfStateInForceMode?.Invoke();
                 }
+            };
+
+            //Извещение подписчиков об изменении
+            //состояния работы конвейера
+            RunForce.ChangeValue += (ov, nv) =>
+            {
+                ChangeOfStateInForceMode?.Invoke();
             };
 
             /*
@@ -299,7 +279,6 @@ namespace SortingStantion.TechnologicalObjects
                 return new DelegateCommand((obj) =>
                 {
                     RunForce.Write(true);
-                    ChangeOfStateInForceMode?.Invoke();
                 },
                 (obj) => (true));
             }
@@ -316,7 +295,6 @@ namespace SortingStantion.TechnologicalObjects
                 return new DelegateCommand((obj) =>
                 {
                     RunForce.Write(false);
-                    ChangeOfStateInForceMode?.Invoke();
                 },
                 (obj) => (true));
             }

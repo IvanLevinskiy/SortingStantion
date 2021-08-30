@@ -64,7 +64,7 @@ namespace SortingStantion
         /// <summary>
         /// Simatic tcp сервер
         /// </summary>
-        public static SimaticServer S7Server;
+        public static SimaticClient S7Server;
 
         /// <summary>
         /// Событие, генерируемое по завершению
@@ -97,10 +97,10 @@ namespace SortingStantion
         /// <summary>
         /// Метод для создания Simatic Server
         /// </summary>
-        public static void CreateSimaticServer()
+        public static void CreateSimaticClient()
         {
             //Создаем экземпляр Simatic Server
-            S7Server = new SimaticServer();
+            S7Server = new SimaticClient();
 
             //Получаем ip из настроек
             var ip = SettingsFile.GetValue("PlcIp");

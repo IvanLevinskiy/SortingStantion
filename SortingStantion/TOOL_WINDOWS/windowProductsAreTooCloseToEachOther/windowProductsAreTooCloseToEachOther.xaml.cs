@@ -11,7 +11,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowProductsAreTooCloseToEachOther
         /// <summary>
         /// Указатель на главный Simatic TCP сервер
         /// </summary>
-        SimaticServer server
+        SimaticClient server
         {
             get
             {

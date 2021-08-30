@@ -24,7 +24,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Указатель на главный Simatic TCP сервер
         /// </summary>
-        SimaticServer server
+        SimaticClient server
         {
             get
             {
@@ -286,7 +286,7 @@ namespace SortingStantion.Models
             set
             {
                 taskID = value;
-                TASK_ID_TAG.Write(value);
+                //TASK_ID_TAG.Write(value);
                 OnPropertyChanged("TaskID");
             }
         }
@@ -304,7 +304,7 @@ namespace SortingStantion.Models
             set
             {
                 gtin = value;
-                S7GTIN.Write(gtin);
+                //S7GTIN.Write(gtin);
                 OnPropertyChanged("GTIN");
             }
         }
@@ -322,7 +322,7 @@ namespace SortingStantion.Models
             set
             {
                 product_Name = value;
-                S7ProductName.Write(product_Name);
+                //S7ProductName.Write(product_Name);
                 OnPropertyChanged("Product_Name");
             }
         }
@@ -340,7 +340,7 @@ namespace SortingStantion.Models
             set
             {
                 lot_No = value;
-                LOT_NO_TAG.Write(lot_No);
+                //LOT_NO_TAG.Write(lot_No);
                 OnPropertyChanged("Lot_No");
             }
         }

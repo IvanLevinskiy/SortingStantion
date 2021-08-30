@@ -27,17 +27,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Viewbox>
+        <!--<Viewbox>-->
             <!--ГЛАВНЫЙ ЭКРАН-->
-            <Grid Grid.Row="1"
-                  Height="768" 
-                  Width="1024"
-                  Background="#FF262626">
-
-                <ContentControl Content="{Binding ScreenEngine.CurrentScreen}"/>
-
-            </Grid>
-        </Viewbox>
+        <Grid Background="#FF262626">
+            <ContentControl Content="{Binding ScreenEngine.CurrentScreen}"/>
+        </Grid>
+        <!--</Viewbox>-->
     </Grid>
 
 </Window>

@@ -93,7 +93,7 @@ namespace SortingStantion.MainScreen
         /// <summary>
         /// Указатель на главный Simatic TCP сервер
         /// </summary>
-        public SimaticServer server
+        public SimaticClient server
         {
             get
             {

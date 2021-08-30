@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         Background="#FF323232"
         WindowStartupLocation="CenterOwner"
-        Title="Ручное добавление продукта." Width="550" Height="250">
+        Title="Ручное добавление продукта." Width="640" Height="200">
     <Grid >
 
         <Grid Height="50"
@@ -18,7 +18,7 @@
 
             <TextBlock Text="Считайте ручным сканером код добавляемого продукта."
                        TextWrapping="Wrap"
-                       TextAlignment="Justify"
+                       TextAlignment="Center"
                        Foreground="{StaticResource TextColor}"
                        FontSize="{StaticResource fontSizeData}"/>
             
