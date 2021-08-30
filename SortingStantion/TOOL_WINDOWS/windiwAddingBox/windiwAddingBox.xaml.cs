@@ -99,7 +99,7 @@ namespace SortingStantion.windiwAddingBox
             */
             if (DataBridge.Report.IsDeffect(serialnumber) == true)
             {
-                message = $"Продукт номер {serialnumber} числиться в браке.";
+                message = $"Продукт номер {serialnumber} числится в браке.";
                 ShowMessage(message, DataBridge.myBlue);
 
                 //Выход

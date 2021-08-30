@@ -332,9 +332,7 @@ namespace SortingStantion.Models
                 //DataBridge.MSGBOX.Add(messageItem);
 
                 //Увеличение счетчика повторов
-                uint repeatCount = (uint)QUANTITY_REPEAT_PRODUCTS.Status;
-                repeatCount++;
-                QUANTITY_REPEAT_PRODUCTS.Write(repeatCount);
+                AddValue(QUANTITY_REPEAT_PRODUCTS, 1);
 
                 //Выход из процедуры
                 return;
