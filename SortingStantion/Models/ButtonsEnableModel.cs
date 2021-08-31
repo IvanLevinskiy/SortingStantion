@@ -254,17 +254,24 @@ namespace SortingStantion.Models
         {
             get
             {
+                //Флаг, указывающий на то, принято ли задание в работу
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
                 //Флаг, указывающий на то, запущен ли конвейер в принудительном режиме
                 var lineisforcerun = DataBridge.Conveyor.LineIsForceRun;
 
-                //1. Если линия не запущена в принудительном режиме
-                if (lineisforcerun == false)
+                //Флаг, указывающий на то, запущен ли конвейер в нормальном режиме
+                var lineisrun = DataBridge.Conveyor.LineIsRun;
+
+                //Если задание в работе, то доступность кнопки такая
+                //же как и BtnStop
+                if (inwork == true)
                 {
-                    return true;
+                    return lineisrun == false;
                 }
 
-                //Возврат false
-                return false;
+                //Если линия запущена в принудительном режиме
+                return lineisforcerun == false;
             }
 
         }
@@ -277,17 +284,24 @@ namespace SortingStantion.Models
         {
             get
             {
+                //Флаг, указывающий на то, принято ли задание в работу
+                var inwork = DataBridge.WorkAssignmentEngine.InWork;
+
                 //Флаг, указывающий на то, запущен ли конвейер в принудительном режиме
                 var lineisforcerun = DataBridge.Conveyor.LineIsForceRun;
 
-                //1. Если линия запущена в принудительном режиме
-                if (lineisforcerun == true)
+                //Флаг, указывающий на то, запущен ли конвейер в нормальном режиме
+                var lineisrun = DataBridge.Conveyor.LineIsRun;
+
+                //Если задание в работе, то доступность кнопки такая
+                //же как и BtnStop
+                if (inwork == true)
                 {
-                    return true;
+                    return lineisrun == true;
                 }
 
-                //Возврат false
-                return false;
+                //Если линия запущена в принудительном режиме
+                return lineisforcerun == true;
             }
         }
 
@@ -462,6 +476,9 @@ namespace SortingStantion.Models
             {
                 OnPropertyChanged("BtnStartEnable");
                 OnPropertyChanged("BtnStopEnable");
+
+                OnPropertyChanged("BtnStartForceEnable");
+                OnPropertyChanged("BtnStopForceEnable");
             };
 
             //Подпись на событие по изменению сотояния статуса

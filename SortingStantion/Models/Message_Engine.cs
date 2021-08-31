@@ -71,10 +71,10 @@ namespace SortingStantion.Models
 
             //Если текущее сообщение не ошибка
             //ПРИОРИТЕТ СООБЩЕНИЯ ОБ ОШИБКИ
-            //if (cm.Type != MSGTYPE.ERROR)
-            //{
+            if (cm.Type != MSGTYPE.ERROR)
+            {
                 _CurrentMessage = msg;
-            //}
+            }
 
         //Добавляем сообщение в коллекцию
         M0: MessageList.Add(msg);

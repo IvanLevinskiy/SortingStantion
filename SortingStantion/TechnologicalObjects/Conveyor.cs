@@ -145,7 +145,7 @@ namespace SortingStantion.TechnologicalObjects
                 //Если линия была запущена в принудительном режиме и
                 //был сменен экран с НАСТРОЕК, выключаем принудительное
                 //включение линии
-                var lineisforcerun = ToBool(RunForce.Status);
+                var lineisforcerun = RunForce.Value;
                 if (lineisforcerun == true)
                 {
                     RunForce.Write(false);
@@ -176,28 +176,24 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         public void Start()
         {
-            //Если конвейер остановлен, запускаем его
-            if (Run.Value == false)
+            //Если задание принято, то запускаем линию
+            //иначе уведомляем оператора сообщением
+            if (DataBridge.WorkAssignmentEngine.InWork == false)
             {
-                //Если задание принято, то запускаем линию
-                //иначе уведомляем оператора сообщением
-                if (DataBridge.WorkAssignmentEngine.InWork == false)
-                {
-                    customMessageBox mb = new customMessageBox("Ошибка", "Запуск невозможен, задание не принято в работу");
-                    mb.Owner = DataBridge.MainScreen;
-                    mb.ShowDialog();
-
-                    return;
-                }
-
-                //Запись статуса в ПЛК
-                Run.Write(true);
-
-                //Внесение в базу данных сообщения об остановке комплекса
-                DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТАРТ. Линия запущена", Models.MessageType.Event);
+                customMessageBox mb = new customMessageBox("Ошибка", "Запуск невозможен, задание не принято в работу");
+                mb.Owner = DataBridge.MainScreen;
+                mb.ShowDialog();
 
                 return;
             }
+
+            //Запись статуса в ПЛК
+            Run.Write(true);
+
+            //Внесение в базу данных сообщения об остановке комплекса
+            DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТАРТ. Линия запущена", Models.MessageType.Event);
+
+            return;
         }
 
         /// <summary>
@@ -211,10 +207,6 @@ namespace SortingStantion.TechnologicalObjects
                 return new DelegateCommand((obj) =>
                 {
                     Start();
-
-                    //Вывод сообщения в окно информации
-                    UserMessage msg = new UserMessage("Линия запущена", MSGTYPE.SUCCES);
-                    DataBridge.MSGBOX.Add(msg);
                 },
                 (obj) => (true));
             }
@@ -227,14 +219,10 @@ namespace SortingStantion.TechnologicalObjects
         /// </summary>
         public void Stop()
         {
-            //Если конвейер запущен - останавливаем его
-            if (Run.Value == true)
-            {
-                //Запись статуса в ПЛК
-                Run.Write(false);
+            //Запись статуса в ПЛК
+            Run.Write(false);
 
-                return;
-            }
+            return;
         }
 
         /// <summary>
@@ -249,10 +237,6 @@ namespace SortingStantion.TechnologicalObjects
                 {
                     //Внесение в базу данных сообщения об остановке комплекса
                     DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТОП. Линия остановлена", Models.MessageType.Event);
-
-                    //Вывод сообщения в окно информации
-                    UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
-                    DataBridge.MSGBOX.Add(msg);
 
                     Stop();
                 },
@@ -270,6 +254,18 @@ namespace SortingStantion.TechnologicalObjects
             {
                 return new DelegateCommand((obj) =>
                 {
+                    var inswork = DataBridge.WorkAssignmentEngine.InWork;
+
+                    //Если задание в работе
+                    //запускаем линию
+                    if (inswork == true)
+                    {
+                        this.Start();
+                        return;
+                    }
+
+                    //Если задание не в работе -
+                    //запускаем только конвейер
                     RunForce.Write(true);
                 },
                 (obj) => (true));
@@ -286,7 +282,11 @@ namespace SortingStantion.TechnologicalObjects
             {
                 return new DelegateCommand((obj) =>
                 {
+                    var inswork = DataBridge.WorkAssignmentEngine.InWork;
+
+                    //Останавливаем всю линию
                     RunForce.Write(false);
+                    Run.Write(false);
                 },
                 (obj) => (true));
             }
@@ -350,8 +350,8 @@ namespace SortingStantion.TechnologicalObjects
                 {
 
                     //Вывод сообщения в окно информации
-                    //UserMessage msg = new UserMessage("Линия запущена", MSGTYPE.SUCCES);
-                    //DataBridge.MSGBOX.Add(msg);
+                    UserMessage msg = new UserMessage("Линия запущена", MSGTYPE.SUCCES);
+                    DataBridge.MSGBOX.Add(msg);
 
                     //Уведомление подписчиков об изменении
                     //состояния линии
@@ -369,8 +369,8 @@ namespace SortingStantion.TechnologicalObjects
                 Action action = () =>
                 {
                     //Вывод сообщения в окно информации
-                    //UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
-                    //DataBridge.MSGBOX.Add(msg);
+                    UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
+                    DataBridge.MSGBOX.Add(msg);
 
                     //Уведомление подписчиков об изменении
                     //состояния линии
