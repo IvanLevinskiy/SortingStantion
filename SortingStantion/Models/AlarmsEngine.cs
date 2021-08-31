@@ -188,23 +188,7 @@ namespace SortingStantion.Models
 
             /*
                 Повтор кода продукта
-            */
-            //al_4 = new S7DiscreteAlarm("Повтор кода продукта", "DB6.DBX12.3", group);
-            //al_4.MessageAction = () =>
-            //{
-            //    //Если линия выключена
-            //    if (DataBridge.Conveyor.LineIsRun == false)
-            //    {
-            //        al_4.Write(false);
-            //        return;
-            //    }
-
-            //    //Остановка конвейера
-            //    DataBridge.Conveyor.Stop();
-
-            //    //Запись сообщения в базу данных
-            //    DataBridge.AlarmLogging.AddMessage("Повтор кода продукта", MessageType.Alarm);
-            //};
+  w
 
             /*
                 Получение кода от сканера при остановке конвейера
@@ -227,7 +211,7 @@ namespace SortingStantion.Models
                 if (DataBridge.Conveyor.LineIsRun == false)
                 {
                     //al_6.Write(false);
-                    return;
+                    //return;
                 }
 
                 //Остановка конвейера
@@ -253,7 +237,7 @@ namespace SortingStantion.Models
                 //Если линия выключена
                 if (DataBridge.Conveyor.LineIsRun == false)
                 {
-                    return;
+                    //return;
                 }
 
                 //Остановка конвейера

@@ -211,6 +211,10 @@ namespace SortingStantion.TechnologicalObjects
                 return new DelegateCommand((obj) =>
                 {
                     Start();
+
+                    //Вывод сообщения в окно информации
+                    UserMessage msg = new UserMessage("Линия запущена", MSGTYPE.SUCCES);
+                    DataBridge.MSGBOX.Add(msg);
                 },
                 (obj) => (true));
             }
@@ -245,6 +249,10 @@ namespace SortingStantion.TechnologicalObjects
                 {
                     //Внесение в базу данных сообщения об остановке комплекса
                     DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТОП. Линия остановлена", Models.MessageType.Event);
+
+                    //Вывод сообщения в окно информации
+                    UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
+                    DataBridge.MSGBOX.Add(msg);
 
                     Stop();
                 },
@@ -342,8 +350,8 @@ namespace SortingStantion.TechnologicalObjects
                 {
 
                     //Вывод сообщения в окно информации
-                    UserMessage msg = new UserMessage("Линия запущена", MSGTYPE.SUCCES);
-                    DataBridge.MSGBOX.Add(msg);
+                    //UserMessage msg = new UserMessage("Линия запущена", MSGTYPE.SUCCES);
+                    //DataBridge.MSGBOX.Add(msg);
 
                     //Уведомление подписчиков об изменении
                     //состояния линии
@@ -361,8 +369,8 @@ namespace SortingStantion.TechnologicalObjects
                 Action action = () =>
                 {
                     //Вывод сообщения в окно информации
-                    UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
-                    DataBridge.MSGBOX.Add(msg);
+                    //UserMessage msg = new UserMessage("Линия остановлена", MSGTYPE.WARNING);
+                    //DataBridge.MSGBOX.Add(msg);
 
                     //Уведомление подписчиков об изменении
                     //состояния линии
