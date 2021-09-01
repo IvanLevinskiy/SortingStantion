@@ -164,12 +164,14 @@ namespace SortingStantion.Controls
             this.originalTextBox = (TextBox)e.OriginalSource;
 
             //Подписка на события
-            this.LostKeyboardFocus += MbTextBox_LostKeyboardFocus;
+            //this.LostKeyboardFocus += MbTextBox_LostKeyboardFocus;
             this.KeyDown += MbTextBox_KeyDown;
-            this.GotKeyboardFocus += MbTextBox_GotKeyboardFocus;
+            //this.GotKeyboardFocus += MbTextBox_GotKeyboardFocus;
             this.TextChanged += MbTextBox_TextChanged;
             this.GotFocus += S7TextBox_GotFocus;
+            this.LostFocus += S7TextBox_LostFocus;
         }
+
 
 
         /// <summary>
@@ -206,6 +208,9 @@ namespace SortingStantion.Controls
         /// <param name="e"></param>
         private void S7TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            //Получаем экземпляр TextBox
+            TextBox originalsourse = (TextBox)e.OriginalSource;
+
             //Открытие клавиатуры
             Keypad keypadWindow = new Keypad(this, DataBridge.MainScreen);
 
@@ -215,7 +220,33 @@ namespace SortingStantion.Controls
             {
                 this.originalTextBox.Text = keypadWindow.Result;
                 WriteValue(this.originalTextBox.Text);
+                deFocus();
+                return;
             }
+
+            //Записываем в контролл значение
+            //из регистра
+            originalTextBox.Text = S7TAG.StatusText;
+            this.Text = S7TAG.StatusText;
+            deFocus();
+        }
+
+
+        private void S7TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (S7TAG == null)
+            {
+                return;
+            }
+
+            //Получаем экземпляр TextBox
+            TextBox originalsourse = (TextBox)e.OriginalSource;
+
+            //Возвращаем текст в контроле
+            originalsourse.Text = text;
+
+            //Возвращаем подписку на изменение регистра
+            S7TAG.ChangeValue += S7TAG_ChangeValue;
         }
 
         /// <summary>
@@ -234,7 +265,7 @@ namespace SortingStantion.Controls
             //Получаем экземпляр TextBox
             TextBox originalsourse = (TextBox)e.OriginalSource;
 
-            //Запоинаем текст в контроле
+            //Возвращаем текст в контроле
             originalsourse.Text = text;
 
             //Возвращаем подписку на изменение регистра
@@ -249,25 +280,25 @@ namespace SortingStantion.Controls
         /// <param name="e"></param>
         private void MbTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            //Получение оригинального источника
-            TextBox originalsourse = (TextBox)e.OriginalSource;
-            this.originalTextBox = originalsourse;
+            ////Получение оригинального источника
+            //TextBox originalsourse = (TextBox)e.OriginalSource;
+            //this.originalTextBox = originalsourse;
 
-            //При нажатии на кнопку ввода
-            //записываем значение в регистр
-            if (e.Key == Key.Enter)
-            {
-                WriteValue(this.originalTextBox.Text);
-                return;
-            }
+            ////При нажатии на кнопку ввода
+            ////записываем значение в регистр
+            //if (e.Key == Key.Enter)
+            //{
+            //    WriteValue(this.originalTextBox.Text);
+            //    return;
+            //}
 
-            //При нажатии на кнопку эскейт
-            //возвращаем значение
-            if (e.Key == Key.Escape)
-            {
-                //S7TAG_ChangeValue(true);
-                //DataBridge.FocusElement.Focus();
-            }
+            ////При нажатии на кнопку эскейт
+            ////возвращаем значение
+            //if (e.Key == Key.Escape)
+            //{
+            //    //S7TAG_ChangeValue(true);
+            //    //DataBridge.FocusElement.Focus();
+            //}
         }
 
         /// <summary>

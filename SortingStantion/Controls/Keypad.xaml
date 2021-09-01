@@ -8,7 +8,7 @@
         Height="313" Width="299" 
         ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen" 
-        Style="{StaticResource VS2012WindowStyle}"
+        Style="{StaticResource WindowNotExitStyle}"
         ResizeMode="NoResize">
     
     <Window.Resources>
