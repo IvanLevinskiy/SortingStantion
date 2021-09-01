@@ -207,15 +207,15 @@ namespace SortingStantion.Controls
         private void S7TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             //Открытие клавиатуры
-            //Keypad keypadWindow = new Keypad(this, DataBridge.MainScreen);
+            Keypad keypadWindow = new Keypad(this, DataBridge.MainScreen);
 
             //Если нажата кнопка Enter - 
             //запись значения в поле
-            //if (keypadWindow.ShowDialog() == true)
-            //{
-            //    this.originalTextBox.Text = keypadWindow.Result;
-            //    WriteValue(this.originalTextBox.Text);
-            //}
+            if (keypadWindow.ShowDialog() == true)
+            {
+                this.originalTextBox.Text = keypadWindow.Result;
+                WriteValue(this.originalTextBox.Text);
+            }
         }
 
         /// <summary>
