@@ -8,7 +8,7 @@ namespace SortingStantion.Controls
     /// <summary>
     /// Логика взаимодействия для Keypad.xaml
     /// </summary>
-    public partial class Keypad : Window, INotifyPropertyChanged
+    public partial class Passwordpad : Window, INotifyPropertyChanged
     {
         /// <summary>
         /// Результат
@@ -17,17 +17,16 @@ namespace SortingStantion.Controls
         {
             get
             {
-                return _result;
+                return passwordBox.Password;
             }
             private set
             {
-                _result = value;
-                this.OnPropertyChanged("Result");
+                passwordBox.Password = value;
             }
         }
         private string _result;
 
-        public Keypad()
+        public Passwordpad()
         {
             InitializeComponent();
             this.DataContext = this;

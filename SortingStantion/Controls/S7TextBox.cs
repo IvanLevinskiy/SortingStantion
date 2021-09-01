@@ -212,7 +212,7 @@ namespace SortingStantion.Controls
             TextBox originalsourse = (TextBox)e.OriginalSource;
 
             //Открытие клавиатуры
-            Keypad keypadWindow = new Keypad(this, DataBridge.MainScreen);
+            Keypad keypadWindow = new Keypad();
 
             //Если нажата кнопка Enter - 
             //запись значения в поле
@@ -226,12 +226,16 @@ namespace SortingStantion.Controls
 
             //Записываем в контролл значение
             //из регистра
-            originalTextBox.Text = S7TAG.StatusText;
-            this.Text = S7TAG.StatusText;
+            SetText(S7TAG.StatusText);
             deFocus();
         }
 
-
+        /// <summary>
+        /// Метод, вызываемый при утрате 
+        /// фокуса
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void S7TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (S7TAG == null)
@@ -241,9 +245,6 @@ namespace SortingStantion.Controls
 
             //Получаем экземпляр TextBox
             TextBox originalsourse = (TextBox)e.OriginalSource;
-
-            //Возвращаем текст в контроле
-            originalsourse.Text = text;
 
             //Возвращаем подписку на изменение регистра
             S7TAG.ChangeValue += S7TAG_ChangeValue;
