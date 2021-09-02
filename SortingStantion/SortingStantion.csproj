@@ -53,10 +53,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="S7Communication, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\S7Communication.dll</HintPath>
-    </Reference>
     <Reference Include="Sharp7, Version=1.1.79.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Sharp7.1.1.79\lib\net40\Sharp7.dll</HintPath>
     </Reference>
@@ -471,6 +467,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libs\S7Communication.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\S7Communication\S7Communication.csproj">
+      <Project>{e7f2b419-5ba7-42fb-a537-496120fad2b1}</Project>
+      <Name>S7Communication</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

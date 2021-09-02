@@ -436,7 +436,7 @@ namespace SortingStantion.Models
 
             NUM_PACKS_IN_BOX_TAG.ChangeValue += (o, n) =>
             {
-                var r = NUM_PACKS_IN_BOX_TAG.Write(666);
+                var r = NUM_PACKS_IN_BOX_TAG.Write((uint)5);
                 var ov = NUM_PACKS_IN_BOX_TAG.Value;
             };
         }
