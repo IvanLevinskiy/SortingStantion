@@ -1,9 +1,11 @@
-﻿using SortingStantion.Models;
+﻿using SortingStantion.Controls;
+using SortingStantion.Models;
 using SortingStantion.Utilites;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -193,12 +195,38 @@ namespace SortingStantion.TOOL_WINDOWS.Authorization
             }
         }
 
+        /// <summary>
+        /// Метод, вызываемый при получении 
+        /// фокуса пасвордбоксом
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pwbPassword_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //Получаем экземпляр TextBox
+            PasswordBox originalsourse = (PasswordBox)e.OriginalSource;
+
+            //Открытие клавиатуры
+            Passwordpad keypadWindow = new Passwordpad();
+
+            //Если нажата кнопка Enter - 
+            //запись значения в поле
+            if (keypadWindow.ShowDialog() == true)
+            {
+                originalsourse.Password = keypadWindow.Result;
+
+            }
+
+            rect.Focus();
+        }
+
         #region РЕАЛИЗАЦИЯ ИНТЕРФЕЙСА INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
         #endregion
 
 

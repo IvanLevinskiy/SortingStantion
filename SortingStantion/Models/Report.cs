@@ -31,6 +31,11 @@ namespace SortingStantion.Models
         /// </summary>
         public string endTime;
 
+        //Настройки из файла настроек
+        string SrvL3Login;
+        string rvL3Password;
+        string SrvL3UrlReport;
+
         /// <summary>
         /// Массив, содержащий объекты Operator 
         /// описывающие мастера на линии
@@ -128,7 +133,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Количество продуктов в коробе
         /// </summary>
-        public S7_DWord NUM_PACKS_IN_BOX;
+        public S7_Word NUM_PACKS_IN_BOX;
 
         /// <summary>
         /// Конструктор класса
@@ -142,7 +147,13 @@ namespace SortingStantion.Models
 
             QUANTITY_BOXS = (S7_DWord)device.GetTagByAddress("DB1.DBD20-DWORD");
 
-            NUM_PACKS_IN_BOX = (S7_DWord)device.GetTagByAddress("DB1.DBD362-DWORD");
+            NUM_PACKS_IN_BOX = (S7_Word)device.GetTagByAddress("DB1.DBW362-WORD");
+
+            //Загрузка настроек из файла
+            SrvL3Login = DataBridge.SettingsFile.GetSetting("SrvL3Login").Value;
+            rvL3Password = DataBridge.SettingsFile.GetSetting("SrvL3Pass").Value;
+            SrvL3UrlReport = DataBridge.SettingsFile.GetSetting("SrvL3UrlReport").Value;
+
 
             //Инициализация коллекции всех кодов
             //находящихся в результате
@@ -332,7 +343,7 @@ namespace SortingStantion.Models
                 //DataBridge.MSGBOX.Add(messageItem);
 
                 //Увеличение счетчика повторов
-                AddValue(QUANTITY_REPEAT_PRODUCTS, 1);
+                //AddValue(QUANTITY_REPEAT_PRODUCTS, 1);
 
                 //Выход из процедуры
                 return;
@@ -449,32 +460,28 @@ namespace SortingStantion.Models
         void AddQuantityProducts(int num)
         {
             /*
-                   Увеличение счетчика выпущеных
-                   продуктов в результате
+               Увеличение счетчика выпущеных
+               продуктов в результате
             */
-            int qp = 0;
-            var resultconvertion = int.TryParse(QUANTITY_PRODUCTS.Status.ToString(), out qp);
+            int qp = (int)QUANTITY_PRODUCTS.Value;
 
             //Инкрементируем значение счетчика
             qp += num;
 
-            int num_pacs_in_box = 0;
-            int.TryParse(NUM_PACKS_IN_BOX.Status.ToString(), out num_pacs_in_box);
-            
+            var num_pacs_in_box = NUM_PACKS_IN_BOX.Value;
+
             //Если ошибок при преобразовании 
             //не возникло - увеличиваем счетчик продуктов на единицу
-            if (resultconvertion == true)
+            //Запись в ПЛК количества выпущеных продуктов
+            QUANTITY_PRODUCTS.Write(qp);
+            QUANTITY_PRODUCTS.Value = (uint)qp;
+
+            //Запись в ПЛК количества выпущеных коробов
+            if (num_pacs_in_box > 0)
             {
-                //Запись в ПЛК количества выпущеных продуктов
-                QUANTITY_PRODUCTS.Write(qp);
-
-                //Запись в ПЛК количества выпущеных коробов
-                if (num_pacs_in_box > 0)
-                {
-                    var quantityBoxs = qp / num_pacs_in_box;
-                    QUANTITY_BOXS.Write(quantityBoxs);
-                }
-
+                uint quantityBoxs = (uint)(qp / num_pacs_in_box);
+                QUANTITY_BOXS.Write(quantityBoxs);
+                QUANTITY_BOXS.Value = (uint)quantityBoxs;
             }
         }
 
@@ -485,22 +492,21 @@ namespace SortingStantion.Models
         void AddValue(S7_DWord tag, int num)
         {
             /*
-                   Увеличение счетчика выпущеных
-                   продуктов в результате
+                Вычисление нового значения тэга
             */
-            int tv = 0;
-            var resultconvertion = int.TryParse(tag.Status.ToString(), out tv);
-
-            //Увеличиваем значение счетчика
-            tv += num;
+            int value = (int)tag.Value + num;
 
             //Производим запись нового значения
             //в тэг
-            if (resultconvertion == true)
-            {
-                tag.Write(tv);
-            }
             
+            var result = tag.Write(value);
+            if(result == true)
+            {
+                tag.Value = (uint)value;
+                tag.Status = tag.Value;
+                tag.StatusText = tag.Value.ToString();
+            }
+
         }
 
         /// <summary>
@@ -637,9 +643,10 @@ namespace SortingStantion.Models
         /// </summary>
         public void SendReport()
         {
-            Thread thread = new Thread(SendReportToL3);
-            thread.IsBackground = true;
-            thread.Start();
+            //Thread thread = new Thread(SendReportToL3);
+            //thread.IsBackground = true;
+            //thread.Start();
+            SendReportToL3();
         }
 
         /// <summary>
@@ -647,20 +654,15 @@ namespace SortingStantion.Models
         /// </summary>
         void SendReportToL3()
         {
-            //Результат операции отправки
-            //отчета
-            bool resultoperation = false;
-
-            //Получен ие настройки с данными конечного получателя отчетов
-            var setting = DataBridge.SettingsFile.GetSetting("SrvL3UrlReport");
-
             //Получение получателя отчета
-            var endPoint = setting.Value;
+            var endPoint = SrvL3UrlReport;           
 
             //Формирование http запроса с отчетом
             var httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(endPoint);
             httpWebRequest.ContentType = "applicaion/json";
             httpWebRequest.Method = "POST";
+            NetworkCredential nc = new NetworkCredential(SrvL3Login, rvL3Password);
+            httpWebRequest.Credentials = nc;
 
             try
             {
@@ -683,16 +685,12 @@ namespace SortingStantion.Models
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 using (var sr = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    var result = sr.ReadToEnd();
-
                     //Если в ответа содержится 201
                     //возвращаем true
-                    if (result.Contains("201"))
+                    if (httpResponse.StatusCode == HttpStatusCode.Created)
                     {
                         //Сброс текущего результата
                         ClearResult();
-
-                        resultoperation = true;
                     }
                 }
             }
@@ -741,7 +739,7 @@ namespace SortingStantion.Models
             this.startTime = string.Empty;
             this.endTime = string.Empty;
             this.defectiveCodes = new List<string>();
-            this.Codes = new List<string>();
+            this.Codes.Clear();
             AllCodes.Clear();
         }
     }

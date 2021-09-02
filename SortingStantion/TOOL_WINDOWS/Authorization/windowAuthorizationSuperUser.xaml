@@ -69,7 +69,8 @@
                      Height="40"/>
 
             <!--КВАДРАТ НАД ПОЛЕМ ВВОДА-ВЫВОДА ДЛЯ ТОГО, ЧТОБ НЕБЫЛО КУРСОРА-->
-            <Rectangle  Fill="Transparent"
+            <Rectangle  x:Name="rect"
+                        Fill="Transparent"
                         Margin="80,0,5,0" 
                         Height="40"/>
 
@@ -94,7 +95,7 @@
                          Height="40"
                          VerticalAlignment="Center"
                          VerticalContentAlignment="Center"
-                         HorizontalContentAlignment="Center"/>
+                         HorizontalContentAlignment="Center" GotFocus="pwbPassword_GotFocus"/>
 
         </Grid>
 

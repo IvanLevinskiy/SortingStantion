@@ -176,10 +176,7 @@ namespace SortingStantion.TechnologicalObjects
             //остановки линии
             var lineistop = false;
 
-            if (DataBridge.Conveyor.IsStopFromTimerTag.Status is bool)
-            {
-                lineistop = (bool)DataBridge.Conveyor.IsStopFromTimerTag.Status;
-            }
+            lineistop = (bool)DataBridge.Conveyor.IsStopFromTimerTag.Value;
 
             /*
                 Если линия не в работе (определяется по таймеру остановки в TIA) 
@@ -308,12 +305,7 @@ namespace SortingStantion.TechnologicalObjects
             //Получение статуса тэга
             //ПОВТОР КОДА
             //остановки линии
-            var RepeatEnable = false;
-            if (REPEAT_ENABLE.Status is bool)
-            {
-                RepeatEnable = (bool)REPEAT_ENABLE.Status;
-            }
-            
+            var RepeatEnable = REPEAT_ENABLE.Value;           
 
             //Флаг, указывающий на то, является ли код повтором
             var IsRepeat = DataBridge.Report.IsRepeat(scaner_serialnumber);
@@ -372,6 +364,16 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Метод для очистки коллекции продукции
+        /// находящейся между сканером
+        /// и отбраковщиком
+        /// </summary>
+        public void ClearCollection()
+        {
+            CLEAR_ITEMS_COLLECTION_CMD.Write(true);
+        }
+
+        /// <summary>
         /// Команда для очистки коллекции в ПЛК
         /// </summary>
         public ICommand ClearCollectionCMD
@@ -380,8 +382,7 @@ namespace SortingStantion.TechnologicalObjects
             {
                 return new DelegateCommand((obj) =>
                 {
-                    CLEAR_ITEMS_COLLECTION_CMD.Write(true);
-
+                    ClearCollection();
                 },
                 (obj) => (true));
             }

@@ -178,6 +178,14 @@ namespace SortingStantion.MainScreen
             set;
         }
 
+        public BoxEngine BoxEngine
+        {
+            get
+            {
+                return DataBridge.BoxEngine;
+            }
+        }
+
 
         /// <summary>
         /// Конструктор

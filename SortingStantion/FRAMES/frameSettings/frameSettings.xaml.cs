@@ -69,5 +69,16 @@ namespace SortingStantion.frameSettings
             InitializeComponent();
             DataContext = this;
         }
+
+        /// <summary>
+        /// Метод, вызываемый при нажатии кнопки
+        /// ОЧИСТИТЬ ОЧЕРЕДЬ
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            BoxEngine.ClearCollection();
+        }
     }
 }

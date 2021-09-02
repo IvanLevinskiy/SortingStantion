@@ -160,6 +160,9 @@ namespace SortingStantion.Controls
         /// <param name="e"></param>
         private void MbTextBox_Loaded(object sender, RoutedEventArgs e)
         {
+            //Отписка от события по загрузке контролла
+            this.Loaded -= MbTextBox_Loaded;
+
             //Получение оригинального текстбокса
             this.originalTextBox = (TextBox)e.OriginalSource;
 
@@ -219,14 +222,21 @@ namespace SortingStantion.Controls
             if (keypadWindow.ShowDialog() == true)
             {
                 this.originalTextBox.Text = keypadWindow.Result;
-                WriteValue(this.originalTextBox.Text);
-                deFocus();
-                return;
+                var result = WriteValue(this.originalTextBox.Text);
+
+                //Если результат записи данных
+                //в плк успешен - покидаем функцию
+                if (result == true)
+                {
+                    deFocus();
+                    return;
+                }
+
             }
 
             //Записываем в контролл значение
             //из регистра
-            SetText(S7TAG.StatusText);
+            M0: SetText(S7TAG.StatusText);
             deFocus();
         }
 
@@ -306,14 +316,14 @@ namespace SortingStantion.Controls
         /// Метод для записи значения
         /// </summary>
         /// <param name="value"></param>
-        void WriteValue(string value)
+        bool WriteValue(string value)
         {
             //Проверка на лимиты
             var result = CheckLimits(value);
             if (result == false)
             {
                 deFocus();
-                return;
+                return false;
             }
 
             this.Text = value;
@@ -323,7 +333,7 @@ namespace SortingStantion.Controls
             {
                 SetText("***");
                 deFocus();
-                return;
+                return false;
             }
 
             //Запоинаем текст в контроле
@@ -334,7 +344,14 @@ namespace SortingStantion.Controls
 
                 //Записываем в базу данных информацию об изминении
                 DataBridge.AlarmLogging.AddMessage($"Значение параметра: {ParametrName} изменено на {this.Text}", MessageType.Event);
+
+                //Возвращаем положительный результат
+                //выполнения операции записи в ПЛК
+                return true;
             }
+
+            //Возврат отрицательного результата
+            return false;
         }
 
         /// <summary>

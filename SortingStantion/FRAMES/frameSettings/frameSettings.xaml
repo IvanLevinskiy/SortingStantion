@@ -542,20 +542,20 @@
 
                             <controls:S7TextBox Address="DB1.DBD130-DWORD"
                                                 ParametrName="Массовый брак"
-                                          Foreground="{StaticResource TextColor}"
-                                          Background="{StaticResource LightColor}"
-                                          FontSize="{StaticResource fontSizeData}"
-                                          FontFamily="{StaticResource fontFamilyData}"
+                                                Foreground="{StaticResource TextColor}"
+                                                Background="{StaticResource LightColor}"
+                                                FontSize="{StaticResource fontSizeData}"
+                                                FontFamily="{StaticResource fontFamilyData}"
                                                 IsEnabled="True"
-                                          LowValue="2"
-                                          VerticalContentAlignment="Center"
-                                          BorderThickness="0"
-                                          Width="100"
-                                          Height="40"
-                                          Margin="100,7,5,7"
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center"
-                                          HorizontalContentAlignment="Center"/>
+                                              LowValue="2"
+                                              VerticalContentAlignment="Center"
+                                              BorderThickness="0"
+                                              Width="100"
+                                              Height="40"
+                                              Margin="100,7,5,7"
+                                              HorizontalAlignment="Right"
+                                              VerticalAlignment="Center"
+                                              HorizontalContentAlignment="Center"/>
 
                             <Rectangle Fill="{StaticResource GridColor}"
                                        Opacity="1"
@@ -635,8 +635,8 @@
                             Background="{StaticResource DarkColor}"
                             Foreground="{StaticResource TextColor}"
                             BorderBrush="{StaticResource GridColor}"
-                            Command="{Binding  BoxEngine.ClearCollectionCMD}"
-                            Content="ОЧИСТИТЬ ОЧЕРЕДЬ ПЛК"/>
+                            IsEnabled="True"
+                            Content="ОЧИСТИТЬ ОЧЕРЕДЬ ПЛК" Click="Button_Click"/>
 
 
                 </StackPanel>

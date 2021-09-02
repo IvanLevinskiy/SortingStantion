@@ -426,12 +426,18 @@ namespace SortingStantion.Models
                     wA.gtin = GTIN;
                     wA.ID = TaskID;
                     wA.productName = Product_Name;
-                    wA.numРacksInBox = int.Parse(NUM_PACKS_IN_BOX_TAG.StatusText);
+                    wA.numРacksInBox = int.Parse(NUM_PACKS_IN_BOX_TAG.Value.ToString());
                     wA.numPacksInSeries = int.Parse(NUM_PACKS_IN_SERIES_TAG.StatusText);
 
                     SelectedWorkAssignment = wA;
                     WorkOrderAcceptanceNotification?.Invoke(wA);
                 }
+            };
+
+            NUM_PACKS_IN_BOX_TAG.ChangeValue += (o, n) =>
+            {
+                var r = NUM_PACKS_IN_BOX_TAG.Write(666);
+                var ov = NUM_PACKS_IN_BOX_TAG.Value;
             };
         }
 
@@ -695,6 +701,9 @@ namespace SortingStantion.Models
                         //Очистка буфера заданий
                         WorkAssignments.Clear();
 
+                        //Очищаем отчет от предыдущих операций
+                        DataBridge.Report.ClearResult();
+
                         //Стирание данных в ПЛК
                         S7GTIN.Write("");
                         TASK_ID_TAG.Write("");
@@ -824,18 +833,22 @@ namespace SortingStantion.Models
                     
                 }
 
+                response.StatusCode = 201;
+
                 //В случае, если в процедуре принятия задания
                 //произошла ошибка
                 if (result == false)
                 {
                     //формирование ответа                   
                     responseStr = "404 Bad Request";
+                    response.StatusCode = 404;
                 }
 
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseStr);
 
                 // получаем поток ответа и пишем в него ответ
                 response.ContentLength64 = buffer.Length;
+                
                 Stream output = response.OutputStream;
                 output.Write(buffer, 0, buffer.Length);
 

@@ -465,6 +465,9 @@
 
                 </Grid>
 
+                <Rectangle Fill="Transparent"
+                           Grid.ColumnSpan="3"/>
+
             </Grid>
 
             <!--ТАБЛИЦА СО СЧЕТЧИКАМИ ИЗДЕЛИЙ-->
