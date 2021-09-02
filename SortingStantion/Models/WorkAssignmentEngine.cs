@@ -107,7 +107,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Кол-во продуктов в коробе. 
         /// </summary>
-        S7_Word NUM_PACKS_IN_BOX_TAG
+        S7_DWord NUM_PACKS_IN_BOX
         {
             get;
             set;
@@ -117,7 +117,7 @@ namespace SortingStantion.Models
         /// Ожидаемое количество продуктов в серии 
         /// (определяется по заданию на производство серии) 
         /// </summary>
-        S7_Word NUM_PACKS_IN_SERIES_TAG
+        S7_DWord NUM_PACKS_IN_SERIES_TAG
         {
             get;
             set;
@@ -222,8 +222,9 @@ namespace SortingStantion.Models
                 Product_Name = S7ProductName.Value;
             };
 
-            NUM_PACKS_IN_BOX_TAG = (S7_Word)device.GetTagByAddress("DB1.DBW362-WORD");
-            NUM_PACKS_IN_SERIES_TAG = (S7_Word)device.GetTagByAddress("DB1.DBW364-WORD");
+            NUM_PACKS_IN_BOX = (S7_DWord)device.GetTagByAddress("DB1.DBD362-DWORD");
+
+            NUM_PACKS_IN_SERIES_TAG = (S7_DWord)device.GetTagByAddress("DB1.DBD364-DWORD");
 
             QUANTITY_WORKSPACE = (S7_DWord)device.GetTagByAddress("DB1.DBD16-DWORD");
             QUANTITY_BOXS = (S7_DWord)device.GetTagByAddress("DB1.DBD20-DWORD");
@@ -426,18 +427,12 @@ namespace SortingStantion.Models
                     wA.gtin = GTIN;
                     wA.ID = TaskID;
                     wA.productName = Product_Name;
-                    wA.numРacksInBox = int.Parse(NUM_PACKS_IN_BOX_TAG.Value.ToString());
+                    wA.numРacksInBox = int.Parse(NUM_PACKS_IN_BOX.Value.ToString());
                     wA.numPacksInSeries = int.Parse(NUM_PACKS_IN_SERIES_TAG.StatusText);
 
                     SelectedWorkAssignment = wA;
                     WorkOrderAcceptanceNotification?.Invoke(wA);
                 }
-            };
-
-            NUM_PACKS_IN_BOX_TAG.ChangeValue += (o, n) =>
-            {
-                var r = NUM_PACKS_IN_BOX_TAG.Write((uint)5);
-                var ov = NUM_PACKS_IN_BOX_TAG.Value;
             };
         }
 
@@ -599,7 +594,7 @@ namespace SortingStantion.Models
                         TASK_ID_TAG.Write(SelectedWorkAssignment.ID);
                         S7ProductName.Write(SelectedWorkAssignment.productName);
                         LOT_NO_TAG.Write(SelectedWorkAssignment.lotNo);
-                        NUM_PACKS_IN_BOX_TAG.Write(SelectedWorkAssignment.numРacksInBox);
+                        NUM_PACKS_IN_BOX.Write(SelectedWorkAssignment.numРacksInBox);
                         NUM_PACKS_IN_SERIES_TAG.Write(SelectedWorkAssignment.numPacksInSeries);
 
                         //Запись статуса в ПЛК
@@ -711,7 +706,7 @@ namespace SortingStantion.Models
                         LOT_NO_TAG.Write("");
 
                         //Обнуление счетчиков изделий
-                        NUM_PACKS_IN_BOX_TAG.Write(0);
+                        NUM_PACKS_IN_BOX.Write(0);
                         NUM_PACKS_IN_SERIES_TAG.Write(0);
 
                         QUANTITY_WORKSPACE.Write(0);

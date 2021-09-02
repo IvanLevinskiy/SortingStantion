@@ -133,7 +133,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Количество продуктов в коробе
         /// </summary>
-        public S7_Word NUM_PACKS_IN_BOX;
+        public S7_DWord NUM_PACKS_IN_BOX;
 
         /// <summary>
         /// Конструктор класса
@@ -147,13 +147,12 @@ namespace SortingStantion.Models
 
             QUANTITY_BOXS = (S7_DWord)device.GetTagByAddress("DB1.DBD20-DWORD");
 
-            NUM_PACKS_IN_BOX = (S7_Word)device.GetTagByAddress("DB1.DBW362-WORD");
+            NUM_PACKS_IN_BOX = (S7_DWord)device.GetTagByAddress("DB1.DBD362-DWORD");
 
             //Загрузка настроек из файла
             SrvL3Login = DataBridge.SettingsFile.GetSetting("SrvL3Login").Value;
             rvL3Password = DataBridge.SettingsFile.GetSetting("SrvL3Pass").Value;
             SrvL3UrlReport = DataBridge.SettingsFile.GetSetting("SrvL3UrlReport").Value;
-
 
             //Инициализация коллекции всех кодов
             //находящихся в результате
