@@ -1,7 +1,7 @@
 ﻿using SortingStantion.Controls;
-using SortingStantion.TOOL_WINDOWS.windiwInformation;
-using SortingStantion.TOOL_WINDOWS.windowAddDeffect;
-using SortingStantion.TOOL_WINDOWS.windowClearCollectionRequest;
+using SortingStantion.ToolsWindows.windiwInformation;
+using SortingStantion.ToolsWindows.windowAddDeffect;
+using SortingStantion.ToolsWindows.windowClearCollectionRequest;
 using SortingStantion.Utilites;
 using System;
 using System.ComponentModel;

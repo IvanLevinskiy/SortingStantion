@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using S7Communication;
 using SortingStantion.Controls;
-using SortingStantion.TOOL_WINDOWS.windowClearCollectionRequest;
+using SortingStantion.ToolsWindows.windowClearCollectionRequest;
 using SortingStantion.Utilites;
 using System;
 using System.Collections.ObjectModel;
@@ -224,7 +224,7 @@ namespace SortingStantion.Models
 
             NUM_PACKS_IN_BOX = (S7_DWord)device.GetTagByAddress("DB1.DBD362-DWORD");
 
-            NUM_PACKS_IN_SERIES_TAG = (S7_DWord)device.GetTagByAddress("DB1.DBD364-DWORD");
+            NUM_PACKS_IN_SERIES_TAG = (S7_DWord)device.GetTagByAddress("DB1.DBD366-DWORD");
 
             QUANTITY_WORKSPACE = (S7_DWord)device.GetTagByAddress("DB1.DBD16-DWORD");
             QUANTITY_BOXS = (S7_DWord)device.GetTagByAddress("DB1.DBD20-DWORD");
@@ -558,7 +558,7 @@ namespace SortingStantion.Models
                     {
                         //Вызываем окно авторизации
                         //Вызов окна для авторизации мастера
-                        SortingStantion.TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser();
+                        SortingStantion.ToolsWindows.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new ToolsWindows.Authorization.windowAuthorizationSuperUser();
                         windowAuthorizationSuperUser.Owner = DataBridge.MainScreen;
                         windowAuthorizationSuperUser.ShowDialog();
 
@@ -646,7 +646,7 @@ namespace SortingStantion.Models
 
                     //Вызываем окно авторизации
                     //Вызов окна для авторизации мастера
-                    SortingStantion.TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser();
+                    SortingStantion.ToolsWindows.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new ToolsWindows.Authorization.windowAuthorizationSuperUser();
                     windowAuthorizationSuperUser.Owner = DataBridge.MainScreen;
                     windowAuthorizationSuperUser.ShowDialog();
 

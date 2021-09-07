@@ -3,20 +3,20 @@ using SortingStantion.Controls;
 using SortingStantion.Models;
 using System;
 using System.Windows.Media;
-using SortingStantion.TOOL_WINDOWS.windowGtinFault;
-using SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode;
-using SortingStantion.TOOL_WINDOWS.windowProductIsDeffect;
-using SortingStantion.TOOL_WINDOWS.windowRepeatProduct;
+using SortingStantion.ToolsWindows.windowGtinFault;
+using SortingStantion.ToolsWindows.windowExtraneousBarcode;
+using SortingStantion.ToolsWindows.windowProductIsDeffect;
+using SortingStantion.ToolsWindows.windowRepeatProduct;
 using System.Windows.Input;
 using SortingStantion.Utilites;
 
 namespace SortingStantion.TechnologicalObjects
 {
     /// <summary>
-    /// Объяект, осуществляющий работу с коробами, из учет
+    /// Объяект, осуществляющий работу с продуктами, их учет
     /// сравнение для отбраковки
     /// </summary>
-    public class BoxEngine
+    public class ProductsEngine
     {
         /// <summary>
         /// Указатель на главный Simatic TCP сервер
@@ -92,7 +92,7 @@ namespace SortingStantion.TechnologicalObjects
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        public BoxEngine()
+        public ProductsEngine()
         {
             //Инициализация сигналов от сканера
             REPEAT_ENABLE = (S7_Boolean)device.GetTagByAddress("DB1.DBX134.0");
@@ -181,30 +181,30 @@ namespace SortingStantion.TechnologicalObjects
             /*
                 Если линия не в работе (определяется по таймеру остановки в TIA) 
             */
-            if (lineistop == true)
-            {
+            //if (lineistop == true)
+            //{
                
-                //Подача звукового сигнала
-                DataBridge.Buzzer.On();
+            //    //Подача звукового сигнала
+            //    DataBridge.Buzzer.On();
 
-                //Запись сообщения в базу данных
-                DataBridge.AlarmLogging.AddMessage($"Получен штрихкод при остановленной линии", MessageType.Alarm);
+            //    //Запись сообщения в базу данных
+            //    DataBridge.AlarmLogging.AddMessage($"Получен штрихкод при остановленной линии", MessageType.Alarm);
 
-                //Вывод сообщения в зоне информации
-                string message = $"Конвейер не запущен, полученный код не будет записан в результат";
-                var msg = new UserMessage(message, DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
+            //    //Вывод сообщения в зоне информации
+            //    string message = $"Конвейер не запущен, полученный код не будет записан в результат";
+            //    var msg = new UserMessage(message, DataBridge.myRed);
+            //    DataBridge.MSGBOX.Add(msg);
 
-                //Вызов окна
-                customMessageBox mb = new customMessageBox("Ошибка", "Подтвердите удаление продукта с конвейера!");
-                mb.Owner = DataBridge.MainScreen;
-                mb.ShowDialog();
+            //    //Вызов окна
+            //    customMessageBox mb = new customMessageBox("Ошибка", "Подтвердите удаление продукта с конвейера!");
+            //    mb.Owner = DataBridge.MainScreen;
+            //    mb.ShowDialog();
 
 
-                //Выход из метода
-                return;
+            //    //Выход из метода
+            //    return;
 
-            }
+            //}
 
             //Получение GTIN из задания
             var task_gtin = DataBridge.WorkAssignmentEngine.GTIN;
@@ -236,11 +236,11 @@ namespace SortingStantion.TechnologicalObjects
                 //Вывод сообщения в зоне информации
                 string message = $"Посторонний код (не является КМ)";
                 var msg = new UserMessage(message, DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
+                //DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна
                 var windowExtraneousBarcode = new windowExtraneousBarcode(msg);
-                windowExtraneousBarcode.ShowDialog();
+                windowExtraneousBarcode.Show();
 
                 //Выход из метода
                 return;
@@ -264,11 +264,11 @@ namespace SortingStantion.TechnologicalObjects
                 //Вывод сообщения в зоне информации
                 string message = $"Посторонний продукт (GTIN не совпадает с заданием)";
                 var msg = new UserMessage(message, DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
+                //DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна
                 var windowExtraneousBarcode = new windowGtinFault(scaner_gtin, scaner_serialnumber, msg);
-                windowExtraneousBarcode.ShowDialog();
+                windowExtraneousBarcode.Show();
 
                 //Выход из метода
                 return;
@@ -282,17 +282,20 @@ namespace SortingStantion.TechnologicalObjects
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage($"Номер продукта {scaner_serialnumber} числится в браке", MessageType.Alarm);
 
                 //Вывод сообщения в окно информации
                 string message = $"Номер продукта {scaner_serialnumber} числится в браке";
                 var msg = new UserMessage(message, DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
+                //DataBridge.MSGBOX.Add(msg);
 
                 //Вызов окна
                 var windowProductIsDeffect = new windowProductIsDeffect(scaner_serialnumber, msg);
-                windowProductIsDeffect.ShowDialog();
+                windowProductIsDeffect.Show();
 
                 //Выход из метода
                 return;
@@ -325,7 +328,7 @@ namespace SortingStantion.TechnologicalObjects
                 //Вывод сообщения в окно информации
                 string message = $"Продукт номер {scaner_serialnumber} считан повторно.";
                 var msg = new UserMessage(message, DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
+                //DataBridge.MSGBOX.Add(msg);
 
                 //Добавление повтора в отчет
                 DataBridge.Report.AddRepeatProduct(scaner_serialnumber);

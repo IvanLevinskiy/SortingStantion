@@ -27,7 +27,7 @@ namespace SortingStantion
         /// <summary>
         /// Синий цвет
         /// </summary>
-        public static SolidColorBrush myBlue = new SolidColorBrush();
+        public static SolidColorBrush myBlue = new SolidColorBrush(Colors.Blue);
 
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace SortingStantion
         /// Элемент, управляющий статистикой
         /// обработаных коробов
         /// </summary>
-        public static BoxEngine BoxEngine = new BoxEngine();
+        public static ProductsEngine BoxEngine = new ProductsEngine();
 
         /// <summary>
         /// Элемент разделяющий данные штрихкода

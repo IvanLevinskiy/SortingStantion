@@ -1,7 +1,7 @@
 ﻿using S7Communication;
 using System.Windows;
 
-namespace SortingStantion.TOOL_WINDOWS.windowProductsAreTooCloseToEachOther
+namespace SortingStantion.ToolsWindows.windowProductsAreTooCloseToEachOther
 {
     /// <summary>
     /// Логика взаимодействия для windowProductsAreTooCloseToEachOther.xaml
@@ -35,10 +35,13 @@ namespace SortingStantion.TOOL_WINDOWS.windowProductsAreTooCloseToEachOther
         /// </summary>
         S7_Boolean CLEAR_ITEMS_COLLECTION_CMD;
 
-        public windowProductsAreTooCloseToEachOther()
+        public windowProductsAreTooCloseToEachOther(string message)
         {
             //Инициализация UI
             InitializeComponent();
+
+            //Вывод сообщения в окне
+            this.txMessage.Text = message;
 
             //Передача указателя на окно, в центе которого 
             //надо разместить окна

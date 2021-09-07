@@ -5,7 +5,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace SortingStantion.TOOL_WINDOWS.windowExtraneousBarcode
+namespace SortingStantion.ToolsWindows.windowExtraneousBarcode
 {
     /// <summary>
     /// Логика взаимодействия для windowExtraneousBarcode.xaml

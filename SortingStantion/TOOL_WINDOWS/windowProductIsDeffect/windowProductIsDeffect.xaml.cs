@@ -5,7 +5,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace SortingStantion.TOOL_WINDOWS.windowProductIsDeffect
+namespace SortingStantion.ToolsWindows.windowProductIsDeffect
 {
     /// <summary>
     /// Логика взаимодействия для windowProductIsDeffect.xaml

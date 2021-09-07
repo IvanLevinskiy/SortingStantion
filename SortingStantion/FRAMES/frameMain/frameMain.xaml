@@ -217,11 +217,11 @@
 
                     <Grid Width="200">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="70"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <Grid Width="50">
+                        <Grid Width="51">
                             <ContentPresenter Content="{StaticResource IconAddTask}"/>
                         </Grid>
 
@@ -253,11 +253,11 @@
 
                     <Grid Width="200">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="70"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <Grid Width="50">
+                        <Grid Width="51">
                             <ContentPresenter Content="{StaticResource IconFinishTask}"/>
                         </Grid>
 

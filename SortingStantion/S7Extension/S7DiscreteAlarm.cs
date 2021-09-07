@@ -70,8 +70,8 @@ namespace SortingStantion.S7Extension
                 //Если новое значение true, добавляем сообщение
                 if (newstatus == true)
                 {
-                    msg = new UserMessage(Message, MSGTYPE.ERROR);
-                    DataBridge.MSGBOX.Add(msg);
+                    //msg = new UserMessage(Message, MSGTYPE.ERROR);
+                    //DataBridge.MSGBOX.Add(msg);
 
                     MessageAction?.Invoke();
 

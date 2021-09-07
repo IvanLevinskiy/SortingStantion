@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-namespace SortingStantion.TOOL_WINDOWS.Authorization
+namespace SortingStantion.ToolsWindows.Authorization
 {
     /// <summary>
     /// Окно для авторизации мастера

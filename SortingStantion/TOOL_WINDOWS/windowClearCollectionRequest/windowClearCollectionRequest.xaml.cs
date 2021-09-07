@@ -2,7 +2,7 @@
 using System;
 using System.Windows;
 
-namespace SortingStantion.TOOL_WINDOWS.windowClearCollectionRequest
+namespace SortingStantion.ToolsWindows.windowClearCollectionRequest
 {
     /// <summary>
     /// Логика взаимодействия для windowClearCollectionRequest.xaml

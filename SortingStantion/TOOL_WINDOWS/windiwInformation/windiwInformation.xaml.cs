@@ -3,7 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace SortingStantion.TOOL_WINDOWS.windiwInformation
+namespace SortingStantion.ToolsWindows.windiwInformation
 {
     /// <summary>
     /// Логика взаимодействия для windiwInformation.xaml

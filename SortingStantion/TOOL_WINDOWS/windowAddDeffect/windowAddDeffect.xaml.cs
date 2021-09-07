@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
+namespace SortingStantion.ToolsWindows.windowAddDeffect
 {
     /// <summary>
     /// Логика взаимодействия для windowAddDeffect.xaml
@@ -158,10 +158,6 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
                 return;
             }
 
-            /*
-                Добавление номера продукта в список брака
-            */
-            DataBridge.Report.AddDeffect(serialnumber);
 
             /*
                 Продукт содержится в рузультате
@@ -173,7 +169,12 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
                 DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
                 return;
             }
-                        
+
+            /*
+                Добавление номера продукта в список брака
+            */
+            DataBridge.Report.AddDeffect(serialnumber);
+
 
             /*
                 Текст сообщения
@@ -192,7 +193,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowAddDeffect
             
 
             //Инкремент счетчика отбракованых изделий вручную
-            var value = Convert.ToInt32(QUANTITY_PRODUCTS_MANUAL_REJECTED.Status) + 1;
+            var value = QUANTITY_PRODUCTS_MANUAL_REJECTED.Value + 1;
             QUANTITY_PRODUCTS_MANUAL_REJECTED.Write(value);
         }
 

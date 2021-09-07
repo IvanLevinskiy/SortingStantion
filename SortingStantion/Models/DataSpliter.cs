@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace SortingStantion.Models
 {
@@ -113,8 +114,8 @@ namespace SortingStantion.Models
             //"\u0002010460456789012621vFvoJl\u001d93Pzx9\r\n"
 
             //Удаление лишних символов
-            data = data.Replace("\u0002", "");
-            data = data.Replace("\u001d", "");
+            data = Regex.Replace(data, @"[^\t\r\n -~]", "");// data.Replace("\u0002", "");
+            //data = data.Replace("\u001d", "");
             data = data.Replace("\r\n", "");
 
             SourseData = data;

@@ -178,7 +178,7 @@ namespace SortingStantion.MainScreen
             set;
         }
 
-        public BoxEngine BoxEngine
+        public ProductsEngine BoxEngine
         {
             get
             {
@@ -227,7 +227,7 @@ namespace SortingStantion.MainScreen
                 return new DelegateCommand((obj) =>
                 {
                     //Вызов окна для авторизации мастера
-                    SortingStantion.TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new TOOL_WINDOWS.Authorization.windowAuthorizationSuperUser(false);
+                    SortingStantion.ToolsWindows.Authorization.windowAuthorizationSuperUser windowAuthorizationSuperUser = new ToolsWindows.Authorization.windowAuthorizationSuperUser(false);
                     windowAuthorizationSuperUser.Owner = DataBridge.MainScreen;
                     windowAuthorizationSuperUser.ShowDialog();
                 },

@@ -13,6 +13,8 @@ namespace SortingStantion.MainScreen
         {
             InitializeComponent();
 
+            this.WindowState = WindowState.Maximized;
+
             //Внесение в базу данных сообщения о запуске приложения 
             DataBridge.AlarmLogging.AddMessage("Запуск приложения", Models.MessageType.Event);
 
@@ -48,28 +50,6 @@ namespace SortingStantion.MainScreen
             //Запись файла с результатом
             //операций (если отчет не отправлен)
             DataBridge.Report.Save();
-        }
-
-        /// <summary>
-        /// Метод для закрытия окна
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnExit_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            try
-            {
-                this.DragMove();
-            }
-            catch
-            { 
-            
-            }
         }
     }
 }

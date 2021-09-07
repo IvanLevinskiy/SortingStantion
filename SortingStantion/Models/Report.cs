@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using S7Communication;
 using System.Threading;
 using System.Windows.Media;
+using System.Text;
 
 namespace SortingStantion.Models
 {
@@ -284,6 +285,31 @@ namespace SortingStantion.Models
                 }
             }
 
+            /*
+                Проверка кодов в списке повторов
+            */
+            foreach (var repeatPack in repeatPacks)
+            {
+                if (repeatPack.num == serialnumber)
+                {
+                    return true;
+                }
+            }
+
+            //Если не нашли код, возвращаем
+            //результат
+            return false;
+        }
+
+        /// <summary>
+        /// Метод для проверки содержится ли
+        /// продукт в коллекции повторов
+        /// </summary>
+        /// <param name="serialnumber"></param>
+        /// <returns></returns>
+
+        public bool IsContentsRepeatCollection(string serialnumber)
+        {
             /*
                 Проверка кодов в списке повторов
             */
@@ -648,20 +674,72 @@ namespace SortingStantion.Models
             SendReportToL3();
         }
 
+        private string GetToken(string url, string username, string password, string tenancyName = null)
+        {
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                var input = "{\"usernameOrEmailAddress\":\"" + username + "\"," +
+                            "\"password\":\"" + password + "\"}";
+
+                if (tenancyName != null)
+                {
+                    input = input.TrimEnd('}') + "," +
+                            "\"tenancyName\":\"" + tenancyName + "\"}";
+                }
+
+                streamWriter.Write(input);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            string response;
+
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                response = streamReader.ReadToEnd();
+            }
+
+            // Crude way
+            var entries = response.TrimStart('{').TrimEnd('}').Replace("\"", String.Empty).Split(',');
+
+            foreach (var entry in entries)
+            {
+                if (entry.Split(':')[0] == "result")
+                {
+                    return entry.Split(':')[1];
+                }
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Метод для отправки результата на L3
         /// </summary>
         void SendReportToL3()
         {
+            var username = SrvL3Login;
+            var password = rvL3Password;
+
             //Получение получателя отчета
-            var endPoint = SrvL3UrlReport;           
+            var endPoint = SrvL3UrlReport;
 
             //Формирование http запроса с отчетом
             var httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(endPoint);
             httpWebRequest.ContentType = "applicaion/json";
             httpWebRequest.Method = "POST";
-            NetworkCredential nc = new NetworkCredential(SrvL3Login, rvL3Password);
-            httpWebRequest.Credentials = nc;
+            httpWebRequest.PreAuthenticate = true;
+
+            string authorisation = string.Format("{0}:{1}", username,  password);
+            string encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(authorisation));
+            string header = string.Format("{0} {1}", "Basic", encoded);
+            httpWebRequest.Headers[HttpRequestHeader.Authorization] = header;
+
 
             try
             {

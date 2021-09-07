@@ -53,7 +53,7 @@ namespace SortingStantion.frameSettings
         /// Указатель на экземпляр класса, управляющий 
         /// сканированием продукта
         /// </summary>
-        public BoxEngine BoxEngine
+        public ProductsEngine BoxEngine
         {
             get
             {

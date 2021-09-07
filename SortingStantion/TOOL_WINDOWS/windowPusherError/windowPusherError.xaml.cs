@@ -6,7 +6,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace SortingStantion.TOOL_WINDOWS.windowPusherError
+namespace SortingStantion.ToolsWindows.windowPusherError
 {
     /// <summary>
     /// Логика взаимодействия для windowPusherError.xaml

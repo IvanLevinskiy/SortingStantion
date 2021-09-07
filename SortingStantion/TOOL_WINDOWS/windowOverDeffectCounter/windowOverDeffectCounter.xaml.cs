@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Windows;
 
-namespace SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter
+namespace SortingStantion.ToolsWindows.windowOverDeffectCounter
 {
     /// <summary>
     /// Логика взаимодействия для windowOverDeffectCounter.xaml

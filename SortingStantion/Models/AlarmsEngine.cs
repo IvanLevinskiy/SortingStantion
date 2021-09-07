@@ -1,9 +1,9 @@
 ﻿using S7Communication;
 using SortingStantion.Controls;
 using SortingStantion.S7Extension;
-using SortingStantion.TOOL_WINDOWS.windowOverDeffectCounter;
-using SortingStantion.TOOL_WINDOWS.windowProductsAreTooCloseToEachOther;
-using SortingStantion.TOOL_WINDOWS.windowPusherError;
+using SortingStantion.ToolsWindows.windowOverDeffectCounter;
+using SortingStantion.ToolsWindows.windowProductsAreTooCloseToEachOther;
+using SortingStantion.ToolsWindows.windowPusherError;
 using System;
 
 namespace SortingStantion.Models
@@ -43,6 +43,43 @@ namespace SortingStantion.Models
                 return device.Groups[0];
             }
         }
+
+        /// <summary>
+        /// Деблокировка
+        /// если имеются критичные ошибки Interlock = false
+        /// если отсутсвуют критичные ошибки Interlock = true
+        /// </summary>
+        public bool Interlock
+        {
+            get
+            {
+                //Если все ошибки не активны - возвращаем TRUE
+                //В случае наличая хотяч бы одной ошибки - FALSE
+                return interlock;
+            }
+            set
+            {
+                //Если текущее состояние деблокировки изменилось - генирируем событие
+                //и уведомляем подписчиков
+                var currentinterlock = al_1.Value == false && al_2.Value == false && al_3.Value == false;
+                if (currentinterlock != interlock)
+                {
+                    //Получение текущего состояния деблокировки
+                    interlock  = al_1.Value == false && al_2.Value == false && al_3.Value == false;
+
+                    //Уведомление подписчиков
+                    ChangeInterlockState?.Invoke();
+                }
+                interlock = currentinterlock;
+            }
+        }
+        bool interlock = true;
+
+        /// <summary>
+        /// Событие, генерируемое при изменении
+        /// состояния деблокировки
+        /// </summary>
+        public event Action ChangeInterlockState;
 
         /// <summary>
         /// Тэ для сброса ошибок
@@ -90,9 +127,14 @@ namespace SortingStantion.Models
         public S7DiscreteAlarm al_8;
 
         /// <summary>
-        /// Ошибка 9 - Продукт слишком близко друг другу
+        /// Ошибка 9 - Продукт слишком близко друг другу в зоне сканера
         /// </summary>
         public S7DiscreteAlarm al_9;
+
+        /// <summary>
+        /// Ошибка 10 - Продукт слишком близко друг другу в зоне отбраковщика
+        /// </summary>
+        public S7DiscreteAlarm al_10;
 
         /// <summary>
         /// Ошибка 13 - Ошибка ИБП UPS
@@ -140,13 +182,21 @@ namespace SortingStantion.Models
                 Неисправность фотодатчика FS1
             */
             al_1 = new S7DiscreteAlarm("Отсутствует связь с датчиком сканера, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", "DB6.DBX12.0", group);
+            al_1.ChangeValue += (oldstate, currentstate) => { Interlock = false; };
             al_1.MessageAction = () =>
             {
+                var msg = new UserMessage("Отсутствует связь с датчиком сканера, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
+                DataBridge.MSGBOX.Add(msg);
+
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
                 //Подача звукового сигнала
                 DataBridge.Buzzer.On();
+
+                //Очистка коллекции продуктов, расположенных
+                //между сканером и отбраковщиком
+                DataBridge.BoxEngine.ClearCollection();
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS1 (перед сканером)", MessageType.Alarm);
@@ -157,13 +207,21 @@ namespace SortingStantion.Models
                 Неисправность фотодатчика FS2
             */
             al_2 = new S7DiscreteAlarm("Отсутствует связь с датчиком отбраковщика, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", "DB6.DBX12.1", group);
+            al_2.ChangeValue += (oldstate, currentstate) => { Interlock = false; };
             al_2.MessageAction = () =>
             {
+                var msg = new UserMessage("Отсутствует связь с датчиком отбраковщика, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
+                DataBridge.MSGBOX.Add(msg);
+
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
                 //Подача звукового сигнала
                 DataBridge.Buzzer.On();
+
+                //Очистка коллекции продуктов, расположенных
+                //между сканером и отбраковщиком
+                DataBridge.BoxEngine.ClearCollection();
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS2 (перед отбраковщиком)", MessageType.Alarm);
@@ -174,13 +232,21 @@ namespace SortingStantion.Models
                 Неисправность фотодатчика FS3
             */
             al_3 = new S7DiscreteAlarm("Отсутствует связь с датчиком контроля отбраковки, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", "DB6.DBX12.2", group);
+            al_3.ChangeValue += (oldstate, currentstate) => { Interlock = false; };
             al_3.MessageAction = () =>
             {
+                var msg = new UserMessage("Отсутствует связь с датчиком контроля отбраковки, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
+                DataBridge.MSGBOX.Add(msg);
+
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
                 //Подача звукового сигнала
                 DataBridge.Buzzer.On();
+
+                //Очистка коллекции продуктов, расположенных
+                //между сканером и отбраковщиком
+                DataBridge.BoxEngine.ClearCollection();
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS3 (перед отбраковщиком)", MessageType.Alarm);
@@ -261,7 +327,7 @@ namespace SortingStantion.Models
             /*
                 Продукт слишком близко к предыдущему, удалите его с конвейера
             */
-            al_9 = new S7DiscreteAlarm("Продукт слишком близко к предыдущему, удалите его с конвейера", "DB6.DBX13.0", group);
+            al_9 = new S7DiscreteAlarm("Продукт в зоне сканера слишком близко к предыдущему, удалите его с конвейера", "DB6.DBX13.0", group);
             al_9.MessageAction = () =>
             {
                 //Остановка конвейера
@@ -277,7 +343,30 @@ namespace SortingStantion.Models
                 al_9.Write(false);
 
                 //Вывод окна ошибки
-                windowProductsAreTooCloseToEachOther windowProductsAreTooCloseToEachOther = new windowProductsAreTooCloseToEachOther();
+                windowProductsAreTooCloseToEachOther windowProductsAreTooCloseToEachOther = new windowProductsAreTooCloseToEachOther(message: "Продукт на фотодатчике 1 слишком близко к предыдущему. Удалите все продукты с линии между датчиками 1 и 2 и проверьте их коды операцией Справка.");
+                windowProductsAreTooCloseToEachOther.ShowDialog();
+            };
+
+            /*
+                Продукт слишком близко к предыдущему, удалите его с конвейера
+            */
+            al_10 = new S7DiscreteAlarm("Продукт в зоне отбраковщика слишком близко к предыдущему, удалите его с конвейера", "DB6.DBX13.1", group);
+            al_10.MessageAction = () =>
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Продукт в зоне отбраковщика слишком близко к предыдущему", MessageType.Alarm);
+
+                //Сброс ошибки
+                al_10.Write(false);
+
+                //Вывод окна ошибки
+                windowProductsAreTooCloseToEachOther windowProductsAreTooCloseToEachOther = new windowProductsAreTooCloseToEachOther(message: "Продукт на фотодатчике 2 слишком близко к предыдущему. Удалите все продукты с линии между датчиками 1 и 2 и проверьте их коды операцией Справка.");
                 windowProductsAreTooCloseToEachOther.ShowDialog();
             };
 

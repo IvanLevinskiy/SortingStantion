@@ -5,7 +5,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
+namespace SortingStantion.ToolsWindows.windowRepeatProduct
 {
     /// <summary>
     /// Логика взаимодействия для windowRepeatProduct.xaml
@@ -129,7 +129,7 @@ namespace SortingStantion.TOOL_WINDOWS.windowRepeatProduct
             /*
                Продукт считан повторно 
             */
-            if (DataBridge.Report.IsRepeat(serialnumber) == true)
+            if (DataBridge.Report.IsContentsRepeatCollection(serialnumber) == true)
             {
                 var brush = DataBridge.myRed;
 

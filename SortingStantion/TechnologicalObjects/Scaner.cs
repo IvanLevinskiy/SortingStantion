@@ -224,14 +224,9 @@ namespace SortingStantion.TechnologicalObjects
             //Чтение данных из последовательного порта
             var lenght = port.Read(buffer, 0, buffer.Length);
 
-            //Инициализация строки для формирования результата сканирования
-            string data = string.Empty;
+            string data = Encoding.Unicode.GetString(buffer);
 
-            //Построение строки
-            for (int i = 0; i < lenght; i++)
-            {
-                data += (char)buffer[i];
-            }
+            var l = data.Length;
 
             //Уведомление подписчиков из потока UI
             Action action = () =>

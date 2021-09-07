@@ -40,6 +40,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Driver, Version=1.1.79.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Driver.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
@@ -56,9 +60,6 @@
     <Reference Include="S7Communication, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\S7Communication.dll</HintPath>
-    </Reference>
-    <Reference Include="Sharp7, Version=1.1.79.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sharp7.1.1.79\lib\net40\Sharp7.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -160,13 +161,13 @@
     <Compile Include="Dictionarys\WindowStyles.xaml.cs">
       <DependentUpon>WindowStyles.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FRAMES\frameMain\frameMain.xaml.cs">
+    <Compile Include="Frames\frameMain\frameMain.xaml.cs">
       <DependentUpon>frameMain.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FRAMES\frameSettings\frameSettings.xaml.cs">
+    <Compile Include="Frames\frameSettings\frameSettings.xaml.cs">
       <DependentUpon>frameSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FRAMES\frameSettings\windowExit.xaml.cs">
+    <Compile Include="Frames\frameSettings\windowExit.xaml.cs">
       <DependentUpon>windowExit.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ButtonsEnableModel.cs" />
@@ -224,7 +225,6 @@
     <Compile Include="Models\WorkAssignmentEngine.cs" />
     <Compile Include="S7Extension\Item.cs" />
     <Compile Include="S7Extension\S7DiscreteAlarm.cs" />
-    <Compile Include="TechnologicalObjects\Box.cs" />
     <Compile Include="TechnologicalObjects\BoxEngine.cs" />
     <Compile Include="TechnologicalObjects\Conveyor.cs" />
     <Compile Include="TechnologicalObjects\Scaner.cs" />
@@ -295,15 +295,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FRAMES\frameMain\frameMain.xaml">
+    <Page Include="Frames\frameMain\frameMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FRAMES\frameSettings\frameSettings.xaml">
+    <Page Include="Frames\frameSettings\frameSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FRAMES\frameSettings\windowExit.xaml">
+    <Page Include="Frames\frameSettings\windowExit.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -468,10 +468,6 @@
     <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListConsumer\Siemens.Simatic.Lang.Online.xml" />
     <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListConsumer\Siemens.Simatic.Lang.xml" />
     <Resource Include="TIASortingStantion\System\PEData\Meta\ChangeListProvider\Siemens.Automation.DomainModel.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Libs\S7Communication.dll" />
-    <Content Include="S7Communication.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

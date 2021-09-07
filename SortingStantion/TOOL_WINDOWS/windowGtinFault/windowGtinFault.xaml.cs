@@ -5,7 +5,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace SortingStantion.TOOL_WINDOWS.windowGtinFault
+namespace SortingStantion.ToolsWindows.windowGtinFault
 {
     /// <summary>
     /// Логика взаимодействия для frame_gtin_fault.xaml

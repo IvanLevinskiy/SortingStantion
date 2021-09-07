@@ -159,6 +159,13 @@ namespace SortingStantion.Models
                 //Флаг, указывающий на то, запущен ли конвейер
                 var lineisrun = DataBridge.Conveyor.LineIsRun;
 
+
+                //Если отсутствует деблокировка
+                if (DataBridge.AlarmsEngine.Interlock == false)
+                {
+                    return false;
+                }
+
                 //1. Задание не прислано в комплекс
                 //   - НЕ АКТИВНА
                 if (workAssignmentsList.Count == 0 && inwork == false)
@@ -263,6 +270,12 @@ namespace SortingStantion.Models
                 //Флаг, указывающий на то, запущен ли конвейер в нормальном режиме
                 var lineisrun = DataBridge.Conveyor.LineIsRun;
 
+                //Если отсутствует деблокировка
+                if (DataBridge.AlarmsEngine.Interlock == false)
+                {
+                    return false;
+                }
+
                 //Если задание в работе, то доступность кнопки такая
                 //же как и BtnStop
                 if (inwork == true)
@@ -292,6 +305,7 @@ namespace SortingStantion.Models
 
                 //Флаг, указывающий на то, запущен ли конвейер в нормальном режиме
                 var lineisrun = DataBridge.Conveyor.LineIsRun;
+
 
                 //Если задание в работе, то доступность кнопки такая
                 //же как и BtnStop
@@ -550,6 +564,13 @@ namespace SortingStantion.Models
                 OnPropertyChanged("BtnStopEnable");
 
                 OnPropertyChanged("BtnToolsEnable");
+            };
+
+            //Изменение состояния деблокировки
+            DataBridge.AlarmsEngine.ChangeInterlockState += () =>
+            {
+                OnPropertyChanged("BtnStartEnable");
+                OnPropertyChanged("BtnStartForceEnable");
             };
         }
 
