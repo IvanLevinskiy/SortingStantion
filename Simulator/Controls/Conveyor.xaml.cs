@@ -36,7 +36,7 @@ namespace Simulator.Controls
             timer.Tick += (e, s) =>
             {
                 Box box = new Box(canvas);
-                var random = r.Next(5, 10);
+                var random = r.Next(20, 50);
                 timer.Interval = new TimeSpan(0, 0, 0, random);
             };
 

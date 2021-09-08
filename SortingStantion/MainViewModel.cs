@@ -186,6 +186,10 @@ namespace SortingStantion.MainScreen
             }
         }
 
+        /// <summary>
+        /// Локальный счетчик
+        /// </summary>
+        int counter;
 
         /// <summary>
         /// Конструктор
@@ -205,15 +209,17 @@ namespace SortingStantion.MainScreen
             //Запуск сервера
             server.Start();
 
-            ////Запуск задачи, взводящий флаг ConnectFlag
-            //Task.Factory.StartNew(() =>
-            //{
-            //    while (true)
-            //    {
-            //        //ConnectFlag.Write(true);
-            //        //Thread.Sleep(500);
-            //    }
-            //});
+            device.DataUpdated += () =>
+            {
+                counter++;
+
+                if (counter >= 10)
+                {
+                    counter = 0;
+                    ConnectFlag.Write(true);
+                }
+
+            };
         }
 
 

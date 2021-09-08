@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using SortingStantion.Controls;
+﻿using SortingStantion.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +8,9 @@ using S7Communication;
 using System.Threading;
 using System.Windows.Media;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
+using Newtonsoft.Json;
 
 namespace SortingStantion.Models
 {
@@ -567,8 +569,14 @@ namespace SortingStantion.Models
                 repeatPacks = this.repeatPacks
             };
 
+            //var options = new JsonSerializerOptions
+            //{
+            //    Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+            //    WriteIndented = true
+            //};
+
             //Сериализация
-            return JsonSerializer.Serialize<ReportBackupFile>(reportBackupFile);
+            return JsonConvert.SerializeObject(reportBackupFile);
         }
 
 
@@ -646,9 +654,10 @@ namespace SortingStantion.Models
 
             //Десериализация задачи из памяти программы
             // чтение данных
-            using (FileStream fs = new FileStream(@"AppData\Task.json", FileMode.OpenOrCreate))
+            using (StreamReader fs = new StreamReader(@"AppData\Task.json"))
             {
-                reportBackupFile = await JsonSerializer.DeserializeAsync<ReportBackupFile>(fs);
+                var text = fs.ReadToEnd();
+                reportBackupFile = (ReportBackupFile)JsonConvert.DeserializeObject(text);
                 fs.Close();
 
                 this.ID = reportBackupFile.id;

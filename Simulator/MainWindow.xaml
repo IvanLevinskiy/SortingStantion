@@ -9,12 +9,165 @@
         mc:Ignorable="d"
         Title="Симуляция" Height="450" Width="800">
     <Grid>
+        <Grid.Resources>
+
+            <SolidColorBrush x:Key="TextColor" Color="#FFE1E1E1" />
+
+            <!--ЦВЕТ РАЗДЕЛИТЕЛЕЙ-->
+            <SolidColorBrush x:Key="GridColor" Color="#FF3e3e3e" />
+
+            <!--ЦВЕТА ПРИЛОЖЕНИЯ-->
+            <SolidColorBrush x:Key="DarkColor" Color="#FF292929" />
+            
+            <SolidColorBrush x:Key="LightColor" Color="#FF323232" />
+
+            <!--<SolidColorBrush x:Key="IconColor" Color="#FF676767" />-->
+            <SolidColorBrush x:Key="IconColor" Color="#FFE1E1E1" />
+
+            <!--ИКОНКА ПЕРЕКЛЮЧАТЕЛЯ В АКТИВНОМ СОСТОЯНИИ-->
+            <Viewbox x:Key="IconTougleOn">
+                <Canvas Width="78.48" Height="35">
+                    <Canvas.RenderTransform>
+                        <TranslateTransform X="0" Y="0"/>
+                    </Canvas.RenderTransform>
+                    <Canvas.Resources/>
+                    <Canvas >
+                        <Rectangle Canvas.Left="0.06497404" 
+                           Canvas.Top="-0.049667623" 
+                           Width="78.480453" 
+                           Height="35.088787" 
+                           RadiusX="20" 
+                           RadiusY="20" 
+                           Fill="#FF00FFFF" 
+                           StrokeThickness="0.166532"/>
+
+                        <Ellipse Canvas.Left="46.2" 
+                         Canvas.Top="2.3" 
+                         Width="30" 
+                         Height="30" 
+                         Fill="#FFFFFFFF" 
+                         StrokeThickness="0.198436"/>
+
+                        <Ellipse Canvas.Left="48.7" 
+                         Canvas.Top="4.8" 
+                         Width="25" 
+                         Height="25" 
+                         Fill="#FF000000" 
+                         StrokeThickness="0.165363"/>
+
+                        <Rectangle Canvas.Left="15.398208" 
+                           Canvas.Top="9.4060364" 
+                           Width="3.96875" 
+                           Height="15.969494" 
+                           Name="rect64" 
+                           Fill="#FFFFFFFF" 
+                           StrokeThickness="0.264583"/>
+                    </Canvas>
+                </Canvas>
+            </Viewbox>
+
+            <!--ИКОНКА ПЕРЕКЛЮЧАТЕЛЯ В НЕАКТИВНОМ СОСТОЯНИИ-->
+            <Viewbox x:Key="IconTougleOff">
+                <Canvas Width="78.48" 
+                Height="35">
+
+                    <Canvas.RenderTransform>
+                        <TranslateTransform X="0" Y="0"/>
+                    </Canvas.RenderTransform>
+                    <Canvas.Resources/>
+
+                    <Canvas >
+                        <Rectangle Canvas.Left="0.06497404" 
+                           Canvas.Top="-0.049667623" 
+                           Width="78.480453" 
+                           Height="35.088787" 
+                           RadiusX="20" 
+                           RadiusY="20" 
+                           Fill="{StaticResource LightColor}" 
+                           StrokeThickness="0.166532"/>
+
+                        <Ellipse Canvas.Left="2.8" 
+                         Canvas.Top="2.3" 
+                         Width="30" 
+                         Height="30" 
+                         Fill="#FFCCCCCC" 
+                         StrokeThickness="0.198436"/>
+
+                        <Ellipse Canvas.Left="5.3" 
+                         Canvas.Top="4.8" 
+                         Width="25" 
+                         Height="25" 
+                         Fill="{StaticResource LightColor}" 
+                         StrokeThickness="0.165363"/>
+
+                        <Ellipse Canvas.Left="55.7" 
+                         Canvas.Top="11.4" 
+                         Width="10" 
+                         Height="10" 
+                         Fill="#FFCCCCCC" 
+                         StrokeThickness="0.264583"/>
+                    </Canvas>
+                </Canvas>
+            </Viewbox>
+
+            <Style TargetType="Controls:S7ToggleButton" x:Key="s7ToggleButton">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Grid>
+
+                                <Viewbox>
+                                    <ContentPresenter x:Name="image" 
+                                              Margin="7"
+                                              Content="{StaticResource IconTougleOn}"/>
+                                </Viewbox>
+
+                                <Grid x:Name="warning" Visibility="Hidden">
+                                    <Viewbox Height="20" 
+                                     Width="20"
+                                     VerticalAlignment="Top"
+                                     HorizontalAlignment="Right">
+
+                                    </Viewbox>
+                                </Grid >
+
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked}" Value="False">
+                                    <Setter TargetName="image" Property="Content" Value="{StaticResource IconTougleOff}"/>
+                                </DataTrigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding WriteBit.IsValid}" Value="false">
+                                    <Setter TargetName="warning" Property="Visibility" Value="Visible"/>
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+        </Grid.Resources>
 
         <Controls:Conveyor Height="400" 
                            Margin="5,0" 
                            VerticalAlignment="Top"/>
-        
-     
+
+        <Controls:S7ToggleButton x:Name="simmodeBtn"
+                                    Address="DB1.DBX98.3"
+                                    IsEnabled="True"
+                                                     Style="{StaticResource s7ToggleButton}"
+                                                     VerticalContentAlignment="Center"
+                                                     Width="80"
+                                                     Height="40"
+                                                     Margin="0,6,10.333,0"
+                                                     HorizontalAlignment="Right"
+                                                     VerticalAlignment="Top"/>
+
+
 
     </Grid>
 </Window>

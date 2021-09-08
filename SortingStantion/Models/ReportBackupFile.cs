@@ -5,18 +5,6 @@ namespace SortingStantion.Models
 
     public class ReportBackupFile
     {
-        public string id
-        {
-            get;
-            set;
-        }
-
-        public List<UserAuthorizationHistotyItem> operators
-        {
-            get;
-            set;
-        }
-
         public string startTime
         {
             get;
@@ -24,6 +12,18 @@ namespace SortingStantion.Models
         }
 
         public string endTime
+        {
+            get;
+            set;
+        }
+
+        public string id
+        {
+            get;
+            set;
+        }
+
+        public List<UserAuthorizationHistotyItem> operators
         {
             get;
             set;

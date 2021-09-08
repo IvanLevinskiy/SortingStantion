@@ -34,7 +34,7 @@ namespace Simulator
         /// <summary>
         /// Simatic Server
         /// </summary>
-        public static SimaticServer Server;
+        public static SimaticClient Server;
 
         /// <summary>
         /// Указатель на отбраковщик
@@ -75,7 +75,7 @@ namespace Simulator
             if (device == null)
             {
                 //Создание сервера
-                DataBridge.Server = new SimaticServer();
+                DataBridge.Server = new SimaticClient();
                 DataBridge.Device = new SimaticDevice("192.168.3.70", S7Communication.Enumerations.CpuType.S71200, 0, 1);
                 DataBridge.Device.AddGroup(new SimaticGroup());
                 DataBridge.Server.AddDevice(DataBridge.Device);

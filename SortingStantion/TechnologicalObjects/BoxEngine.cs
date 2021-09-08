@@ -104,7 +104,7 @@ namespace SortingStantion.TechnologicalObjects
             CLEAR_ITEMS_COLLECTION_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX98.2");
 
             //Данные из сканера
-            SCAN_DATA = (S7_String)device.GetTagByAddress("DB1.DBD494-STR100");
+            SCAN_DATA = (S7_String)device.GetTagByAddress("DB1.DBD506-STR100");
 
             //Количество отсканированных но не выпущенных объектов
             ProductCollectionLenght = (S7_DWord)device.GetTagByAddress("DB5.DBD0-DWORD");

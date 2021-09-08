@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Windows;
-using S7Communication;
+﻿using System.Windows;
 
 namespace Simulator
 {
@@ -19,6 +15,11 @@ namespace Simulator
             this.Loaded += (s, e) =>
             {
                 DataBridge.Server.Start();
+            };
+
+            this.Closing += (s, e) =>
+            {
+                  simmodeBtn.IsChecked = false;
             };
         }
     }

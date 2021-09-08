@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="S7Communication, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SortingStantion\bin\Debug\S7Communication.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -98,6 +102,7 @@
     <Compile Include="Controls\Pusher.xaml.cs">
       <DependentUpon>Pusher.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\S7ToggleButton.cs" />
     <Compile Include="DataBridge.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
