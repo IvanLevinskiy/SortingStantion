@@ -27,7 +27,7 @@ namespace SortingStantion
         /// <summary>
         /// Синий цвет
         /// </summary>
-        public static SolidColorBrush myBlue = new SolidColorBrush(Colors.Blue);
+        public static SolidColorBrush myBlue = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x7A, 0xCC));
 
 
         /// <summary>

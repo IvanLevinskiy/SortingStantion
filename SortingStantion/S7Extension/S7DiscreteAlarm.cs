@@ -18,6 +18,12 @@ namespace SortingStantion.S7Extension
             set;
         }
 
+        public bool ShowMessage
+        {
+            get;
+            set;
+        }
+
 
         /// <summary>
         /// Метод, вызываемый при возникновлении аварии
@@ -68,10 +74,10 @@ namespace SortingStantion.S7Extension
 
 
                 //Если новое значение true, добавляем сообщение
-                if (newstatus == true)
+                if (newstatus == true && ShowMessage == true)
                 {
-                    //msg = new UserMessage(Message, MSGTYPE.ERROR);
-                    //DataBridge.MSGBOX.Add(msg);
+                    msg = new UserMessage(Message, MSGTYPE.ERROR);
+                    DataBridge.MSGBOX.Add(msg);
 
                     MessageAction?.Invoke();
 

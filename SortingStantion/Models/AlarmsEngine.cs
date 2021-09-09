@@ -183,11 +183,9 @@ namespace SortingStantion.Models
             */
             al_1 = new S7DiscreteAlarm("Отсутствует связь с датчиком сканера, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", "DB6.DBX12.0", group);
             al_1.ChangeValue += (oldstate, currentstate) => { Interlock = false; };
+            al_1.ShowMessage = true;
             al_1.MessageAction = () =>
             {
-                var msg = new UserMessage("Отсутствует связь с датчиком сканера, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
-
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
@@ -200,6 +198,9 @@ namespace SortingStantion.Models
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS1 (перед сканером)", MessageType.Alarm);
+
+                //var msg = new UserMessage("Отсутствует связь с датчиком сканера, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
+                //DataBridge.MSGBOX.Add(msg);
             };
 
 
@@ -208,11 +209,9 @@ namespace SortingStantion.Models
             */
             al_2 = new S7DiscreteAlarm("Отсутствует связь с датчиком отбраковщика, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", "DB6.DBX12.1", group);
             al_2.ChangeValue += (oldstate, currentstate) => { Interlock = false; };
+            al_2.ShowMessage = true;
             al_2.MessageAction = () =>
             {
-                var msg = new UserMessage("Отсутствует связь с датчиком отбраковщика, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
-
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
@@ -226,6 +225,8 @@ namespace SortingStantion.Models
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS2 (перед отбраковщиком)", MessageType.Alarm);
 
+                //var msg = new UserMessage("Отсутствует связь с датчиком отбраковщика, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
+                //DataBridge.MSGBOX.Add(msg);
             };
 
             /*
@@ -233,11 +234,9 @@ namespace SortingStantion.Models
             */
             al_3 = new S7DiscreteAlarm("Отсутствует связь с датчиком контроля отбраковки, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", "DB6.DBX12.2", group);
             al_3.ChangeValue += (oldstate, currentstate) => { Interlock = false; };
+            al_3.ShowMessage = true;
             al_3.MessageAction = () =>
             {
-                var msg = new UserMessage("Отсутствует связь с датчиком контроля отбраковки, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
-                DataBridge.MSGBOX.Add(msg);
-
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
 
@@ -250,6 +249,9 @@ namespace SortingStantion.Models
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS3 (перед отбраковщиком)", MessageType.Alarm);
+
+                //var msg = new UserMessage("Отсутствует связь с датчиком контроля отбраковки, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
+                //DataBridge.MSGBOX.Add(msg);
             };
 
             /*

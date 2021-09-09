@@ -258,7 +258,7 @@ namespace SortingStantion.Models
         /// <returns></returns>
         public bool AsAResult(string serialnumber)
         {
-            foreach (var code in AllCodes)
+            foreach (var code in Codes)
             {
                 if (code == serialnumber)
                 {
@@ -657,7 +657,7 @@ namespace SortingStantion.Models
             using (StreamReader fs = new StreamReader(@"AppData\Task.json"))
             {
                 var text = fs.ReadToEnd();
-                reportBackupFile = (ReportBackupFile)JsonConvert.DeserializeObject(text);
+                reportBackupFile = JsonConvert.DeserializeObject<ReportBackupFile>(text);
                 fs.Close();
 
                 this.ID = reportBackupFile.id;

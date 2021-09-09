@@ -131,23 +131,23 @@ namespace SortingStantion.Controls
         {
             if (type == MSGTYPE.WARNING)
             {
-                return new SolidColorBrush(Colors.Orange);
+                return DataBridge.myOrange;
             }
 
             if (type == MSGTYPE.SUCCES)
             {
                 //Зеленый цвет
-                return new SolidColorBrush(Color.FromArgb(0xFF, 0x6D, 0xC2, 0x7A));
+                return DataBridge.myGreen;
             }
 
             if (type == MSGTYPE.ERROR)
             {
-                return new SolidColorBrush(Color.FromArgb(0xFF, 0xDB, 0x49, 0x69));
+                return DataBridge.myRed;
             }
 
             if (type == MSGTYPE.INFO)
             {
-                return new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x7A, 0xCC));
+                return  DataBridge.myBlue;
             }
 
             return new SolidColorBrush(Colors.Transparent);

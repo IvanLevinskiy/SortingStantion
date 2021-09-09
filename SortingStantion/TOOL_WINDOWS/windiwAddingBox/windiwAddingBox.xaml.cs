@@ -1,4 +1,5 @@
-﻿using SortingStantion.Controls;
+﻿using S7Communication;
+using SortingStantion.Controls;
 using SortingStantion.Models;
 using System;
 using System.Windows;
@@ -15,6 +16,33 @@ namespace SortingStantion.windiwAddingBox
         DispatcherTimer ShutdownTimer;
 
         /// <summary>
+        /// Указатель на главный Simatic TCP сервер
+        /// </summary>
+        public SimaticClient server
+        {
+            get
+            {
+                return DataBridge.S7Server;
+            }
+        }
+
+        /// <summary>
+        /// Указатель на экземпляр ПЛК
+        /// </summary>
+        public SimaticDevice device
+        {
+            get
+            {
+                return server.Devices[0];
+            }
+        }
+
+        /// <summary>
+        /// Тэг - разрешить повтор кода продукта
+        /// </summary>
+        S7_Boolean REPEAT_ENABLE;
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public windiwAddingBox()
@@ -24,6 +52,9 @@ namespace SortingStantion.windiwAddingBox
 
             //Подписка на обытие по получению данных от сканера
             DataBridge.Scaner.NewDataNotification += Scaner_NewDataNotification;
+
+            //Инициализация сигналов от сканера
+            REPEAT_ENABLE = (S7_Boolean)device.GetTagByAddress("DB1.DBX134.0");
 
             //Инициализация и запуск таймера для закрытия окна
             //при бездейсвии
@@ -106,10 +137,18 @@ namespace SortingStantion.windiwAddingBox
                 return;
             }
 
+            //Флаг, указывающий на то, является ли код повтором
+            var IsRepeat = DataBridge.Report.IsRepeat(serialnumber);
+
+            //Получение статуса тэга
+            //ПОВТОР КОДА
+            //остановки линии
+            var RepeatEnable = REPEAT_ENABLE.Value && IsRepeat;
+
             /*
                 Продукт уже содержится в результате
             */
-            if (DataBridge.Report.AsAResult(serialnumber) == true)
+            if (DataBridge.Report.AsAResult(serialnumber) == true && RepeatEnable == false)
             {
                 //Формирование сообщения
                 message = $"Продукт {serialnumber} уже есть в результате.";
@@ -119,15 +158,22 @@ namespace SortingStantion.windiwAddingBox
                 return;
             }
 
-            /*
-                Добавление кода в результ
-            */
-            DataBridge.Report.AddBox(serialnumber);
 
             /*
                 Текст сообщения
             */
             message = $"Продукт {serialnumber} добавлен в результат.";
+
+            //Текст, если код повторился
+            if (DataBridge.Report.AsAResult(serialnumber) || DataBridge.Report.IsRepeat(serialnumber))
+            {
+                message = $"Продукт номер {serialnumber} считан повторно.";
+            }
+
+            /*
+                Добавление кода в результ
+            */
+            DataBridge.Report.AddBox(serialnumber);
 
             /*
                 Добавление в базу данных (лог) записи

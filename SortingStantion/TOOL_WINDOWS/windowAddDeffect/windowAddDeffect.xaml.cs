@@ -166,7 +166,16 @@ namespace SortingStantion.ToolsWindows.windowAddDeffect
             {
                 message = $"Продукт номер {serialnumber} перемещен из результата в брак.";
                 ShowMessage(message, DataBridge.myOrange);
+
+                DataBridge.Report.AddDeffect(serialnumber);
+
+                //Инкремент счетчика отбракованых изделий вручную
+                var q = QUANTITY_PRODUCTS_MANUAL_REJECTED.Value + 1;
+                QUANTITY_PRODUCTS_MANUAL_REJECTED.Write(q);
+
                 DataBridge.AlarmLogging.AddMessage(message, Models.MessageType.Info);
+                
+                //Выход из функции
                 return;
             }
 
