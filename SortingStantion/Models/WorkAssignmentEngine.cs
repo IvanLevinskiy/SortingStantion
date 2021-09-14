@@ -479,6 +479,18 @@ namespace SortingStantion.Models
                     return false;
                 }
 
+                if (workAssignment.gtin.Length != 14)
+                {
+                    action = () =>
+                    {
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не верный GTIN", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(messageItem);
+                    };
+                    DataBridge.UIDispatcher.Invoke(action);
+
+                    return false;
+                }
+
                 //Проверка lotNo
                 if (string.IsNullOrEmpty(workAssignment.lotNo) == true)
                 {
@@ -634,7 +646,7 @@ namespace SortingStantion.Models
                 return new DelegateCommand((obj) =>
                 {
                     //Проверка - работает ли линия
-                    if (DataBridge.Conveyor.LineIsRun == true)
+                    if (DataBridge.Conveyor.LineIsRun == true && device.IsAvailable == true)
                     {
                         customMessageBox mb = new customMessageBox("Ошибка", "Задание в работе, перед завершением остановите конвейер.");
                         mb.Owner = DataBridge.MainScreen;
@@ -642,7 +654,6 @@ namespace SortingStantion.Models
 
                         return;
                     }
-
 
                     //Вызываем окно авторизации
                     //Вызов окна для авторизации мастера
@@ -658,25 +669,42 @@ namespace SortingStantion.Models
 
                     Action action = () =>
                     {
+                        //Объявление локальных переменных
+                        string message = string.Empty;
+                        UserMessage msg = null;
+
+                        //Отправка результата на L3
+                        var result = DataBridge.Report.SendReportToL3();
+
+                        //Если отправка отчета не удалась
+                        if (result == false)
+                        {
+                            message = "Ошибка при выгрузке результата в ПО верхнего уровня. Восстановите связь и повторите выгрузку";
+
+                            //вывод сообщения в зоне информации
+                            msg = new UserMessage(message, DataBridge.myRed);
+                            DataBridge.MSGBOX.Add(msg);
+
+                            //Запись в базу данных о завершении задания
+                            DataBridge.AlarmLogging.AddMessage("Ошибка отправки отчета на L3", MessageType.TaskLogging);
+
+                            return;
+                        }
+
                         //Запись статуса в ПЛК
                         IN_WORK_TAG.Write(false);
 
                         //Запись в базу данных
-                        var message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
+                        message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
 
-                        //Запись в базу данных о принятии задания
+                        //Запись в базу данных о завершении задания
                         DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
 
-                        var msg = new UserMessage(message, MSGTYPE.SUCCES);
+                        msg = new UserMessage(message, MSGTYPE.SUCCES);
                         DataBridge.MSGBOX.Add(msg);
 
                         //Сохранение отчета
                         DataBridge.Report.Save("ReportArchive");
-
-                        //Сброс результата 
-                        //Отправка результата в отдельном
-                        //выделеном потоке
-                        DataBridge.Report.SendReport();
 
                         //Уведомление подписчиков о завершении задания
                         WorkOrderCompletionNotification?.Invoke(SelectedWorkAssignment);
@@ -765,6 +793,9 @@ namespace SortingStantion.Models
             //Цикл для бесконечной прослушки listener
             while (true)
             {
+                //Объявление локального делегата
+                Action action = null;
+
                 //метод GetContext блокирует текущий поток, ожидая получение запроса
                 HttpListenerContext context = listener.GetContext();
                 HttpListenerRequest request = context.Request;
@@ -779,17 +810,37 @@ namespace SortingStantion.Models
                     data = reader.ReadToEnd();
                 }
 
-                //Если данные не пустая строка - производим десериализацию
-                var workAssignment = JsonConvert.DeserializeObject<WorkAssignment>(data);
+                //Объявление указателя на принятое задание
+                WorkAssignment workAssignment = null;
+
+                //Результат получения задания
+                var result = false;
 
                 // создаем ответ в виде кода html
                 string responseStr = "201";
 
-                //Проверка задания и перенос задачи в текущую задачу
-                var result = CheckTask(workAssignment);
+                //Если данные не пустая строка - производим десериализацию
+                try
+                {
+                    //Десериализация принятого задания
+                    workAssignment = JsonConvert.DeserializeObject<WorkAssignment>(data);
+                }
+                catch (Exception ex)
+                {
+                    action = () =>
+                    {
+                        //При ошибке десериализации вывод сообщения в зоне информации и продолжение прослушивания сервера заданий
+                        UserMessage msg = new Controls.UserMessage("Задание не может быть принято в работу. Неверный формат задания", DataBridge.myRed);
+                        DataBridge.MSGBOX.Add(msg);
+                    };
 
-                //Объявление локального делегата
-                Action action = null;
+                    DataBridge.MainScreen.Dispatcher.Invoke(action);
+                    goto M00;
+                }
+                
+
+                //Проверка задания и перенос задачи в текущую задачу
+                result = CheckTask(workAssignment);               
 
                 //В случае, если проверка прошла 
                 //успешно
@@ -798,7 +849,7 @@ namespace SortingStantion.Models
                     //Инициализация делегата
                     action = () =>
                     {
-                        var msg = new UserMessage($"На ПК поступило задание {workAssignment.ID}. Задание может быть принято в работу", DataBridge.myGreen);
+                        var msg = new UserMessage($"Поступило задание {workAssignment.ID}. Задание может быть принято в работу.", DataBridge.myGreen);
                         DataBridge.MSGBOX.Add(msg);
                     };
 
@@ -832,7 +883,7 @@ namespace SortingStantion.Models
 
                 //В случае, если в процедуре принятия задания
                 //произошла ошибка
-                if (result == false)
+                M00:  if (result == false)
                 {
                     //формирование ответа                   
                     responseStr = "404 Bad Request";

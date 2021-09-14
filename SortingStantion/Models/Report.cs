@@ -30,6 +30,11 @@ namespace SortingStantion.Models
         public string startTime;
 
         /// <summary>
+        /// Флаг, что отчет загружен из файла Task.json
+        /// </summary>
+        public bool IsLoadFromFile = false;
+
+        /// <summary>
         /// Время окончания работы с заданием 
         /// </summary>
         public string endTime;
@@ -207,10 +212,14 @@ namespace SortingStantion.Models
 
                 //Если последний оператор не
                 //поменялся
-                if (currentuser.ID == lastuser)
+                if (currentuser.ID == lastuser && IsLoadFromFile == false)
                 {
                     return;
                 }
+
+                //Сброс флага, указывающего на то
+                //что отчет загружен из файла
+                IsLoadFromFile = false;
 
                 //Сохраняем время завершения работы
                 //предыдущего мастера
@@ -389,9 +398,9 @@ namespace SortingStantion.Models
 
 
             //Вывод сообщений
-            msg = $"Считан продукт с серийным номером {serialnumber}. В результате продуктов: {Codes.Count}";
-            messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
-            DataBridge.MSGBOX.Add(messageItem);
+            //msg = $"Считан продукт с серийным номером {serialnumber}. В результате продуктов: {Codes.Count}";
+            //messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
+            //DataBridge.MSGBOX.Add(messageItem);
         }
 
         /// <summary>
@@ -650,6 +659,9 @@ namespace SortingStantion.Models
                 return;
             }
 
+            //Устанавливаем флаг, что отчет загружен из файла
+            IsLoadFromFile = true;
+
             ReportBackupFile reportBackupFile = null;
 
             //Десериализация задачи из памяти программы
@@ -677,12 +689,17 @@ namespace SortingStantion.Models
         /// </summary>
         public void SendReport()
         {
-            //Thread thread = new Thread(SendReportToL3);
-            //thread.IsBackground = true;
-            //thread.Start();
-            SendReportToL3();
+            var result = SendReportToL3();
         }
 
+        /// <summary>
+        /// Метод для получения токена
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="tenancyName"></param>
+        /// <returns></returns>
         private string GetToken(string url, string username, string password, string tenancyName = null)
         {
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -730,7 +747,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Метод для отправки результата на L3
         /// </summary>
-        void SendReportToL3()
+        public bool SendReportToL3()
         {
             var username = SrvL3Login;
             var password = rvL3Password;
@@ -760,7 +777,7 @@ namespace SortingStantion.Models
                     //Если ответ не сериализирован, выходим
                     if (string.IsNullOrEmpty(json) == true)
                     {
-                        return;
+                        return false;
                     }
 
                     //Запись данных в поток вывода
@@ -779,6 +796,8 @@ namespace SortingStantion.Models
                         ClearResult();
                     }
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -786,10 +805,11 @@ namespace SortingStantion.Models
                 //отчет на L3 - созраняем его в папке "Report"
                 this.Save("Report");
 
-                //Вывод сообщения об отправке отчета
-                ShowMessage("Ошибка отправки отчета", DataBridge.myRed);
+                ////Вывод сообщения об отправке отчета
+                //ShowMessage("Ошибка отправки отчета", DataBridge.myRed);
             }
 
+            return false;
 
         }
 

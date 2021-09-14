@@ -1,5 +1,6 @@
 ﻿using S7Communication;
 using S7Communication.Enumerations;
+using SortingStantion.Controls;
 using SortingStantion.Models;
 using SortingStantion.TechnologicalObjects;
 using System;
@@ -71,6 +72,11 @@ namespace SortingStantion
         /// загрузки
         /// </summary>
         public static event Action LoadComplete;
+
+        /// <summary>
+        /// Указатель на открытую клавиатуру
+        /// </summary>
+        public static Keypad keypad;
 
         /// <summary>
         /// Костыль для генерации события LoadComplete

@@ -74,14 +74,17 @@ namespace SortingStantion.S7Extension
 
 
                 //Если новое значение true, добавляем сообщение
-                if (newstatus == true && ShowMessage == true)
+                if (newstatus == true)
                 {
-                    msg = new UserMessage(Message, MSGTYPE.ERROR);
-                    DataBridge.MSGBOX.Add(msg);
+                    //Вывод сообщения, если есть разрешение
+                    if (ShowMessage == true)
+                    {
+                        msg = new UserMessage(Message, MSGTYPE.ERROR);
+                        DataBridge.MSGBOX.Add(msg);
+                    }
 
+                    //Вывзов делегата
                     MessageAction?.Invoke();
-
-                    return;
                 }
 
                 //Если новое значение false, удаляем сообщение

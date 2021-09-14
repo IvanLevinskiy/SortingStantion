@@ -159,6 +159,11 @@ namespace SortingStantion.Models
                 //Флаг, указывающий на то, запущен ли конвейер
                 var lineisrun = DataBridge.Conveyor.LineIsRun;
 
+                //Если отсутсвует связь с ПЛК
+                if (device.IsAvailable == false)
+                {
+                    return false;
+                }
 
                 //Если отсутствует деблокировка
                 if (DataBridge.AlarmsEngine.Interlock == false)
@@ -220,6 +225,12 @@ namespace SortingStantion.Models
                 //Флаг, указывающий на то, запущен ли конвейер
                 var lineisrun = DataBridge.Conveyor.LineIsRun;
 
+                //Если отсутсвует связь с ПЛК
+                if (device.IsAvailable == false)
+                {
+                    return false;
+                }
+
                 //1. Задание не прислано в комплекс
                 //   - НЕ АКТИВНА
                 if (workAssignmentsList.Count == 0 && inwork == false)
@@ -270,6 +281,12 @@ namespace SortingStantion.Models
                 //Флаг, указывающий на то, запущен ли конвейер в нормальном режиме
                 var lineisrun = DataBridge.Conveyor.LineIsRun;
 
+                //Если отсутсвует связь с ПЛК
+                if (device.IsAvailable == false)
+                {
+                    return false;
+                }
+
                 //Если отсутствует деблокировка
                 if (DataBridge.AlarmsEngine.Interlock == false)
                 {
@@ -306,6 +323,11 @@ namespace SortingStantion.Models
                 //Флаг, указывающий на то, запущен ли конвейер в нормальном режиме
                 var lineisrun = DataBridge.Conveyor.LineIsRun;
 
+                //Если отсутсвует связь с ПЛК
+                if (device.IsAvailable == false)
+                {
+                    return false;
+                }
 
                 //Если задание в работе, то доступность кнопки такая
                 //же как и BtnStop
@@ -571,6 +593,24 @@ namespace SortingStantion.Models
             {
                 OnPropertyChanged("BtnStartEnable");
                 OnPropertyChanged("BtnStartForceEnable");
+            };
+
+            device.GotConnection += () =>
+            {
+                OnPropertyChanged("BtnStartEnable");
+                OnPropertyChanged("BtnStopEnable");
+
+                OnPropertyChanged("BtnStartForceEnable");
+                OnPropertyChanged("BtnStopForceEnable");
+            };
+
+            device.LostConnection += () =>
+            {
+                OnPropertyChanged("BtnStartEnable");
+                OnPropertyChanged("BtnStopEnable");
+
+                OnPropertyChanged("BtnStartForceEnable");
+                OnPropertyChanged("BtnStopForceEnable");
             };
         }
 

@@ -19,12 +19,19 @@ namespace SortingStantion.ToolsWindows.windowGtinFault
         UserMessage userMessage;
 
         /// <summary>
+        /// Считаный GTIN
+        /// </summary>
+        string GTIN;
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         public windowGtinFault(string GTIN, string serialNumber, UserMessage userMessage)
         {
             //Инициализация UI
             InitializeComponent();
+
+            this.GTIN = GTIN;
 
             //Передача указателя на сообщение в зоне
             //информации, которое надо удалить при нажатии кнопки Отмена
@@ -80,14 +87,23 @@ namespace SortingStantion.ToolsWindows.windowGtinFault
             var gtin = spliter.GTIN;
             var serialnumber = spliter.SerialNumber;
 
+            var color = DataBridge.myRed;
+
             /*
                 Если Посторонний продукт
             */
             if (DataBridge.WorkAssignmentEngine.GTIN != gtin)
             {
+                //Если обнаружен продукт с GTIN, которым мы ищем
+                //выводим надпись зеленого цвета
+                if (this.GTIN == gtin)
+                {
+                    color = DataBridge.myGreen;
+                }
+
                 //Вывод сообщения в окно информации
                 message = $"Посторонний продукт GTIN {gtin} номер {serialnumber}. Удалите его с конвейера.";
-                ShowMessage(message, DataBridge.myGreen);
+                ShowMessage(message, color);
 
                 //Выход из функции
                 return;

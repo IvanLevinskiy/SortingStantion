@@ -199,6 +199,9 @@ namespace SortingStantion.Models
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS1 (перед сканером)", MessageType.Alarm);
 
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
                 //var msg = new UserMessage("Отсутствует связь с датчиком сканера, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
                 //DataBridge.MSGBOX.Add(msg);
             };
@@ -225,6 +228,9 @@ namespace SortingStantion.Models
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS2 (перед отбраковщиком)", MessageType.Alarm);
 
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
                 //var msg = new UserMessage("Отсутствует связь с датчиком отбраковщика, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
                 //DataBridge.MSGBOX.Add(msg);
             };
@@ -250,13 +256,13 @@ namespace SortingStantion.Models
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Неисправность фотодатчика FS3 (перед отбраковщиком)", MessageType.Alarm);
 
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
                 //var msg = new UserMessage("Отсутствует связь с датчиком контроля отбраковки, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
                 //DataBridge.MSGBOX.Add(msg);
             };
 
-            /*
-                Повтор кода продукта
-  w
 
             /*
                 Получение кода от сканера при остановке конвейера
@@ -275,12 +281,8 @@ namespace SortingStantion.Models
             al_6 = new S7DiscreteAlarm("Ошибка отбраковщика (продукт не отбраковался)", "DB6.DBX12.5", group);
             al_6.MessageAction = () =>
             {
-                //Если линия выключена
-                if (DataBridge.Conveyor.LineIsRun == false)
-                {
-                    //al_6.Write(false);
-                    //return;
-                }
+                //Сброс ошибки
+                al_6.Write(false);
 
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
@@ -291,9 +293,12 @@ namespace SortingStantion.Models
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Ошибка отбраковщика (продукт не отбраковался)", MessageType.Alarm);
 
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
                 //Вывод окна ошибки
                 windowPusherError windowPusherError = new windowPusherError(al_6);
-                windowPusherError.ShowDialog();
+                windowPusherError.Show();
             };
 
             /*
@@ -302,11 +307,8 @@ namespace SortingStantion.Models
             al_7 = new S7DiscreteAlarm("Массовый брак", "DB6.DBX12.6", group);
             al_7.MessageAction = () =>
             {
-                //Если линия выключена
-                if (DataBridge.Conveyor.LineIsRun == false)
-                {
-                    //return;
-                }
+                //Сброс ошибки
+                al_7.Write(false);
 
                 //Остановка конвейера
                 DataBridge.Conveyor.Stop();
@@ -317,11 +319,14 @@ namespace SortingStantion.Models
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Массовый брак", MessageType.Alarm);
 
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
                 //Вывод окна ошибки
                 //if (windowOverDeffectCounter == null)
                 //{
-                    windowOverDeffectCounter = new windowOverDeffectCounter(DEFFECT_PRODUCTS_COUNTER, al_7);
-                    windowOverDeffectCounter.ShowDialog();
+                windowOverDeffectCounter = new windowOverDeffectCounter(DEFFECT_PRODUCTS_COUNTER, al_7);
+                    windowOverDeffectCounter.Show();
                     //windowOverDeffectCounter = null;
                 //}
             };
@@ -343,6 +348,9 @@ namespace SortingStantion.Models
 
                 //Сброс ошибки
                 al_9.Write(false);
+
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
 
                 //Вывод окна ошибки
                 windowProductsAreTooCloseToEachOther windowProductsAreTooCloseToEachOther = new windowProductsAreTooCloseToEachOther(message: "Продукт на фотодатчике 1 слишком близко к предыдущему. Удалите все продукты с линии между датчиками 1 и 2 и проверьте их коды операцией Справка.");
@@ -367,6 +375,9 @@ namespace SortingStantion.Models
                 //Сброс ошибки
                 al_10.Write(false);
 
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
                 //Вывод окна ошибки
                 windowProductsAreTooCloseToEachOther windowProductsAreTooCloseToEachOther = new windowProductsAreTooCloseToEachOther(message: "Продукт на фотодатчике 2 слишком близко к предыдущему. Удалите все продукты с линии между датчиками 1 и 2 и проверьте их коды операцией Справка.");
                 windowProductsAreTooCloseToEachOther.ShowDialog();
@@ -381,6 +392,9 @@ namespace SortingStantion.Models
             {
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Ошибка питания ИБП", MessageType.Alarm);
+
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
 
                 //Создание окна
                 SortingStantion.frameUSPFault.frameUSPFault fups = new SortingStantion.frameUSPFault.frameUSPFault();
@@ -415,6 +429,9 @@ namespace SortingStantion.Models
                     DataBridge.AlarmLogging.AddMessage("Восстановление связи с ПЛК", MessageType.Alarm);
 
                     DataBridge.MSGBOX.Remove(msgLostConnection);
+
+                    //Переход на главный экран
+                    DataBridge.ScreenEngine.GoToMainWindow();
                 };
                 DataBridge.UIDispatcher?.Invoke(action);
 

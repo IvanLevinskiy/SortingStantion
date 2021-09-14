@@ -196,6 +196,22 @@ namespace SortingStantion.Models
             }
         }
 
+        /// <summary>
+        /// Метод для перехода 
+        /// </summary>
+        public void GoToMainWindow()
+        {
+            //Если открыта клавиатура - закрываем её
+            if (DataBridge.keypad != null)
+            {
+                DataBridge.keypad.Close();
+            }
+
+            //Переходим на главный экран
+            CurrentScreen = frameMain;
+            ChangeScreenNotification?.Invoke(frameMain);
+        }
+
 
         #region Реализация интерфейса INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

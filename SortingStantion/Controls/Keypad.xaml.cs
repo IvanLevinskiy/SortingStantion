@@ -27,11 +27,21 @@ namespace SortingStantion.Controls
         }
         private string _result;
 
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
         public Keypad()
         {
             InitializeComponent();
+            DataBridge.keypad = this;
             this.DataContext = this;
             Result = "";
+
+            //Обнуление указателя на экран клавиатуры
+            this.Closing += (o, s) =>
+            {
+                DataBridge.keypad = null;
+            };
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -40,6 +50,7 @@ namespace SortingStantion.Controls
             switch (button.CommandParameter.ToString())
             {
                 case "ESC":
+                    
                     this.DialogResult = false;
                     break;
 
