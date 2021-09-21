@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Management;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -45,7 +46,16 @@ namespace SortingStantion.frameUSPFault
                 //выключаем комплекс
                 if (time < 0)
                 {
-                    App.Current.Shutdown();
+                    //Остановка таймера 
+                    //обратного отсчета
+                    timer.Stop();
+
+                    //Сохранение результата 
+                    DataBridge.Report.Save();
+
+                    //Выключение ПК
+                    Shutdown();
+
                     return;
                 }
 
@@ -93,6 +103,27 @@ namespace SortingStantion.frameUSPFault
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
+        }
+
+        void Shutdown()
+        {
+            ManagementBaseObject mboShutdown = null;
+            ManagementClass mcWin32 = new ManagementClass("Win32_OperatingSystem");
+            mcWin32.Get();
+
+            // You can't shutdown without security privileges
+            mcWin32.Scope.Options.EnablePrivileges = true;
+            ManagementBaseObject mboShutdownParams =
+                     mcWin32.GetMethodParameters("Win32Shutdown");
+
+            // Flag 1 means we want to shut down the system. Use "2" to reboot.
+            mboShutdownParams["Flags"] = "1";
+            mboShutdownParams["Reserved"] = "0";
+            foreach (ManagementObject manObj in mcWin32.GetInstances())
+            {
+                mboShutdown = manObj.InvokeMethod("Win32Shutdown",
+                                               mboShutdownParams, null);
+            }
         }
     }
 }

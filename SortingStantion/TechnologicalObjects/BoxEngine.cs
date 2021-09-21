@@ -233,6 +233,9 @@ namespace SortingStantion.TechnologicalObjects
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage($"От автоматического сканера получен посторонний код: {spliter.SourseData}  (код не является СИ)", MessageType.Alarm);
 
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
                 //Вывод сообщения в зоне информации
                 string message = $"Посторонний код (не является КМ)";
                 var msg = new UserMessage(message, DataBridge.myRed);
@@ -261,6 +264,9 @@ namespace SortingStantion.TechnologicalObjects
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Посторонний продукт (GTIN не совпадает с заданием)", MessageType.Alarm);
 
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
                 //Вывод сообщения в зоне информации
                 string message = $"Посторонний продукт (GTIN не совпадает с заданием)";
                 var msg = new UserMessage(message, DataBridge.myRed);
@@ -287,6 +293,9 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage($"Номер продукта {scaner_serialnumber} числится в браке", MessageType.Alarm);
+
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
 
                 //Вывод сообщения в окно информации
                 string message = $"Номер продукта {scaner_serialnumber} числится в браке";
@@ -324,6 +333,9 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage($"Продукт GTIN {scaner_gtin} номер {scaner_serialnumber} считан повторно", MessageType.Alarm);
+
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
 
                 //Вывод сообщения в окно информации
                 string message = $"Продукт номер {scaner_serialnumber} считан повторно.";

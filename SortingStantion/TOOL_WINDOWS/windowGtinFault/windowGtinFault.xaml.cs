@@ -87,13 +87,15 @@ namespace SortingStantion.ToolsWindows.windowGtinFault
             var gtin = spliter.GTIN;
             var serialnumber = spliter.SerialNumber;
 
-            var color = DataBridge.myRed;
+            
 
             /*
                 Если Посторонний продукт
             */
             if (DataBridge.WorkAssignmentEngine.GTIN != gtin)
             {
+                var color = DataBridge.myRed;
+
                 //Если обнаружен продукт с GTIN, которым мы ищем
                 //выводим надпись зеленого цвета
                 if (this.GTIN == gtin)

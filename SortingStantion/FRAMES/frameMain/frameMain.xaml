@@ -397,19 +397,16 @@
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
 
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
-
+                   
                     <controls:S7TextBox Address="DB1.DBD234-STR40" 
-                                      Background="Transparent"
-                                      Height="40"
-                                      FontSize="{StaticResource fontSizeData}"
-                                      Margin="105,5,25,5"
-                                      VerticalContentAlignment="Center"
-                                      IsReadOnly="False"
-                                      Text=""
-                                          Foreground="#FF686868"/>
+                                        Background="Transparent"
+                                        Height="40"
+                                        FontSize="{StaticResource fontSizeData}"
+                                        Margin="105,5,25,5"
+                                        VerticalContentAlignment="Center"
+                                        Text=""
+                                        MinAccesLevel="0"
+                                        Foreground="{StaticResource TextColor}"/>
 
                 </Grid>
 
@@ -423,19 +420,15 @@
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
 
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
-
                     <controls:S7TextBox Address="DB1.DBD192-STR40" 
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
                                       Margin="62,5,28,5"
                                       VerticalContentAlignment="Center"
-                                      IsReadOnly="False"
+                                      MinAccesLevel="0"
                                       Text=""
-                                          Foreground="#FF686868"/>
+                                      Foreground="{StaticResource TextColor}"/>
 
                 </Grid>
 
@@ -449,19 +442,15 @@
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
 
-                    <Rectangle Fill="{StaticResource GridColor}"
-                           Height="1"
-                           VerticalAlignment="Bottom"/>
-
                     <controls:S7TextBox Address="DB1.DBD318-STR40" 
-                                      Background="Transparent"
-                                      Height="40"
-                                      FontSize="{StaticResource fontSizeData}"
-                                      Margin="94,5,16,5"
-                                      VerticalContentAlignment="Center"
-                                      IsReadOnly="False"
-                                      Text="" 
-                                          Foreground="#FF686868"/>
+                                        Background="Transparent"
+                                        MinAccesLevel="0"
+                                        Height="40"
+                                        FontSize="{StaticResource fontSizeData}"
+                                        Margin="94,5,16,5"
+                                        VerticalContentAlignment="Center"
+                                        Text="" 
+                                        Foreground="{StaticResource TextColor}"/>
 
                 </Grid>
 

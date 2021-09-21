@@ -290,6 +290,10 @@ namespace SortingStantion.Models
                 //Подача звукового сигнала
                 DataBridge.Buzzer.On();
 
+                //Очистка коллекции продуктов, расположенных
+                //между сканером и отбраковщиком
+                DataBridge.BoxEngine.ClearCollection();
+
                 //Запись сообщения в базу данных
                 DataBridge.AlarmLogging.AddMessage("Ошибка отбраковщика (продукт не отбраковался)", MessageType.Alarm);
 
@@ -323,12 +327,8 @@ namespace SortingStantion.Models
                 DataBridge.ScreenEngine.GoToMainWindow();
 
                 //Вывод окна ошибки
-                //if (windowOverDeffectCounter == null)
-                //{
                 windowOverDeffectCounter = new windowOverDeffectCounter(DEFFECT_PRODUCTS_COUNTER, al_7);
-                    windowOverDeffectCounter.Show();
-                    //windowOverDeffectCounter = null;
-                //}
+                windowOverDeffectCounter.Show();
             };
 
             /*
@@ -410,10 +410,14 @@ namespace SortingStantion.Models
                 Action action = () =>
                 {
                     //Запись сообщения в базу данных
-                    DataBridge.AlarmLogging.AddMessage("Потеря связи с ПЛК", MessageType.Alarm);
+                    DataBridge.AlarmLogging.AddMessage("Линия остановлена. Обрыв связи с контроллером. Удалите все продукты с конвейера между первым и последним датчиком", MessageType.Alarm);
 
-                    msgLostConnection = new Controls.UserMessage($"Линия остановлена. Обрыв связи с контроллером.", MSGTYPE.ERROR);
+                    msgLostConnection = new Controls.UserMessage($"Линия остановлена. Обрыв связи с контроллером. Удалите все продукты с конвейера между первым и последним датчиком", DataBridge.myRed);
                     DataBridge.MSGBOX.Add(msgLostConnection);
+
+                    //Переход на главный экран
+                    DataBridge.ScreenEngine.GoToMainWindow();
+
                 };
                 DataBridge.UIDispatcher?.Invoke(action);
             };
@@ -432,6 +436,10 @@ namespace SortingStantion.Models
 
                     //Переход на главный экран
                     DataBridge.ScreenEngine.GoToMainWindow();
+
+                    //Очистка коллекции продуктов, расположенных
+                    //между сканером и отбраковщиком
+                    //DataBridge.BoxEngine.ClearCollection();
                 };
                 DataBridge.UIDispatcher?.Invoke(action);
 

@@ -128,14 +128,7 @@ namespace SortingStantion.Controls
             //пустой объект
             if (S7TAG != null)
             {
-                //Записываем значение с трех попыток
-                for (int i = 0; i <= 3; i++)
-                {
-                    var result = S7TAG.Write(State);
-
-                    //Технологическая пауза
-                    Thread.Sleep(50);
-                }
+                var result = S7TAG.Write(State);
             }
         }
 

@@ -18,6 +18,12 @@ namespace SortingStantion.ToolsWindows.windowProductIsDeffect
         /// в зоне информации, которое надо удалить
         /// </summary>
         UserMessage userMessage;
+
+        /// <summary>
+        /// Серийный номер продукта,
+        /// который вызвал возникновление ошибки
+        /// </summary>
+        string SerialNumber;
                 
 
         /// <summary>
@@ -28,6 +34,8 @@ namespace SortingStantion.ToolsWindows.windowProductIsDeffect
         {
             //Инициализация UI
             InitializeComponent();
+
+            SerialNumber = serialnumberdeffect;
 
             //Передача указателя на сообщение в зоне
             //информации, которое надо удалить при нажатии кнопки Отмена
@@ -114,8 +122,18 @@ namespace SortingStantion.ToolsWindows.windowProductIsDeffect
             */
             if (DataBridge.Report.IsDeffect(serialnumber) == true)
             {
+                var color = DataBridge.myRed;
+
+                //Если ручным сканером считан тот код
+                //который числится в браке
+                if (SerialNumber == serialnumber)
+                {
+                    color = DataBridge.myGreen;
+                }
+
+                //Вывод сообщения
                 message = $"Продукт номер {serialnumber} числиться в браке. Удалите его с конвейера.";
-                ShowMessage(message, DataBridge.myGreen);
+                ShowMessage(message, color);
                 return;
             }
 

@@ -578,12 +578,6 @@ namespace SortingStantion.Models
                 repeatPacks = this.repeatPacks
             };
 
-            //var options = new JsonSerializerOptions
-            //{
-            //    Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
-            //    WriteIndented = true
-            //};
-
             //Сериализация
             return JsonConvert.SerializeObject(reportBackupFile);
         }
@@ -780,6 +774,7 @@ namespace SortingStantion.Models
                         return false;
                     }
 
+
                     //Запись данных в поток вывода
                     sw.Write(json);
                 }
@@ -792,12 +787,11 @@ namespace SortingStantion.Models
                     //возвращаем true
                     if (httpResponse.StatusCode == HttpStatusCode.Created)
                     {
-                        //Сброс текущего результата
-                        ClearResult();
+                        return true;
                     }
                 }
 
-                return true;
+                return false;
             }
             catch (Exception ex)
             {

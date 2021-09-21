@@ -483,7 +483,7 @@ namespace SortingStantion.Models
                 {
                     action = () =>
                     {
-                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Не верный GTIN", DataBridge.myRed);
+                        UserMessage messageItem = new Controls.UserMessage("Задание не может быть принято в работу. Неверный GTIN", DataBridge.myRed);
                         DataBridge.MSGBOX.Add(messageItem);
                     };
                     DataBridge.UIDispatcher.Invoke(action);
@@ -691,23 +691,8 @@ namespace SortingStantion.Models
                             return;
                         }
 
-                        //Запись статуса в ПЛК
-                        IN_WORK_TAG.Write(false);
-
-                        //Запись в базу данных
-                        message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
-
-                        //Запись в базу данных о завершении задания
-                        DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
-
-                        msg = new UserMessage(message, MSGTYPE.SUCCES);
-                        DataBridge.MSGBOX.Add(msg);
-
                         //Сохранение отчета
                         DataBridge.Report.Save("ReportArchive");
-
-                        //Уведомление подписчиков о завершении задания
-                        WorkOrderCompletionNotification?.Invoke(SelectedWorkAssignment);
 
                         //Сохранение завершенного задания в файл
                         SelectedWorkAssignment.Save("OrdersArhive");
@@ -720,6 +705,21 @@ namespace SortingStantion.Models
                         {
                             File.Delete(fn);
                         }
+
+                        //Запись статуса в ПЛК
+                        IN_WORK_TAG.Write(false);
+
+                        //Запись в базу данных
+                        message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
+
+                        //Запись в базу данных о завершении задания
+                        DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
+
+                        msg = new UserMessage(message, MSGTYPE.SUCCES);
+                        DataBridge.MSGBOX.Add(msg);                      
+
+                        //Уведомление подписчиков о завершении задания
+                        WorkOrderCompletionNotification?.Invoke(SelectedWorkAssignment);
 
                         //Очистка буфера заданий
                         WorkAssignments.Clear();
@@ -744,6 +744,9 @@ namespace SortingStantion.Models
                         REPEAT_COUNTER.Write(0);
                         DEFECT_COUNTER.Write(0);
 
+                        //Очистка результата
+                        DataBridge.Report.ClearResult();
+
                     };
 
                     var wcr = new windowClearCollectionRequest(action);
@@ -762,10 +765,10 @@ namespace SortingStantion.Models
         {
             //Получение адреса ПК, запросы от которого необходимо
             //прослушивать для получения задания
-            var prefixe = DataBridge.SettingsFile.GetValue("SrvL3Url") + "/";
+            var url_jobs = DataBridge.SettingsFile.GetValue("SrvL3UrlJobs");
 
             //Регистрация url
-            NetAclChecker.AddAddress("http://192.168.3.97:7080/jobs/");
+            NetAclChecker.AddAddress(url_jobs);
             //NetAclChecker.AddAddress("http://localhost:7080/jobs/");
 
             //Инициализация экземпляра  listener
@@ -773,7 +776,7 @@ namespace SortingStantion.Models
 
             //Установка адресов  listener
             //listener.Prefixes.Add("http://localhost:7080/jobs/");
-            listener.Prefixes.Add("http://192.168.3.97:7080/jobs/");
+            listener.Prefixes.Add(url_jobs);
 
             //Запуск слушателя
             try
@@ -827,6 +830,13 @@ namespace SortingStantion.Models
                 }
                 catch (Exception ex)
                 {
+                    //Удаление задания
+                    if (WorkAssignments.Count > 0)
+                    {
+                        WorkAssignments.RemoveAt(0);
+                        this.WorkOrderAcceptanceNotification?.Invoke(null);
+                    }
+                    
                     action = () =>
                     {
                         //При ошибке десериализации вывод сообщения в зоне информации и продолжение прослушивания сервера заданий
@@ -888,6 +898,13 @@ namespace SortingStantion.Models
                     //формирование ответа                   
                     responseStr = "404 Bad Request";
                     response.StatusCode = 404;
+
+                    //КОСТЫЛЬ для того, деактивировать кнопку
+                    //ПРИНЯТЬ ЗАДАНИЕ
+                    WorkAssignments.Clear();
+
+                    //Уведомление подписчиков о получении нового задания от L3 (пустого)
+                    NewWorkOrderHasArrivedNotification?.Invoke(null);
                 }
 
                 byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseStr);
