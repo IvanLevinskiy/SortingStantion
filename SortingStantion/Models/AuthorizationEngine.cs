@@ -75,7 +75,7 @@ namespace SortingStantion.Models
         /// Событие, возникающее при смене
         /// пользователя
         /// </summary>
-        public event Action<int, User> ChangeUser;
+        public event Action<int, User, bool> ChangeUser;
 
         /// <summary>
         /// Конструктор класса
@@ -132,7 +132,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Метод для авторизации
         /// </summary>
-        public bool Login(string login, string Password, bool RepeatIgnore = true)
+        public bool Login(string login, string Password, bool RepeatIgnore = true, bool Archive=true)
         {
             //Локальные переменные для вывода сообщения
             //в зоне информации
@@ -171,9 +171,16 @@ namespace SortingStantion.Models
                     //В случае успешной авторизации МАСТЕРА
                     if (accesLevel < 2)
                     {
-                        CurrentUser = user;
-                        OnPropertyChanged("DisplayName");
-                        ChangeUser?.Invoke((int)CurrentUser.AccesLevel, user);
+
+                        if (Archive == true)
+                        {
+                            CurrentUser = user;
+                            OnPropertyChanged("DisplayName");
+                        }
+
+
+                        //Уведомление подписчиков об авторизации нового пользователя
+                        ChangeUser?.Invoke((int)CurrentUser.AccesLevel, user, Archive);
 
                         //Выводим сообщение об успешной авторизации
                         messageItem = new Controls.UserMessage(message, DataBridge.myGreen);
@@ -191,6 +198,34 @@ namespace SortingStantion.Models
             //Выводим сообщение, что при ошибке возникла ошибка авторизации
             messageItem = new Controls.UserMessage("Ошибка авторизации", DataBridge.myRed);
             DataBridge.MSGBOX.Add(messageItem);
+
+            return false;
+        }
+
+        /// <summary>
+        /// Метод для проверки логина-пароля
+        /// </summary>
+        public bool CheckPassword(string login, string Password)
+        {
+
+            foreach (var user in Users)
+            {
+                //Если имя пользователя не соответствует
+                //имени пользователя из коллеции
+                //переходим к следующему пользователю
+                if (user.Name.ToUpper() != login.ToUpper())
+                {
+                    continue;
+                }
+
+                ////Если пользователь валидный
+                ////извещаем подписчиков и делаем запись в базу данных
+                if (user.Password == Password)
+                {
+                    //Возврат результата
+                    return true;
+                }
+            }
 
             return false;
         }

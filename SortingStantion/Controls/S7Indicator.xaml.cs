@@ -44,7 +44,13 @@ namespace SortingStantion.Controls
         public string S7Operand
         {
             set
-            { 
+            {
+                //Если сервер не проинициализирован - инициализируем его
+                if (DataBridge.S7Server == null)
+                {
+                    DataBridge.CreateSimaticClient();
+                }
+
                 tag = (S7_Boolean)device.GetTagByAddress(value);
                 tag.ChangeValue += Tag_ChangeValue;
             }

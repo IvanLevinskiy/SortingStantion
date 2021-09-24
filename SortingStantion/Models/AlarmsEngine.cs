@@ -204,6 +204,10 @@ namespace SortingStantion.Models
 
                 //var msg = new UserMessage("Отсутствует связь с датчиком сканера, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
                 //DataBridge.MSGBOX.Add(msg);
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
             };
 
 
@@ -233,6 +237,10 @@ namespace SortingStantion.Models
 
                 //var msg = new UserMessage("Отсутствует связь с датчиком отбраковщика, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
                 //DataBridge.MSGBOX.Add(msg);
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
             };
 
             /*
@@ -261,6 +269,10 @@ namespace SortingStantion.Models
 
                 //var msg = new UserMessage("Отсутствует связь с датчиком контроля отбраковки, уберите все продукты в зоне работы комплекса и обратитесь к наладчику.", DataBridge.myRed);
                 //DataBridge.MSGBOX.Add(msg);
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
             };
 
 
@@ -303,6 +315,10 @@ namespace SortingStantion.Models
                 //Вывод окна ошибки
                 windowPusherError windowPusherError = new windowPusherError(al_6);
                 windowPusherError.Show();
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
             };
 
             /*
@@ -329,6 +345,10 @@ namespace SortingStantion.Models
                 //Вывод окна ошибки
                 windowOverDeffectCounter = new windowOverDeffectCounter(DEFFECT_PRODUCTS_COUNTER, al_7);
                 windowOverDeffectCounter.Show();
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
             };
 
             /*
@@ -352,9 +372,15 @@ namespace SortingStantion.Models
                 //Переход на главный экран
                 DataBridge.ScreenEngine.GoToMainWindow();
 
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+
                 //Вывод окна ошибки
                 windowProductsAreTooCloseToEachOther windowProductsAreTooCloseToEachOther = new windowProductsAreTooCloseToEachOther(message: "Продукт на фотодатчике 1 слишком близко к предыдущему. Удалите все продукты с линии между датчиками 1 и 2 и проверьте их коды операцией Справка.");
                 windowProductsAreTooCloseToEachOther.ShowDialog();
+
             };
 
             /*
@@ -378,6 +404,10 @@ namespace SortingStantion.Models
                 //Переход на главный экран
                 DataBridge.ScreenEngine.GoToMainWindow();
 
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+
                 //Вывод окна ошибки
                 windowProductsAreTooCloseToEachOther windowProductsAreTooCloseToEachOther = new windowProductsAreTooCloseToEachOther(message: "Продукт на фотодатчике 2 слишком близко к предыдущему. Удалите все продукты с линии между датчиками 1 и 2 и проверьте их коды операцией Справка.");
                 windowProductsAreTooCloseToEachOther.ShowDialog();
@@ -396,6 +426,11 @@ namespace SortingStantion.Models
                 //Переход на главный экран
                 DataBridge.ScreenEngine.GoToMainWindow();
 
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+
                 //Создание окна
                 SortingStantion.frameUSPFault.frameUSPFault fups = new SortingStantion.frameUSPFault.frameUSPFault();
                 fups.Owner = DataBridge.MainScreen;
@@ -409,11 +444,19 @@ namespace SortingStantion.Models
             {
                 Action action = () =>
                 {
+                    //Подписка на событие по восстановлению связи
+                    //для очистки коллекции продуктов перед отбракощиком
+                    device.GotConnection += ClearCollectionCallBack;
+
                     //Запись сообщения в базу данных
                     DataBridge.AlarmLogging.AddMessage("Линия остановлена. Обрыв связи с контроллером. Удалите все продукты с конвейера между первым и последним датчиком", MessageType.Alarm);
 
                     msgLostConnection = new Controls.UserMessage($"Линия остановлена. Обрыв связи с контроллером. Удалите все продукты с конвейера между первым и последним датчиком", DataBridge.myRed);
                     DataBridge.MSGBOX.Add(msgLostConnection);
+
+                    //Извещение подписчиков о возникновлении
+                    //новой аварии
+                    DataBridge.NewAlarmNotificationMetod();
 
                     //Переход на главный экран
                     DataBridge.ScreenEngine.GoToMainWindow();
@@ -434,17 +477,33 @@ namespace SortingStantion.Models
 
                     DataBridge.MSGBOX.Remove(msgLostConnection);
 
+
+                    //Извещение подписчиков о возникновлении
+                    //новой аварии
+                    DataBridge.NewAlarmNotificationMetod();
+
                     //Переход на главный экран
                     DataBridge.ScreenEngine.GoToMainWindow();
 
-                    //Очистка коллекции продуктов, расположенных
-                    //между сканером и отбраковщиком
-                    //DataBridge.BoxEngine.ClearCollection();
+                    
                 };
                 DataBridge.UIDispatcher?.Invoke(action);
 
             };
 
+        }
+
+        /// <summary>
+        /// Очистка коллекции при восстановлении связи
+        /// </summary>
+        void ClearCollectionCallBack()
+        {
+            //Очистка коллекции продуктов, расположенных
+            //между сканером и отбраковщиком
+            DataBridge.BoxEngine.ClearCollection();
+
+            //отписка от события
+            device.GotConnection -= ClearCollectionCallBack;
         }
     }
 }

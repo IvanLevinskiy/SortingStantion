@@ -205,7 +205,8 @@ namespace SortingStantion.UserAdmin
             {
                 return new DelegateCommand((obj) =>
                 {
-                    AuthorizationResult = DataBridge.MainAccesLevelModel.Login(SelectedUser.Name, pwbPassword.Password, repeatIgnore);
+                    AuthorizationResult = DataBridge.MainAccesLevelModel.CheckPassword(SelectedUser.Name, pwbPassword.Password);
+                    DialogResult = AuthorizationResult;
                     this.Close();
                 },
                 (obj) => (SelectedUser != null));

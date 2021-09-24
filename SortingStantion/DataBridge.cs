@@ -74,6 +74,20 @@ namespace SortingStantion
         public static event Action LoadComplete;
 
         /// <summary>
+        /// Событие, генерируемое при появлении ошибки
+        /// </summary>
+        public static event Action NewAlarmNotification;
+
+        /// <summary>
+        /// Метод для вызова извещателя о появлении 
+        /// новой ошибки
+        /// </summary>
+        public static void NewAlarmNotificationMetod()
+        {
+            NewAlarmNotification?.Invoke();
+        }
+
+        /// <summary>
         /// Указатель на открытую клавиатуру
         /// </summary>
         public static Keypad keypad;

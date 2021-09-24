@@ -71,13 +71,28 @@ namespace SortingStantion.ToolsWindows.windiwInformation
             ShutdownTimer.Tick += ShutdownTimer_Tick;
             ShutdownTimer.Start();
 
+            //Подписка но событие по возникновлению новой ошибки
+            DataBridge.NewAlarmNotification += DataBridge_NewAlarmNotification;
+
             //Выражение, вызываемое при закрытии
             //данного экземпляра окна
             this.Closing += (e, s) =>
             {
                 //Отписка от обытия по получению данных от сканера
                 DataBridge.Scaner.NewDataNotification -= Scaner_NewDataNotification;
+
+                //Отписка от обытия по получению данных от сканера
+                DataBridge.Scaner.NewDataNotification -= Scaner_NewDataNotification;
             };
+        }
+
+        /// <summary>
+        /// Метод, вызываемый при возникновлении
+        /// новой аварии
+        /// </summary>
+        private void DataBridge_NewAlarmNotification()
+        {
+            this.Close();
         }
 
         /// <summary>

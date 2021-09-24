@@ -223,7 +223,7 @@
     <Compile Include="Models\WorkAssignmentEngine.cs" />
     <Compile Include="S7Extension\Item.cs" />
     <Compile Include="S7Extension\S7DiscreteAlarm.cs" />
-    <Compile Include="TechnologicalObjects\BoxEngine.cs" />
+    <Compile Include="TechnologicalObjects\ProductsEngine.cs" />
     <Compile Include="TechnologicalObjects\Conveyor.cs" />
     <Compile Include="TechnologicalObjects\Scaner.cs" />
     <Compile Include="Models\WorkAssignment.cs" />
@@ -236,7 +236,6 @@
     <Compile Include="TOOL_WINDOWS\windiwAddingBox\windiwAddingBox.xaml.cs">
       <DependentUpon>windiwAddingBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TOOL_WINDOWS\windiwAddingBox\windowAddingBoxViewModel.cs" />
     <Page Include="Controls\ComboBoxSerialPorts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -402,8 +401,26 @@
     <None Include="Docs\A1-2 СОПы проверки.docx" />
     <None Include="Docs\A2-2 СОПы работы и наладки.docx" />
     <None Include="Docs\quickscan_i_family_prg_rus.pdf" />
+    <None Include="Docs\Обмен с S1.docx" />
     <None Include="Docs\Описание ПО L2 сериализация вер.2.docx" />
     <None Include="Docs\2021_07_27_Тестирование S1.docx" />
+    <None Include="Docs\Описание_ПО_L2_сериализация_вер_2_2.docx" />
+    <None Include="Docs\Описание_ПО_L2_сериализация_вер_2_3.docx" />
+    <None Include="Docs\Описание_ПО_L2_сериализация_вер_2_4.docx" />
+    <None Include="Docs\Предварительный_документ_описания_интерфейса.docx" />
+    <None Include="Docs\Тестирование %289%29.docx" />
+    <None Include="Docs\Тестирование S1 %283%29.docx" />
+    <None Include="Docs\Тестирование S1 %284%29.docx" />
+    <None Include="Docs\Тестирование S1 %285%29 2.docx" />
+    <None Include="Docs\Тестирование S1 %286%29.docx" />
+    <None Include="Docs\Тестирование S1 %287%29.docx" />
+    <None Include="Docs\Тестирование S1 %288%29.docx" />
+    <None Include="Docs\Тестирование_S1_4_проверка_выполнения2.docx" />
+    <None Include="Docs\Тестирование_S1_4_проверка_выполнения25_08_2021.docx" />
+    <None Include="Docs\Тестирование_S1_4_проверка_выполнения26_08_2021.docx" />
+    <None Include="Docs\Тестирование_S1_5_проверка_выполнения.docx" />
+    <None Include="Docs\Тестирование_S1_5_проверка_выполнения_25_08_2021.docx" />
+    <None Include="Docs\Тестирование_S1_5_проверка_выполнения_26_08_2021.docx" />
     <None Include="Docs\Техническое_требование_к_программному_обеспечению_ПЛК.docx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -107,6 +107,13 @@ namespace SortingStantion.Models
             //Получаем значение 
             for (int i = 0; i < Length; i++)
             {
+                //Если данные закончены
+                //возвращаем false
+                if (data.Length == 0)
+                {
+                    return false;
+                }    
+
                 Data += data[0];
                 data = data.Remove(0, 1);
             }

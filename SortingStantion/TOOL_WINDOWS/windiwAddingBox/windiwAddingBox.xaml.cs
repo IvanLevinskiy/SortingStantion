@@ -64,13 +64,28 @@ namespace SortingStantion.windiwAddingBox
             ShutdownTimer.Tick += ShutdownTimer_Tick;
             ShutdownTimer.Start();
 
+            //Подписка но событие по возникновлению новой ошибки
+            DataBridge.NewAlarmNotification += DataBridge_NewAlarmNotification;
+
             //Выражение, вызываемое при закрытии
             //данного экземпляра окна
             this.Closing += (e, s) =>
             {
                 //Отписка от обытия по получению данных от сканера
                 DataBridge.Scaner.NewDataNotification -= Scaner_NewDataNotification;
+
+                //Отписка от события по возникновлению новой ошибки
+                DataBridge.NewAlarmNotification -= DataBridge_NewAlarmNotification;
             };
+        }
+
+        /// <summary>
+        /// Метод, вызываемый при возникновлении
+        /// новой аварии
+        /// </summary>
+        private void DataBridge_NewAlarmNotification()
+        {
+            this.Close();
         }
 
         /// <summary>
@@ -143,12 +158,12 @@ namespace SortingStantion.windiwAddingBox
             //Получение статуса тэга
             //ПОВТОР КОДА
             //остановки линии
-            var RepeatEnable = REPEAT_ENABLE.Value && IsRepeat;
+            var RepeatEnable = REPEAT_ENABLE.Value;
 
             /*
                 Продукт уже содержится в результате
             */
-            if (DataBridge.Report.AsAResult(serialnumber) == true && RepeatEnable == false)
+            if ((DataBridge.Report.AsAResult(serialnumber) == true || IsRepeat == true) &&  RepeatEnable == false)
             {
                 //Формирование сообщения
                 message = $"Продукт {serialnumber} уже есть в результате.";
@@ -168,6 +183,7 @@ namespace SortingStantion.windiwAddingBox
             if (DataBridge.Report.AsAResult(serialnumber) || DataBridge.Report.IsRepeat(serialnumber))
             {
                 message = $"Продукт номер {serialnumber} считан повторно.";
+
             }
 
             /*

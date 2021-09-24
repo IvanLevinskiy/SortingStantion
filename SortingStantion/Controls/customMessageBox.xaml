@@ -30,14 +30,17 @@
                        FontSize="26"
                        Margin="10,20,10,0"/>
 
-                <Button Content="OK"
+                <Button Content="Закрыть"
+                         Height="50"
+                        Width="300"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,10,10"
                         Style="{StaticResource btnStyle}"
                         Background="{StaticResource LightColor}"
                         Foreground="{StaticResource TextColor}"
-                        Margin="0,0,0,30"
-                        Height="50"
-                        Width="200"
-                        VerticalAlignment="Bottom" Click="Button_Click"/>
+                        FontSize="{StaticResource fontSizeData}" 
+                        Click="Button_Click"/>
 
             </Grid>
 

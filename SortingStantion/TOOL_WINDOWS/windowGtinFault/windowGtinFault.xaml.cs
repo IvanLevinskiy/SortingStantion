@@ -19,9 +19,14 @@ namespace SortingStantion.ToolsWindows.windowGtinFault
         UserMessage userMessage;
 
         /// <summary>
-        /// Считаный GTIN
+        ///GTIN
         /// </summary>
         string GTIN;
+
+        /// <summary>
+        /// Серийный номер продукта
+        /// </summary>
+        string SerialNumber;
 
         /// <summary>
         /// Конструктор
@@ -32,6 +37,8 @@ namespace SortingStantion.ToolsWindows.windowGtinFault
             InitializeComponent();
 
             this.GTIN = GTIN;
+
+            this.SerialNumber = serialNumber;
 
             //Передача указателя на сообщение в зоне
             //информации, которое надо удалить при нажатии кнопки Отмена
@@ -96,9 +103,9 @@ namespace SortingStantion.ToolsWindows.windowGtinFault
             {
                 var color = DataBridge.myRed;
 
-                //Если обнаружен продукт с GTIN, которым мы ищем
+                //Если обнаружен код, который мы ищем
                 //выводим надпись зеленого цвета
-                if (this.GTIN == gtin)
+                if (this.SerialNumber == serialnumber)
                 {
                     color = DataBridge.myGreen;
                 }

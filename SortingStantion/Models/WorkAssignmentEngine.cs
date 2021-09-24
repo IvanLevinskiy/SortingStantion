@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using S7Communication;
 using SortingStantion.Controls;
 using SortingStantion.ToolsWindows.windowClearCollectionRequest;
 using SortingStantion.Utilites;
@@ -10,6 +9,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace SortingStantion.Models
 {
@@ -19,279 +19,21 @@ namespace SortingStantion.Models
     /// </summary>
     public class WorkAssignmentEngine : INotifyPropertyChanged
     {
-        #region SIMATIC СУЩНОСТИ 
-
-        /// <summary>
-        /// Указатель на главный Simatic TCP сервер
-        /// </summary>
-        SimaticClient server
-        {
-            get
-            {
-                return DataBridge.S7Server;
-            }
-        }
-
-        /// <summary>
-        /// Указатель на экземпляр ПЛК
-        /// </summary>
-        SimaticDevice device
-        {
-            get
-            {
-                return server.Devices[0];
-            }
-        }
-
-        /// <summary>
-        /// Указатель на группу, где хранятся все тэгиК
-        /// </summary>
-        SimaticGroup group
-        {
-            get
-            {
-                return device.Groups[0];
-            }
-        }
-
-        #endregion
-
-      
-        #region SIMATIC ТЭГИ
-
-        /// <summary>
-        /// Тэг, отвечающий за Принять - завершить задание
-        /// </summary>
-        S7_Boolean IN_WORK_TAG
-        {
-            get;
-            set;
-        }
-
         /// <summary>
         /// Уникальный идентификатор задания.
         /// </summary>
-        S7_String TASK_ID_TAG
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Номер GTIN. (14 символов)
-        /// </summary>
-        S7_String S7GTIN
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Наименование продукта (UTF-8)
-        /// </summary>
-        S7_String S7ProductName
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Номер производственной серии (до 20 символов) 
-        /// </summary>
-        S7_String LOT_NO_TAG
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Кол-во продуктов в коробе. 
-        /// </summary>
-        S7_DWord NUM_PACKS_IN_BOX
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Ожидаемое количество продуктов в серии 
-        /// (определяется по заданию на производство серии) 
-        /// </summary>
-        S7_DWord NUM_PACKS_IN_SERIES_TAG
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Общее количество изделий
-        /// </summary>
-        S7_DWord QUANTITY_WORKSPACE
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Счетчик коробов
-        /// </summary>
-        S7_DWord QUANTITY_BOXS
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Количество изделий, 
-        /// отбракованых отбраковщиком автоматически
-        /// </summary>
-        S7_DWord QUANTITY_WORKSPACE_AUTO_REJECTED
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Количество изделий, отбракованых вручную
-        /// </summary>
-        S7_DWord QUANTITY_WORKSPACE_MANUAL_REJECTED
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Счетчик дефектного продукта
-        /// </summary>
-        S7_DWord DEFECT_COUNTER
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Счетчик повторов
-        /// </summary>
-        S7_DWord REPEAT_COUNTER
-        {
-            get;
-            set;
-        }
-
-
-
-        /// <summary>
-        /// Метод для инициализации данных
-        // хранящихся в ПЛК
-        /// </summary>
-        void PlcDataInit()
-        {
-            //Инициализация тэгов
-            IN_WORK_TAG = (S7_Boolean)device.GetTagByAddress("DB1.DBX148.0");
-            IN_WORK_TAG.ChangeValue += (oldvalue, newvalue) =>
-            {
-                InWork = IN_WORK_TAG.Value;
-                InNotWork = !InWork;
-            };
-
-            //ID задания
-            TASK_ID_TAG = (S7_String)device.GetTagByAddress("DB1.DBD150-STR40");
-            TASK_ID_TAG.ChangeValue += (oldvalue, newvalue) =>
-            {
-                TaskID = TASK_ID_TAG.Value;
-            };
-
-            //GTIN
-            S7GTIN = (S7_String)device.GetTagByAddress("DB1.DBD192-STR40");
-            S7GTIN.ChangeValue += (oldvalue, newvalue) =>
-            {
-                GTIN = S7GTIN.Value;
-            };
-
-            ///Номер производственной серии
-            LOT_NO_TAG = (S7_String)device.GetTagByAddress("DB1.DBD318-STR40");
-            LOT_NO_TAG.ChangeValue += (oldvalue, newvalue) =>
-            {
-                Lot_No = LOT_NO_TAG.Value;
-            };
-
-            //Наименорвание продукта
-            S7ProductName = (S7_String)device.GetTagByAddress("DB1.DBD234-STR82");
-            S7ProductName.ChangeValue += (oldvalue, newvalue) =>
-            {
-                Product_Name = S7ProductName.Value;
-            };
-
-            NUM_PACKS_IN_BOX = (S7_DWord)device.GetTagByAddress("DB1.DBD362-DWORD");
-
-            NUM_PACKS_IN_SERIES_TAG = (S7_DWord)device.GetTagByAddress("DB1.DBD366-DWORD");
-
-            QUANTITY_WORKSPACE = (S7_DWord)device.GetTagByAddress("DB1.DBD16-DWORD");
-            QUANTITY_BOXS = (S7_DWord)device.GetTagByAddress("DB1.DBD20-DWORD");
-            QUANTITY_WORKSPACE_AUTO_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD24-DWORD");
-            QUANTITY_WORKSPACE_MANUAL_REJECTED = (S7_DWord)device.GetTagByAddress("DB1.DBD28-DWORD");
-            DEFECT_COUNTER = (S7_DWord)device.GetTagByAddress("DB1.DBD30-DWORD");
-            REPEAT_COUNTER = (S7_DWord)device.GetTagByAddress("DB1.DBD36-DWORD");
-            
-        }
-
-
-        #endregion
-
-        /// <summary>
-        /// Флаг возвращает или задает
-        /// принято ли задание
-        /// </summary>
-        public bool InWork
+        public string ID
         {
             get
             {
-                //Возвращение значения тэга
-                return inWorkFeedBack;
-            }
-            set
-            {
-                inWorkFeedBack = value; ;
-                OnPropertyChanged("InWork");
-            }
-        }
-        bool inWorkFeedBack = false;
+                if (SelectedWorkAssignment == null)
+                {
+                    return string.Empty;
+                }
 
-        /// <summary>
-        /// Флаг, указывающий, 
-        /// что задание не принято в работу
-        /// </summary>
-        public bool InNotWork
-        {
-            get
-            {
-                return inNotWork;
-            }
-            private set
-            {
-                inNotWork = value;
-                OnPropertyChanged("InNotWork");
+                return SelectedWorkAssignment.ID;
             }
         }
-        bool inNotWork = false;
-
-        /// <summary>
-        /// Уникальный идентификатор задания.
-        /// </summary>
-        public string TaskID
-        {
-            get
-            {
-                return taskID;
-            }
-            set
-            {
-                taskID = value;
-                //TASK_ID_TAG.Write(value);
-                OnPropertyChanged("TaskID");
-            }
-        }
-        string taskID = string.Empty;
 
         /// <summary>
         /// Номер GTIN. (14 символов)
@@ -300,16 +42,14 @@ namespace SortingStantion.Models
         {
             get
             {
-                return gtin;
-            }
-            set
-            {
-                gtin = value;
-                //S7GTIN.Write(gtin);
-                OnPropertyChanged("GTIN");
+                if (SelectedWorkAssignment == null)
+                {
+                    return string.Empty;
+                }
+
+                return SelectedWorkAssignment.gtin;
             }
         }
-        string gtin = string.Empty;
 
         /// <summary>
         /// Наименование продукта (UTF-8)
@@ -318,16 +58,14 @@ namespace SortingStantion.Models
         {
             get
             {
-                return product_Name;
-            }
-            set
-            {
-                product_Name = value;
-                //S7ProductName.Write(product_Name);
-                OnPropertyChanged("Product_Name");
+                if (SelectedWorkAssignment == null)
+                {
+                    return string.Empty;
+                }
+
+                return SelectedWorkAssignment.productName;
             }
         }
-        string product_Name = string.Empty;
 
         /// <summary>
         /// Номер производственной серии (до 20 символов) 
@@ -336,16 +74,46 @@ namespace SortingStantion.Models
         {
             get
             {
-                return lot_No;
-            }
-            set
-            {
-                lot_No = value;
-                //LOT_NO_TAG.Write(lot_No);
-                OnPropertyChanged("Lot_No");
+                if (SelectedWorkAssignment == null)
+                {
+                    return string.Empty;
+                }
+
+                return SelectedWorkAssignment.lotNo;
             }
         }
-        string lot_No = string.Empty;
+
+        /// <summary>
+        /// Количество продуктов в коробе
+        /// </summary>
+        public int numPacksInBox
+        {
+            get
+            {
+                if (SelectedWorkAssignment == null)
+                {
+                    return 0;
+                }
+
+                return SelectedWorkAssignment.numРacksInBox;
+            }
+        }
+
+        /// <summary>
+        /// Количество продуктов в серии
+        /// </summary>
+        public int numPacksInSeries
+        {
+            get
+            {
+                if (SelectedWorkAssignment == null)
+                {
+                    return 0;
+                }
+
+                return SelectedWorkAssignment.numPacksInSeries;
+            }
+        }
 
         /// <summary>
         /// Коллекция рабочих заданий
@@ -368,9 +136,31 @@ namespace SortingStantion.Models
             set
             {
                 selectedWorkAssignment = value;
+
+                //уведомление подписчиков
+                this.WorkOrderAcceptanceNotification?.Invoke(selectedWorkAssignment);
+
+                //Уведомление UI
+                OnPropertyChanged("ID");
+                OnPropertyChanged("GTIN");
+                OnPropertyChanged("Lot_No");
+                OnPropertyChanged("Product_Name");                
             }
         }
         WorkAssignment selectedWorkAssignment;
+
+        /// <summary>
+        /// Флаг возвращает 
+        /// принято ли задание
+        /// </summary>
+        public bool InWork
+        {
+            get
+            {
+                //Возвращение значения тэга
+                return SelectedWorkAssignment != null;
+            }
+        }
 
         /// <summary>
         /// Событие, генерируемое при принятии
@@ -390,7 +180,6 @@ namespace SortingStantion.Models
         /// </summary>
         public event Action<WorkAssignment> NewWorkOrderHasArrivedNotification;
 
-
         /// <summary>
         /// Конструктор класса
         /// </summary>
@@ -399,9 +188,18 @@ namespace SortingStantion.Models
             //Инициализация коллекции с рабочими заданиями
             WorkAssignments = new ObservableCollection<WorkAssignment>();
 
-            //Инициализация переменных ПЛК
-            PlcDataInit();
+            //Загрузка задания из файла
+            try
+            {
+                LoadFromFile();
+            }
+            catch (System.Net.HttpListenerException ex)
+            {
+                //Запись в лог
+                Logger.AddExeption("WorkAssignmentEngine.cs", ex);
+            }
 
+            
             //Запуск задачи по прослушиванию
             //http
             Task.Factory.StartNew(() =>
@@ -417,23 +215,56 @@ namespace SortingStantion.Models
                 }
                
             });
+        }
 
-            //Подгрузка текущего задания
-            device.FirstScan += () =>
+        /// <summary>
+        /// Метод для загрузки задания из файла
+        /// в папке Orders
+        /// </summary>
+        void LoadFromFile()
+        {
+            var files = Directory.GetFiles("Orders");
+
+            //Если файлов больше 1 выводим ошибку
+            if (files.Length > 1)
             {
-                if (InWork == true)
-                {
-                    var wA = new WorkAssignment();
-                    wA.gtin = GTIN;
-                    wA.ID = TaskID;
-                    wA.productName = Product_Name;
-                    wA.numРacksInBox = int.Parse(NUM_PACKS_IN_BOX.Value.ToString());
-                    wA.numPacksInSeries = int.Parse(NUM_PACKS_IN_SERIES_TAG.StatusText);
+                string message = "Ошибка загрузки незавершенного задания. Обратитесь к наладчику";
+                ShowMessage(message, DataBridge.myRed);
+                return;
+            }
 
-                    SelectedWorkAssignment = wA;
-                    WorkOrderAcceptanceNotification?.Invoke(wA);
-                }
-            };
+            //Если файлы отсутсвуют, пропускаем загрузку файла
+            if (files.Length == 0)
+            {
+                return;
+            }
+
+            //Получение файла незавершенного задания
+            var file = $@"{files[0]}";
+
+            //Десериализация задачи из памяти программы
+            using (StreamReader fs = new StreamReader(file))
+            {
+                var text = fs.ReadToEnd();
+                fs.Close();
+
+                //Десериализация
+                var deserializeWorkAssignment = JsonConvert.DeserializeObject<WorkAssignment>(text);
+
+                //Передача десериализованного объекта в текущее задание
+                WorkAssignments.Add(deserializeWorkAssignment);
+
+                //Передача десериализованного объекта в текущее задание
+                SelectedWorkAssignment = deserializeWorkAssignment; 
+            }
+        }
+
+        /// <summary>
+        /// Метод для сброса полей
+        /// </summary>
+        void Clear()
+        {
+            SelectedWorkAssignment = null;
         }
 
        /// <summary>
@@ -586,7 +417,7 @@ namespace SortingStantion.Models
                         //Запись в отчет первого мастера, вошедшего в систему
                         var currentuser = DataBridge.MainAccesLevelModel.CurrentUser;
                         var historyitem = new UserAuthorizationHistotyItem(currentuser);
-                        DataBridge.Report.operators.Add(historyitem);
+                        DataBridge.Report.AddAuthorizationUser(historyitem);
 
                         //Запись времени, когда принято задание
                         var timeStart = historyitem.startTime;
@@ -601,22 +432,8 @@ namespace SortingStantion.Models
                         //Запись ID в отчет
                         DataBridge.Report.ID = SelectedWorkAssignment.ID;
 
-                        //Запись атрибутов принятого задания в ПЛК
-                        S7GTIN.Write(SelectedWorkAssignment.gtin);
-                        TASK_ID_TAG.Write(SelectedWorkAssignment.ID);
-                        S7ProductName.Write(SelectedWorkAssignment.productName);
-                        LOT_NO_TAG.Write(SelectedWorkAssignment.lotNo);
-                        NUM_PACKS_IN_BOX.Write(SelectedWorkAssignment.numРacksInBox);
-                        NUM_PACKS_IN_SERIES_TAG.Write(SelectedWorkAssignment.numPacksInSeries);
-
-                        //Запись статуса в ПЛК
-                        IN_WORK_TAG.Write(true);
-
-                        //Уведомление подписчиков о принятии задания
-                        WorkOrderAcceptanceNotification?.Invoke(SelectedWorkAssignment);
-
                         //Формирование текста сообщения в зоне информации
-                        string message = $"Задание {TASK_ID_TAG.StatusText} принято в работу";
+                        string message = $"Задание {this.ID} принято в работу";
 
                         //Запись в базу данных о принятии задания
                         DataBridge.AlarmLogging.AddMessage(message, MessageType.TaskLogging);
@@ -626,7 +443,8 @@ namespace SortingStantion.Models
                         DataBridge.MSGBOX.Add(msg);
 
                         //Сохранение принятого задания в файл
-                        SelectedWorkAssignment.Save("Orders");
+                        //резервной копии
+                        CreateBackupFile();
 
                         //Выход из функции
                         return;
@@ -646,7 +464,7 @@ namespace SortingStantion.Models
                 return new DelegateCommand((obj) =>
                 {
                     //Проверка - работает ли линия
-                    if (DataBridge.Conveyor.LineIsRun == true && device.IsAvailable == true)
+                    if (DataBridge.Conveyor.LineIsRun == true && DataBridge.S7Server.Devices[0].IsAvailable == true)
                     {
                         customMessageBox mb = new customMessageBox("Ошибка", "Задание в работе, перед завершением остановите конвейер.");
                         mb.Owner = DataBridge.MainScreen;
@@ -654,6 +472,17 @@ namespace SortingStantion.Models
 
                         return;
                     }
+
+
+                    ////Проверка - имеются ли на линии невыпущенныые продукты
+                    //if (DataBridge.BoxEngine.ProductCollectionLenght.Value > 0)
+                    //{
+                    //    customMessageBox mb = new customMessageBox("Ошибка", "Внимание! На ленте конвейера остались считанные, но не выпущенные продукты! Уберите их вручную и очистите очередь ПЛК перед завершением задания");
+                    //    mb.Owner = DataBridge.MainScreen;
+                    //    mb.ShowDialog();
+
+                    //    return;
+                    //}
 
                     //Вызываем окно авторизации
                     //Вызов окна для авторизации мастера
@@ -669,12 +498,17 @@ namespace SortingStantion.Models
 
                     Action action = () =>
                     {
-                        //Объявление локальных переменных
+                        //Текст сообщения в зоне информации
                         string message = string.Empty;
+
+                        //сообщение в зоне информации
                         UserMessage msg = null;
 
+                        //Запоминание времени завершения задания
+                        DataBridge.Report.endTime = DateTime.Now.GetDateTimeFormats()[43];
+
                         //Отправка результата на L3
-                        var result = DataBridge.Report.SendReportToL3();
+                        var result = DataBridge.Report.SendReport();
 
                         //Если отправка отчета не удалась
                         if (result == false)
@@ -697,17 +531,9 @@ namespace SortingStantion.Models
                         //Сохранение завершенного задания в файл
                         SelectedWorkAssignment.Save("OrdersArhive");
 
-                        var fn = $@"Orders\{SelectedWorkAssignment.ID}.txt";
-
-                        //Удаление файла с заданием из папки Orders
-                        //по завершению задания
-                        if (File.Exists(fn))
-                        {
-                            File.Delete(fn);
-                        }
-
-                        //Запись статуса в ПЛК
-                        IN_WORK_TAG.Write(false);
+                        //Удаление резервного файла с принятым, но
+                        //не завершенным заданием
+                        DeleteBackupFile();
 
                         //Запись в базу данных
                         message = $"Завершена работа по заданию ID: {SelectedWorkAssignment.ID}";
@@ -727,22 +553,8 @@ namespace SortingStantion.Models
                         //Очищаем отчет от предыдущих операций
                         DataBridge.Report.ClearResult();
 
-                        //Стирание данных в ПЛК
-                        S7GTIN.Write("");
-                        TASK_ID_TAG.Write("");
-                        S7ProductName.Write("");
-                        LOT_NO_TAG.Write("");
-
-                        //Обнуление счетчиков изделий
-                        NUM_PACKS_IN_BOX.Write(0);
-                        NUM_PACKS_IN_SERIES_TAG.Write(0);
-
-                        QUANTITY_WORKSPACE.Write(0);
-                        QUANTITY_BOXS.Write(0);
-                        QUANTITY_WORKSPACE_AUTO_REJECTED.Write(0);
-                        QUANTITY_WORKSPACE_MANUAL_REJECTED.Write(0);
-                        REPEAT_COUNTER.Write(0);
-                        DEFECT_COUNTER.Write(0);
+                        //Очистка данных
+                        Clear();
 
                         //Очистка результата
                         DataBridge.Report.ClearResult();
@@ -751,10 +563,32 @@ namespace SortingStantion.Models
 
                     var wcr = new windowClearCollectionRequest(action);
 
-
                     return;
                 },
                 (obj) => (true));
+            }
+        }
+
+        /// <summary>
+        /// Метод для создания бэкап файла
+        /// </summary>
+        public void CreateBackupFile()
+        {
+            SelectedWorkAssignment.Save("Orders");
+        }
+
+        /// <summary>
+        /// Метод для удаления резервного файла
+        /// </summary>
+        void DeleteBackupFile()
+        {
+            var fn = $@"Orders\{SelectedWorkAssignment.ID}.txt";
+
+            //Удаление файла с заданием из папки Orders
+            //по завершению задания
+            if (File.Exists(fn))
+            {
+                File.Delete(fn);
             }
         }
 
@@ -769,13 +603,11 @@ namespace SortingStantion.Models
 
             //Регистрация url
             NetAclChecker.AddAddress(url_jobs);
-            //NetAclChecker.AddAddress("http://localhost:7080/jobs/");
 
             //Инициализация экземпляра  listener
             HttpListener listener = new HttpListener();
 
             //Установка адресов  listener
-            //listener.Prefixes.Add("http://localhost:7080/jobs/");
             listener.Prefixes.Add(url_jobs);
 
             //Запуск слушателя
@@ -922,6 +754,21 @@ namespace SortingStantion.Models
             // останавливаем прослушивание подключений
             listener.Stop();
         }
+
+        /// <summary>
+        /// Метод для отображения сообщения в зоне информации
+        /// </summary>
+        /// <param name="message"></param>
+        void ShowMessage(string message, Brush color)
+        {
+            Action action = () =>
+            {
+                var msgitem = new UserMessage(message, color);
+                DataBridge.MSGBOX.Add(msgitem);
+            };
+            DataBridge.UIDispatcher.Invoke(action);
+        }
+
 
         #region Реализация интерфейса INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

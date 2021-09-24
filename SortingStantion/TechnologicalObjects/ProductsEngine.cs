@@ -2,7 +2,6 @@
 using SortingStantion.Controls;
 using SortingStantion.Models;
 using System;
-using System.Windows.Media;
 using SortingStantion.ToolsWindows.windowGtinFault;
 using SortingStantion.ToolsWindows.windowExtraneousBarcode;
 using SortingStantion.ToolsWindows.windowProductIsDeffect;
@@ -76,7 +75,7 @@ namespace SortingStantion.TechnologicalObjects
         /// Количество отсканированных, но не выпущенных
         /// продуктов
         /// </summary>
-        S7_DWord ProductCollectionLenght;
+        public S7_DWord ProductCollectionLenght;
 
         /// <summary>
         /// Счетчик повтора кодов
@@ -236,6 +235,10 @@ namespace SortingStantion.TechnologicalObjects
                 //Переход на главный экран
                 DataBridge.ScreenEngine.GoToMainWindow();
 
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+
                 //Вывод сообщения в зоне информации
                 string message = $"Посторонний код (не является КМ)";
                 var msg = new UserMessage(message, DataBridge.myRed);
@@ -267,6 +270,10 @@ namespace SortingStantion.TechnologicalObjects
                 //Переход на главный экран
                 DataBridge.ScreenEngine.GoToMainWindow();
 
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+
                 //Вывод сообщения в зоне информации
                 string message = $"Посторонний продукт (GTIN не совпадает с заданием)";
                 var msg = new UserMessage(message, DataBridge.myRed);
@@ -296,6 +303,10 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Переход на главный экран
                 DataBridge.ScreenEngine.GoToMainWindow();
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
 
                 //Вывод сообщения в окно информации
                 string message = $"Номер продукта {scaner_serialnumber} числится в браке";
@@ -336,6 +347,10 @@ namespace SortingStantion.TechnologicalObjects
 
                 //Переход на главный экран
                 DataBridge.ScreenEngine.GoToMainWindow();
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
 
                 //Вывод сообщения в окно информации
                 string message = $"Продукт номер {scaner_serialnumber} считан повторно.";

@@ -50,12 +50,13 @@ namespace SortingStantion.frameUSPFault
                     //обратного отсчета
                     timer.Stop();
 
-                    //Сохранение результата 
-                    DataBridge.Report.Save();
+                    //Сохранение результата в файл резервной копии
+                    DataBridge.Report.CreateBackupFile();
 
                     //Выключение ПК
                     Shutdown();
 
+                    //Выход
                     return;
                 }
 

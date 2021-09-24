@@ -5,29 +5,18 @@ using System.IO;
 using System.Net;
 using System.Collections.ObjectModel;
 using S7Communication;
-using System.Threading;
 using System.Windows.Media;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace SortingStantion.Models
 {
     /// <summary>
     /// Класс, реализующий результат операций
     /// </summary>
-    public class Report
+    public class Report : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Уникальный идентификатор задания. 
-        /// </summary>
-        public string ID;
-
-        /// <summary>
-        /// Время начала работы с заданием
-        /// </summary>
-        public string startTime;
 
         /// <summary>
         /// Флаг, что отчет загружен из файла Task.json
@@ -35,20 +24,73 @@ namespace SortingStantion.Models
         public bool IsLoadFromFile = false;
 
         /// <summary>
+        /// Уникальный идентификатор задания. 
+        /// </summary>
+        public string ID
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
+        }
+        string _id;
+
+        /// <summary>
+        /// Время начала работы с заданием
+        /// </summary>
+        public string startTime
+        {
+            get
+            {
+                return _startTime;
+            }
+            set
+            {
+                _startTime = value;
+            }
+        }
+        string _startTime;
+
+        /// <summary>
         /// Время окончания работы с заданием 
         /// </summary>
-        public string endTime;
+        public string endTime
+        {
+            get
+            {
+                return _endTime;
+            }
+            set
+            {
+                _endTime = value;
+            }
+        }
+        string _endTime;
 
-        //Настройки из файла настроек
-        string SrvL3Login;
-        string rvL3Password;
+        /// <summary>
+        /// URL адрес для отправки отчетов на  L3
+        /// </summary>
         string SrvL3UrlReport;
+
+        /// <summary>
+        /// Логин для авторизации на L3
+        /// </summary>
+        string SrvL3Login;
+
+        /// <summary>
+        /// Пароль  для авторизации на L3
+        /// </summary>
+        string rvL3Password;
 
         /// <summary>
         /// Массив, содержащий объекты Operator 
         /// описывающие мастера на линии
         /// </summary>
-        public List<UserAuthorizationHistotyItem> operators = new List<UserAuthorizationHistotyItem>();
+        List<UserAuthorizationHistotyItem> operators = new List<UserAuthorizationHistotyItem>();
 
         /// <summary>
         /// Акцессор для предоставления упрощенного
@@ -83,6 +125,60 @@ namespace SortingStantion.Models
         public List<string> Codes = new List<string>();
 
         /// <summary>
+        /// Счветчик продуктов
+        /// </summary>
+        public int ProductCount
+        {
+            get
+            {
+                return Codes.Count;
+            }
+        }
+
+        /// <summary>
+        /// Счетчик коробов
+        /// </summary>
+        public int BoxCount
+        {
+            get
+            {
+                if (DataBridge.WorkAssignmentEngine.SelectedWorkAssignment == null)
+                {
+                    return 0;
+                }
+
+                return Codes.Count / DataBridge.WorkAssignmentEngine.SelectedWorkAssignment.numРacksInBox;
+            }
+        }
+
+        /// <summary>
+        /// Счетчик отбракованных продуктов
+        /// </summary>
+        public int DeffectCount
+        {
+            get
+            {
+                return defectiveCodes.Count;
+            }
+        }
+
+        /// <summary>
+        /// Счетчик повторов
+        /// </summary>
+        public int RepeatCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (var repeat in repeatPacks)
+                {
+                    count += repeat.quantity;
+                }
+                return count;
+            }
+        }
+
+        /// <summary>
         /// Массив отбракованных вручную номеров продуктов 
         /// </summary>
         public List<string> defectiveCodes = new List<string>();
@@ -95,68 +191,30 @@ namespace SortingStantion.Models
         /// <summary>
         /// Текущее рабочее задание
         /// </summary>
-        public WorkAssignment CurrentWorkAssignment
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Указатель на главный Simatic TCP сервер
-        /// </summary>
-        SimaticClient server
+        WorkAssignment CurrentWorkAssignment
         {
             get
             {
-                return DataBridge.S7Server;
+                return DataBridge.WorkAssignmentEngine.SelectedWorkAssignment;
             }
         }
 
         /// <summary>
-        /// Указатель на экземпляр ПЛК
+        /// Флаг, указывающий на ошибку отправки отчета
         /// </summary>
-        SimaticDevice device
-        {
-            get
-            {
-                return server.Devices[0];
-            }
-        }
+        public bool SendReportErrorMemmoryFlag;
 
         /// <summary>
-        /// Счетчик повторов
+        /// Событие генериремое при отправке отчета либо
+        /// ошибки отправки отчета
         /// </summary>
-        public S7_DWord QUANTITY_REPEAT_PRODUCTS;
-
-        /// <summary>
-        /// Количество выпущеных продуктов
-        /// </summary>
-        public S7_DWord QUANTITY_PRODUCTS;
-
-        /// <summary>
-        /// Количество выпущеных коробов
-        /// </summary>
-        public S7_DWord QUANTITY_BOXS;
-
-        /// <summary>
-        /// Количество продуктов в коробе
-        /// </summary>
-        public S7_DWord NUM_PACKS_IN_BOX;
+        public event Action<bool> SendReportNotification;
 
         /// <summary>
         /// Конструктор класса
         /// </summary>
         public Report()
         {
-            //Инициализация тэга - повтор продуктов
-            QUANTITY_REPEAT_PRODUCTS = (S7_DWord)device.GetTagByAddress("DB1.DBD36-DWORD");
-
-            QUANTITY_PRODUCTS = (S7_DWord)device.GetTagByAddress("DB1.DBD16-DWORD");
-
-            QUANTITY_BOXS = (S7_DWord)device.GetTagByAddress("DB1.DBD20-DWORD");
-
-            NUM_PACKS_IN_BOX = (S7_DWord)device.GetTagByAddress("DB1.DBD362-DWORD");
-
             //Загрузка настроек из файла
             SrvL3Login = DataBridge.SettingsFile.GetSetting("SrvL3Login").Value;
             rvL3Password = DataBridge.SettingsFile.GetSetting("SrvL3Pass").Value;
@@ -166,23 +224,27 @@ namespace SortingStantion.Models
             //находящихся в результате
             AllCodes = new ObservableCollection<string>();
 
-            //Подпись на событие по принятию задания
-            DataBridge.WorkAssignmentEngine.WorkOrderAcceptanceNotification += (workAssignment) =>
-            {
-                //startTime = DateTime.Now.GetDateTimeFormats()[43];
-                CurrentWorkAssignment = workAssignment;
-            };
-
             //Подпись на событие по завершению задания
             DataBridge.WorkAssignmentEngine.WorkOrderCompletionNotification += (workAssignment) =>
-            {
-                endTime = DateTime.Now.GetDateTimeFormats()[43];
-                CurrentWorkAssignment = null;
+            {               
+               // endTime = DateTime.Now.GetDateTimeFormats()[43];
+
+                //if (LastOperator != null)
+                //{
+                //    LastOperator.endTime = endTime;
+                //}
             };
 
             //Подпись на событие по авторизации нового пользователя
-            DataBridge.MainAccesLevelModel.ChangeUser += (accesslevel, currentuser) =>
+            DataBridge.MainAccesLevelModel.ChangeUser += (accesslevel, currentuser, archive) =>
             {
+                //Если отсутсвует разрешение на архивацию истории авторизации
+                //выходим из метода
+                if (archive == false)
+                {
+                    return;
+                }
+
                 //Если задание не в работое - запись в историю 
                 //регистрации в отчет не заносим
                 var inwork = DataBridge.WorkAssignmentEngine.InWork;
@@ -217,16 +279,20 @@ namespace SortingStantion.Models
                     return;
                 }
 
-                //Сброс флага, указывающего на то
-                //что отчет загружен из файла
-                IsLoadFromFile = false;
-
                 //Сохраняем время завершения работы
                 //предыдущего мастера
                 if (LastOperator != null)
                 {
-                    LastOperator.endTime = DateTime.Now.GetDateTimeFormats()[43];
-                } 
+                    //Если окончание работы мастера не определено
+                    if (string.IsNullOrEmpty(LastOperator.endTime) == true)
+                    {
+                        LastOperator.endTime = DateTime.Now.GetDateTimeFormats()[43];
+                    }
+                }
+
+                //Сброс флага, указывающего на то
+                //что отчет загружен из файла
+                IsLoadFromFile = false;
 
                 //Создаем запись истории регистрации мастера
                 var historyitem = new UserAuthorizationHistotyItem(currentuser);
@@ -235,9 +301,31 @@ namespace SortingStantion.Models
                 operators.Add(historyitem);
             };
 
-            //Загрузка результата из файла
-            Load();
+            //Загрузка результата выцполнения задания
+            //из файла резервной копии
+            try
+            {
+                LoadFromBackupFile();
+            }
+            catch (System.Net.HttpListenerException ex)
+            {
+                //Запись в лог
+                Logger.AddExeption("Report.cs", ex);
+            }
 
+            DataBridge.WorkAssignmentEngine.WorkOrderAcceptanceNotification += (task) =>
+            {
+                //Обновление счетчиков на UI
+                UpdateCounters();
+            };
+        }
+
+        /// <summary>
+        /// метод для добавления пользователя
+        /// </summary>
+        public void AddAuthorizationUser(UserAuthorizationHistotyItem historyitem)
+        {
+            this.operators.Add(historyitem);
         }
 
         /// <summary>
@@ -318,7 +406,6 @@ namespace SortingStantion.Models
         /// </summary>
         /// <param name="serialnumber"></param>
         /// <returns></returns>
-
         public bool IsContentsRepeatCollection(string serialnumber)
         {
             /*
@@ -370,16 +457,11 @@ namespace SortingStantion.Models
             */
             if (IsRepeat(serialnumber) == true)
             {
-                //Добавление кодов в повторы
+                //Добавление повтора в коллекцию
                 AddRepeatProduct(serialnumber);
 
-                //Вывод сообщений
-                //msg = $"Считан продукт с серийным номером {serialnumber}. Продукт добавлен в коллекцию кодов повторов";
-                //messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
-                //DataBridge.MSGBOX.Add(messageItem);
-
-                //Увеличение счетчика повторов
-                //AddValue(QUANTITY_REPEAT_PRODUCTS, 1);
+                //Обновление счетчиков на UI
+                UpdateCounters();
 
                 //Выход из процедуры
                 return;
@@ -390,17 +472,8 @@ namespace SortingStantion.Models
             */
             Codes.Add(serialnumber);
 
-            /*
-                Увеличение счетчика выпущеных
-                продуктов в результате
-            */
-            AddQuantityProducts( num:1);
-
-
-            //Вывод сообщений
-            //msg = $"Считан продукт с серийным номером {serialnumber}. В результате продуктов: {Codes.Count}";
-            //messageItem = new Controls.UserMessage(msg, DataBridge.myGreen);
-            //DataBridge.MSGBOX.Add(messageItem);
+            //Обновление счетчиков на UI
+            UpdateCounters();
         }
 
         /// <summary>
@@ -408,9 +481,6 @@ namespace SortingStantion.Models
         /// </summary>
         public void AddRepeatProduct(string serialnumber)
         {
-            //Увеличение счетчика повторов
-            AddValue(tag: QUANTITY_REPEAT_PRODUCTS, num: 1);
-
             //Осуществляем поиск повтора из отчета
             foreach (var repeatPack in repeatPacks)
             {
@@ -418,7 +488,10 @@ namespace SortingStantion.Models
                 //следует добавить, инкрементируем счетчик
                 if (repeatPack.num == serialnumber)
                 {
-                    repeatPack.quantity ++;
+                    repeatPack.quantity++;
+
+                    //Обновление счетчиков на UI
+                    UpdateCounters();
 
                     return;
                 }
@@ -432,6 +505,9 @@ namespace SortingStantion.Models
             };
 
             repeatPacks.Add(repeatPackItem);
+
+            //Обновление счетчиков на UI
+            UpdateCounters();
         }
 
         /// <summary>
@@ -444,9 +520,8 @@ namespace SortingStantion.Models
             RemoteCodeFromFullResult(serialnumber);
             defectiveCodes.Add(serialnumber);
 
-            //Вычитание количества удаленных продуктов
-            //из счетчика выпущеных продуктов
-            AddQuantityProducts( -1 * dcounter);
+            //Обновление счетчиков на UI
+            UpdateCounters();
         }
 
         /// <summary>
@@ -489,63 +564,6 @@ namespace SortingStantion.Models
         }
 
         /// <summary>
-        /// Метод для добавления значения к количеству
-        /// выпущенных продуктов
-        /// </summary>
-        /// <param name="num"></param>
-        void AddQuantityProducts(int num)
-        {
-            /*
-               Увеличение счетчика выпущеных
-               продуктов в результате
-            */
-            int qp = (int)QUANTITY_PRODUCTS.Value;
-
-            //Инкрементируем значение счетчика
-            qp += num;
-
-            var num_pacs_in_box = NUM_PACKS_IN_BOX.Value;
-
-            //Если ошибок при преобразовании 
-            //не возникло - увеличиваем счетчик продуктов на единицу
-            //Запись в ПЛК количества выпущеных продуктов
-            QUANTITY_PRODUCTS.Write(qp);
-            QUANTITY_PRODUCTS.Value = (uint)qp;
-
-            //Запись в ПЛК количества выпущеных коробов
-            if (num_pacs_in_box > 0)
-            {
-                uint quantityBoxs = (uint)(qp / num_pacs_in_box);
-                QUANTITY_BOXS.Write(quantityBoxs);
-                QUANTITY_BOXS.Value = (uint)quantityBoxs;
-            }
-        }
-
-        /// <summary>
-        /// Метод для добавления значения тэгу
-        /// </summary>
-        /// <param name="num"></param>
-        void AddValue(S7_DWord tag, int num)
-        {
-            /*
-                Вычисление нового значения тэга
-            */
-            int value = (int)tag.Value + num;
-
-            //Производим запись нового значения
-            //в тэг
-            
-            var result = tag.Write(value);
-            if(result == true)
-            {
-                tag.Value = (uint)value;
-                tag.Status = tag.Value;
-                tag.StatusText = tag.Value.ToString();
-            }
-
-        }
-
-        /// <summary>
         /// Метод для сериализации отчета
         /// </summary>
         /// <returns></returns>
@@ -558,21 +576,27 @@ namespace SortingStantion.Models
                 return "";
             }
 
-            //Если время работы последнего оператора
-            //уазываем его
+            //Если время окончания определено, записваем
+            //время окончания работы мастера как время завершения задания
+            if (string.IsNullOrEmpty(endTime) == false)
+            {
+                LastOperator.endTime = endTime;
+            }
+
+            //Если время завершения последнего мостера не определено
+            //записваем текущее время
             if (string.IsNullOrEmpty(LastOperator.endTime) == true)
             {
                 LastOperator.endTime = DateTime.Now.GetDateTimeFormats()[43];
             }
-            
 
             //Создание бэкап файла
             var reportBackupFile = new ReportBackupFile()
             {
-                id = this.CurrentWorkAssignment.ID,
+                id = DataBridge.WorkAssignmentEngine.ID,
                 operators = this.operators,
                 startTime = this.startTime,
-                endTime = DateTime.Now.GetDateTimeFormats()[43],
+                endTime =   this.endTime,
                 defectiveCodes = this.defectiveCodes,
                 Packs = this.Codes,
                 repeatPacks = this.repeatPacks
@@ -580,33 +604,6 @@ namespace SortingStantion.Models
 
             //Сериализация
             return JsonConvert.SerializeObject(reportBackupFile);
-        }
-
-
-        /// <summary>
-        /// Метод для сохранения
-        /// результата в файл
-        /// </summary>
-        public void Save()
-        {
-            if (CurrentWorkAssignment == null)
-            {
-                return;
-            }
-
-            //Получение сериализованного отчета
-            string json = Serialize();
-
-            //Если ответ не сериализирован, выходим
-            if (string.IsNullOrEmpty(json) == true)
-            {
-                return;
-            }
-
-            //Сохранение файла
-            StreamWriter sr = new StreamWriter(@"AppData\Task.json");
-            sr.Write(json);
-            sr.Close();
         }
 
         /// <summary>
@@ -637,7 +634,7 @@ namespace SortingStantion.Models
             }
 
             //Получение имени файла
-            var filename = $@"{dirName}\{DataBridge.WorkAssignmentEngine.TaskID}.txt";
+            var filename = $@"{dirName}\{DataBridge.WorkAssignmentEngine.ID}.txt";
 
             //Сохранение файла
             StreamWriter sr = new StreamWriter($@"{filename}");
@@ -645,13 +642,38 @@ namespace SortingStantion.Models
             sr.Close();
         }
 
-        async void Load()
+        /// <summary>
+        /// Метод для создания бэкап файла
+        /// </summary>
+        public void CreateBackupFile()
         {
-            //Если файла нет, выходим из функции
-            if (File.Exists(@"AppData\Task.json") == false)
+            this.Save("Report");
+        }
+
+        /// <summary>
+        /// Метод для загрузки результата незавершенного задания
+        /// из файла резервной копии
+        /// </summary>
+        async void LoadFromBackupFile()
+        {
+            var files = Directory.GetFiles("Report");
+
+            //Если файлов больше 1 выводим ошибку
+            if (files.Length > 1)
+            {
+                string message = "Ошибка загрузки незавершенного задания. Обратитесь к наладчику";
+                ShowMessage(message, DataBridge.myRed);
+                return;
+            }
+
+            //Если файлы отсутсвуют, пропускаем загрузку файла
+            if (files.Length == 0)
             {
                 return;
             }
+
+            //Получение файла незавершенного задания
+            var file = $@"{files[0]}";
 
             //Устанавливаем флаг, что отчет загружен из файла
             IsLoadFromFile = true;
@@ -660,7 +682,7 @@ namespace SortingStantion.Models
 
             //Десериализация задачи из памяти программы
             // чтение данных
-            using (StreamReader fs = new StreamReader(@"AppData\Task.json"))
+            using (StreamReader fs = new StreamReader(file))
             {
                 var text = fs.ReadToEnd();
                 reportBackupFile = JsonConvert.DeserializeObject<ReportBackupFile>(text);
@@ -674,6 +696,8 @@ namespace SortingStantion.Models
                 this.defectiveCodes = reportBackupFile.defectiveCodes;
                 this.Codes = reportBackupFile.Packs;
 
+                //Обновление счетчиков на UI
+                UpdateCounters();
             }
         }
 
@@ -681,9 +705,19 @@ namespace SortingStantion.Models
         /// метод для отправки отчета
         /// Выполняется в отдельном потоке
         /// </summary>
-        public void SendReport()
+        public bool SendReport()
         {
+            //Отправка отчета на L3
             var result = SendReportToL3();
+
+            //Записываем статус ошибки отправки последнего отчета
+            SendReportErrorMemmoryFlag = !result;
+
+            //Уведомление подписчиков
+            SendReportNotification?.Invoke(SendReportErrorMemmoryFlag);
+
+            //Возврат результата
+            return result;
         }
 
         /// <summary>
@@ -741,7 +775,7 @@ namespace SortingStantion.Models
         /// <summary>
         /// Метод для отправки результата на L3
         /// </summary>
-        public bool SendReportToL3()
+        bool SendReportToL3()
         {
             var username = SrvL3Login;
             var password = rvL3Password;
@@ -764,7 +798,7 @@ namespace SortingStantion.Models
             try
             {
                 //Отправка отчета конечному получателю
-                using (var sw = new StreamWriter(httpWebRequest.GetRequestStream()))
+                using (var sw = httpWebRequest.GetRequestStream())
                 {
                     string json = Serialize();
 
@@ -774,9 +808,11 @@ namespace SortingStantion.Models
                         return false;
                     }
 
+                    //Получение массива байт из json
+                    byte[] byteArray = Encoding.UTF8.GetBytes(json);
 
                     //Запись данных в поток вывода
-                    sw.Write(json);
+                    sw.Write(byteArray, 0, byteArray.Length);
                 }
 
                 //Прием ответа от получателя отчетов
@@ -796,11 +832,11 @@ namespace SortingStantion.Models
             catch (Exception ex)
             {
                 //В случае невозможности отправить
-                //отчет на L3 - созраняем его в папке "Report"
-                this.Save("Report");
+                //отчет на L3 - создаем резервную копию в папке "Report"
+                CreateBackupFile();
 
-                ////Вывод сообщения об отправке отчета
-                //ShowMessage("Ошибка отправки отчета", DataBridge.myRed);
+                //Запись исключения в лог
+                Logger.AddExeption("Report.cs", ex);
             }
 
             return false;
@@ -826,11 +862,8 @@ namespace SortingStantion.Models
         /// </summary>
         public void ClearResult()
         {
-            //Удаление файла
-            if (File.Exists(@"AppData\Task.json") == true)
-            {
-                File.Delete(@"AppData\Task.json");
-            }
+            //Удаление бэкап файла
+            DeleteBackupFile();
 
             //Обнуление результата
             this.ID = string.Empty;
@@ -841,6 +874,47 @@ namespace SortingStantion.Models
             this.defectiveCodes = new List<string>();
             this.Codes.Clear();
             AllCodes.Clear();
+
+            //Обновление счетчиков на UI
+            UpdateCounters();
         }
+
+        /// <summary>
+        /// Метод для удаления бэкап файла
+        /// </summary>
+        public void DeleteBackupFile()
+        {
+            //Получаем имя бэкап файла
+            var backupfile = $@"Report\{DataBridge.WorkAssignmentEngine.ID}.txt";
+
+            //Если бэкап файл существует - удаляем его
+            if (File.Exists(backupfile) == true)
+            {
+                File.Delete(backupfile);
+            }
+        }
+
+        /// <summary>
+        /// Метод для обновления счетчиков на UI
+        /// </summary>
+        void UpdateCounters()
+        {
+            OnPropertyChanged("ProductCount");
+            OnPropertyChanged("BoxCount");
+            OnPropertyChanged("DeffectCount");
+            OnPropertyChanged("RepeatCount");
+        }
+
+        #region Реализация интерфейса INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+
+        }
+        #endregion
     }
 }

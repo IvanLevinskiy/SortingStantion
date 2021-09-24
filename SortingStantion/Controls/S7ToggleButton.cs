@@ -108,7 +108,7 @@ namespace SortingStantion.Controls
         /// Собылие при изменении пользователя
         /// </summary>
         /// <param name="accesslevel"></param>
-        private void Users_ChangeUser(int accesslevel, User newuser)
+        private void Users_ChangeUser(int accesslevel, User newuser, bool Archive)
         {
             CheckAccesLevel();
         }

@@ -82,11 +82,22 @@ namespace SortingStantion.MainScreen
         /// <summary>
         /// Модель для создания результата операции
         /// </summary>
-        public Report ResultOperation
+        public Report Report
         {
             get
             {
                 return DataBridge.Report;
+            }
+        }
+
+        /// <summary>
+        /// Модель, осуществляющая обработку заданий
+        /// </summary>
+        public WorkAssignmentEngine WorkAssignmentEngine
+        {
+            get
+            {
+                return DataBridge.WorkAssignmentEngine;
             }
         }
 
@@ -111,6 +122,12 @@ namespace SortingStantion.MainScreen
                 return  server.Devices[0];
             }
         }
+
+        /// <summary>
+        /// Флаг, по которому осуществляется сброс
+        /// ошибки счетчика связи
+        /// </summary>
+        S7_Boolean S7ConnectionTag;
 
         /// <summary>
         /// Указатель на группу, где хранятся все тэгиК
@@ -147,37 +164,11 @@ namespace SortingStantion.MainScreen
             {
                 return DataBridge.WorkAssignmentEngine;
             }
-            set
-            {
-                DataBridge.WorkAssignmentEngine = value;
-            }
         }
 
         /// <summary>
-        /// Технологический объект - рабочее задание
+        /// Модель, управляющмя обработкорй продуктов на линии
         /// </summary>
-
-        /// <summary>
-        /// Команда принять - завершить
-        /// задание
-        /// </summary>
-        public S7_Boolean TaskTag
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Флаг по которому ПЛК определяет
-        /// наличие или отсутсвие связи с ПЛК
-        /// (данный флаг надо циклически взводить)
-        /// </summary>
-        public S7_Boolean ConnectFlag
-        {
-            get;
-            set;
-        }
-
         public ProductsEngine BoxEngine
         {
             get
@@ -199,9 +190,9 @@ namespace SortingStantion.MainScreen
             //Инициализация модели - синхронизатора
             //времени
             CurrentTime = new TimeUpdater();
-                        
+
             //Тэг который сбрасывает дисконект
-            ConnectFlag = new S7_Boolean("ConnectFlag", "DB1.DBX0.0", group);
+            S7ConnectionTag = new S7_Boolean("ConnectFlag", "DB1.DBX0.0", group);
 
             //Установка таймаута
             server.Timeout = 0;
@@ -216,7 +207,7 @@ namespace SortingStantion.MainScreen
                 if (counter >= 10)
                 {
                     counter = 0;
-                    ConnectFlag.Write(true);
+                    S7ConnectionTag.Write(true);
                 }
 
             };

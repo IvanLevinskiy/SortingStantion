@@ -41,12 +41,12 @@ namespace SortingStantion.ToolsWindows.windowClearCollectionRequest
         /// Количество отсканированных, но не выпущенных
         /// продуктов
         /// </summary>
-        S7_DWord ProductCollectionLenght;
+        S7_DWord S7ProductCollectionLenght;
 
         /// <summary>
         /// Тэг для очистки очереди в ПЛК
         /// </summary>
-        S7_Boolean CLEAR_ITEMS_COLLECTION_CMD;
+        S7_Boolean S7ClearItemsCollectionCMD;
 
         /// <summary>
         /// Конструктор класса
@@ -56,21 +56,21 @@ namespace SortingStantion.ToolsWindows.windowClearCollectionRequest
             //Инициализация UI
             InitializeComponent();
 
+            this.Owner = DataBridge.MainScreen;
+
             //Передача события по клику кнопки
             BtnContinueClickEvent = btnContinueClickAction;
 
             //Инициализация тэга - количество невыпущенных продуктов
-            ProductCollectionLenght = (S7_DWord)device.GetTagByAddress("DB5.DBD0-DWORD");
+            S7ProductCollectionLenght = (S7_DWord)device.GetTagByAddress("DB5.DBD0-DWORD");
 
             //Тэг для очистки коллекции изделий
-            CLEAR_ITEMS_COLLECTION_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX98.2");
+            S7ClearItemsCollectionCMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX98.2");
 
             //Если количество невыпущенных продуктов
             //меньше нуля - высываем событие, которое вызывается при
             //нажатии кнопки "ПРОДОЛЖИТЬ"
-            UInt32 productquantity = 0;
-            var resultconvertion = UInt32.TryParse(ProductCollectionLenght.Status.ToString(), out productquantity);
-            if (productquantity == 0)
+            if (S7ProductCollectionLenght.Value == 0)
             {
                 BtnContinueClickEvent?.Invoke();
                 BtnContinueClickEvent = null;
@@ -103,7 +103,7 @@ namespace SortingStantion.ToolsWindows.windowClearCollectionRequest
         /// <param name="e"></param>
         private void BtnContinueClick(object sender, RoutedEventArgs e)
         {
-            CLEAR_ITEMS_COLLECTION_CMD.Write(true);
+            S7ClearItemsCollectionCMD.Write(true);
             BtnContinueClickEvent?.Invoke();
             BtnContinueClickEvent = null;
             this.Close();

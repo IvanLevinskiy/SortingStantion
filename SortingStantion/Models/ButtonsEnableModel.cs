@@ -55,6 +55,11 @@ namespace SortingStantion.Models
                 */
                 var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
 
+                //Если активна ошибка отправки отчета
+                if (DataBridge.Report.SendReportErrorMemmoryFlag == true)
+                {
+                    return false;
+                }
 
                 //1. Задание не прислано в комплекс
                 //   - АКТИВНА
@@ -115,6 +120,12 @@ namespace SortingStantion.Models
                 //2. Задание прислано в комплекс
                 //   но в работу не принято - НЕ АКТИВНА
                 if (workAssignmentsList.Count > 0 && inwork == false)
+                {
+                    return false;
+                }
+
+                //Если активна ошибка отправки отчета
+                if (DataBridge.Report.SendReportErrorMemmoryFlag == true)
                 {
                     return false;
                 }
@@ -192,6 +203,12 @@ namespace SortingStantion.Models
                     return false;
                 }
 
+                //Если активна ошибка отправки отчета
+                if (DataBridge.Report.SendReportErrorMemmoryFlag == true)
+                {
+                    return false;
+                }
+
                 //4. Задание прислано в комплекс
                 //   и принято в работу, пользователь авторизирован - АКТИВНА и линия не запущена
                 if (inwork == true && currentUser != null && lineisrun == false)
@@ -248,6 +265,12 @@ namespace SortingStantion.Models
                 //3. Задание прислано в комплекс
                 //   и принято в работу, но пользователь не авторизирован - НЕ АКТИВНА
                 if (inwork == true && currentUser == null)
+                {
+                    return false;
+                }
+
+                //Если активна ошибка отправки отчета
+                if (DataBridge.Report.SendReportErrorMemmoryFlag == true)
                 {
                     return false;
                 }
@@ -358,6 +381,12 @@ namespace SortingStantion.Models
                 //Указатель на текущего авторизованного пользователя
                 var currentUser = DataBridge.MainAccesLevelModel.CurrentUser;
 
+                //Если активна ошибка отправки отчета
+                if (DataBridge.Report.SendReportErrorMemmoryFlag == true)
+                {
+                    return false;
+                }
+
                 //1. Задание не прислано в комплекс
                 //   - НЕ АКТИВНА
                 if (workAssignmentsList.Count == 0 && inwork == false)
@@ -463,6 +492,12 @@ namespace SortingStantion.Models
                     return false;
                 }
 
+                //Если активна ошибка отправки отчета
+                if (DataBridge.Report.SendReportErrorMemmoryFlag == true)
+                {
+                    return false;
+                }
+
                 //4. Задание прислано в комплекс
                 //   и принято в работу, пользователь авторизирован - АКТИВНА
                 if (inwork == true && currentUser != null)
@@ -491,7 +526,7 @@ namespace SortingStantion.Models
         private void DataBridge_LoadComplete()
         {
             //Подпись на событие по изменению пользователя
-            DataBridge.MainAccesLevelModel.ChangeUser += (a1, a2) =>
+            DataBridge.MainAccesLevelModel.ChangeUser += (a1, a2, archive) =>
             {
                 OnPropertyChanged("BtnStartEnable");
                 OnPropertyChanged("BtnStopEnable");
@@ -593,6 +628,21 @@ namespace SortingStantion.Models
             {
                 OnPropertyChanged("BtnStartEnable");
                 OnPropertyChanged("BtnStartForceEnable");
+            };
+
+            //Изменение статуса отправки отчета
+            DataBridge.Report.SendReportNotification += (status) =>
+            {
+                OnPropertyChanged("BtnSettingsEnable");
+                OnPropertyChanged("BtnAutorizationEnable");
+
+                OnPropertyChanged("BtnAcceptTaskEnable");
+                OnPropertyChanged("BtnFinishTaskEnable");
+
+                OnPropertyChanged("BtnStartEnable");
+                OnPropertyChanged("BtnStopEnable");
+
+                OnPropertyChanged("BtnToolsEnable");
             };
 
             device.GotConnection += () =>

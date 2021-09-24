@@ -398,7 +398,7 @@
                            Foreground="{StaticResource TextColor}"/>
 
                    
-                    <controls:S7TextBox Address="DB1.DBD234-STR40" 
+                    <!--<controls:S7TextBox Address="DB1.DBD234-STR40" 
                                         Background="Transparent"
                                         Height="40"
                                         FontSize="{StaticResource fontSizeData}"
@@ -406,7 +406,15 @@
                                         VerticalContentAlignment="Center"
                                         Text=""
                                         MinAccesLevel="0"
-                                        Foreground="{StaticResource TextColor}"/>
+                                        Foreground="{StaticResource TextColor}"/>-->
+
+                    <TextBlock Text="{Binding  WorkAssignmentEngine.Product_Name}"
+                               Background="Transparent"
+                               Height="33"
+                               FontSize="{StaticResource fontSizeData}"
+                               Margin="105,5,25,5"
+                               Foreground="{StaticResource TextColor}"
+                               VerticalAlignment="Bottom" />
 
                 </Grid>
 
@@ -420,7 +428,7 @@
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
 
-                    <controls:S7TextBox Address="DB1.DBD192-STR40" 
+                    <!--<controls:S7TextBox Address="DB1.DBD192-STR40" 
                                       Background="Transparent"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
@@ -428,7 +436,16 @@
                                       VerticalContentAlignment="Center"
                                       MinAccesLevel="0"
                                       Text=""
-                                      Foreground="{StaticResource TextColor}"/>
+                                      Foreground="{StaticResource TextColor}"/>-->
+
+                    <TextBlock Text="{Binding  WorkAssignmentEngine.GTIN}"
+                               Background="Transparent"
+                               Height="33"
+                               FontSize="{StaticResource fontSizeData}"
+                               Margin="62,5,28,5"
+                               Foreground="{StaticResource TextColor}"
+                               VerticalAlignment="Bottom" />
+
 
                 </Grid>
 
@@ -442,7 +459,7 @@
                            VerticalAlignment="Center"
                            Foreground="{StaticResource TextColor}"/>
 
-                    <controls:S7TextBox Address="DB1.DBD318-STR40" 
+                    <!--<controls:S7TextBox Address="DB1.DBD318-STR40" 
                                         Background="Transparent"
                                         MinAccesLevel="0"
                                         Height="40"
@@ -450,7 +467,16 @@
                                         Margin="94,5,16,5"
                                         VerticalContentAlignment="Center"
                                         Text="" 
-                                        Foreground="{StaticResource TextColor}"/>
+                                        Foreground="{StaticResource TextColor}"/>-->
+
+                    <TextBlock Text="{Binding  WorkAssignmentEngine.Lot_No}"
+                               Background="Transparent"
+                               Height="33"
+                               FontSize="{StaticResource fontSizeData}"
+                               Margin="94,5,16,5"
+                               Foreground="{StaticResource TextColor}"
+                               VerticalAlignment="Bottom" />
+
 
                 </Grid>
 
@@ -487,13 +513,24 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7TextBox Address="DB1.DBD20-DWORD"
+                    <!--<controls:S7TextBox Address="DB1.DBD20-DWORD"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
                                       VerticalContentAlignment="Center"
                                       IsReadOnly="False"
                                       Margin="280,0,10,0"
-                                      Text="0"/>
+                                      Text="0"/>-->
+
+                    <TextBox Height="40"
+                             FontSize="{StaticResource fontSizeData}"
+                             Background="{StaticResource DarkColor}"
+                             Foreground="{StaticResource TextColor}"
+                             BorderThickness="0"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding Report.BoxCount, Mode=OneWay}"
+                             IsReadOnly="False"
+                             Margin="280,0,10,0"/>
+
 
                 </Grid>
 
@@ -513,13 +550,23 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7TextBox Address="DB1.DBD16-DWORD"
+                    <!--<controls:S7TextBox Address="DB1.DBD16-DWORD"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
                                       VerticalContentAlignment="Center"
                                       IsReadOnly="False"
                                       Margin="280,0,10,0"
-                                      Text="0"/>
+                                      Text="0"/>-->
+
+                    <TextBox Height="40"
+                             FontSize="{StaticResource fontSizeData}"
+                             Background="{StaticResource DarkColor}"
+                             Foreground="{StaticResource TextColor}"
+                             BorderThickness="0"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding Report.ProductCount, Mode=OneWay}"
+                             IsReadOnly="False"
+                             Margin="280,0,10,0"/>
 
                 </Grid>
 
@@ -539,13 +586,23 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7TextBox Address="DB1.DBD28-DWORD"
+                    <!--<controls:S7TextBox Address="DB1.DBD28-DWORD"
                                       Height="40"
                                       FontSize="{StaticResource fontSizeData}"
                                       VerticalContentAlignment="Center"
                                       IsReadOnly="False"
                                       Margin="280,0,10,0"
-                                      Text="0"/>
+                                      Text="0"/>-->
+
+                    <TextBox Height="40"
+                             FontSize="{StaticResource fontSizeData}"
+                             Background="{StaticResource DarkColor}"
+                             Foreground="{StaticResource TextColor}"
+                             BorderThickness="0"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding Report.DeffectCount, Mode=OneWay}"
+                             IsReadOnly="False"
+                             Margin="280,0,10,0"/>
 
                 </Grid>
 
@@ -565,13 +622,23 @@
                            Height="1"
                            VerticalAlignment="Bottom"/>
 
-                    <controls:S7TextBox Address="DB1.DBD36-DWORD"
+                    <!--<controls:S7TextBox Address="DB1.DBD36-DWORD"
                                           Height="40"
                                           FontSize="{StaticResource fontSizeData}"
                                           VerticalContentAlignment="Center"
                                           IsReadOnly="False"
                                           Margin="280,0,10,0"
-                                          Text="0"/>
+                                          Text="0"/>-->
+
+                    <TextBox Height="40"
+                             FontSize="{StaticResource fontSizeData}"
+                             Background="{StaticResource DarkColor}"
+                             Foreground="{StaticResource TextColor}"
+                             BorderThickness="0"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding Report.RepeatCount, Mode=OneWay}"
+                             IsReadOnly="False"
+                             Margin="280,0,10,0"/>
 
                 </Grid>
 
@@ -688,7 +755,7 @@
                               ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
                               Background="{StaticResource LightColor}"
-                              ItemsSource="{Binding ResultOperation.AllCodes}"
+                              ItemsSource="{Binding Report.AllCodes}"
                               BorderBrush="{StaticResource GridColor}">
 
                         <ListView.ItemTemplate>
