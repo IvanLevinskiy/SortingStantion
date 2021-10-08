@@ -77,6 +77,15 @@ namespace SortingStantion.TechnologicalObjects
         }
 
         /// <summary>
+        /// Тэг готовности ПК к приему штрих-кода от ПЛК
+        /// </summary>
+        public S7_Boolean ReadyForTransfer
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Флаг, указывающий, что
         /// линия запущена в нормальном режиме (для View Model)
         /// </summary>
@@ -128,6 +137,9 @@ namespace SortingStantion.TechnologicalObjects
             //Тэг, указывающий, что линия установлена с учетом задержки
             //на останов
             IsStopFromTimerTag = new S7_Boolean("", "DB1.DBX86.1", group);
+
+            //Тэг, указывающий о готовности ПК приянтия данных от ПЛК
+            ReadyForTransfer = new S7_Boolean("", "DB1.DBX98.6", group);
 
             //Подпись на событие по изминеию статуса работы
             //линии
@@ -190,7 +202,10 @@ namespace SortingStantion.TechnologicalObjects
             //Запись статуса в ПЛК
             Run.Write(true);
 
-            //Внесение в базу данных сообщения об остановке комплекса
+            //установка флага готовности принятия результата
+            ReadyForTransfer.Write(true);
+
+            //Внесение в базу данных сообщения о запуске комплекса
             DataBridge.AlarmLogging.AddMessage("Нажата кнопка СТАРТ. Линия запущена", Models.MessageType.Event);
 
             return;
@@ -221,6 +236,8 @@ namespace SortingStantion.TechnologicalObjects
         {
             //Запись статуса в ПЛК
             Run.Write(false);
+            //Сброс флага готовности принятия результата
+            ReadyForTransfer.Write(false);
 
             return;
         }

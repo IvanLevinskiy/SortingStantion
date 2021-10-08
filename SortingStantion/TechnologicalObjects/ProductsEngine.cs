@@ -8,6 +8,10 @@ using SortingStantion.ToolsWindows.windowProductIsDeffect;
 using SortingStantion.ToolsWindows.windowRepeatProduct;
 using System.Windows.Input;
 using SortingStantion.Utilites;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
+using System.Threading;
 
 namespace SortingStantion.TechnologicalObjects
 {
@@ -67,6 +71,16 @@ namespace SortingStantion.TechnologicalObjects
         S7_String SCAN_DATA;
 
         /// <summary>
+        /// Тэг готовности ПК к приему штрих-кода от ПЛК
+        /// </summary>
+        public S7_Boolean ReadyForTransfer
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
         /// Тэг - разрешить повтор кода продукта
         /// </summary>
         S7_Boolean REPEAT_ENABLE;
@@ -96,14 +110,20 @@ namespace SortingStantion.TechnologicalObjects
             //Инициализация сигналов от сканера
             REPEAT_ENABLE = (S7_Boolean)device.GetTagByAddress("DB1.DBX134.0");
 
+            var fastdevice = DataBridge.S7Server.Devices[1];
+            var fastgroup = fastdevice.Groups[0];
+
             //Команда для считывания кода сканера
-            READ_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX378.0");
+            READ_CMD = new S7_Boolean("", "DB1.DBX378.0", fastgroup);
+
+            //Данные из сканера
+            SCAN_DATA = new S7_String("", "DB1.DBD506-STR100", fastgroup);
+
+            //Тэг, указывающий о готовности ПК приянтия данных от ПЛК
+            ReadyForTransfer = new S7_Boolean("", "DB1.DBX98.6", group);
 
             //Тэг для очистки коллекции изделий
             CLEAR_ITEMS_COLLECTION_CMD = (S7_Boolean)device.GetTagByAddress("DB1.DBX98.2");
-
-            //Данные из сканера
-            SCAN_DATA = (S7_String)device.GetTagByAddress("DB1.DBD506-STR100");
 
             //Количество отсканированных но не выпущенных объектов
             ProductCollectionLenght = (S7_DWord)device.GetTagByAddress("DB5.DBD0-DWORD");
@@ -114,24 +134,29 @@ namespace SortingStantion.TechnologicalObjects
             //Подписываемся на событие по изминению
             //тэга READ_CMD  и осуществляем вызов
             //метода в потоке UI
-            READ_CMD.ChangeValue += (ov, nv) =>
-            {
-                //Если новое или старое значение не bool
-                var errortr = (ov is bool) == false;
-                errortr = errortr || (nv is bool) == false;
+            //fastdevice.DataUpdated += () =>
+            //{
+            //    if (READ_CMD.Value == false)
+            //    {
+            //        return;
+            //    }
 
-                if (errortr == true)
-                {
-                    return;
-                }
+            //    SCAN_DATA_DataUpdated(null);
+            //};
 
-                //В случае, если ппроисходит 
-                //сброс тэга - код не выполняем
-                if ((bool)ov == false && (bool)nv == true)
-                {
-                    SCAN_DATA.DataUpdated += SCAN_DATA_DataUpdated;
-                }
-            };
+            //READ_CMD.DataUpdated += (ov) =>
+            //{
+            //    if (READ_CMD.Value == false)
+            //    {
+            //        return;
+            //    }
+
+            //    SCAN_DATA_DataUpdated(null);
+
+            //    ////В случае, если ппроисходит 
+            //    ////сброс тэга - код не выполняем
+            //    //SCAN_DATA.DataUpdated += SCAN_DATA_DataUpdated;
+            //};
 
             //При первом скане очищаем коллекцию
             //продуктов в очереди ПЛК
@@ -140,6 +165,49 @@ namespace SortingStantion.TechnologicalObjects
                 //Очистка коллекции продуктов в очереди ПЛК
                 CLEAR_ITEMS_COLLECTION_CMD.Write(true);
             };
+
+            //Запуск приема кодов по UDP
+            Thread rth = new Thread(Receiver);
+            rth.IsBackground = true;
+            rth.Start();
+
+
+        }
+
+        /// <summary>
+        /// Метод для принятия кодов
+        /// </summary>
+        public void Receiver()
+        {
+            // Создаем UdpClient для чтения входящих данных
+            UdpClient receivingUdpClient = new UdpClient(2000);
+
+            IPEndPoint RemoteIpEndPoint = new IPEndPoint(new IPAddress(new byte[] { 192, 168, 3, 70}), 102);
+
+            try
+            { 
+                while (true)
+                {
+                    // Ожидание дейтаграммы
+                    byte[] receiveBytes = receivingUdpClient.Receive(
+                       ref RemoteIpEndPoint);
+
+                    // Преобразуем и отображаем данные
+                    string barcode = Encoding.UTF8.GetString(receiveBytes);
+
+                    Action action = () =>
+                    {
+                        NEW_BARCODE_NOTIFICATION(barcode);
+                    };
+                    DataBridge.MainScreen?.Dispatcher.Invoke(action);
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+
+                //Console.WriteLine("Возникло исключение: " + ex.ToString() + "\n  " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -159,6 +227,207 @@ namespace SortingStantion.TechnologicalObjects
             DataBridge.MainScreen.Dispatcher.Invoke(action);
         }
 
+        private void NEW_BARCODE_NOTIFICATION(string barcode)
+        {
+
+            var bcode = barcode.Substring(3);
+            bcode = bcode.Replace("\0", "");
+
+            //Получение статуса линии
+            //с учетом таймера, учитывающего время
+            //остановки линии
+            var lineistop = false;
+
+            lineistop = (bool)DataBridge.Conveyor.IsStopFromTimerTag.Value;
+
+            //Получение GTIN из задания
+            var task_gtin = DataBridge.WorkAssignmentEngine.GTIN;
+
+            //Разбор телеграммы из ПЛК
+            var data = SCAN_DATA.StatusText;
+            spliter.Split(ref bcode);
+
+            //Получение GTIN и SerialNumber из разобранного
+            //штрихкода, полученного из ПЛК
+            var scaner_serialnumber = spliter.SerialNumber;
+            var scaner_gtin = spliter.GTIN;
+
+            /*
+                Если сигнатура задачи не совпадает
+                с той, что указана в задании
+            */
+            if (spliter.IsValid == false)
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage($"От автоматического сканера получен посторонний код: {spliter.SourseData}  (код не является СИ)", MessageType.Alarm);
+
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+
+                //Вывод сообщения в зоне информации
+                string message = $"Посторонний код (не является КМ)";
+                var msg = new UserMessage(message, DataBridge.myRed);
+                //DataBridge.MSGBOX.Add(msg);
+
+                //Вызов окна
+                var windowExtraneousBarcode = new windowExtraneousBarcode(msg);
+                windowExtraneousBarcode.Show();
+
+                //Выход из метода
+                return;
+            }
+
+            /*
+                Если GTIN из сканера и задачи
+                не совпадают - формируем ошибку
+            */
+            if (scaner_gtin != task_gtin)
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Посторонний продукт (GTIN не совпадает с заданием)", MessageType.Alarm);
+
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+
+                //Вывод сообщения в зоне информации
+                string message = $"Посторонний продукт (GTIN не совпадает с заданием)";
+                var msg = new UserMessage(message, DataBridge.myRed);
+                //DataBridge.MSGBOX.Add(msg);
+
+                //Вызов окна
+                var windowExtraneousBarcode = new windowGtinFault(scaner_gtin, scaner_serialnumber, msg);
+                windowExtraneousBarcode.Show();
+
+                //Выход из метода
+                return;
+            }
+
+            /*
+                Если продукт числится в браке
+            */
+            if (DataBridge.Report.IsDeffect(scaner_serialnumber) == true)
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage($"Номер продукта {scaner_serialnumber} числится в браке", MessageType.Alarm);
+
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+
+                //Вывод сообщения в окно информации
+                string message = $"Номер продукта {scaner_serialnumber} числится в браке";
+                var msg = new UserMessage(message, DataBridge.myRed);
+                //DataBridge.MSGBOX.Add(msg);
+
+                //Вызов окна
+                var windowProductIsDeffect = new windowProductIsDeffect(scaner_serialnumber, msg);
+                windowProductIsDeffect.Show();
+
+                //Выход из метода
+                return;
+            }
+
+
+            /*
+                Повтор кода запрещен
+            */
+            //Получение статуса тэга
+            //ПОВТОР КОДА
+            //остановки линии
+            var RepeatEnable = REPEAT_ENABLE.Value;
+
+            //Флаг, указывающий на то, является ли код повтором
+            var IsRepeat = DataBridge.Report.IsRepeat(scaner_serialnumber);
+
+
+            if (RepeatEnable == false && IsRepeat == true)
+            {
+                //Остановка конвейера
+                DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage($"Продукт GTIN {scaner_gtin} номер {scaner_serialnumber} считан повторно", MessageType.Alarm);
+
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+
+                //Вывод сообщения в окно информации
+                string message = $"Продукт номер {scaner_serialnumber} считан повторно.";
+                var msg = new UserMessage(message, DataBridge.myRed);
+                //DataBridge.MSGBOX.Add(msg);
+
+                //Добавление повтора в отчет
+                DataBridge.Report.AddRepeatProduct(scaner_serialnumber);
+
+                //Вызов окна
+                var windowRepeatProduct = new windowRepeatProduct(scaner_gtin, scaner_serialnumber, msg);
+                windowRepeatProduct.Show();
+
+                //Выход из метода
+                return;
+            }
+
+            /*
+               Если повтор - увеличиваем счетчик на единицу
+           */
+            //if (IsRepeat == true)
+            //{
+            //    uint value = 0;
+            //    var result = uint.TryParse(RepeatProductCounter.Status.ToString(), out value);
+            //    if (result == true)
+            //    {
+            //        value++;
+            //        RepeatProductCounter.Write(value);
+            //    }
+            //}
+
+
+            /*
+                Если проверка прошла успешно добавляем 
+                продукт в результат
+            */
+
+            //Добавляем просканированное изделие
+            //в коллекцию изделий результата
+            DataBridge.Report.AddBox(scaner_serialnumber);
+        }
+
         /// <summary>
         /// Событие, вызываемое при изменении статуса GOODREAD или NOREAD
         /// </summary>
@@ -168,6 +437,9 @@ namespace SortingStantion.TechnologicalObjects
             //Стираем флаг READ_CMD
             //для того, чтоб процедура отработала один раз
             READ_CMD.Write(false);
+
+            //установка флага готовности принятия результата
+            ReadyForTransfer.Write(true);
 
 
             //Получение статуса линии

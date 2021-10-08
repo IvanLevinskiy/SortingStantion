@@ -677,7 +677,7 @@
                                         BorderThickness="0"
                                         BorderBrush="Transparent"
                                         IsEnabled="{Binding ButtonsEnableModel.BtnStartEnable}"
-                                        Command="{Binding Conveyor.StartLineCMD}">
+                                        Command="{Binding Conveyor.StartLineCMD}" Click="Button_Click">
                         <TextBlock  TextAlignment="Center"
                                                     FontSize="{StaticResource fontSizeButtons}">
                                                     <Run>СТАРТ</Run>

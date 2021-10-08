@@ -128,14 +128,20 @@ namespace SortingStantion
             //Создаем экземпляр устройства
             var s7device = new SimaticDevice(ip, CpuType.S71200, 0, 1);
 
+            var s7fastdevice = new SimaticDevice(ip, CpuType.S71200, 0, 1);
+
             //Добавляем устройство в сервер
             S7Server.AddDevice(s7device);
+            S7Server.AddDevice(s7fastdevice);
 
             //Создаем пустую группу для тэгов
             var s7group = new SimaticGroup();
 
+            var s7fastgroup = new SimaticGroup();
+
             //Добавляем группу в устройство
             s7device.AddGroup(s7group);
+            s7fastdevice.AddGroup(s7fastgroup);
         }
 
         /// <summary>
