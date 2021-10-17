@@ -12,6 +12,9 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace SortingStantion.TechnologicalObjects
 {
@@ -58,7 +61,7 @@ namespace SortingStantion.TechnologicalObjects
         /// Сигнал для перемещения данных
         /// просканированного изделия в коллекцию
         /// </summary>
-        S7_Boolean READ_CMD;
+        //S7_Boolean READ_CMD;
 
         /// <summary>
         /// Тэг для очистки очереди в ПЛК
@@ -68,7 +71,7 @@ namespace SortingStantion.TechnologicalObjects
         /// <summary>
         /// Результат сканирования
         /// </summary>
-        S7_String SCAN_DATA;
+        //S7_String SCAN_DATA;
 
         /// <summary>
         /// Тэг готовности ПК к приему штрих-кода от ПЛК
@@ -103,6 +106,11 @@ namespace SortingStantion.TechnologicalObjects
         DataSpliter spliter = new DataSpliter();
 
         /// <summary>
+        /// Последний код, принятый от ПЛК
+        /// </summary>
+        string LastBarcode;
+
+        /// <summary>
         /// Конструктор класса
         /// </summary>
         public ProductsEngine()
@@ -110,14 +118,14 @@ namespace SortingStantion.TechnologicalObjects
             //Инициализация сигналов от сканера
             REPEAT_ENABLE = (S7_Boolean)device.GetTagByAddress("DB1.DBX134.0");
 
-            var fastdevice = DataBridge.S7Server.Devices[1];
-            var fastgroup = fastdevice.Groups[0];
+            //var fastdevice = DataBridge.S7Server.Devices[1];
+            //var fastgroup = fastdevice.Groups[0];
 
-            //Команда для считывания кода сканера
-            READ_CMD = new S7_Boolean("", "DB1.DBX378.0", fastgroup);
+            ////Команда для считывания кода сканера
+            //READ_CMD = new S7_Boolean("", "DB1.DBX378.0", fastgroup);
 
             //Данные из сканера
-            SCAN_DATA = new S7_String("", "DB1.DBD506-STR100", fastgroup);
+            //SCAN_DATA = new S7_String("", "DB1.DBD506-STR100", fastgroup);
 
             //Тэг, указывающий о готовности ПК приянтия данных от ПЛК
             ReadyForTransfer = new S7_Boolean("", "DB1.DBX98.6", group);
@@ -167,48 +175,215 @@ namespace SortingStantion.TechnologicalObjects
             };
 
             //Запуск приема кодов по UDP
-            Thread rth = new Thread(Receiver);
-            rth.IsBackground = true;
-            rth.Start();
+            Thread backgroundTask_UDP_listener = new Thread(UDP_Listener);
+            backgroundTask_UDP_listener.IsBackground = true;
+            backgroundTask_UDP_listener.Start();
+
+            //Запуск приема кодов по TCP
+            Thread backgroundTask_TCP_listener = new Thread(TCP_Listener);
+            backgroundTask_TCP_listener.IsBackground = true;
+            backgroundTask_TCP_listener.Start();
 
 
         }
 
         /// <summary>
+        /// ID продукта, полученный от ПЛК
+        /// </summary>
+        UInt32 RecvID = 0;
+
+        /// <summary>
         /// Метод для принятия кодов
         /// </summary>
-        public void Receiver()
+        public void UDP_Listener()
         {
             // Создаем UdpClient для чтения входящих данных
             UdpClient receivingUdpClient = new UdpClient(2000);
 
-            IPEndPoint RemoteIpEndPoint = new IPEndPoint(new IPAddress(new byte[] { 192, 168, 3, 70}), 102);
+            //Получение адреса ПЛК из файла настроек
+            var ipsetting = DataBridge.SettingsFile.GetSetting("PlcIp").Value;
+            var ip = IPAddress.Parse(ipsetting);
+            IPEndPoint RemoteIpEndPoint = new IPEndPoint(ip, 102);
+
+
 
             try
             { 
                 while (true)
                 {
+
                     // Ожидание дейтаграммы
-                    byte[] receiveBytes = receivingUdpClient.Receive(
-                       ref RemoteIpEndPoint);
+                    byte[] receiveBytes = receivingUdpClient.Receive(ref RemoteIpEndPoint);
+
+                    //Уведомление ПЛК о получении данных 
+                    SendASK();
 
                     // Преобразуем и отображаем данные
-                    string barcode = Encoding.UTF8.GetString(receiveBytes);
+                    var data = Encoding.UTF8.GetString(receiveBytes);
+                    var barcode = data.Substring(42);
+                    RecvID = GetID(data); 
+
 
                     Action action = () =>
                     {
-                        NEW_BARCODE_NOTIFICATION(barcode);
+                        if (LastBarcode != data)
+                        {
+                            NEW_BARCODE_NOTIFICATION(barcode);
+                        }
                     };
                     DataBridge.MainScreen?.Dispatcher.Invoke(action);
-                    
+
+
+                    LastBarcode = data;
+
+
                 }
             }
             catch (Exception ex)
             {
-
-                //Console.WriteLine("Возникло исключение: " + ex.ToString() + "\n  " + ex.Message);
+                Logger.AddExeption("ProductsEngine.cs, Method=UDP_Listener", ex);
             }
         }
+
+        /// <summary>
+        /// Отправка байта подтверждения в ПЛК
+        /// </summary>
+        private void SendASK()
+        {
+            // Создаем UdpClient
+            UdpClient sender = new UdpClient(2002);
+
+            //Получение адреса ПЛК из файла настроек
+            var ipsetting = DataBridge.SettingsFile.GetSetting("PlcIp").Value;
+            var ip = IPAddress.Parse(ipsetting);
+            IPEndPoint RemoteIpEndPoint = new IPEndPoint(ip, 2002);
+
+            try
+            {
+                // Преобразуем данные в массив байтов
+                byte[] bytes = BitConverter.GetBytes(RecvID);
+
+                //Переворачивание байтов, для симатика
+                byte[] rotareBytes = new byte[]
+                {
+                    bytes[3],
+                    bytes[2],
+                    bytes[1],
+                    bytes[0]
+                };
+
+                // Отправляем данные
+                sender.Send(rotareBytes, rotareBytes.Length, RemoteIpEndPoint);
+            }
+            catch (Exception ex)
+            {
+                
+            }
+            finally
+            {
+                // Закрыть соединение
+                sender.Close();
+            }
+        }
+
+        /// <summary>
+        /// Получение ID сообщения
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        UInt32 GetID(string input)
+        {
+            var numbers = Regex.Split(input, @"\D+").Where(s => s != "").ToArray();
+            return UInt32.Parse(numbers[0]);
+        }
+
+        public void TCP_Listener()
+        {
+            TcpListener tcpListener = null;
+
+            try
+            {
+                //Инициализация прослушивателя TCP
+                tcpListener = new TcpListener(IPAddress.Any, 2000);
+
+                //Запуск прослушивателя TCP
+                tcpListener.Start();
+
+                //Цикл
+                while (true)
+                {
+                    //Получение подключившегося клиента
+                    TcpClient client = tcpListener.AcceptTcpClient();
+
+                    //Получение потока вывода
+                    NetworkStream ns = client.GetStream();
+                    if (client.ReceiveBufferSize > 0)
+                    {
+                        //Чтение данных из потока вывода
+                        var bytes = new byte[client.ReceiveBufferSize];
+                        var lenght = ns.Read(bytes, 0, client.ReceiveBufferSize);
+
+                        var data = Encoding.Default.GetString(bytes);
+                        //data = ToASCII(data);
+
+                        var barcode = data.Substring(39);
+
+                        //Обработка данных
+                        Action action = () =>
+                        {
+                            NEW_BARCODE_NOTIFICATION(barcode);
+                        };
+                        DataBridge.MainScreen?.Dispatcher.Invoke(action);
+                    }
+
+                    //Завершение сессии с клиентом
+                    client.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.AddExeption("ProductsEngine.cs, Method=TCP_Listener", ex);
+            }
+        }
+
+        /// <summary>
+        /// Если английские символы
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        bool IsASCII(char symbol)
+        {
+            if (symbol > 255)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Метод для получения из стрики 
+        /// символов ASCII
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        string ToASCII(string input)
+        {
+            string result = string.Empty;
+            var symbols = input.ToCharArray();
+
+            foreach (var symbol in symbols)
+            {
+                var ascii = IsASCII(symbol);
+                if (ascii == true)
+                {
+                    result += symbol;
+                }
+            }
+
+            return result;
+        }
+
 
         /// <summary>
         /// Метод, вызываемый при обновлении массива данных
@@ -222,7 +397,7 @@ namespace SortingStantion.TechnologicalObjects
             Action action = () =>
             {
                 BARCODESCANER_CHANGEVALUE(null, null);
-                SCAN_DATA.DataUpdated -= SCAN_DATA_DataUpdated;
+                //SCAN_DATA.DataUpdated -= SCAN_DATA_DataUpdated;
             };
             DataBridge.MainScreen.Dispatcher.Invoke(action);
         }
@@ -230,7 +405,7 @@ namespace SortingStantion.TechnologicalObjects
         private void NEW_BARCODE_NOTIFICATION(string barcode)
         {
 
-            var bcode = barcode.Substring(3);
+            var bcode = barcode;
             bcode = bcode.Replace("\0", "");
 
             //Получение статуса линии
@@ -244,7 +419,7 @@ namespace SortingStantion.TechnologicalObjects
             var task_gtin = DataBridge.WorkAssignmentEngine.GTIN;
 
             //Разбор телеграммы из ПЛК
-            var data = SCAN_DATA.StatusText;
+            //var data = SCAN_DATA.StatusText;
             spliter.Split(ref bcode);
 
             //Получение GTIN и SerialNumber из разобранного
@@ -436,7 +611,7 @@ namespace SortingStantion.TechnologicalObjects
         {
             //Стираем флаг READ_CMD
             //для того, чтоб процедура отработала один раз
-            READ_CMD.Write(false);
+            //READ_CMD.Write(false);
 
             //установка флага готовности принятия результата
             ReadyForTransfer.Write(true);
@@ -481,8 +656,8 @@ namespace SortingStantion.TechnologicalObjects
             var task_gtin = DataBridge.WorkAssignmentEngine.GTIN;
 
             //Разбор телеграммы из ПЛК
-            var data = SCAN_DATA.StatusText;
-            spliter.Split(ref data);
+            //var data = SCAN_DATA.StatusText;
+            //spliter.Split(ref data);
 
             //Получение GTIN и SerialNumber из разобранного
             //штрихкода, полученного из ПЛК

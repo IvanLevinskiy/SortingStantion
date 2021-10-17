@@ -352,6 +352,35 @@ namespace SortingStantion.Models
             };
 
             /*
+                Ошибка отправки продукта на ПК
+            */
+            al_8 = new S7DiscreteAlarm("Один из продуктов не поступил в ПК. Линия остановлена", "DB6.DBX12.7", group);
+            al_8.MessageAction = () =>
+            {
+                //Сброс ошибки
+                al_8.Write(false);
+
+                //Остановка конвейера
+                //DataBridge.Conveyor.Stop();
+
+                //Подача звукового сигнала
+                DataBridge.Buzzer.On();
+
+                //Запись сообщения в базу данных
+                DataBridge.AlarmLogging.AddMessage("Ошибка перемещения продукта из ПЛК в ПК", MessageType.Alarm);
+
+                //Переход на главный экран
+                DataBridge.ScreenEngine.GoToMainWindow();
+
+                customMessageBox cmb = new customMessageBox("Ошибка получения продукта", "Один или несколько продуктов не были получены сервером L2");
+                cmb.Show();
+
+                //Извещение подписчиков о возникновлении
+                //новой аварии
+                DataBridge.NewAlarmNotificationMetod();
+            };
+
+            /*
                 Продукт слишком близко к предыдущему, удалите его с конвейера
             */
             al_9 = new S7DiscreteAlarm("Продукт в зоне сканера слишком близко к предыдущему, удалите его с конвейера", "DB6.DBX13.0", group);
